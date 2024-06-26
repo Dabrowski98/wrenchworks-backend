@@ -27,7 +27,7 @@ model AddressPerson {
   person     Person    @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_addresses_persons_person_id")
 
   @@id([addressId, personId])
-  @@index([personId], map: "fk_addresses_persons_person_id")
+  @@index([personId])
 }
 
 model AddressWorkshop {
@@ -37,10 +37,9 @@ model AddressWorkshop {
   workshop    Workshop  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_addresses_workshops_workshop_id")
 
   @@id([addressId, workshopId])
-  @@index([workshopId], map: "fk_addresses_workshops_workshop_id")
+  @@index([workshopId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model Customer {
   customerId   BigInt     @db.UnsignedBigInt
   workshopId   BigInt     @db.UnsignedBigInt
@@ -54,11 +53,10 @@ model Customer {
   services     Service[]
 
   @@id([customerId, workshopId])
-  @@index([workshopId], map: "fk_customerOfWorkshop")
+  @@index([workshopId])
   @@unique([customerId, workshopId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model Employee {
   employeeId        BigInt            @db.UnsignedBigInt
   workshopId        BigInt            @db.UnsignedBigInt
@@ -72,8 +70,8 @@ model Employee {
   employeeTasks     EmployeeTask[]
 
   @@id([employeeId, workshopId])
-  @@index([permissionSetId], map: "fk_employeeCanHavePermissionSetAssigned")
-  @@index([workshopId], map: "fk_employeeWorksAtWorkshop")
+  @@index([permissionSetId])
+  @@index([workshopId])
   @@unique([employeeId, workshopId])
 }
 
@@ -88,7 +86,7 @@ model JobCategory {
   jobs                       Job[]
   jobCategoryWorkshops       WorkshopJobCategory[]
 
-  @@index([parentId], map: "fk_subcategory")
+  @@index([parentId])
 }
 
 model Job {
@@ -101,7 +99,7 @@ model Job {
   jobServiceRequests   ServiceRequestJob[]
   jobWorkshops         WorkshopJob[]
 
-  @@index([categoryId], map: "fk_jobFallsUnderCategory")
+  @@index([categoryId])
 }
 
 model PermissionSet {
@@ -129,7 +127,7 @@ model PermissionSet {
   employees                   Employee[]
   workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
 
-  @@index([workshopId], map: "fk_permissionSetForCertainWorkshop")
+  @@index([workshopId])
 }
 
 model Person {
@@ -159,8 +157,8 @@ model Review {
   workshop          Workshop            @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviewsWorkshop")
   reviewResponses   ReviewResponse[]
 
-  @@index([userId], map: "fk_userReviews")
-  @@index([workshopId], map: "fk_userReviewsWorkshop")
+  @@index([userId])
+  @@index([workshopId])
 }
 
 model ReviewResponse {
@@ -176,9 +174,9 @@ model ReviewResponse {
   review                 Review                   @relation(fields: [reviewId], references: [reviewId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseUnderReview")
   user                   User                     @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userResponses")
 
-  @@index([parentResponseId], map: "fk_responseToResponse")
-  @@index([reviewId], map: "fk_responseUnderReview")
-  @@index([userId], map: "fk_userResponses")
+  @@index([parentResponseId])
+  @@index([reviewId])
+  @@index([userId])
 }
 
 model ServiceRequestJob {
@@ -188,7 +186,7 @@ model ServiceRequestJob {
   serviceRequest     ServiceRequest   @relation(fields: [serviceRequestId], references: [serviceRequestId], onDelete: NoAction, map: "fk_serviceRequestHasJobs")
 
   @@id([serviceRequestId, jobId])
-  @@index([jobId], map: "fk_jobsAssignedToServiceRequest")
+  @@index([jobId])
 }
 
 model ServiceRequest {
@@ -207,12 +205,11 @@ model ServiceRequest {
   workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
   person                                                  Person                  @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_requestFromPerson")
 
-  @@index([vehicleId], map: "fk_requestAssignedToVehicle")
-  @@index([workshopId], map: "fk_requestAssignedToWorkshop")
-  @@index([personId], map: "fk_requestFromPerson")
+  @@index([vehicleId])
+  @@index([workshopId])
+  @@index([personId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model ServiceTask {
   taskId               BigInt                @id @unique(map: "task_id") @default(autoincrement()) @db.UnsignedBigInt
   serviceId            BigInt                @db.UnsignedBigInt
@@ -225,10 +222,9 @@ model ServiceTask {
   service              Service              @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
   taskEmployees        EmployeeTask[]
 
-  @@index([serviceId], map: "fk_taskIsAPartOfService")
+  @@index([serviceId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model Service {
   serviceId           BigInt            @id @unique(map: "service_id") @default(autoincrement()) @db.UnsignedBigInt
   serviceRequestId    BigInt?           @unique(map: "service_request_id") @db.UnsignedBigInt
@@ -251,10 +247,10 @@ model Service {
   vehicle             Vehicle          @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_serviceAssignedToVehicle")
   workshop            Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_serviceAssignedToWorkshop")
 
-  @@index([customerId], map: "fk_customerOrdersService")
-  @@index([employeeId], map: "fk_employeeResponsibleForService")
-  @@index([vehicleId], map: "fk_serviceAssignedToVehicle")
-  @@index([workshopId], map: "fk_serviceAssignedToWorkshop")
+  @@index([customerId])
+  @@index([employeeId])
+  @@index([vehicleId])
+  @@index([workshopId])
 }
 
 model EmployeeTask {
@@ -265,7 +261,7 @@ model EmployeeTask {
   serviceTask   ServiceTask   @relation(fields: [taskId], references: [taskId], onDelete: NoAction, map: "fk_tasks_employees_taskCanBeAssignedToManyEmployees")
 
   @@id([employeeId, taskId, workshopId])
-  @@index([taskId], map: "fk_tasks_employees_taskCanBeAssignedToManyEmployees")
+  @@index([taskId])
 }
 
 model UserReport {
@@ -279,10 +275,9 @@ model UserReport {
   updatedAt          DateTime?                  @db.Timestamp(0)
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
-  @@index([userId], map: "fk_reportMadeByUser")
+  @@index([userId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model User {
   userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
   personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
@@ -315,9 +310,9 @@ model Vehicle {
   person                            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_vehicleHasOwner")
   vehiclesDetails                   VehicleDetails?
 
-  @@index([brandName], map: "fk_vehicleHasBrand")
-  @@index([modelId], map: "fk_vehicleHasModel")
-  @@index([personId], map: "fk_vehicleHasOwner")
+  @@index([brandName])
+  @@index([modelId])
+  @@index([personId])
 }
 
 model VehicleBrand {
@@ -328,7 +323,6 @@ model VehicleBrand {
   vehicleModels   VehicleModel[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model VehicleDetails {
   vehicleId         BigInt    @id @db.UnsignedBigInt
   yearOfProduction  Int?
@@ -352,7 +346,7 @@ model VehicleModel {
   vehiclesBrand  VehicleBrand @relation(fields: [brandName], references: [brandName], onDelete: NoAction, map: "fk_modelMadeByBrand")
 
   @@unique([modelName, brandName], map: "model_name")
-  @@index([brandName], map: "fk_modelMadeByBrand")
+  @@index([brandName])
 }
 
 model Workshop {
@@ -376,10 +370,9 @@ model Workshop {
   workshopJobs              WorkshopJob[]
   workshopJobCategories     WorkshopJobCategory[]
 
-  @@index([personId], map: "fk_workshopHasOwner")
+  @@index([personId])
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model WorkshopDetails {
   workshopId       BigInt                    @id @db.UnsignedBigInt
   rating           Decimal                   @default(0.00) @db.Decimal(3, 2)
@@ -406,7 +399,7 @@ model WorkshopJob {
   workshop            Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
 
   @@unique([workshopId, jobId], map: "workshop_id")
-  @@index([jobId], map: "fk_jobsCanBeOfferedByWorkshops")
+  @@index([jobId])
 }
 
 model WorkshopJobCategory {
@@ -416,7 +409,7 @@ model WorkshopJobCategory {
   workshop            Workshop             @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopOfferJobsFromCategory")
 
   @@id([workshopId, categoryId])
-  @@index([categoryId], map: "fk_categoryHandledByWorkshop")
+  @@index([categoryId])
 }
 
 enum UserReportsReportedType {
