@@ -282,7 +282,7 @@ model User {
   userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
   personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
   username          String              @db.VarChar(30)
-  passwordHash      String              @db.VarChar(255)
+  password          String              @db.VarChar(255)
   email             String?             @db.VarChar(50)
   isVerified        Boolean?
   status            UsersStatus?       @default(active)
@@ -294,7 +294,7 @@ model User {
   userReports       UserReport[]
   person            Person?            @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_userCanBePerson")
 
-  @@unique([username, deletedAt], map: "uniqueUsername")
+  @@unique([username], map: "uniqueUsername")
 }
 
 model Vehicle {

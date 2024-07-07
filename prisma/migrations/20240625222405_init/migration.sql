@@ -262,7 +262,7 @@ CREATE TABLE `User` (
     `userId` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `personId` BIGINT UNSIGNED NULL,
     `username` VARCHAR(30) NOT NULL,
-    `passwordHash` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `email` VARCHAR(50) NULL,
     `isVerified` BOOLEAN NULL,
     `status` ENUM('active', 'suspended') NULL DEFAULT 'active',
