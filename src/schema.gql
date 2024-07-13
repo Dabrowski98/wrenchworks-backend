@@ -1,0 +1,185 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""BigInt custom scalar type"""
+scalar BigInt
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+input CreateCustomerInput {
+  NIP: String
+  companyName: String
+  customerId: BigInt!
+  description: String
+  totalDue: Float! = 0
+  workshopId: BigInt!
+}
+
+input CreatePersonInput {
+  firstName: String!
+  lastName: String!
+  telephoneNumber: String
+}
+
+input CreateUserInput {
+  email: String
+  isVerified: Boolean
+  password: String!
+  status: String
+  username: String!
+}
+
+input CreateVehicleBrandInput {
+  brandName: String!
+}
+
+input CreateVehicleModelInput {
+  brandName: String!
+  modelName: String!
+}
+
+input CreateWorkshopInput {
+  email: String
+  isManagingWork: Boolean = true
+  personId: BigInt!
+}
+
+type Customer {
+  NIP: String
+  companyName: String
+  customerId: BigInt!
+  deletedAt: DateTime
+  description: String
+  person: Person!
+  totalDue: Float!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LinkUserToPersonInput {
+  personId: BigInt!
+  userId: BigInt!
+}
+
+type Mutation {
+  activateUser(userId: BigInt!): User!
+  changePassword(data: ChangePasswordInput!, userId: BigInt!): User!
+  createCustomer(data: CreateCustomerInput!): Customer!
+  createPerson(data: CreatePersonInput!): Person!
+  createUser(data: CreateUserInput!): User!
+  createVehicleBrand(createVehicleBrandInput: CreateVehicleBrandInput!): VehicleBrand!
+  createVehicleModel(createVehicleModelInput: CreateVehicleModelInput!): VehicleModel!
+  createWorkshop(data: CreateWorkshopInput!): Workshop!
+  deletePerson(id: BigInt!): Person!
+  deleteUser(userId: BigInt!): User!
+  deleteWorkshop(id: BigInt!): Workshop!
+  destroyPerson(id: BigInt!): Person!
+  destroyUser(userId: BigInt!): User!
+  destroyVehicleBrand(brandName: String!): VehicleBrand!
+  destroyVehicleModel(brandName: String!, modelName: String!): VehicleModel!
+  destroyWorkshop(id: BigInt!): Workshop!
+  linkUserToPerson(linkUserToPersonInput: LinkUserToPersonInput!): User!
+  retrievePerson(id: BigInt!): Person!
+  retrieveUser(userId: BigInt!): User!
+  retrieveWorkshop(id: BigInt!): Workshop!
+  suspendUser(userId: BigInt!): User!
+  updatePerson(data: UpdatePersonInput!, id: BigInt!): Person!
+  updateUser(data: UpdateUserInput!, userId: BigInt!): User!
+  updateWorkshop(data: UpdateWorkshopInput!, id: BigInt!): Workshop!
+  verifyEmail(userId: BigInt!): User!
+}
+
+type Person {
+  customers: [Customer!]!
+  deletedAt: DateTime
+  firstName: String!
+  lastName: String!
+  personId: BigInt!
+  telephoneNumber: String
+}
+
+type Query {
+  customer(customerId: BigInt!, workshopId: BigInt!): Customer
+  customers: [Customer!]!
+  person(id: BigInt!): Person
+  persons: [Person!]!
+  searchUsers(includeDeleted: Boolean!, query: String!): [User!]!
+  user(userId: BigInt!): User!
+  users: [User!]!
+  vehicleBrand(brandName: String!): VehicleBrand
+  vehicleBrands: [VehicleBrand!]!
+  vehicleModel(brandName: String!, modelName: String!): VehicleModel!
+  vehicleModels: [VehicleModel!]!
+  workshop(id: BigInt!): Workshop
+  workshops: [Workshop!]!
+}
+
+input UpdatePersonInput {
+  firstName: String
+  lastName: String
+  telephoneNumber: String
+}
+
+input UpdateUserInput {
+  email: String
+  isVerified: Boolean
+  password: String
+  status: String
+  username: String
+}
+
+input UpdateWorkshopInput {
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  personId: BigInt!
+}
+
+type User {
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  isVerified: Boolean
+  password: String!
+  person: Person
+  personId: BigInt
+  status: String
+  updatedAt: DateTime
+  userId: BigInt!
+  username: String!
+}
+
+type VehicleBrand {
+  brandName: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type VehicleModel {
+  brand: VehicleBrand!
+  brandName: String!
+  createdAt: DateTime
+  modelName: String!
+  updatedAt: DateTime
+}
+
+type Workshop {
+  createdAt: DateTime
+  customers: [Customer!]!
+  deletedAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  personId: BigInt!
+  updatedAt: DateTime
+  workshopId: BigInt!
+}

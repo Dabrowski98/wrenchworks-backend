@@ -1,0 +1,1 @@
+export { CreateVehicleBrandInput } from "./create-vehicle-brand.input";

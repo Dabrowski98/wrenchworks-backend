@@ -1,7 +1,7 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import './common/utils';
+import './common/utils/defineBigInt';
 
 dotenv.config();
 

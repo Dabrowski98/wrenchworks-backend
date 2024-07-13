@@ -23,6 +23,7 @@ model Address {
 model AddressPerson {
   addressId  BigInt    @db.UnsignedBigInt
   personId   BigInt    @db.UnsignedBigInt
+  createdAt  DateTime  @default(now()) @db.DateTime(0)
   address    Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_persons_address_id")
   person     Person    @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_addresses_persons_person_id")
 
@@ -33,6 +34,7 @@ model AddressPerson {
 model AddressWorkshop {
   addressId   BigInt    @db.UnsignedBigInt
   workshopId  BigInt    @db.UnsignedBigInt
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
   address     Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_workshops_address_id")
   workshop    Workshop  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_addresses_workshops_workshop_id")
 
@@ -54,7 +56,6 @@ model Customer {
 
   @@id([customerId, workshopId])
   @@index([workshopId])
-  @@unique([customerId, workshopId])
 }
 
 model Employee {
@@ -72,7 +73,6 @@ model Employee {
   @@id([employeeId, workshopId])
   @@index([permissionSetId])
   @@index([workshopId])
-  @@unique([employeeId, workshopId])
 }
 
 model JobCategory {
@@ -182,6 +182,7 @@ model ReviewResponse {
 model ServiceRequestJob {
   serviceRequestId   BigInt           @db.UnsignedBigInt
   jobId              BigInt           @db.UnsignedBigInt
+  createdAt          DateTime         @default(now()) @db.DateTime(0)
   job                Job              @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsAssignedToServiceRequest")
   serviceRequest     ServiceRequest   @relation(fields: [serviceRequestId], references: [serviceRequestId], onDelete: NoAction, map: "fk_serviceRequestHasJobs")
 
@@ -257,6 +258,7 @@ model EmployeeTask {
   taskId        BigInt        @db.UnsignedBigInt
   employeeId    BigInt        @db.UnsignedBigInt
   workshopId    BigInt        @db.UnsignedBigInt
+  createdAt     DateTime      @default(now()) @db.DateTime(0)
   employee      Employee      @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_tasks_employees_employeeCanBeAssignedToManyTasks")
   serviceTask   ServiceTask   @relation(fields: [taskId], references: [taskId], onDelete: NoAction, map: "fk_tasks_employees_taskCanBeAssignedToManyEmployees")
 
@@ -405,6 +407,7 @@ model WorkshopJob {
 model WorkshopJobCategory {
   workshopId          BigInt               @db.UnsignedBigInt
   categoryId          BigInt               @db.UnsignedBigInt
+  createdAt           DateTime             @default(now()) @db.DateTime(0)
   jobCategory         JobCategory          @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, map: "fk_categoryHandledByWorkshop")
   workshop            Workshop             @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopOfferJobsFromCategory")
 

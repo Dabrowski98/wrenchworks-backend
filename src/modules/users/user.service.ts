@@ -5,29 +5,39 @@ import {
 } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from '@prisma/client';
-import { comparePasswords, hashPassword } from '../../common/bcrypt';
-import '../../common/softdeletion';
-import '../../common/bcrypt';
-import { isSoftDeleted } from '../../common/softdeletion';
-import { ChangePasswordDto } from './DTOs/change-password-dto';
-import { LinkUserToPersonDto } from './DTOs/link-user-to-person.dto';
+import { comparePasswords, hashPassword } from 'src/common/helper/bcrypt';
+import '../../common/helper/softdeletion';
+import '../../common/helper/bcrypt';
+import { isSoftDeleted } from '../../common/helper/softdeletion';
+import { ChangePasswordInput, LinkUserToPersonInput } from './dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(createUserDto: Prisma.UserCreateInput) {
+  async createUser(createUserDto: Prisma.UserCreateInput) {
+    if (!createUserDto.username) {
+      throw new BadRequestException('Username is required');
+    }
+
     if (!createUserDto.password) {
       throw new BadRequestException('Password is required');
     }
-    const hashedPassword = hashPassword(createUserDto.password);
+
+    if (this.findUserByUsername) {
+      throw new BadRequestException(
+        'Username with that username already exists',
+      );
+    }
+
+    const hashedPassword: string = hashPassword(createUserDto.password);
 
     return this.databaseService.user.create({
       data: { ...createUserDto, password: hashedPassword },
     });
   }
 
-  async findAll() {
+  async findUsers() {
     const users = this.databaseService.user.findMany({
       where: { deletedAt: null },
     });
@@ -39,43 +49,58 @@ export class UsersService {
     return users;
   }
 
-  async findOne(userId: number) {
+  async findUserById(id: bigint) {
     const user = await this.databaseService.user.findUnique({
       where: {
-        userId,
+        userId: id,
         deletedAt: null,
       },
     });
 
     if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
 
     return user;
   }
 
-  async update(userId: number, updateUserDto: Prisma.UserUpdateInput) {
-    await this.findOne(userId);
+  async findUserByUsername(username: string) {
+    const user = await this.databaseService.user.findUnique({
+      where: {
+        username: username,
+        deletedAt: null,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with username: ${username} not found`);
+    }
+
+    return user;
+  }
+
+  async updateUser(id: bigint, updateUserDto: Prisma.UserUpdateInput) {
+    await this.findUserById(id);
     return this.databaseService.user.update({
       where: {
-        userId,
+        userId: id,
       },
       data: updateUserDto,
     });
   }
 
-  async verifyEmail(userId: number) {
-    await this.findOne(userId);
+  async verifyEmail(id: bigint) {
+    await this.findUserById(id);
     return this.databaseService.user.update({
-      where: { userId, deletedAt: null },
+      where: { userId: id, deletedAt: null },
       data: { isVerified: true },
     });
   }
 
-  async changePassword(userId: any, changePasswordDto: ChangePasswordDto) {
-    const { currentPassword, newPassword } = changePasswordDto;
+  async changePassword(id: any, changePasswordInput: ChangePasswordInput) {
+    const { currentPassword, newPassword } = changePasswordInput;
 
-    const user = await this.findOne(userId);
+    const user = await this.findUserById(id);
 
     const isPasswordValid = await comparePasswords(
       currentPassword,
@@ -89,37 +114,31 @@ export class UsersService {
     const newHashedPassword = await hashPassword(newPassword);
 
     await this.databaseService.user.update({
-      where: { userId },
+      where: { userId: id },
       data: { password: newHashedPassword },
     });
   }
 
-  async suspendUser(userId: number) {
-    await this.findOne(userId);
+  async suspendUser(id: bigint) {
+    await this.findUserById(id);
     return this.databaseService.user.update({
-      where: { userId, deletedAt: null },
+      where: { userId: id, deletedAt: null },
       data: { status: 'suspended' },
     });
   }
 
-  async activateUser(userId: number) {
-    await this.findOne(userId);
+  async activateUser(id: bigint) {
+    await this.findUserById(id);
     return this.databaseService.user.update({
-      where: { userId, deletedAt: null },
+      where: { userId: id, deletedAt: null },
       data: { status: 'active' },
     });
   }
 
-  async linkUserToPerson(linkUserToPersonDto: LinkUserToPersonDto) {
-    const { userId, personId } = linkUserToPersonDto;
+  async linkUserToPerson(linkUserToPersonInput: LinkUserToPersonInput) {
+    const { userId, personId } = linkUserToPersonInput;
 
-    const user = await this.databaseService.user.findUnique({
-      where: { userId },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`User with id ${userId} does not exist`);
-    }
+    const user = await this.findUserById(userId);
 
     const person = await this.databaseService.person.findUnique({
       where: { personId },
@@ -130,7 +149,7 @@ export class UsersService {
     }
 
     return await this.databaseService.user.update({
-      where: { userId },
+      where: { userId: userId },
       data: { personId },
     });
   }
@@ -147,11 +166,11 @@ export class UsersService {
     return this.databaseService.user.findMany({ where });
   }
 
-  async delete(userId: number) {
-    await this.findOne(userId);
+  async deleteUser(id: bigint) {
+    await this.findUserById(id);
     return this.databaseService.user.update({
       where: {
-        userId,
+        userId: id,
         deletedAt: null,
       },
       data: {
@@ -160,22 +179,22 @@ export class UsersService {
     });
   }
 
-  async destroy(userId: number) {
-    await this.isDestroyable( { userId } );
-    return this.databaseService.user.delete({ where: { userId } });
+  async destroyUser(id: bigint) {
+    await this.isDestroyable({ id });
+    return this.databaseService.user.delete({ where: { userId: id } });
   }
 
-  async retrieve(userId: number) {
-    await this.isRetrievable({userId});
+  async retrieveUser(id: bigint) {
+    await this.isRetrievable({ id });
 
     return this.databaseService.user.update({
       data: { deletedAt: null },
-      where: { userId },
+      where: { userId: id },
     });
   }
 
   async isDestroyable(where: Record<string, any>) {
-    await isSoftDeleted(where, "user", "delete");
+    await isSoftDeleted(where, 'user', 'delete');
   }
 
   async isRetrievable(where: Record<string, any>) {
