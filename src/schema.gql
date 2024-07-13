@@ -2,6 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  addressId: Float!
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  postCode: String!
+  region: String!
+  street: String
+}
+
+type AddressPerson {
+  address: Address!
+  addressId: BigInt!
+  createdAt: DateTime!
+  person: Person!
+  personId: BigInt!
+}
+
+type AddressWorkshop {
+  address: Address!
+  addressId: BigInt!
+  createdAt: DateTime!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
 """BigInt custom scalar type"""
 scalar BigInt
 
@@ -10,13 +37,74 @@ input ChangePasswordInput {
   newPassword: String!
 }
 
+input CreateAddressInput {
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  postCode: String!
+  region: String!
+  street: String
+}
+
 input CreateCustomerInput {
   NIP: String
   companyName: String
-  customerId: BigInt!
+  customerId: Float!
   description: String
   totalDue: Float! = 0
+  workshopId: Float!
+}
+
+input CreateEmployeeInput {
+  deletedAt: DateTime
+  employeeId: BigInt!
+  joinedAt: DateTime
+  permissionSetId: BigInt
   workshopId: BigInt!
+}
+
+input CreateEmployeeTaskInput {
+  employeeId: BigInt!
+  taskId: BigInt!
+  workshopId: BigInt!
+}
+
+input CreateJobCategoryInput {
+  description: String
+  isPopular: Boolean
+  name: String!
+  parentId: BigInt
+}
+
+input CreateJobInput {
+  categoryId: BigInt!
+  description: String
+  isPopular: Boolean = false
+  name: String
+}
+
+input CreatePermissionSetInput {
+  canGenerateReports: Boolean!
+  canModifyCustomers: Boolean!
+  canModifyEmployees: Boolean!
+  canModifyPermissions: Boolean!
+  canModifyServices: Boolean!
+  canModifyTasks: Boolean!
+  canModifyWorkshopDetails: Boolean!
+  canReadCustomers: Boolean!
+  canReadEmployees: Boolean!
+  canReadReports: Boolean!
+  canReadServices: Boolean!
+  canReadTasks: Boolean!
+  canReadWorkshopDetails: Boolean!
+  canUpdateCustomers: Boolean!
+  canUpdateEmployees: Boolean!
+  canUpdateServices: Boolean!
+  canUpdateTasks: Boolean!
+  canUpdateWorkshopDetails: Boolean!
+  setName: String!
+  workshopId: BigInt
 }
 
 input CreatePersonInput {
@@ -25,16 +113,97 @@ input CreatePersonInput {
   telephoneNumber: String
 }
 
+input CreateReviewInput {
+  rating: Float!
+  reviewDate: DateTime!
+  reviewText: String!
+  status: ReviewsStatus!
+  userId: BigInt!
+  workshopId: BigInt!
+}
+
+input CreateReviewResponseInput {
+  parentResponseId: BigInt
+  responseDate: DateTime!
+  responseText: String!
+  reviewId: BigInt!
+  status: ReviewsResponsesStatus!
+  userId: BigInt!
+}
+
+input CreateServiceInput {
+  customerId: BigInt!
+  deletedAt: DateTime
+  description: String
+  employeeId: BigInt!
+  payedOff: Boolean!
+  paymentAmount: Float!
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime!
+  status: ServicesStatus!
+  updatedAt: DateTime!
+  vehicleId: BigInt!
+  workshopId: BigInt!
+}
+
+input CreateServiceRequestInput {
+  description: String
+  personId: BigInt!
+  vehicleId: BigInt!
+  workshopId: BigInt!
+}
+
+input CreateServiceRequestJobInput {
+  jobId: BigInt!
+  serviceRequestId: BigInt!
+}
+
+input CreateTaskInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  jobId: BigInt
+  partsCost: Float!
+  serviceId: BigInt!
+}
+
 input CreateUserInput {
   email: String
   isVerified: Boolean
   password: String!
-  status: String
+  status: UsersStatus
   username: String!
+}
+
+input CreateUserReportInput {
+  reportText: String!
+  reportedId: BigInt!
+  reportedType: UserReportsReportedType!
+  userId: BigInt!
 }
 
 input CreateVehicleBrandInput {
   brandName: String!
+}
+
+input CreateVehicleDetailsInput {
+  VIN: String
+  bodyColor: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: String
+  licensePlate: String
+  vehicleId: BigInt!
+  yearOfProduction: Int
+}
+
+input CreateVehicleInput {
+  brandName: String!
+  deletedAt: DateTime
+  modelId: BigInt!
+  personId: BigInt!
 }
 
 input CreateVehicleModelInput {
@@ -42,28 +211,88 @@ input CreateVehicleModelInput {
   modelName: String!
 }
 
+input CreateWorkshopDetailsInput {
+  NIP: String
+  deletedAt: DateTime
+  description: String
+  logoURL: String
+  rating: Float!
+  telephoneNumber: String
+  workshopId: BigInt!
+  workshopName: String!
+}
+
 input CreateWorkshopInput {
   email: String
   isManagingWork: Boolean = true
-  personId: BigInt!
+  personId: Float!
+}
+
+input CreateWorkshopJobCategoryInput {
+  categoryId: BigInt!
+  workshopId: BigInt!
+}
+
+input CreateWorkshopJobInput {
+  availability: Boolean!
+  jobId: Float!
+  maxPrice: Float
+  minPrice: Float
+  price: Float
+  workshopDescription: String
+  workshopId: Float!
 }
 
 type Customer {
   NIP: String
   companyName: String
-  customerId: BigInt!
+  customerId: Float!
   deletedAt: DateTime
   description: String
   person: Person!
   totalDue: Float!
   workshop: Workshop!
-  workshopId: BigInt!
+  workshopId: Float!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Employee {
+  deletedAt: DateTime
+  employeeId: BigInt!
+  joinedAt: DateTime!
+  permissionSetId: BigInt
+  workshopId: BigInt!
+}
+
+type EmployeeTask {
+  createdAt: DateTime!
+  employee: Employee!
+  employeeId: BigInt!
+  task: Task!
+  taskId: BigInt!
+  workshopId: BigInt!
+}
+
+type Job {
+  categoryId: BigInt!
+  description: String
+  isPopular: Boolean!
+  jobCategory: JobCategory!
+  jobId: BigInt!
+  name: String
+}
+
+type JobCategory {
+  categoryId: BigInt!
+  description: String
+  isPopular: Boolean!
+  name: String!
+  parentId: BigInt
+}
 
 input LinkUserToPersonInput {
   personId: BigInt!
@@ -73,15 +302,48 @@ input LinkUserToPersonInput {
 type Mutation {
   activateUser(userId: BigInt!): User!
   changePassword(data: ChangePasswordInput!, userId: BigInt!): User!
+  createAddress(data: CreateAddressInput!): Address!
   createCustomer(data: CreateCustomerInput!): Customer!
+  createEmployee(data: CreateEmployeeInput!): Employee!
+  createEmployeeTask(data: CreateEmployeeTaskInput!): EmployeeTask!
+  createJob(data: CreateJobInput!): Job!
+  createJobCategory(data: CreateJobCategoryInput!): JobCategory!
+  createPermissionSet(data: CreatePermissionSetInput!): PermissionSet!
   createPerson(data: CreatePersonInput!): Person!
+  createReview(data: CreateReviewInput!): Review!
+  createReviewResponse(data: CreateReviewResponseInput!): ReviewResponse!
+  createService(data: CreateServiceInput!): Service!
+  createServiceRequest(data: CreateServiceRequestInput!): ServiceRequest!
+  createServiceRequestJob(data: CreateServiceRequestJobInput!): ServiceRequestJob!
+  createTask(data: CreateTaskInput!): Task!
   createUser(data: CreateUserInput!): User!
+  createUserReport(data: CreateUserReportInput!): UserReport!
+  createVehicle(data: CreateVehicleInput!): Vehicle!
   createVehicleBrand(createVehicleBrandInput: CreateVehicleBrandInput!): VehicleBrand!
+  createVehicleDetails(data: CreateVehicleDetailsInput!): VehicleDetails!
   createVehicleModel(createVehicleModelInput: CreateVehicleModelInput!): VehicleModel!
   createWorkshop(data: CreateWorkshopInput!): Workshop!
+  createWorkshopDetails(data: CreateWorkshopDetailsInput!): WorkshopDetails!
+  createWorkshopJob(data: CreateWorkshopJobInput!): WorkshopJob!
+  createWorkshopJobCategory(data: CreateWorkshopJobCategoryInput!): WorkshopJobCategory!
+  deleteAddress(addressId: BigInt!): Address!
+  deleteEmployee(employeeId: BigInt!, workshopId: BigInt!): Employee!
+  deleteEmployeeTask(employeeId: BigInt!, taskId: BigInt!, workshopId: BigInt!): EmployeeTask!
+  deleteJob(jobId: BigInt!): Job!
+  deleteJobCategory(id: BigInt!): JobCategory!
+  deletePermissionSet(permissionSetId: BigInt!): PermissionSet!
   deletePerson(id: BigInt!): Person!
+  deleteReview(reviewId: BigInt!): Review!
+  deleteReviewResponse(reviewResponseId: BigInt!): ReviewResponse!
+  deleteService(serviceId: BigInt!): Service!
+  deleteServiceRequest(serviceRequestId: BigInt!): ServiceRequest!
+  deleteServiceRequestJob(jobId: BigInt!, serviceRequestId: BigInt!): ServiceRequestJob!
+  deleteTask(taskId: BigInt!): Task!
   deleteUser(userId: BigInt!): User!
+  deleteUserReport(reportId: BigInt!): UserReport!
+  deleteVehicle(vehicleId: BigInt!): Vehicle!
   deleteWorkshop(id: BigInt!): Workshop!
+  deleteWorkshopJobCategory(categoryId: BigInt!, workshopId: BigInt!): WorkshopJobCategory!
   destroyPerson(id: BigInt!): Person!
   destroyUser(userId: BigInt!): User!
   destroyVehicleBrand(brandName: String!): VehicleBrand!
@@ -92,10 +354,52 @@ type Mutation {
   retrieveUser(userId: BigInt!): User!
   retrieveWorkshop(id: BigInt!): Workshop!
   suspendUser(userId: BigInt!): User!
+  updateAddress(addressId: BigInt!, data: UpdateAddressInput!): Address!
+  updateEmployee(data: UpdateEmployeeInput!, employeeId: BigInt!, workshopId: BigInt!): Employee!
+  updateEmployeeTask(data: UpdateEmployeeTaskInput!, employeeId: BigInt!, taskId: BigInt!, workshopId: BigInt!): EmployeeTask!
+  updateJob(data: UpdateJobInput!): Job!
+  updateJobCategory(data: UpdateJobCategoryInput!, id: BigInt!): JobCategory!
+  updatePermissionSet(data: UpdatePermissionSetInput!): PermissionSet!
   updatePerson(data: UpdatePersonInput!, id: BigInt!): Person!
+  updateReview(data: UpdateReviewInput!): Review!
+  updateReviewResponse(data: UpdateReviewResponseInput!): ReviewResponse!
+  updateService(data: UpdateServiceInput!): Service!
+  updateServiceRequest(data: UpdateServiceRequestInput!): ServiceRequest!
+  updateServiceRequestJob(data: UpdateServiceRequestJobInput!): ServiceRequestJob!
+  updateTask(data: UpdateTaskInput!, taskId: BigInt!): Task!
   updateUser(data: UpdateUserInput!, userId: BigInt!): User!
+  updateUserReport(data: UpdateUserReportInput!): UserReport!
+  updateVehicle(data: UpdateVehicleInput!): Vehicle!
+  updateVehicleDetails(data: UpdateVehicleDetailsInput!): VehicleDetails!
   updateWorkshop(data: UpdateWorkshopInput!, id: BigInt!): Workshop!
+  updateWorkshopDetails(data: UpdateWorkshopDetailsInput!): WorkshopDetails!
+  updateWorkshopJob(data: UpdateWorkshopJobInput!): WorkshopJob!
+  updateWorkshopJobCategory(data: UpdateWorkshopJobCategoryInput!): WorkshopJobCategory!
   verifyEmail(userId: BigInt!): User!
+}
+
+type PermissionSet {
+  canGenerateReports: Boolean!
+  canModifyCustomers: Boolean!
+  canModifyEmployees: Boolean!
+  canModifyPermissions: Boolean!
+  canModifyServices: Boolean!
+  canModifyTasks: Boolean!
+  canModifyWorkshopDetails: Boolean!
+  canReadCustomers: Boolean!
+  canReadEmployees: Boolean!
+  canReadReports: Boolean!
+  canReadServices: Boolean!
+  canReadTasks: Boolean!
+  canReadWorkshopDetails: Boolean!
+  canUpdateCustomers: Boolean!
+  canUpdateEmployees: Boolean!
+  canUpdateServices: Boolean!
+  canUpdateTasks: Boolean!
+  canUpdateWorkshopDetails: Boolean!
+  permissionSetId: BigInt!
+  setName: String!
+  workshopId: BigInt
 }
 
 type Person {
@@ -103,24 +407,240 @@ type Person {
   deletedAt: DateTime
   firstName: String!
   lastName: String!
-  personId: BigInt!
+  personId: Float!
   telephoneNumber: String
 }
 
 type Query {
+  address(addressId: BigInt!): Address
+  addressPersonByAddressId(addressId: BigInt!): [AddressPerson!]!
+  addressPersonByPersonId(personId: BigInt!): [AddressPerson!]!
+  addressPersons: [AddressPerson!]!
+  addressWorkshopByAddressId(addressId: BigInt!): [AddressWorkshop!]!
+  addressWorkshopByWorkshopId(workshopId: BigInt!): [AddressWorkshop!]!
+  addressWorkshops: [AddressWorkshop!]!
+  addresses: [Address!]!
   customer(customerId: BigInt!, workshopId: BigInt!): Customer
   customers: [Customer!]!
+  employee(employeeId: BigInt!, workshopId: BigInt!): Employee
+  employees: [Employee!]!
+  job(jobId: BigInt!): Job
+  jobCategories: [JobCategory!]!
+  jobCategory(id: BigInt!): JobCategory
+  jobs: [Job!]!
+  permissionSet(permissionSetId: BigInt!): PermissionSet
+  permissionSets: [PermissionSet!]!
   person(id: BigInt!): Person
   persons: [Person!]!
+  review(reviewId: BigInt!): Review
+  reviewResponse(reviewResponseId: BigInt!): ReviewResponse
+  reviewResponses: [ReviewResponse!]!
+  reviews: [Review!]!
   searchUsers(includeDeleted: Boolean!, query: String!): [User!]!
+  service(serviceId: BigInt!): Service
+  serviceRequest(serviceRequestId: BigInt!): ServiceRequest
+  serviceRequestJob(jobId: BigInt!, serviceRequestId: BigInt!): ServiceRequestJob
+  serviceRequestJobs: [ServiceRequestJob!]!
+  serviceRequests: [ServiceRequest!]!
+  services: [Service!]!
+  task(taskId: BigInt!): Task
+  tasks: [Task!]!
   user(userId: BigInt!): User!
+  userReport(reportId: BigInt!): UserReport
+  userReports: [UserReport!]!
   users: [User!]!
+  vehicle(vehicleId: BigInt!): Vehicle
   vehicleBrand(brandName: String!): VehicleBrand
   vehicleBrands: [VehicleBrand!]!
+  vehicleDetails(vehicleId: BigInt!): VehicleDetails
   vehicleModel(brandName: String!, modelName: String!): VehicleModel!
   vehicleModels: [VehicleModel!]!
+  vehicles: [Vehicle!]!
   workshop(id: BigInt!): Workshop
+  workshopDetails(workshopId: BigInt!): WorkshopDetails
+  workshopJob(workshopJobId: BigInt!): WorkshopJob
+  workshopJobCategories: [WorkshopJobCategory!]!
+  workshopJobCategory(categoryId: BigInt!, workshopId: BigInt!): WorkshopJobCategory
   workshops: [Workshop!]!
+}
+
+type Review {
+  rating: Float!
+  reviewDate: DateTime!
+  reviewId: BigInt!
+  reviewResponses: [ReviewResponse!]!
+  reviewText: String!
+  status: ReviewsStatus!
+  user: User!
+  userId: BigInt!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
+type ReviewResponse {
+  otherReviewResponses: [ReviewResponse!]!
+  parentResponseId: BigInt
+  responseDate: DateTime!
+  responseText: String!
+  review: Review!
+  reviewId: BigInt!
+  reviewResponse: ReviewResponse
+  reviewResponseId: BigInt!
+  status: ReviewsResponsesStatus!
+  user: User!
+  userId: BigInt!
+}
+
+enum ReviewsResponsesStatus {
+  accepted
+  denied
+  pending
+}
+
+enum ReviewsStatus {
+  accepted
+  denied
+  pending
+}
+
+type Service {
+  customer: Customer!
+  customerId: BigInt!
+  deletedAt: DateTime
+  description: String
+  employee: Employee!
+  employeeId: BigInt!
+  payedOff: Boolean!
+  paymentAmount: Float!
+  serviceEndDate: DateTime
+  serviceId: BigInt!
+  serviceRequest: ServiceRequest
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime!
+  status: ServicesStatus!
+  tasks: [Task!]!
+  updatedAt: DateTime!
+  vehicle: Vehicle!
+  vehicleId: BigInt!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
+type ServiceRequest {
+  approvedService: Service
+  approvedServiceId: BigInt
+  deletedAt: DateTime
+  description: String
+  person: Person!
+  personId: BigInt!
+  requestedAt: DateTime!
+  serviceRequestId: BigInt!
+  serviceRequestJobs: [ServiceRequestJob!]!
+  status: ServiceRequestsStatus
+  vehicle: Vehicle!
+  vehicleId: BigInt!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
+type ServiceRequestJob {
+  createdAt: DateTime!
+  job: Job!
+  jobId: BigInt!
+  serviceRequest: ServiceRequest!
+  serviceRequestId: BigInt!
+}
+
+enum ServiceRequestsStatus {
+  accepted
+  pending
+  rejected
+}
+
+enum ServicesStatus {
+  cancelled
+  completed
+  pending
+}
+
+type Task {
+  customName: String
+  description: String!
+  executionTime: Float!
+  jobId: BigInt
+  partsCost: Float!
+  serviceId: BigInt!
+  status: TasksStatus!
+  taskId: BigInt!
+}
+
+enum TasksStatus {
+  cancelled
+  completed
+  pending
+}
+
+input UpdateAddressInput {
+  buildingNo: String
+  city: String
+  country: String
+  flatNo: String
+  postCode: String
+  region: String
+  street: String
+}
+
+input UpdateEmployeeInput {
+  deletedAt: DateTime
+  employeeId: BigInt!
+  joinedAt: DateTime
+  permissionSetId: BigInt
+  workshopId: BigInt!
+}
+
+input UpdateEmployeeTaskInput {
+  employeeId: BigInt
+  taskId: BigInt
+  workshopId: BigInt
+}
+
+input UpdateJobCategoryInput {
+  description: String
+  isPopular: Boolean
+  name: String
+  parentId: BigInt
+}
+
+input UpdateJobInput {
+  categoryId: BigInt
+  description: String
+  isPopular: Boolean
+  jobId: BigInt!
+  name: String
+}
+
+input UpdatePermissionSetInput {
+  canGenerateReports: Boolean!
+  canModifyCustomers: Boolean!
+  canModifyEmployees: Boolean!
+  canModifyPermissions: Boolean!
+  canModifyServices: Boolean!
+  canModifyTasks: Boolean!
+  canModifyWorkshopDetails: Boolean!
+  canReadCustomers: Boolean!
+  canReadEmployees: Boolean!
+  canReadReports: Boolean!
+  canReadServices: Boolean!
+  canReadTasks: Boolean!
+  canReadWorkshopDetails: Boolean!
+  canUpdateCustomers: Boolean!
+  canUpdateEmployees: Boolean!
+  canUpdateServices: Boolean!
+  canUpdateTasks: Boolean!
+  canUpdateWorkshopDetails: Boolean!
+  permissionSetId: BigInt!
+  setName: String!
+  workshopId: BigInt
 }
 
 input UpdatePersonInput {
@@ -129,19 +649,136 @@ input UpdatePersonInput {
   telephoneNumber: String
 }
 
+input UpdateReviewInput {
+  rating: Float
+  reviewDate: DateTime
+  reviewId: BigInt!
+  reviewText: String
+  status: ReviewsStatus!
+  userId: BigInt
+  workshopId: BigInt
+}
+
+input UpdateReviewResponseInput {
+  parentResponseId: BigInt
+  responseDate: DateTime
+  responseText: String
+  reviewId: BigInt
+  reviewResponseId: BigInt!
+  status: ReviewsResponsesStatus
+  userId: BigInt
+}
+
+input UpdateServiceInput {
+  customerId: BigInt
+  deletedAt: DateTime
+  description: String
+  employeeId: BigInt
+  payedOff: Boolean
+  paymentAmount: Float
+  serviceEndDate: DateTime
+  serviceId: BigInt!
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  vehicleId: BigInt
+  workshopId: BigInt
+}
+
+input UpdateServiceRequestInput {
+  approvedServiceId: BigInt
+  deletedAt: DateTime
+  description: String
+  personId: BigInt
+  serviceRequestId: BigInt!
+  status: ServiceRequestsStatus
+  vehicleId: BigInt
+  workshopId: BigInt
+}
+
+input UpdateServiceRequestJobInput {
+  createdAt: DateTime
+  jobId: BigInt!
+  serviceRequestId: BigInt!
+}
+
+input UpdateTaskInput {
+  customName: String
+  description: String
+  executionTime: Float
+  jobId: BigInt
+  partsCost: Float
+}
+
 input UpdateUserInput {
   email: String
   isVerified: Boolean
   password: String
-  status: String
+  status: UsersStatus
   username: String
+}
+
+input UpdateUserReportInput {
+  reportId: BigInt!
+  reportText: String
+  reportedId: BigInt
+  reportedType: UserReportsReportedType
+  status: UserReportsStatus
+  updatedAt: DateTime
+}
+
+input UpdateVehicleDetailsInput {
+  VIN: String
+  bodyColor: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: String
+  licensePlate: String
+  vehicleId: BigInt!
+  yearOfProduction: Int
+}
+
+input UpdateVehicleInput {
+  brandName: String
+  deletedAt: DateTime
+  modelId: Float
+  personId: Float
+  vehicleId: BigInt!
+}
+
+input UpdateWorkshopDetailsInput {
+  NIP: String
+  deletedAt: DateTime
+  description: String
+  logoURL: String
+  rating: Float
+  status: WorkshopsDetailsStatus
+  telephoneNumber: String
+  workshopId: BigInt!
+  workshopName: String
 }
 
 input UpdateWorkshopInput {
   email: String
   isManagingWork: Boolean
   isVerified: Boolean
-  personId: BigInt!
+  personId: Float!
+}
+
+input UpdateWorkshopJobCategoryInput {
+  categoryId: BigInt!
+  workshopId: BigInt!
+}
+
+input UpdateWorkshopJobInput {
+  availability: Boolean
+  maxPrice: Float
+  minPrice: Float
+  price: Float
+  workshopDescription: String
+  workshopJobId: Float!
 }
 
 type User {
@@ -150,18 +787,73 @@ type User {
   email: String
   isVerified: Boolean
   password: String!
-  person: Person
-  personId: BigInt
-  status: String
+  personId: Float
+  status: UsersStatus
   updatedAt: DateTime
-  userId: BigInt!
+  userId: Float!
   username: String!
+}
+
+type UserReport {
+  createdAt: DateTime!
+  reportId: BigInt!
+  reportText: String!
+  reportedId: BigInt!
+  reportedType: UserReportsReportedType!
+  status: UserReportsStatus!
+  updatedAt: DateTime
+  user: User!
+  userId: BigInt!
+}
+
+enum UserReportsReportedType {
+  review
+  review_response
+  user
+  workshop
+}
+
+enum UserReportsStatus {
+  closed
+  considered
+  pending
+}
+
+enum UsersStatus {
+  active
+  suspended
+}
+
+type Vehicle {
+  brandName: String!
+  deletedAt: DateTime
+  modelId: BigInt!
+  person: Person!
+  personId: BigInt!
+  services: [Service!]!
+  vehicleAssociatedServiceRequests: [ServiceRequest!]!
+  vehicleBrand: VehicleBrand!
+  vehicleId: BigInt!
+  vehicleModel: VehicleModel!
 }
 
 type VehicleBrand {
   brandName: String!
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type VehicleDetails {
+  VIN: String
+  bodyColor: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: String
+  licensePlate: String
+  vehicle: Vehicle!
+  vehicleId: BigInt!
+  yearOfProduction: Int
 }
 
 type VehicleModel {
@@ -179,7 +871,46 @@ type Workshop {
   email: String
   isManagingWork: Boolean
   isVerified: Boolean
-  personId: BigInt!
+  personId: Float!
   updatedAt: DateTime
+  workshopId: Float!
+}
+
+type WorkshopDetails {
+  NIP: String
+  deletedAt: DateTime
+  description: String
+  logoURL: String
+  rating: Float!
+  status: WorkshopsDetailsStatus!
+  telephoneNumber: String
+  workshop: Workshop!
   workshopId: BigInt!
+  workshopName: String!
+}
+
+type WorkshopJob {
+  availability: Boolean!
+  job: Job!
+  jobId: BigInt!
+  maxPrice: Float
+  minPrice: Float
+  price: Float
+  workshop: Workshop!
+  workshopDescription: String
+  workshopId: BigInt!
+  workshopJobId: BigInt!
+}
+
+type WorkshopJobCategory {
+  categoryId: BigInt!
+  createdAt: DateTime!
+  jobCategory: JobCategory!
+  workshop: Workshop!
+  workshopId: BigInt!
+}
+
+enum WorkshopsDetailsStatus {
+  active
+  suspended
 }

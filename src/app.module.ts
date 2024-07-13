@@ -3,14 +3,36 @@ import { DatabaseService } from './database/database.service';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { UserModule } from './modules/users/user.module';
 import { join } from 'path';
-import { VehicleBrandsModule } from './modules/vehicle-brands/vehicle-brand.module';
-import { VehicleModelsModule } from './modules/vehicle-models/vehicle-model.module';
 import { BigIntScalar } from './common/scalars/bigint.scalar';
-import { PersonModule } from './modules/persons/person.module';
-import { WorkshopModule } from './modules/workshops/workshop.module';
-import { CustomerModule } from './modules/customers/customer.module';
+import {
+  AddressModule,
+  AddressPersonModule,
+  AddressWorkshopModule,
+  CustomerModule,
+  EmployeeModule,
+  EmployeeTaskModule,
+  JobModule,
+  JobCategoryModule,
+  PermissionSetModule,
+  PersonModule,
+  ReviewModule,
+  ReviewResponseModule,
+  ServiceModule,
+  ServiceRequestModule,
+  ServiceRequestJobModule,
+  TaskModule,
+  UserModule,
+  UserReportModule,
+  VehicleModule,
+  VehicleBrandModule,
+  VehicleDetailsModule,
+  VehicleModelModule,
+  WorkshopModule,
+  WorkshopDetailsModule,
+  WorkshopJobModule,
+  WorkshopJobCategoryModule,
+} from './modules/index';
 
 @Module({
   imports: [
@@ -20,12 +42,32 @@ import { CustomerModule } from './modules/customers/customer.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
-    UserModule,
-    VehicleBrandsModule,
-    VehicleModelsModule,
-    PersonModule,
-    WorkshopModule,
+    AddressModule,
+    AddressPersonModule,
+    AddressWorkshopModule,
     CustomerModule,
+    EmployeeModule,
+    EmployeeTaskModule,
+    JobModule,
+    JobCategoryModule,
+    PermissionSetModule,
+    PersonModule,
+    ReviewModule,
+    ReviewResponseModule,
+    ServiceModule,
+    ServiceRequestModule,
+    ServiceRequestJobModule,
+    TaskModule,
+    UserModule,
+    UserReportModule,
+    VehicleModule,
+    VehicleBrandModule,
+    VehicleDetailsModule,
+    VehicleModelModule,
+    WorkshopModule,
+    WorkshopDetailsModule,
+    WorkshopJobModule,
+    WorkshopJobCategoryModule, 
   ],
   providers: [DatabaseService, BigIntScalar],
 })
