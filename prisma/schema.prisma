@@ -1,0 +1,470 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  addressId           BigInt                @id @unique @default(autoincrement()) @db.UnsignedBigInt
+  country             String                @db.VarChar(30)
+  region              String                @db.VarChar(30)
+  city                String                @db.VarChar(30)
+  street              String?               @db.VarChar(30)
+  buildingNo          String                @db.VarChar(6)
+  flatNo              String?               @db.VarChar(6)
+  postCode            String                @db.VarChar(10)
+  addressPersons      AddressPerson[]
+  addressWorkshops    AddressWorkshop[]
+}
+
+model AddressPerson {
+  addressId  BigInt    @db.UnsignedBigInt
+  personId   BigInt    @db.UnsignedBigInt
+  createdAt  DateTime  @default(now()) @db.DateTime(0)
+  address    Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_persons_address_id")
+  person     Person    @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_addresses_persons_person_id")
+
+  @@id([addressId, personId])
+  @@index([personId])
+}
+
+model AddressWorkshop {
+  addressId   BigInt    @db.UnsignedBigInt
+  workshopId  BigInt    @db.UnsignedBigInt
+  createdAt   DateTime  @default(now()) @db.DateTime(0)
+  address     Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_workshops_address_id")
+  workshop    Workshop  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_addresses_workshops_workshop_id")
+
+  @@id([addressId, workshopId])
+  @@index([workshopId])
+}
+
+model Customer {
+  customerId   BigInt     @db.UnsignedBigInt
+  workshopId   BigInt     @db.UnsignedBigInt
+  totalDue     Decimal    @default(0.00) @db.Decimal(10, 2)
+  description  String?    @db.VarChar(255)
+  deletedAt    DateTime?  @db.Timestamp(0)
+  NIP          String?    @db.VarChar(10)
+  companyName  String?    @db.VarChar(30)
+  person       Person     @relation(fields: [customerId], references: [personId], onDelete: NoAction, map: "fk_customerIsPerson")
+  workshop     Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
+  services     Service[]
+
+  @@id([customerId, workshopId])
+  @@index([workshopId])
+}
+
+model Employee {
+  employeeId        BigInt            @db.UnsignedBigInt
+  workshopId        BigInt            @db.UnsignedBigInt
+  joinedAt          DateTime          @default(now()) @db.DateTime(0)
+  deletedAt         DateTime?         @db.Timestamp(0)
+  permissionSetId   BigInt?           @db.UnsignedBigInt
+  permissionSet     PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
+  workshop          Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
+  person            Person            @relation(fields: [employeeId], references: [personId], onDelete: NoAction, map: "fk_personIsEmployee")
+  services          Service[]
+  employeeTasks     EmployeeTask[]
+
+  @@id([employeeId, workshopId])
+  @@index([permissionSetId])
+  @@index([workshopId])
+}
+
+model JobCategory {
+  categoryId                 BigInt                      @id @unique(map: "category_id") @default(autoincrement()) @db.UnsignedBigInt
+  name                       String                      @db.VarChar(50)
+  parentId                   BigInt?                     @db.UnsignedBigInt
+  description                String?                     @db.VarChar(255)
+  isPopular                  Boolean                     @default(false)
+  child                      JobCategory?                @relation("jobs_categories_dictTojobs_categories_dict", fields: [parentId], references: [categoryId], onDelete: Cascade, map: "fk_subcategory")
+  children                   JobCategory[]               @relation("jobs_categories_dictTojobs_categories_dict")
+  jobs                       Job[]
+  jobCategoryWorkshops       WorkshopJobCategory[]
+
+  @@index([parentId])
+}
+
+model Job {
+  jobId                BigInt                 @id @unique(map: "job_id") @default(autoincrement()) @db.UnsignedBigInt
+  categoryId           BigInt                 @db.UnsignedBigInt
+  name                 String?                @db.VarChar(50)
+  description          String?                @db.VarChar(255)
+  isPopular            Boolean                @default(false)
+  jobCategory          JobCategory   @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade, map: "fk_jobFallsUnderCategory")
+  jobServiceRequests   ServiceRequestJob[]
+  jobWorkshops         WorkshopJob[]
+
+  @@index([categoryId])
+}
+
+model PermissionSet {
+  permissionSetId             BigInt       @id @unique(map: "permission_set_id") @default(autoincrement()) @db.UnsignedBigInt
+  workshopId                  BigInt?      @db.UnsignedBigInt
+  setName                     String       @default("CUSTOM") @db.VarChar(30)
+  canReadWorkshopDetails      Boolean      @default(false)
+  canUpdateWorkshopDetails    Boolean      @default(false)
+  canModifyWorkshopDetails    Boolean      @default(false)
+  canReadEmployees            Boolean      @default(false)
+  canUpdateEmployees          Boolean      @default(false)
+  canModifyEmployees          Boolean      @default(false)
+  canReadCustomers            Boolean      @default(false)
+  canUpdateCustomers          Boolean      @default(false)
+  canModifyCustomers          Boolean      @default(false)
+  canReadServices             Boolean      @default(false)
+  canUpdateServices           Boolean      @default(false)
+  canModifyServices           Boolean      @default(false)
+  canReadTasks                Boolean      @default(false)
+  canUpdateTasks              Boolean      @default(false)
+  canModifyTasks              Boolean      @default(false)
+  canReadReports              Boolean      @default(false)
+  canGenerateReports          Boolean      @default(false)
+  canModifyPermissions        Boolean      @default(false)
+  employees                   Employee[]
+  workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
+
+  @@index([workshopId])
+}
+
+model Person {
+  personId          BigInt              @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
+  firstName         String              @db.VarChar(30)
+  lastName          String              @db.VarChar(30)
+  telephoneNumber   String?             @db.VarChar(12)
+  deletedAt         DateTime?           @db.Timestamp(0)
+  personAddresses   AddressPerson[]
+  customers         Customer[]
+  employees         Employee[]
+  serviceRequests   ServiceRequest[]
+  user              User?
+  vehicles          Vehicle[]
+  workshops         Workshop[]
+}
+
+model Review {
+  reviewId          BigInt              @id @unique(map: "review_id") @default(autoincrement()) @db.UnsignedBigInt
+  userId            BigInt              @db.UnsignedBigInt
+  workshopId        BigInt              @db.UnsignedBigInt
+  rating            Decimal             @default(0.00) @db.Decimal(3, 2)
+  reviewText        String              @db.Text
+  reviewDate        DateTime            @default(now()) @db.DateTime(0)
+  status            ReviewsStatus      @default(pending)
+  user              User                @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviews")
+  workshop          Workshop            @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviewsWorkshop")
+  reviewResponses   ReviewResponse[]
+
+  @@index([userId])
+  @@index([workshopId])
+}
+
+model ReviewResponse {
+  reviewResponseId       BigInt                   @id @unique(map: "review_response_id") @default(autoincrement()) @db.UnsignedBigInt
+  reviewId               BigInt                   @db.UnsignedBigInt
+  userId                 BigInt                   @db.UnsignedBigInt
+  parentResponseId       BigInt?                  @db.UnsignedBigInt
+  responseText           String                   @db.Text
+  responseDate           DateTime                 @default(now()) @db.DateTime(0)
+  status                 ReviewsResponsesStatus @default(pending)
+  reviewResponse         ReviewResponse?          @relation("reviews_responsesToreviews_responses", fields: [parentResponseId], references: [reviewResponseId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseToResponse")
+  otherReviewResponses   ReviewResponse[]         @relation("reviews_responsesToreviews_responses")
+  review                 Review                   @relation(fields: [reviewId], references: [reviewId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseUnderReview")
+  user                   User                     @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userResponses")
+
+  @@index([parentResponseId])
+  @@index([reviewId])
+  @@index([userId])
+}
+
+model ServiceRequestJob {
+  serviceRequestId   BigInt           @db.UnsignedBigInt
+  jobId              BigInt           @db.UnsignedBigInt
+  createdAt          DateTime         @default(now()) @db.DateTime(0)
+  job                Job              @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsAssignedToServiceRequest")
+  serviceRequest     ServiceRequest   @relation(fields: [serviceRequestId], references: [serviceRequestId], onDelete: NoAction, map: "fk_serviceRequestHasJobs")
+
+  @@id([serviceRequestId, jobId])
+  @@index([jobId])
+}
+
+model ServiceRequest {
+  serviceRequestId                                        BigInt                   @id @unique(map: "service_request_id") @default(autoincrement()) @db.UnsignedBigInt
+  workshopId                                              BigInt                   @db.UnsignedBigInt
+  vehicleId                                               BigInt                   @db.UnsignedBigInt
+  personId                                                BigInt                   @db.UnsignedBigInt
+  requestedAt                                             DateTime                 @default(now()) @db.DateTime(0)
+  status                                                  ServiceRequestsStatus? @default(pending)
+  description                                             String?                  @db.VarChar(511)
+  approvedServiceId                                       BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
+  deletedAt                                               DateTime?                @db.Timestamp(0)
+  serviceRequestJobs                                      ServiceRequestJob[]
+  approvedService                                         Service?                @relation("service_requests_approved_service_idToservices", fields: [approvedServiceId], references: [serviceId], onDelete: NoAction, map: "fk_requestApprovedService")
+  vehicle                                                 Vehicle                 @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_requestAssignedToVehicle")
+  workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
+  person                                                  Person                  @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_requestFromPerson")
+
+  @@index([vehicleId])
+  @@index([workshopId])
+  @@index([personId])
+}
+
+model Task {
+  taskId               BigInt                @id @unique(map: "task_id") @default(autoincrement()) @db.UnsignedBigInt
+  serviceId            BigInt                @db.UnsignedBigInt
+  jobId                BigInt?               @db.UnsignedBigInt
+  customName           String?               @db.VarChar(50)
+  description          String                @db.VarChar(255)
+  status               TasksStatus?          @default(pending)
+  executionTime        Float                 @db.Float
+  partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
+  service              Service              @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
+  taskEmployees        EmployeeTask[]
+
+  @@index([serviceId])
+	@@map("Task")
+}
+
+model Service {
+  serviceId           BigInt            @id @unique(map: "service_id") @default(autoincrement()) @db.UnsignedBigInt
+  serviceRequestId    BigInt?           @unique(map: "service_request_id") @db.UnsignedBigInt
+  workshopId          BigInt            @db.UnsignedBigInt
+  vehicleId           BigInt            @db.UnsignedBigInt
+  customerId          BigInt            @db.UnsignedBigInt
+  employeeId          BigInt            @db.UnsignedBigInt
+  description         String?           @db.VarChar(511)
+  status              ServicesStatus?  @default(pending)
+  payedOff            Boolean           @default(false)
+  paymentAmount       Decimal           @default(0.00) @db.Decimal(10, 2)
+  serviceStartDate    DateTime          @default(now()) @db.DateTime(0)
+  serviceEndDate      DateTime?         @db.DateTime(0)
+  updatedAt           DateTime?         @default(now()) @db.Timestamp(0)
+  deletedAt           DateTime?         @db.Timestamp(0)
+  serviceRequest      ServiceRequest? @relation("service_requests_approved_service_idToservices")
+  tasks               Task[]
+  customer            Customer         @relation(fields: [customerId, workshopId], references: [customerId, workshopId], onDelete: NoAction, map: "fk_customerOrdersService")
+  employee            Employee         @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_employeeResponsibleForService")
+  vehicle             Vehicle          @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_serviceAssignedToVehicle")
+  workshop            Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_serviceAssignedToWorkshop")
+
+  @@index([customerId])
+  @@index([employeeId])
+  @@index([vehicleId])
+  @@index([workshopId])
+}
+
+model EmployeeTask {
+  taskId        BigInt        @db.UnsignedBigInt
+  employeeId    BigInt        @db.UnsignedBigInt
+  workshopId    BigInt        @db.UnsignedBigInt
+  createdAt     DateTime      @default(now()) @db.DateTime(0)
+  employee      Employee      @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_tasks_employees_employeeCanBeAssignedToManyTasks")
+  Task          Task          @relation(fields: [taskId], references: [taskId], onDelete: NoAction, map: "fk_tasks_employees_taskCanBeAssignedToManyEmployees")
+
+  @@id([employeeId, taskId, workshopId])
+  @@index([taskId])
+}
+
+model UserReport {
+  reportId           BigInt                     @id @unique(map: "report_id") @default(autoincrement()) @db.UnsignedBigInt
+  userId             BigInt                     @db.UnsignedBigInt
+  reportText         String                     @db.TinyText
+  reportedType       UserReportsReportedType
+  reportedId         BigInt                     @db.UnsignedBigInt
+  status             UserReportsStatus        @default(pending)
+  createdAt          DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt          DateTime?                  @db.Timestamp(0)
+  user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
+
+  @@index([userId])
+}
+
+model User {
+  userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
+  personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
+  username          String              @db.VarChar(30)
+  password          String              @db.VarChar(255)
+  email             String?             @db.VarChar(50)
+  isVerified        Boolean?
+  status            UsersStatus?        @default(active)
+  createdAt         DateTime?           @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime?           @default(now()) @db.Timestamp(0)
+  deletedAt         DateTime?           @db.Timestamp(0)
+  reviews           Review[]
+  reviewResponses   ReviewResponse[]
+  userReports       UserReport[]
+  person            Person?            @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_userCanBePerson")
+
+  @@unique([username], map: "uniqueUsername")
+}
+
+model Vehicle {
+  vehicleId                         BigInt             @id @unique(map: "vehicle_id") @default(autoincrement()) @db.UnsignedBigInt
+  personId                          BigInt             @db.UnsignedBigInt
+  brandName                         String             @db.VarChar(50)
+  modelId                           BigInt             @db.UnsignedBigInt
+  deletedAt                         DateTime?          @db.Timestamp(0)
+  vehicleAssociatedServiceRequests  ServiceRequest[]
+  services                          Service[]
+  vehicleBrand                      VehicleBrand       @relation(fields: [brandName], references: [brandName], onDelete: NoAction, map: "fk_vehicleHasBrand")
+  vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
+  person                            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_vehicleHasOwner")
+  vehiclesDetails                   VehicleDetails?
+
+  @@index([brandName])
+  @@index([modelId])
+  @@index([personId])
+}
+
+model VehicleBrand {
+  brandName       String            @id @unique(map: "brand_name") @db.VarChar(50)
+  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime?         @default(now()) @db.Timestamp(0)
+  vehicles        Vehicle[]
+  vehicleModels   VehicleModel[]
+}
+
+model VehicleDetails {
+  vehicleId         BigInt    @id @db.UnsignedBigInt
+  yearOfProduction  Int?
+  VIN               String?   @db.Char(17)
+  engineCapacity    String?   @db.VarChar(5)
+  licensePlate      String?   @db.VarChar(20)
+  fuelType          String?   @db.VarChar(16)
+  engineNo          String?   @db.VarChar(16)
+  bodyColor         String?   @db.VarChar(16)
+  deletedAt         DateTime? @db.Timestamp(0)
+  vehicle           Vehicle   @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_vehicleHasDetails")
+}
+
+model VehicleModel {
+  modelId        BigInt          @id @unique(map: "model_id") @default(autoincrement()) @db.UnsignedBigInt
+  modelName      String          @db.VarChar(50)
+  brandName      String          @db.VarChar(50)
+  createdAt      DateTime?       @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime?       @default(now()) @db.Timestamp(0)
+  vehicles       Vehicle[]
+  vehiclesBrand  VehicleBrand @relation(fields: [brandName], references: [brandName], onDelete: NoAction, map: "fk_modelMadeByBrand")
+
+  @@unique([modelName, brandName], map: "model_name")
+  @@index([brandName])
+}
+
+model Workshop {
+  workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
+  personId                  BigInt                      @db.UnsignedBigInt
+  email                     String?                     @db.VarChar(50)
+  isVerified                Boolean?                    @default(false)
+  isManagingWork            Boolean?                    @default(false)
+  createdAt                 DateTime?                   @default(now()) @db.Timestamp(0)
+  updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
+  deletedAt                 DateTime?                   @db.Timestamp(0)
+  workshopAddresses         AddressWorkshop[]
+  customers                 Customer[]
+  employees                 Employee[]
+  permissionSets            PermissionSet[]
+  reviews                   Review[]
+  serviceRequests           ServiceRequest[]
+  services                  Service[]
+  person                    Person                     @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_workshopHasOwner")
+  workshopDetails           WorkshopDetails?
+  workshopJobs              WorkshopJob[]
+  workshopJobCategories     WorkshopJobCategory[]
+
+  @@index([personId])
+}
+
+model WorkshopDetails {
+  workshopId       BigInt                    @id @db.UnsignedBigInt
+  rating           Decimal                   @default(0.00) @db.Decimal(3, 2)
+  workshopName     String                    @db.VarChar(100)
+  description      String?                   @db.Text
+  telephoneNumber  String?                   @db.VarChar(12)
+  logoURL          String?                   @db.VarChar(255)
+  status           WorkshopsDetailsStatus? @default(active)
+  NIP              String?                   @db.VarChar(10)
+  deletedAt        DateTime?                 @db.Timestamp(0)
+  workshop         Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDetails")
+}
+
+model WorkshopJob {
+  workshopJobId        BigInt    @id @unique(map: "workshop_job_id") @default(autoincrement()) @db.UnsignedBigInt
+  workshopId           BigInt    @db.UnsignedBigInt
+  jobId                BigInt    @db.UnsignedBigInt
+  workshopDescription  String?   @db.VarChar(255)
+  minPrice             Decimal?  @db.Decimal(10, 2)
+  maxPrice             Decimal?  @db.Decimal(10, 2)
+  price                Decimal?  @db.Decimal(10, 2)
+  availability         Boolean   @default(true)
+  job                  Job       @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
+  workshop            Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
+
+  @@unique([workshopId, jobId], map: "workshop_id")
+  @@index([jobId])
+}
+
+model WorkshopJobCategory {
+  workshopId          BigInt               @db.UnsignedBigInt
+  categoryId          BigInt               @db.UnsignedBigInt
+  createdAt           DateTime             @default(now()) @db.DateTime(0)
+  jobCategory         JobCategory          @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, map: "fk_categoryHandledByWorkshop")
+  workshop            Workshop             @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopOfferJobsFromCategory")
+
+  @@id([workshopId, categoryId])
+  @@index([categoryId])
+}
+
+enum UserReportsReportedType {
+  user
+  workshop
+  review
+  review_response
+}
+
+enum ServiceRequestsStatus {
+  pending
+  accepted
+  rejected
+}
+
+enum TasksStatus {
+  pending
+  completed
+  cancelled
+}
+
+enum UserReportsStatus {
+  pending
+  considered
+  closed
+}
+
+enum ReviewsStatus {
+  pending
+  accepted
+  denied
+}
+
+enum ReviewsResponsesStatus {
+  pending
+  accepted
+  denied
+}
+
+enum UsersStatus {
+  active
+  suspended
+}
+
+enum WorkshopsDetailsStatus {
+  active
+  suspended
+}
+
+enum ServicesStatus {
+  pending
+  completed
+  cancelled
+}
