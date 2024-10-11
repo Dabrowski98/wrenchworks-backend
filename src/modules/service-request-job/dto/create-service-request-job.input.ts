@@ -8,3 +8,4 @@ export class CreateServiceRequestJobInput {
   @Field(() => BigInt)
   jobId: bigint;
 }
+ 

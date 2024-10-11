@@ -3,7 +3,9 @@
 # ------------------------------------------------------
 
 type Address {
-  addressId: Float!
+  addressId: BigInt!
+  addressPersons: [AddressPerson!]
+  addressWorkshops: [AddressWorkshop!]
   buildingNo: String!
   city: String!
   country: String!
@@ -38,6 +40,8 @@ input ChangePasswordInput {
 }
 
 input CreateAddressInput {
+  addressPersons: [CreateAddressPersonInput!]
+  addressWorkshops: [CreateAddressWorkshopInput!]
   buildingNo: String!
   city: String!
   country: String!
@@ -47,13 +51,29 @@ input CreateAddressInput {
   street: String
 }
 
+input CreateAddressPersonInput {
+  address: CreateAddressInput!
+  addressId: BigInt!
+  createdAt: DateTime!
+  person: CreatePersonInput!
+  personId: BigInt!
+}
+
+input CreateAddressWorkshopInput {
+  address: CreateAddressInput!
+  addressId: BigInt!
+  createdAt: DateTime!
+  person: CreatePersonInput!
+  personId: BigInt!
+}
+
 input CreateCustomerInput {
   NIP: String
   companyName: String
-  customerId: Float!
+  customerId: BigInt!
   description: String
   totalDue: Float! = 0
-  workshopId: Float!
+  workshopId: BigInt!
 }
 
 input CreateEmployeeInput {
@@ -72,7 +92,7 @@ input CreateEmployeeTaskInput {
 
 input CreateJobCategoryInput {
   description: String
-  isPopular: Boolean
+  isPopular: Boolean!
   name: String!
   parentId: BigInt
 }
@@ -80,7 +100,7 @@ input CreateJobCategoryInput {
 input CreateJobInput {
   categoryId: BigInt!
   description: String
-  isPopular: Boolean = false
+  isPopular: Boolean! = false
   name: String
 }
 
@@ -139,7 +159,7 @@ input CreateServiceInput {
   payedOff: Boolean!
   paymentAmount: Float!
   serviceEndDate: DateTime
-  serviceRequestId: BigInt
+  serviceRequestId: BigInt!
   serviceStartDate: DateTime!
   status: ServicesStatus!
   updatedAt: DateTime!
@@ -225,7 +245,7 @@ input CreateWorkshopDetailsInput {
 input CreateWorkshopInput {
   email: String
   isManagingWork: Boolean = true
-  personId: Float!
+  personId: BigInt!
 }
 
 input CreateWorkshopJobCategoryInput {
@@ -235,24 +255,24 @@ input CreateWorkshopJobCategoryInput {
 
 input CreateWorkshopJobInput {
   availability: Boolean!
-  jobId: Float!
+  jobId: BigInt!
   maxPrice: Float
   minPrice: Float
   price: Float
   workshopDescription: String
-  workshopId: Float!
+  workshopId: BigInt!
 }
 
 type Customer {
   NIP: String
   companyName: String
-  customerId: Float!
+  customerId: BigInt!
   deletedAt: DateTime
   description: String
   person: Person!
   totalDue: Float!
   workshop: Workshop!
-  workshopId: Float!
+  workshopId: BigInt!
 }
 
 """
@@ -407,7 +427,7 @@ type Person {
   deletedAt: DateTime
   firstName: String!
   lastName: String!
-  personId: Float!
+  personId: BigInt!
   telephoneNumber: String
 }
 
@@ -743,8 +763,8 @@ input UpdateVehicleDetailsInput {
 input UpdateVehicleInput {
   brandName: String
   deletedAt: DateTime
-  modelId: Float
-  personId: Float
+  modelId: BigInt
+  personId: BigInt
   vehicleId: BigInt!
 }
 
@@ -764,7 +784,7 @@ input UpdateWorkshopInput {
   email: String
   isManagingWork: Boolean
   isVerified: Boolean
-  personId: Float!
+  personId: BigInt!
 }
 
 input UpdateWorkshopJobCategoryInput {
@@ -778,7 +798,7 @@ input UpdateWorkshopJobInput {
   minPrice: Float
   price: Float
   workshopDescription: String
-  workshopJobId: Float!
+  workshopJobId: BigInt!
 }
 
 type User {
@@ -787,10 +807,10 @@ type User {
   email: String
   isVerified: Boolean
   password: String!
-  personId: Float
+  personId: BigInt
   status: UsersStatus
   updatedAt: DateTime
-  userId: Float!
+  userId: BigInt!
   username: String!
 }
 
@@ -871,9 +891,9 @@ type Workshop {
   email: String
   isManagingWork: Boolean
   isVerified: Boolean
-  personId: Float!
+  personId: BigInt!
   updatedAt: DateTime
-  workshopId: Float!
+  workshopId: BigInt!
 }
 
 type WorkshopDetails {

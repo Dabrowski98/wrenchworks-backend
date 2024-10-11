@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateAddressInput, UpdateAddressInput } from './dto/index';
 
@@ -7,7 +8,8 @@ export class AddressService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async createAddress(data: CreateAddressInput) {
-    return this.databaseService.address.create({
+    // async createAddress(data: Prisma.AddressCreateInput) {
+      return this.databaseService.address.create({
       data: {
         country: data.country,
         region: data.region,

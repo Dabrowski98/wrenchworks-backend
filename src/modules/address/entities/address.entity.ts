@@ -1,6 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-// import { AddressPerson } from 'src/address-person/entities/address-person.entity';
-// import { AddressWorkshop } from 'src/address-workshop/entities/address-workshop.entity';
+import { AddressPerson } from 'src/modules/address-person/entities/address-person.entity';
+import { AddressWorkshop } from 'src/modules/address-workshop/entities/address-workshop.entity';
+import { Exclude } from 'class-transformer'
 
 @ObjectType()
 export class Address {
@@ -13,6 +14,7 @@ export class Address {
   @Field()
   region: string;
 
+  @Exclude()
   @Field()
   city: string;
 
@@ -28,9 +30,9 @@ export class Address {
   @Field()
   postCode: string;
 
-  // @Field(() => [AddressPerson], { nullable: true })
-  // addressPersons?: AddressPerson[];
+  @Field(() => [AddressPerson], { nullable: true })
+  addressPersons?: AddressPerson[];
 
-  // @Field(() => [AddressWorkshop], { nullable: true })
-  // addressWorkshops?: AddressWorkshop[];
+  @Field(() => [AddressWorkshop], { nullable: true })
+  addressWorkshops?: AddressWorkshop[];
 }

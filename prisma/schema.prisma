@@ -31,6 +31,21 @@ model AddressPerson {
   @@index([personId])
 }
 
+model Person {
+  personId          BigInt              @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
+  firstName         String              @db.VarChar(30)
+  lastName          String              @db.VarChar(30)
+  telephoneNumber   String?             @db.VarChar(12)
+  deletedAt         DateTime?           @db.Timestamp(0)
+  personAddresses   AddressPerson[]
+  customers         Customer[]
+  employees         Employee[]
+  serviceRequests   ServiceRequest[]
+  user              User?
+  vehicles          Vehicle[]
+  workshops         Workshop[]
+}
+
 model AddressWorkshop {
   addressId   BigInt    @db.UnsignedBigInt
   workshopId  BigInt    @db.UnsignedBigInt
@@ -130,20 +145,7 @@ model PermissionSet {
   @@index([workshopId])
 }
 
-model Person {
-  personId          BigInt              @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
-  firstName         String              @db.VarChar(30)
-  lastName          String              @db.VarChar(30)
-  telephoneNumber   String?             @db.VarChar(12)
-  deletedAt         DateTime?           @db.Timestamp(0)
-  personAddresses   AddressPerson[]
-  customers         Customer[]
-  employees         Employee[]
-  serviceRequests   ServiceRequest[]
-  user              User?
-  vehicles          Vehicle[]
-  workshops         Workshop[]
-}
+
 
 model Review {
   reviewId          BigInt              @id @unique(map: "review_id") @default(autoincrement()) @db.UnsignedBigInt

@@ -1,7 +1,9 @@
 import { InputType, Field } from '@nestjs/graphql';
-
+import { CreateAddressPersonInput } from 'src/modules/address-person/dto/create-address-person.input';
+import { CreateAddressWorkshopInput } from 'src/modules/address-workshop/dto/create-address-workshop.input';
 @InputType()
 export class CreateAddressInput {
+
   @Field()
   country: string;
 
@@ -22,4 +24,10 @@ export class CreateAddressInput {
 
   @Field()
   postCode: string;
+
+  @Field(() => [CreateAddressPersonInput], { nullable: true })
+  addressPersons?: CreateAddressPersonInput[];
+
+  @Field(() => [CreateAddressWorkshopInput], { nullable: true })
+  addressWorkshops?: CreateAddressWorkshopInput[];
 }

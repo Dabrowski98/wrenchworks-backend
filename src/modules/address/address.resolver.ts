@@ -2,6 +2,8 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AddressService } from './address.service';
 import { Address } from './entities/address.entity';
 import { CreateAddressInput, UpdateAddressInput } from './dto/index';
+import { Prisma } from '@prisma/client';
+
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -14,7 +16,7 @@ export class AddressResolver {
 
   @Mutation(() => Address)
   async updateAddress(
-    @Args('addressId', { type: () => BigInt }) addressId: bigint,
+    @Args('addressId', { type: () => BigInt}) addressId: bigint,
     @Args('data') data: UpdateAddressInput,
   ) {
     return this.addressService.updateAddress(addressId, data);
@@ -32,6 +34,6 @@ export class AddressResolver {
 
   @Query(() => Address, { nullable: true })
   async address(@Args('addressId', { type: () => BigInt }) addressId: bigint) {
-    return this.addressService.findAddressById(addressId);
+    return this.addressService.findAddressById(addressId)
   }
 }
