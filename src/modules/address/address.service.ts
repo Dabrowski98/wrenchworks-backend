@@ -1,14 +1,14 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import {
+  Address,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from 'src/@generated/address';
-import { EntityNotFoundError } from 'src/config/errors.config';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { HelperService } from 'src/common/helper/helper.service';
 
 @Injectable()
 export class AddressService {
@@ -28,7 +28,6 @@ export class AddressService {
 
   async deleteAddress(args: DeleteOneAddressArgs): Promise<any> {
     const { where } = args;
-
     await this.prisma.address.delete({
       where: { addressId: where.addressId },
     });
@@ -47,11 +46,7 @@ export class AddressService {
       where: { addressId: where.addressId },
     });
 
-    if (!entity) {
-      throw new EntityNotFoundError(
-        `Address with id ${args.where.addressId} was not found.`,
-      );
-    }
+    if (!entity) throw new RecordNotFoundError();
 
     return entity;
   }
@@ -61,7 +56,6 @@ export class AddressService {
       where: { addressId: addressId },
     });
   }
-
   async findAddressWorkshopsByAddressId(addressId: bigint): Promise<any> {
     return this.prisma.addressWorkshop.findMany({
       where: { addressId: addressId },

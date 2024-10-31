@@ -23,37 +23,37 @@ export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
   @Mutation(() => Address)
-  async createAddress(@Args() args: CreateOneAddressArgs) {
+  createAddress(@Args() args: CreateOneAddressArgs): Promise<Address> {
     return this.addressService.createAddress(args);
   }
 
   @Mutation(() => Address)
-  async updateAddress(@Args() args: UpdateOneAddressArgs) {
+  updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
     return this.addressService.updateAddress(args);
   }
 
   @Mutation(() => DeletePayload)
-  async deleteAddress(@Args() args: DeleteOneAddressArgs): Promise<number> {
+  deleteAddress(@Args() args: DeleteOneAddressArgs): Promise<DeletePayload> {
     return this.addressService.deleteAddress(args);
   }
 
   @Query(() => [Address])
-  async addresses(): Promise<Address[]> {
+  addresses(): Promise<Address[]> {
     return this.addressService.findAllAddresses();
   }
 
   @Query(() => Address)
-  async address(@Args() args: FindUniqueAddressArgs): Promise<Address>{
+  address(@Args() args: FindUniqueAddressArgs): Promise<Address>{
     return this.addressService.findAddressById(args);
   }
 
   @ResolveField(() => [AddressPerson])
-  async addressPersons(@Parent() address: Address) {
+  addressPersons(@Parent() address: Address): Promise<AddressPerson> {
     return this.addressService.findAddressPersonsByAddressId(address.addressId);
   }
 
-  @ResolveField(() => [AddressWorkshop!])
-  async addressWorkshops(@Parent() address: Address) {
+  @ResolveField(() => [AddressWorkshop])
+  addressWorkshops(@Parent() address: Address): Promise<AddressWorkshop> {
     return this.addressService.findAddressWorkshopsByAddressId(address.addressId);
   }
 }

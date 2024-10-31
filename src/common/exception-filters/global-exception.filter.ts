@@ -1,9 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  HttpException,
-  Logger,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, Logger } from '@nestjs/common';
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { GraphQLError } from 'graphql';
@@ -38,10 +33,10 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
   }
 
   private handleOtherError(exception: any): any {
-    return new GraphQLError( exception.message || 'Internal server error', {
+    return new GraphQLError(exception.message || 'Internal server error', {
       extensions: {
-        code: exception.code || 'INTERNAL_SERVER_ERROR',
-        status: exception.status || 500,
+        code: exception.code || 500,
+        status: exception.status || 'INTERNAL_SERVER_ERROR',
       },
     });
   }
@@ -61,29 +56,29 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
         case 'P2002':
           return new GraphQLError('Unique constraint violation', {
             extensions: {
-              code: 'BAD_USER_INPUT',
-              status: 409,
+              code: 409,
+              status: 'BAD_USER_INPUT',
             },
           });
         case 'P2025':
           return new GraphQLError('Record not found', {
             extensions: {
-              code: 'NOT_FOUND',
-              status: 404,
+              code: 404,
+              status: 'NOT_FOUND',
             },
           });
         case 'P2003':
           return new GraphQLError('Foreign key constraint violation', {
             extensions: {
-              code: 'BAD_USER_INPUT',
-              status: 400,
+              code: 400,
+              status: 'BAD_USER_INPUT',
             },
           });
         default:
           return new GraphQLError('Database error', {
             extensions: {
-              code: 'INTERNAL_SERVER_ERROR',
-              status: 500,
+              code: 500,
+              status: 'INTERNAL_SERVER_ERROR',
             },
           });
       }
@@ -91,8 +86,8 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
 
     return new GraphQLError('Unknown database error', {
       extensions: {
-        code: 'INTERNAL_SERVER_ERROR',
-        status: 500,
+        code: 500,
+        status: 'INTERNAL_SERVER_ERROR',
       },
     });
   }
