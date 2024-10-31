@@ -1,0 +1,55 @@
+import { Field } from '@nestjs/graphql';
+import { ArgsType } from '@nestjs/graphql';
+import { ReviewWhereInput } from './review-where.input';
+import { Type } from 'class-transformer';
+import { ReviewOrderByWithRelationInput } from './review-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
+import { ReviewWhereUniqueInput } from './review-where-unique.input';
+import { Int } from '@nestjs/graphql';
+import { ReviewCountAggregateInput } from './review-count-aggregate.input';
+import { ReviewAvgAggregateInput } from './review-avg-aggregate.input';
+import { ReviewSumAggregateInput } from './review-sum-aggregate.input';
+import { ReviewMinAggregateInput } from './review-min-aggregate.input';
+import { ReviewMaxAggregateInput } from './review-max-aggregate.input';
+
+@ArgsType()
+export class ReviewAggregateArgs {
+
+    @Field(() => ReviewWhereInput, {nullable:true})
+    @Type(() => ReviewWhereInput)
+    where?: ReviewWhereInput;
+
+    @Field(() => [ReviewOrderByWithRelationInput], {nullable:true})
+    @Type(() => ReviewOrderByWithRelationInput)
+    orderBy?: Array<ReviewOrderByWithRelationInput>;
+
+    @Field(() => ReviewWhereUniqueInput, {nullable:true})
+    @Type(() => ReviewWhereUniqueInput)
+    cursor?: Prisma.AtLeast<ReviewWhereUniqueInput, 'reviewId'>;
+
+    @Field(() => Int, {nullable:true})
+    take?: number;
+
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+
+    @Field(() => ReviewCountAggregateInput, {nullable:true})
+    @Type(() => ReviewCountAggregateInput)
+    _count?: ReviewCountAggregateInput;
+
+    @Field(() => ReviewAvgAggregateInput, {nullable:true})
+    @Type(() => ReviewAvgAggregateInput)
+    _avg?: ReviewAvgAggregateInput;
+
+    @Field(() => ReviewSumAggregateInput, {nullable:true})
+    @Type(() => ReviewSumAggregateInput)
+    _sum?: ReviewSumAggregateInput;
+
+    @Field(() => ReviewMinAggregateInput, {nullable:true})
+    @Type(() => ReviewMinAggregateInput)
+    _min?: ReviewMinAggregateInput;
+
+    @Field(() => ReviewMaxAggregateInput, {nullable:true})
+    @Type(() => ReviewMaxAggregateInput)
+    _max?: ReviewMaxAggregateInput;
+}
