@@ -2,14 +2,29 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+generator nestgraphql {
+    provider = "node node_modules/prisma-nestjs-graphql"
+    output = "../src/@generated"
+    reExport = Directories
+    fields_Validator_from = "class-validator"
+    noTypeId = true
+
+    fields_Scalars_from = "graphql-scalars"
+    fields_Scalars_input = true
+    fields_Scalars_output = true
 }
 
-model Address {
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+
+model Address{ 
+  /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
+  /// @FieldType('Scalars.GraphQLBigInt')
   addressId           BigInt                @id @unique @default(autoincrement()) @db.UnsignedBigInt
-  country             String                @db.VarChar(30)
+  country             String                @db.VarChar(30) 
   region              String                @db.VarChar(30)
   city                String                @db.VarChar(30)
   street              String?               @db.VarChar(30)
@@ -21,7 +36,9 @@ model Address {
 }
 
 model AddressPerson {
+  /// @FieldType('Scalars.GraphQLBigInt')
   addressId  BigInt    @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId   BigInt    @db.UnsignedBigInt
   createdAt  DateTime  @default(now()) @db.DateTime(0)
   address    Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_persons_address_id")
@@ -32,6 +49,7 @@ model AddressPerson {
 }
 
 model Person {
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId          BigInt              @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
   firstName         String              @db.VarChar(30)
   lastName          String              @db.VarChar(30)
@@ -47,7 +65,9 @@ model Person {
 }
 
 model AddressWorkshop {
+  /// @FieldType('Scalars.GraphQLBigInt')
   addressId   BigInt    @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId  BigInt    @db.UnsignedBigInt
   createdAt   DateTime  @default(now()) @db.DateTime(0)
   address     Address   @relation(fields: [addressId], references: [addressId], onDelete: Cascade, map: "fk_addresses_workshops_address_id")
@@ -58,7 +78,9 @@ model AddressWorkshop {
 }
 
 model Customer {
+  /// @FieldType('Scalars.GraphQLBigInt')
   customerId   BigInt     @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId   BigInt     @db.UnsignedBigInt
   totalDue     Decimal    @default(0.00) @db.Decimal(10, 2)
   description  String?    @db.VarChar(255)
@@ -74,7 +96,9 @@ model Customer {
 }
 
 model Employee {
+  /// @FieldType('Scalars.GraphQLBigInt')
   employeeId        BigInt            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt            @db.UnsignedBigInt
   joinedAt          DateTime          @default(now()) @db.DateTime(0)
   deletedAt         DateTime?         @db.Timestamp(0)
@@ -91,8 +115,10 @@ model Employee {
 }
 
 model JobCategory {
+  /// @FieldType('Scalars.GraphQLBigInt')
   categoryId                 BigInt                      @id @unique(map: "category_id") @default(autoincrement()) @db.UnsignedBigInt
   name                       String                      @db.VarChar(50)
+  /// @FieldType('Scalars.GraphQLBigInt')
   parentId                   BigInt?                     @db.UnsignedBigInt
   description                String?                     @db.VarChar(255)
   isPopular                  Boolean                     @default(false)
@@ -105,7 +131,9 @@ model JobCategory {
 }
 
 model Job {
+  /// @FieldType('Scalars.GraphQLBigInt')
   jobId                BigInt                 @id @unique(map: "job_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   categoryId           BigInt                 @db.UnsignedBigInt
   name                 String?                @db.VarChar(50)
   description          String?                @db.VarChar(255)
@@ -118,7 +146,9 @@ model Job {
 }
 
 model PermissionSet {
+  /// @FieldType('Scalars.GraphQLBigInt')
   permissionSetId             BigInt       @id @unique(map: "permission_set_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                  BigInt?      @db.UnsignedBigInt
   setName                     String       @default("CUSTOM") @db.VarChar(30)
   canReadWorkshopDetails      Boolean      @default(false)
@@ -148,8 +178,11 @@ model PermissionSet {
 
 
 model Review {
+  /// @FieldType('Scalars.GraphQLBigInt')
   reviewId          BigInt              @id @unique(map: "review_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   userId            BigInt              @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt              @db.UnsignedBigInt
   rating            Decimal             @default(0.00) @db.Decimal(3, 2)
   reviewText        String              @db.Text
@@ -164,9 +197,13 @@ model Review {
 }
 
 model ReviewResponse {
+  /// @FieldType('Scalars.GraphQLBigInt')
   reviewResponseId       BigInt                   @id @unique(map: "review_response_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   reviewId               BigInt                   @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   userId                 BigInt                   @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   parentResponseId       BigInt?                  @db.UnsignedBigInt
   responseText           String                   @db.Text
   responseDate           DateTime                 @default(now()) @db.DateTime(0)
@@ -182,7 +219,9 @@ model ReviewResponse {
 }
 
 model ServiceRequestJob {
+  /// @FieldType('Scalars.GraphQLBigInt')
   serviceRequestId   BigInt           @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   jobId              BigInt           @db.UnsignedBigInt
   createdAt          DateTime         @default(now()) @db.DateTime(0)
   job                Job              @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsAssignedToServiceRequest")
@@ -193,9 +232,13 @@ model ServiceRequestJob {
 }
 
 model ServiceRequest {
+  /// @FieldType('Scalars.GraphQLBigInt')
   serviceRequestId                                        BigInt                   @id @unique(map: "service_request_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                                              BigInt                   @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId                                               BigInt                   @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId                                                BigInt                   @db.UnsignedBigInt
   requestedAt                                             DateTime                 @default(now()) @db.DateTime(0)
   status                                                  ServiceRequestsStatus? @default(pending)
@@ -214,8 +257,11 @@ model ServiceRequest {
 }
 
 model Task {
+  /// @FieldType('Scalars.GraphQLBigInt')
   taskId               BigInt                @id @unique(map: "task_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   serviceId            BigInt                @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   jobId                BigInt?               @db.UnsignedBigInt
   customName           String?               @db.VarChar(50)
   description          String                @db.VarChar(255)
@@ -230,11 +276,17 @@ model Task {
 }
 
 model Service {
+  /// @FieldType('Scalars.GraphQLBigInt')
   serviceId           BigInt            @id @unique(map: "service_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   serviceRequestId    BigInt?           @unique(map: "service_request_id") @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId          BigInt            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId           BigInt            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   customerId          BigInt            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   employeeId          BigInt            @db.UnsignedBigInt
   description         String?           @db.VarChar(511)
   status              ServicesStatus?  @default(pending)
@@ -258,8 +310,11 @@ model Service {
 }
 
 model EmployeeTask {
+  /// @FieldType('Scalars.GraphQLBigInt')
   taskId        BigInt        @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   employeeId    BigInt        @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId    BigInt        @db.UnsignedBigInt
   createdAt     DateTime      @default(now()) @db.DateTime(0)
   employee      Employee      @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_tasks_employees_employeeCanBeAssignedToManyTasks")
@@ -270,7 +325,9 @@ model EmployeeTask {
 }
 
 model UserReport {
+  /// @FieldType('Scalars.GraphQLBigInt')
   reportId           BigInt                     @id @unique(map: "report_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   userId             BigInt                     @db.UnsignedBigInt
   reportText         String                     @db.TinyText
   reportedType       UserReportsReportedType
@@ -284,9 +341,12 @@ model UserReport {
 }
 
 model User {
+  /// @FieldType('Scalars.GraphQLBigInt')
   userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
   username          String              @db.VarChar(30)
+  /// @HideField(output: true)
   password          String              @db.VarChar(255)
   email             String?             @db.VarChar(50)
   isVerified        Boolean?
@@ -303,7 +363,9 @@ model User {
 }
 
 model Vehicle {
+  /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId                         BigInt             @id @unique(map: "vehicle_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId                          BigInt             @db.UnsignedBigInt
   brandName                         String             @db.VarChar(50)
   modelId                           BigInt             @db.UnsignedBigInt
@@ -329,6 +391,7 @@ model VehicleBrand {
 }
 
 model VehicleDetails {
+  /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId         BigInt    @id @db.UnsignedBigInt
   yearOfProduction  Int?
   VIN               String?   @db.Char(17)
@@ -342,6 +405,7 @@ model VehicleDetails {
 }
 
 model VehicleModel {
+  /// @FieldType('Scalars.GraphQLBigInt')
   modelId        BigInt          @id @unique(map: "model_id") @default(autoincrement()) @db.UnsignedBigInt
   modelName      String          @db.VarChar(50)
   brandName      String          @db.VarChar(50)
@@ -355,7 +419,9 @@ model VehicleModel {
 }
 
 model Workshop {
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   personId                  BigInt                      @db.UnsignedBigInt
   email                     String?                     @db.VarChar(50)
   isVerified                Boolean?                    @default(false)
@@ -379,6 +445,7 @@ model Workshop {
 }
 
 model WorkshopDetails {
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId       BigInt                    @id @db.UnsignedBigInt
   rating           Decimal                   @default(0.00) @db.Decimal(3, 2)
   workshopName     String                    @db.VarChar(100)
@@ -392,8 +459,11 @@ model WorkshopDetails {
 }
 
 model WorkshopJob {
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopJobId        BigInt    @id @unique(map: "workshop_job_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId           BigInt    @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   jobId                BigInt    @db.UnsignedBigInt
   workshopDescription  String?   @db.VarChar(255)
   minPrice             Decimal?  @db.Decimal(10, 2)
@@ -408,7 +478,9 @@ model WorkshopJob {
 }
 
 model WorkshopJobCategory {
+  /// @FieldType('Scalars.GraphQLBigInt')
   workshopId          BigInt               @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   categoryId          BigInt               @db.UnsignedBigInt
   createdAt           DateTime             @default(now()) @db.DateTime(0)
   jobCategory         JobCategory          @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, map: "fk_categoryHandledByWorkshop")

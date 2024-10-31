@@ -1,74 +1,48 @@
-import { Module } from '@nestjs/common';
-import { DatabaseService } from './database/database.service';
+import { Logger, Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { BigIntScalar } from './common/scalars/bigint.scalar';
-import {
-  AddressModule,
-  AddressPersonModule,
-  AddressWorkshopModule,
-  CustomerModule,
-  EmployeeModule,
-  EmployeeTaskModule,
-  JobModule,
-  JobCategoryModule,
-  PermissionSetModule,
-  PersonModule,
-  ReviewModule,
-  ReviewResponseModule,
-  ServiceModule,
-  ServiceRequestModule,
-  ServiceRequestJobModule,
-  TaskModule,
-  UserModule,
-  UserReportModule,
-  VehicleModule,
-  VehicleBrandModule,
-  VehicleDetailsModule,
-  VehicleModelModule,
-  WorkshopModule,
-  WorkshopDetailsModule,
-  WorkshopJobModule,
-  WorkshopJobCategoryModule,
-} from './modules/index';
+import { AddressModule } from './modules/index';
+import { AppController } from './app.controller';
+import { HelperModule } from './common/helper.module';
+import { GraphQLError } from 'graphql';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './common/exception-filters/http-exception.filter';
 
 @Module({
   imports: [
-    DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      sortSchema: true
+      sortSchema: true,
+      playground: false,
+
+      formatError: (error) => {
+        let originalError = error.extensions?.originalError as
+          | Error
+          | undefined;
+        return {
+          message: 
+          originalError ? originalError.message : 
+          error.message,
+          code: error.extensions.code,
+          status: error.extensions.status,
+        };
+      },
     }),
+
+    DatabaseModule,
+    HelperModule,
     AddressModule,
-    AddressPersonModule,
-    AddressWorkshopModule,
-    CustomerModule,
-    EmployeeModule,
-    EmployeeTaskModule,
-    JobModule,
-    JobCategoryModule,
-    PermissionSetModule,
-    PersonModule,
-    ReviewModule,
-    ReviewResponseModule,
-    ServiceModule,
-    ServiceRequestModule,
-    ServiceRequestJobModule,
-    TaskModule,
-    UserModule,
-    UserReportModule,
-    VehicleModule,
-    VehicleBrandModule,
-    VehicleDetailsModule,
-    VehicleModelModule,
-    WorkshopModule,
-    WorkshopDetailsModule,
-    WorkshopJobModule,
-    WorkshopJobCategoryModule, 
   ],
-  providers: [DatabaseService, BigIntScalar],
+  providers: [
+    Logger,
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter, // Set it as a global filter
+    // },
+  ],
+  controllers: [AppController],
 })
 export class AppModule {}

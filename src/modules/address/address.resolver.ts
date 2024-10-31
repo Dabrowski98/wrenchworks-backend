@@ -1,8 +1,27 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AddressService } from './address.service';
-import { Address } from './entities/address.entity';
-import { CreateAddressInput, UpdateAddressInput } from './dto/index';
-import { Prisma } from '@prisma/client';
+import {
+  Address,
+  AddressCreateInput,
+  AddressUpdateInput,
+  CreateOneAddressArgs,
+  DeleteOneAddressArgs,
+  FindFirstAddressArgs,
+  FindUniqueAddressArgs,
+  UpdateOneAddressArgs,
+} from 'src/@generated/address';
+import { GraphQLBigInt } from 'graphql-scalars';
+import { AddressPerson } from 'src/@generated/address-person';
+import { AddressWorkshop } from 'src/@generated/address-workshop';
+import { BadRequestException, Delete, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { DeletePayload } from '../../common/payloads/delete.payload';
 
 
 @Resolver(() => Address)
@@ -10,30 +29,42 @@ export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
   @Mutation(() => Address)
-  async createAddress(@Args('data') data: CreateAddressInput) {
-    return this.addressService.createAddress(data);
+  async createAddress(@Args() args: CreateOneAddressArgs) {
+    return this.addressService.createAddress(args);
   }
 
   @Mutation(() => Address)
-  async updateAddress(
-    @Args('addressId', { type: () => BigInt}) addressId: bigint,
-    @Args('data') data: UpdateAddressInput,
-  ) {
-    return this.addressService.updateAddress(addressId, data);
+  async updateAddress(@Args() args: UpdateOneAddressArgs) {
+    return this.addressService.updateAddress(args);
   }
 
-  @Mutation(() => Address)
-  async deleteAddress(@Args('addressId', { type: () => BigInt }) addressId: bigint) {
-    return this.addressService.deleteAddress(addressId);
+  @Mutation(() => DeletePayload)
+  async deleteAddress(@Args() args: DeleteOneAddressArgs) {
+    return this.addressService.deleteAddress(args);
   }
 
   @Query(() => [Address])
-  async addresses() {
+  async addresses(): Promise<Address[]> {
     return this.addressService.findAllAddresses();
   }
 
-  @Query(() => Address, { nullable: true })
-  async address(@Args('addressId', { type: () => BigInt }) addressId: bigint) {
-    return this.addressService.findAddressById(addressId)
+
+  @Query(() => Address)
+  async address(@Args() args: FindUniqueAddressArgs)  {
+    return this.addressService.findAddressById(args);
+  }
+
+  @ResolveField(() => [AddressPerson])
+  async addressPersons(@Parent() address: Address) {
+    return this.addressService.findAddressPersonsByAddressId(address.addressId);
+  }
+
+  @ResolveField(() => [AddressWorkshop!])
+  async addressWorkshops(
+    @Parent() address: Address,
+  ){
+    return this.addressService.findAddressWorkshopsByAddressId(
+      address.addressId,
+    );
   }
 }
