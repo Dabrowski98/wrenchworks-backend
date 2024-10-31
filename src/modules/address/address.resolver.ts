@@ -18,7 +18,6 @@ import { AddressPerson } from 'src/@generated/address-person';
 import { AddressWorkshop } from 'src/@generated/address-workshop';
 import { DeletePayload } from '../../common/payloads/delete.payload';
 
-
 @Resolver(() => Address)
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
@@ -34,7 +33,7 @@ export class AddressResolver {
   }
 
   @Mutation(() => DeletePayload)
-  async deleteAddress(@Args() args: DeleteOneAddressArgs) {
+  async deleteAddress(@Args() args: DeleteOneAddressArgs): Promise<number> {
     return this.addressService.deleteAddress(args);
   }
 
@@ -43,9 +42,8 @@ export class AddressResolver {
     return this.addressService.findAllAddresses();
   }
 
-
   @Query(() => Address)
-  async address(@Args() args: FindUniqueAddressArgs)  {
+  async address(@Args() args: FindUniqueAddressArgs): Promise<Address>{
     return this.addressService.findAddressById(args);
   }
 
@@ -55,11 +53,7 @@ export class AddressResolver {
   }
 
   @ResolveField(() => [AddressWorkshop!])
-  async addressWorkshops(
-    @Parent() address: Address,
-  ){
-    return this.addressService.findAddressWorkshopsByAddressId(
-      address.addressId,
-    );
+  async addressWorkshops(@Parent() address: Address) {
+    return this.addressService.findAddressWorkshopsByAddressId(address.addressId);
   }
 }
