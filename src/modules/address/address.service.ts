@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import {
-  Address,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from 'src/@generated/address';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { HelperService } from 'src/common/helper/helper.service';
 
 @Injectable()
 export class AddressService {
@@ -42,13 +40,13 @@ export class AddressService {
   async findAddressById(args: FindUniqueAddressArgs): Promise<any> {
     const { where } = args;
 
-    const entity = await this.prisma.address.findUnique({
+    const record = await this.prisma.address.findUnique({
       where: { addressId: where.addressId },
     });
 
-    if (!entity) throw new RecordNotFoundError();
+    if (!record) throw new RecordNotFoundError();
 
-    return entity;
+    return record;
   }
 
   async findAddressPersonsByAddressId(addressId: bigint): Promise<any> {
