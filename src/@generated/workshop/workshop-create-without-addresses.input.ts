@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { CustomerCreateNestedManyWithoutWorkshopInput } from '../customer/customer-create-nested-many-without-workshop.input';
 import { Type } from 'class-transformer';
 import { EmployeeCreateNestedManyWithoutWorkshopInput } from '../employee/employee-create-nested-many-without-workshop.input';
@@ -16,7 +16,7 @@ import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../job-categor
 @InputType()
 export class WorkshopCreateWithoutAddressesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     workshopId?: bigint | number;
 
     @Field(() => String, {nullable:true})

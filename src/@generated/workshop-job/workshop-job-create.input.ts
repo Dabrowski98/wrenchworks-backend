@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
@@ -12,7 +12,7 @@ import { WorkshopCreateNestedOneWithoutWorkshopJobsInput } from '../workshop/wor
 @InputType()
 export class WorkshopJobCreateInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     workshopJobId?: bigint | number;
 
     @Field(() => String, {nullable:true})

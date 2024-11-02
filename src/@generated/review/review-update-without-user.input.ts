@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { DecimalFieldUpdateOperationsInput } from '../prisma/decimal-field-update-operations.input';
 import { Type } from 'class-transformer';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
@@ -12,7 +13,7 @@ import { ReviewResponseUpdateManyWithoutReviewNestedInput } from '../review-resp
 @InputType()
 export class ReviewUpdateWithoutUserInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     reviewId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})

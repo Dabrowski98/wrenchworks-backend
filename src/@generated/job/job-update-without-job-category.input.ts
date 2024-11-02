@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
 import { ServiceRequestUpdateManyWithoutJobsNestedInput } from '../service-request/service-request-update-many-without-jobs-nested.input';
@@ -10,7 +11,7 @@ import { WorkshopJobUpdateManyWithoutJobNestedInput } from '../workshop-job/work
 @InputType()
 export class JobUpdateWithoutJobCategoryInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     jobId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})

@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
 import { ServiceCreateNestedOneWithoutServiceRequestInput } from '../service/service-create-nested-one-without-service-request.input';
 import { Type } from 'class-transformer';
@@ -11,7 +11,7 @@ import { PersonCreateNestedOneWithoutServiceRequestsInput } from '../person/pers
 @InputType()
 export class ServiceRequestCreateWithoutJobsInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     serviceRequestId?: bigint | number;
 
     @Field(() => Date, {nullable:true})

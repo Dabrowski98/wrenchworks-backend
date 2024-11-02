@@ -1,12 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
 
 @InputType()
 export class ServiceRequestCreateManyPersonInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     serviceRequestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})

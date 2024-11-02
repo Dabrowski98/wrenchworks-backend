@@ -1,13 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { UserReportsReportedType } from '../prisma/user-reports-reported-type.enum';
 import { UserReportsStatus } from '../prisma/user-reports-status.enum';
 
 @InputType()
 export class UserReportCreateManyUserInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     reportId?: bigint | number;
 
     @Field(() => String, {nullable:false})

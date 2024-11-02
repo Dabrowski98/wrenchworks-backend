@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { CustomerCreateNestedManyWithoutPersonInput } from '../customer/customer-create-nested-many-without-person.input';
 import { Type } from 'class-transformer';
 import { EmployeeCreateNestedManyWithoutPersonInput } from '../employee/employee-create-nested-many-without-person.input';
@@ -12,7 +12,7 @@ import { WorkshopCreateNestedManyWithoutPersonInput } from '../workshop/workshop
 @InputType()
 export class PersonCreateWithoutAddressesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     personId?: bigint | number;
 
     @Field(() => String, {nullable:false})
