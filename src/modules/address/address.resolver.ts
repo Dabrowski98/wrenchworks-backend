@@ -16,7 +16,7 @@ import {
 } from 'src/@generated/address';
 import { Person } from 'src/@generated/person';
 import { DeletePayload } from '../../common/payloads/delete.payload';
-import { Workshop } from 'src/@generated/workshop';
+import { Workshop } from 'src/@generated/workshop'  ;
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -46,6 +46,8 @@ export class AddressResolver {
   address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
     return this.addressService.findAddressById(args);
   }
+
+  //RESOLVE FIELDS
 
   @ResolveField(() => [Person])
   persons(@Parent() address: Address): Promise<Person[]> {

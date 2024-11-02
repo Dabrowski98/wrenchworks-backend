@@ -54,6 +54,8 @@ export class AddressService {
     return record;
   }
 
+  //RESOLVE METHODS
+
   async resolvePersons(addressId: bigint): Promise<Person[]> {
     return this.prisma.address.findUnique({ where: { addressId } }).persons();
   }

@@ -44,7 +44,6 @@ model Person {
   telephoneNumber  String?          @db.VarChar(12)
   deletedAt        DateTime?        @db.Timestamp(0)
   addresses        Address[]        @relation("AddressPersons")
-
   customers        Customer[]
   employees        Employee[]
   serviceRequests  ServiceRequest[]
