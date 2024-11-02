@@ -9,8 +9,8 @@ import {
 } from 'src/@generated/address';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
-import { AddressPerson } from 'src/@generated/address-person';
-import { AddressWorkshop } from 'src/@generated/address-workshop';
+import { Person } from 'src/@generated/person';
+import { Workshop } from 'src/@generated/workshop';
 
 @Injectable()
 export class AddressService {
@@ -54,14 +54,11 @@ export class AddressService {
     return record;
   }
 
-  async resolveAddressPersons(addressId: bigint): Promise<AddressPerson[]> {
-    return this.prisma.addressPerson.findMany({
-      where: { addressId: addressId },
-    });
+  async resolvePersons(addressId: bigint): Promise<Person[]> {
+    return this.prisma.address.findUnique({ where: { addressId } }).persons();
   }
-  async resolveAddressWorkshops(addressId: bigint): Promise<AddressWorkshop[]> {
-    return this.prisma.addressWorkshop.findMany({
-      where: { addressId: addressId },
-    });
+
+  async resolveWorkshops(addressId: bigint): Promise<Workshop[]> {
+    return this.prisma.address.findUnique({ where: { addressId } }).workshops();
   }
 }

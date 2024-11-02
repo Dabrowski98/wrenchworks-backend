@@ -4,7 +4,7 @@ import { BigIntFilter } from '../prisma/big-int-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { BoolNullableFilter } from '../prisma/bool-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { AddressWorkshopListRelationFilter } from '../address-workshop/address-workshop-list-relation-filter.input';
+import { AddressListRelationFilter } from '../address/address-list-relation-filter.input';
 import { CustomerListRelationFilter } from '../customer/customer-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { EmployeeListRelationFilter } from '../employee/employee-list-relation-filter.input';
@@ -15,7 +15,7 @@ import { ServiceListRelationFilter } from '../service/service-list-relation-filt
 import { PersonRelationFilter } from '../person/person-relation-filter.input';
 import { WorkshopDetailsNullableRelationFilter } from '../workshop-details/workshop-details-nullable-relation-filter.input';
 import { WorkshopJobListRelationFilter } from '../workshop-job/workshop-job-list-relation-filter.input';
-import { WorkshopJobCategoryListRelationFilter } from '../workshop-job-category/workshop-job-category-list-relation-filter.input';
+import { JobCategoryListRelationFilter } from '../job-category/job-category-list-relation-filter.input';
 
 @InputType()
 export class WorkshopWhereInput {
@@ -53,8 +53,8 @@ export class WorkshopWhereInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => AddressWorkshopListRelationFilter, {nullable:true})
-    workshopAddresses?: AddressWorkshopListRelationFilter;
+    @Field(() => AddressListRelationFilter, {nullable:true})
+    addresses?: AddressListRelationFilter;
 
     @Field(() => CustomerListRelationFilter, {nullable:true})
     @Type(() => CustomerListRelationFilter)
@@ -91,6 +91,6 @@ export class WorkshopWhereInput {
     @Type(() => WorkshopJobListRelationFilter)
     workshopJobs?: WorkshopJobListRelationFilter;
 
-    @Field(() => WorkshopJobCategoryListRelationFilter, {nullable:true})
-    workshopJobCategories?: WorkshopJobCategoryListRelationFilter;
+    @Field(() => JobCategoryListRelationFilter, {nullable:true})
+    jobCategories?: JobCategoryListRelationFilter;
 }

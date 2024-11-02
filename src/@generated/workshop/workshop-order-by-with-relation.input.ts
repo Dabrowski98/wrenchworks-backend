@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
 import { SortOrderInput } from '../prisma/sort-order.input';
-import { AddressWorkshopOrderByRelationAggregateInput } from '../address-workshop/address-workshop-order-by-relation-aggregate.input';
+import { AddressOrderByRelationAggregateInput } from '../address/address-order-by-relation-aggregate.input';
 import { CustomerOrderByRelationAggregateInput } from '../customer/customer-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
 import { EmployeeOrderByRelationAggregateInput } from '../employee/employee-order-by-relation-aggregate.input';
@@ -13,7 +13,7 @@ import { ServiceOrderByRelationAggregateInput } from '../service/service-order-b
 import { PersonOrderByWithRelationInput } from '../person/person-order-by-with-relation.input';
 import { WorkshopDetailsOrderByWithRelationInput } from '../workshop-details/workshop-details-order-by-with-relation.input';
 import { WorkshopJobOrderByRelationAggregateInput } from '../workshop-job/workshop-job-order-by-relation-aggregate.input';
-import { WorkshopJobCategoryOrderByRelationAggregateInput } from '../workshop-job-category/workshop-job-category-order-by-relation-aggregate.input';
+import { JobCategoryOrderByRelationAggregateInput } from '../job-category/job-category-order-by-relation-aggregate.input';
 
 @InputType()
 export class WorkshopOrderByWithRelationInput {
@@ -42,8 +42,8 @@ export class WorkshopOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     deletedAt?: SortOrderInput;
 
-    @Field(() => AddressWorkshopOrderByRelationAggregateInput, {nullable:true})
-    workshopAddresses?: AddressWorkshopOrderByRelationAggregateInput;
+    @Field(() => AddressOrderByRelationAggregateInput, {nullable:true})
+    addresses?: AddressOrderByRelationAggregateInput;
 
     @Field(() => CustomerOrderByRelationAggregateInput, {nullable:true})
     @Type(() => CustomerOrderByRelationAggregateInput)
@@ -80,6 +80,6 @@ export class WorkshopOrderByWithRelationInput {
     @Type(() => WorkshopJobOrderByRelationAggregateInput)
     workshopJobs?: WorkshopJobOrderByRelationAggregateInput;
 
-    @Field(() => WorkshopJobCategoryOrderByRelationAggregateInput, {nullable:true})
-    workshopJobCategories?: WorkshopJobCategoryOrderByRelationAggregateInput;
+    @Field(() => JobCategoryOrderByRelationAggregateInput, {nullable:true})
+    jobCategories?: JobCategoryOrderByRelationAggregateInput;
 }

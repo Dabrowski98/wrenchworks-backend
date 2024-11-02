@@ -1,7 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ServiceRequestJobUncheckedCreateNestedManyWithoutJobInput } from '../service-request-job/service-request-job-unchecked-create-nested-many-without-job.input';
+import { ServiceRequestUncheckedCreateNestedManyWithoutJobsInput } from '../service-request/service-request-unchecked-create-nested-many-without-jobs.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class JobUncheckedCreateWithoutJobWorkshopsInput {
@@ -21,6 +22,7 @@ export class JobUncheckedCreateWithoutJobWorkshopsInput {
     @Field(() => Boolean, {nullable:true})
     isPopular?: boolean;
 
-    @Field(() => ServiceRequestJobUncheckedCreateNestedManyWithoutJobInput, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobUncheckedCreateNestedManyWithoutJobInput;
+    @Field(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput, {nullable:true})
+    @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput)
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutJobsInput;
 }

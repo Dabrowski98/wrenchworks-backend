@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressPersonUncheckedCreateNestedManyWithoutPersonInput } from '../address-person/address-person-unchecked-create-nested-many-without-person.input';
+import { AddressUncheckedCreateNestedManyWithoutPersonsInput } from '../address/address-unchecked-create-nested-many-without-persons.input';
 import { EmployeeUncheckedCreateNestedManyWithoutPersonInput } from '../employee/employee-unchecked-create-nested-many-without-person.input';
 import { Type } from 'class-transformer';
 import { ServiceRequestUncheckedCreateNestedManyWithoutPersonInput } from '../service-request/service-request-unchecked-create-nested-many-without-person.input';
@@ -27,8 +27,8 @@ export class PersonUncheckedCreateWithoutCustomersInput {
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 
-    @Field(() => AddressPersonUncheckedCreateNestedManyWithoutPersonInput, {nullable:true})
-    personAddresses?: AddressPersonUncheckedCreateNestedManyWithoutPersonInput;
+    @Field(() => AddressUncheckedCreateNestedManyWithoutPersonsInput, {nullable:true})
+    addresses?: AddressUncheckedCreateNestedManyWithoutPersonsInput;
 
     @Field(() => EmployeeUncheckedCreateNestedManyWithoutPersonInput, {nullable:true})
     @Type(() => EmployeeUncheckedCreateNestedManyWithoutPersonInput)

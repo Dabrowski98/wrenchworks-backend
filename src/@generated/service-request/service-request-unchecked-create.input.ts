@@ -2,7 +2,8 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
-import { ServiceRequestJobUncheckedCreateNestedManyWithoutServiceRequestInput } from '../service-request-job/service-request-job-unchecked-create-nested-many-without-service-request.input';
+import { JobUncheckedCreateNestedManyWithoutServiceRequestsInput } from '../job/job-unchecked-create-nested-many-without-service-requests.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class ServiceRequestUncheckedCreateInput {
@@ -34,6 +35,7 @@ export class ServiceRequestUncheckedCreateInput {
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 
-    @Field(() => ServiceRequestJobUncheckedCreateNestedManyWithoutServiceRequestInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobUncheckedCreateNestedManyWithoutServiceRequestInput;
+    @Field(() => JobUncheckedCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
+    @Type(() => JobUncheckedCreateNestedManyWithoutServiceRequestsInput)
+    jobs?: JobUncheckedCreateNestedManyWithoutServiceRequestsInput;
 }

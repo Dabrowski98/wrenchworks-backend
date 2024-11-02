@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
-import { ServiceRequestJob } from '../service-request-job/service-request-job.model';
+import { Job } from '../job/job.model';
 import { Service } from '../service/service.model';
 import { Vehicle } from '../vehicle/vehicle.model';
 import { Workshop } from '../workshop/workshop.model';
@@ -39,8 +39,8 @@ export class ServiceRequest {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => [ServiceRequestJob], {nullable:true})
-    serviceRequestJobs?: Array<ServiceRequestJob>;
+    @Field(() => [Job], {nullable:true})
+    jobs?: Array<Job>;
 
     @Field(() => Service, {nullable:true})
     approvedService?: Service | null;

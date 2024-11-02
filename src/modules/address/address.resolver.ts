@@ -14,9 +14,9 @@ import {
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from 'src/@generated/address';
-import { AddressPerson } from 'src/@generated/address-person';
-import { AddressWorkshop } from 'src/@generated/address-workshop';
+import { Person } from 'src/@generated/person';
 import { DeletePayload } from '../../common/payloads/delete.payload';
+import { Workshop } from 'src/@generated/workshop';
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -47,13 +47,13 @@ export class AddressResolver {
     return this.addressService.findAddressById(args);
   }
 
-  @ResolveField(() => [AddressPerson])
-  addressPersons(@Parent() address: Address): Promise<AddressPerson[]> {
-    return this.addressService.resolveAddressPersons(address.addressId);
+  @ResolveField(() => [Person])
+  persons(@Parent() address: Address): Promise<Person[]> {
+    return this.addressService.resolvePersons(address.addressId);
   }
 
-  @ResolveField(() => [AddressWorkshop])
-  addressWorkshops(@Parent() address: Address): Promise<AddressWorkshop[]> {
-    return this.addressService.resolveAddressWorkshops(address.addressId);
+  @ResolveField(() => [Workshop])
+  workshops(@Parent() address: Address): Promise<Workshop[]> {
+    return this.addressService.resolveWorkshops(address.addressId);
   }
 }

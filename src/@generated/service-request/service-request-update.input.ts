@@ -5,9 +5,9 @@ import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-up
 import { NullableEnumServiceRequestsStatusFieldUpdateOperationsInput } from '../prisma/nullable-enum-service-requests-status-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput } from '../service-request-job/service-request-job-update-many-without-service-request-nested.input';
-import { ServiceUpdateOneWithoutServiceRequestNestedInput } from '../service/service-update-one-without-service-request-nested.input';
+import { JobUpdateManyWithoutServiceRequestsNestedInput } from '../job/job-update-many-without-service-requests-nested.input';
 import { Type } from 'class-transformer';
+import { ServiceUpdateOneWithoutServiceRequestNestedInput } from '../service/service-update-one-without-service-request-nested.input';
 import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../vehicle/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../workshop/workshop-update-one-required-without-service-requests-nested.input';
 import { PersonUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../person/person-update-one-required-without-service-requests-nested.input';
@@ -30,8 +30,9 @@ export class ServiceRequestUpdateInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput;
+    @Field(() => JobUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
+    jobs?: JobUpdateManyWithoutServiceRequestsNestedInput;
 
     @Field(() => ServiceUpdateOneWithoutServiceRequestNestedInput, {nullable:true})
     @Type(() => ServiceUpdateOneWithoutServiceRequestNestedInput)

@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressWorkshopCreateNestedManyWithoutWorkshopInput } from '../address-workshop/address-workshop-create-nested-many-without-workshop.input';
+import { AddressCreateNestedManyWithoutWorkshopsInput } from '../address/address-create-nested-many-without-workshops.input';
 import { CustomerCreateNestedManyWithoutWorkshopInput } from '../customer/customer-create-nested-many-without-workshop.input';
 import { Type } from 'class-transformer';
 import { EmployeeCreateNestedManyWithoutWorkshopInput } from '../employee/employee-create-nested-many-without-workshop.input';
@@ -11,7 +11,7 @@ import { ServiceRequestCreateNestedManyWithoutWorkshopInput } from '../service-r
 import { ServiceCreateNestedManyWithoutWorkshopInput } from '../service/service-create-nested-many-without-workshop.input';
 import { PersonCreateNestedOneWithoutWorkshopsInput } from '../person/person-create-nested-one-without-workshops.input';
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../workshop-job/workshop-job-create-nested-many-without-workshop.input';
-import { WorkshopJobCategoryCreateNestedManyWithoutWorkshopInput } from '../workshop-job-category/workshop-job-category-create-nested-many-without-workshop.input';
+import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../job-category/job-category-create-nested-many-without-workshops.input';
 
 @InputType()
 export class WorkshopCreateWithoutWorkshopDetailsInput {
@@ -37,8 +37,8 @@ export class WorkshopCreateWithoutWorkshopDetailsInput {
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 
-    @Field(() => AddressWorkshopCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    workshopAddresses?: AddressWorkshopCreateNestedManyWithoutWorkshopInput;
+    @Field(() => AddressCreateNestedManyWithoutWorkshopsInput, {nullable:true})
+    addresses?: AddressCreateNestedManyWithoutWorkshopsInput;
 
     @Field(() => CustomerCreateNestedManyWithoutWorkshopInput, {nullable:true})
     @Type(() => CustomerCreateNestedManyWithoutWorkshopInput)
@@ -71,6 +71,6 @@ export class WorkshopCreateWithoutWorkshopDetailsInput {
     @Type(() => WorkshopJobCreateNestedManyWithoutWorkshopInput)
     workshopJobs?: WorkshopJobCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => WorkshopJobCategoryCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    workshopJobCategories?: WorkshopJobCategoryCreateNestedManyWithoutWorkshopInput;
+    @Field(() => JobCategoryCreateNestedManyWithoutWorkshopsInput, {nullable:true})
+    jobCategories?: JobCategoryCreateNestedManyWithoutWorkshopsInput;
 }

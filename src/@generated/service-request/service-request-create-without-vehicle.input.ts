@@ -2,9 +2,9 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
-import { ServiceRequestJobCreateNestedManyWithoutServiceRequestInput } from '../service-request-job/service-request-job-create-nested-many-without-service-request.input';
-import { ServiceCreateNestedOneWithoutServiceRequestInput } from '../service/service-create-nested-one-without-service-request.input';
+import { JobCreateNestedManyWithoutServiceRequestsInput } from '../job/job-create-nested-many-without-service-requests.input';
 import { Type } from 'class-transformer';
+import { ServiceCreateNestedOneWithoutServiceRequestInput } from '../service/service-create-nested-one-without-service-request.input';
 import { WorkshopCreateNestedOneWithoutServiceRequestsInput } from '../workshop/workshop-create-nested-one-without-service-requests.input';
 import { PersonCreateNestedOneWithoutServiceRequestsInput } from '../person/person-create-nested-one-without-service-requests.input';
 
@@ -26,8 +26,9 @@ export class ServiceRequestCreateWithoutVehicleInput {
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 
-    @Field(() => ServiceRequestJobCreateNestedManyWithoutServiceRequestInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobCreateNestedManyWithoutServiceRequestInput;
+    @Field(() => JobCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
+    @Type(() => JobCreateNestedManyWithoutServiceRequestsInput)
+    jobs?: JobCreateNestedManyWithoutServiceRequestsInput;
 
     @Field(() => ServiceCreateNestedOneWithoutServiceRequestInput, {nullable:true})
     @Type(() => ServiceCreateNestedOneWithoutServiceRequestInput)

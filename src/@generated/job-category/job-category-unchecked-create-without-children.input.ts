@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { JobUncheckedCreateNestedManyWithoutJobCategoryInput } from '../job/job-unchecked-create-nested-many-without-job-category.input';
 import { Type } from 'class-transformer';
-import { WorkshopJobCategoryUncheckedCreateNestedManyWithoutJobCategoryInput } from '../workshop-job-category/workshop-job-category-unchecked-create-nested-many-without-job-category.input';
+import { WorkshopUncheckedCreateNestedManyWithoutJobCategoriesInput } from '../workshop/workshop-unchecked-create-nested-many-without-job-categories.input';
 
 @InputType()
 export class JobCategoryUncheckedCreateWithoutChildrenInput {
@@ -27,6 +27,7 @@ export class JobCategoryUncheckedCreateWithoutChildrenInput {
     @Type(() => JobUncheckedCreateNestedManyWithoutJobCategoryInput)
     jobs?: JobUncheckedCreateNestedManyWithoutJobCategoryInput;
 
-    @Field(() => WorkshopJobCategoryUncheckedCreateNestedManyWithoutJobCategoryInput, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryUncheckedCreateNestedManyWithoutJobCategoryInput;
+    @Field(() => WorkshopUncheckedCreateNestedManyWithoutJobCategoriesInput, {nullable:true})
+    @Type(() => WorkshopUncheckedCreateNestedManyWithoutJobCategoriesInput)
+    Workshops?: WorkshopUncheckedCreateNestedManyWithoutJobCategoriesInput;
 }

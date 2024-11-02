@@ -3,7 +3,7 @@ import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { AddressModule, AddressPersonModule } from './modules/index';
+import { AddressModule } from './modules/index';
 import { AppController } from './app.controller';
 import { HelperModule } from './common/helper/helper.module';
 
@@ -30,7 +30,7 @@ import { HelperModule } from './common/helper/helper.module';
     DatabaseModule,
     HelperModule,
     AddressModule,
-    AddressPersonModule,
+    // AddressPersonModule,
   ],
   providers: [Logger],
   controllers: [AppController],

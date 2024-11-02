@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressWorkshopUncheckedCreateNestedManyWithoutWorkshopInput } from '../address-workshop/address-workshop-unchecked-create-nested-many-without-workshop.input';
+import { AddressUncheckedCreateNestedManyWithoutWorkshopsInput } from '../address/address-unchecked-create-nested-many-without-workshops.input';
 import { CustomerUncheckedCreateNestedManyWithoutWorkshopInput } from '../customer/customer-unchecked-create-nested-many-without-workshop.input';
 import { Type } from 'class-transformer';
 import { EmployeeUncheckedCreateNestedManyWithoutWorkshopInput } from '../employee/employee-unchecked-create-nested-many-without-workshop.input';
@@ -10,7 +10,7 @@ import { ServiceRequestUncheckedCreateNestedManyWithoutWorkshopInput } from '../
 import { ServiceUncheckedCreateNestedManyWithoutWorkshopInput } from '../service/service-unchecked-create-nested-many-without-workshop.input';
 import { WorkshopDetailsUncheckedCreateNestedOneWithoutWorkshopInput } from '../workshop-details/workshop-details-unchecked-create-nested-one-without-workshop.input';
 import { WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput } from '../workshop-job/workshop-job-unchecked-create-nested-many-without-workshop.input';
-import { WorkshopJobCategoryUncheckedCreateNestedManyWithoutWorkshopInput } from '../workshop-job-category/workshop-job-category-unchecked-create-nested-many-without-workshop.input';
+import { JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput } from '../job-category/job-category-unchecked-create-nested-many-without-workshops.input';
 
 @InputType()
 export class WorkshopUncheckedCreateWithoutReviewsInput {
@@ -39,8 +39,8 @@ export class WorkshopUncheckedCreateWithoutReviewsInput {
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 
-    @Field(() => AddressWorkshopUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    workshopAddresses?: AddressWorkshopUncheckedCreateNestedManyWithoutWorkshopInput;
+    @Field(() => AddressUncheckedCreateNestedManyWithoutWorkshopsInput, {nullable:true})
+    addresses?: AddressUncheckedCreateNestedManyWithoutWorkshopsInput;
 
     @Field(() => CustomerUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
     @Type(() => CustomerUncheckedCreateNestedManyWithoutWorkshopInput)
@@ -69,6 +69,6 @@ export class WorkshopUncheckedCreateWithoutReviewsInput {
     @Type(() => WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput)
     workshopJobs?: WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => WorkshopJobCategoryUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    workshopJobCategories?: WorkshopJobCategoryUncheckedCreateNestedManyWithoutWorkshopInput;
+    @Field(() => JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput, {nullable:true})
+    jobCategories?: JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput;
 }

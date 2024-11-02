@@ -4,7 +4,7 @@ import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { AddressPersonUncheckedUpdateManyWithoutPersonNestedInput } from '../address-person/address-person-unchecked-update-many-without-person-nested.input';
+import { AddressUncheckedUpdateManyWithoutPersonsNestedInput } from '../address/address-unchecked-update-many-without-persons-nested.input';
 import { CustomerUncheckedUpdateManyWithoutPersonNestedInput } from '../customer/customer-unchecked-update-many-without-person-nested.input';
 import { Type } from 'class-transformer';
 import { EmployeeUncheckedUpdateManyWithoutPersonNestedInput } from '../employee/employee-unchecked-update-many-without-person-nested.input';
@@ -30,8 +30,8 @@ export class PersonUncheckedUpdateWithoutUserInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => AddressPersonUncheckedUpdateManyWithoutPersonNestedInput, {nullable:true})
-    personAddresses?: AddressPersonUncheckedUpdateManyWithoutPersonNestedInput;
+    @Field(() => AddressUncheckedUpdateManyWithoutPersonsNestedInput, {nullable:true})
+    addresses?: AddressUncheckedUpdateManyWithoutPersonsNestedInput;
 
     @Field(() => CustomerUncheckedUpdateManyWithoutPersonNestedInput, {nullable:true})
     @Type(() => CustomerUncheckedUpdateManyWithoutPersonNestedInput)

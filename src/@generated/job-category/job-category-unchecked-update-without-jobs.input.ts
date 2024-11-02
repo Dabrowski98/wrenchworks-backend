@@ -6,7 +6,8 @@ import { NullableBigIntFieldUpdateOperationsInput } from '../prisma/nullable-big
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
 import { JobCategoryUncheckedUpdateManyWithoutChildNestedInput } from './job-category-unchecked-update-many-without-child-nested.input';
-import { WorkshopJobCategoryUncheckedUpdateManyWithoutJobCategoryNestedInput } from '../workshop-job-category/workshop-job-category-unchecked-update-many-without-job-category-nested.input';
+import { WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput } from '../workshop/workshop-unchecked-update-many-without-job-categories-nested.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class JobCategoryUncheckedUpdateWithoutJobsInput {
@@ -29,6 +30,7 @@ export class JobCategoryUncheckedUpdateWithoutJobsInput {
     @Field(() => JobCategoryUncheckedUpdateManyWithoutChildNestedInput, {nullable:true})
     children?: JobCategoryUncheckedUpdateManyWithoutChildNestedInput;
 
-    @Field(() => WorkshopJobCategoryUncheckedUpdateManyWithoutJobCategoryNestedInput, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryUncheckedUpdateManyWithoutJobCategoryNestedInput;
+    @Field(() => WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput, {nullable:true})
+    @Type(() => WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput)
+    Workshops?: WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput;
 }

@@ -5,12 +5,12 @@
 type Address {
   _count: AddressCount!
   addressId: BigInt!
-  addressPersons: [AddressPerson!]
   addressWorkshops: [AddressWorkshop!]
   buildingNo: String!
   city: String!
   country: String!
   flatNo: String
+  persons: [Person!]
   postCode: String!
   region: String!
   street: String
@@ -21,8 +21,8 @@ type AddressAvgAggregate {
 }
 
 type AddressCount {
-  addressPersons: Int!
   addressWorkshops: Int!
+  persons: Int!
 }
 
 type AddressCountAggregate {
@@ -38,21 +38,21 @@ type AddressCountAggregate {
 }
 
 input AddressCreateInput {
-  addressPersons: AddressPersonCreateNestedManyWithoutAddressInput
   addressWorkshops: AddressWorkshopCreateNestedManyWithoutAddressInput
   buildingNo: String!
   city: String!
   country: String!
   flatNo: String
+  persons: PersonCreateNestedManyWithoutAddressesInput
   postCode: String!
   region: String!
   street: String
 }
 
-input AddressCreateNestedOneWithoutAddressPersonsInput {
-  connect: AddressWhereUniqueInput
-  connectOrCreate: AddressCreateOrConnectWithoutAddressPersonsInput
-  create: AddressCreateWithoutAddressPersonsInput
+input AddressCreateNestedManyWithoutPersonsInput {
+  connect: [AddressWhereUniqueInput!]
+  connectOrCreate: [AddressCreateOrConnectWithoutPersonsInput!]
+  create: [AddressCreateWithoutPersonsInput!]
 }
 
 input AddressCreateNestedOneWithoutAddressWorkshopsInput {
@@ -61,17 +61,28 @@ input AddressCreateNestedOneWithoutAddressWorkshopsInput {
   create: AddressCreateWithoutAddressWorkshopsInput
 }
 
-input AddressCreateOrConnectWithoutAddressPersonsInput {
-  create: AddressCreateWithoutAddressPersonsInput!
-  where: AddressWhereUniqueInput!
-}
-
 input AddressCreateOrConnectWithoutAddressWorkshopsInput {
   create: AddressCreateWithoutAddressWorkshopsInput!
   where: AddressWhereUniqueInput!
 }
 
-input AddressCreateWithoutAddressPersonsInput {
+input AddressCreateOrConnectWithoutPersonsInput {
+  create: AddressCreateWithoutPersonsInput!
+  where: AddressWhereUniqueInput!
+}
+
+input AddressCreateWithoutAddressWorkshopsInput {
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  persons: PersonCreateNestedManyWithoutAddressesInput
+  postCode: String!
+  region: String!
+  street: String
+}
+
+input AddressCreateWithoutPersonsInput {
   addressWorkshops: AddressWorkshopCreateNestedManyWithoutAddressInput
   buildingNo: String!
   city: String!
@@ -82,15 +93,10 @@ input AddressCreateWithoutAddressPersonsInput {
   street: String
 }
 
-input AddressCreateWithoutAddressWorkshopsInput {
-  addressPersons: AddressPersonCreateNestedManyWithoutAddressInput
-  buildingNo: String!
-  city: String!
-  country: String!
-  flatNo: String
-  postCode: String!
-  region: String!
-  street: String
+input AddressListRelationFilter {
+  every: AddressWhereInput
+  none: AddressWhereInput
+  some: AddressWhereInput
 }
 
 type AddressMaxAggregate {
@@ -115,223 +121,23 @@ type AddressMinAggregate {
   street: String
 }
 
-type AddressPerson {
-  address: Address!
-  addressId: BigInt!
-  createdAt: DateTime!
-  person: Person!
-  personId: BigInt!
-}
-
-input AddressPersonAddressIdPersonIdCompoundUniqueInput {
-  addressId: BigInt!
-  personId: BigInt!
-}
-
-type AddressPersonAvgAggregate {
-  addressId: Float
-  personId: Float
-}
-
-type AddressPersonCountAggregate {
-  _all: Int!
-  addressId: Int!
-  createdAt: Int!
-  personId: Int!
-}
-
-input AddressPersonCreateInput {
-  address: AddressCreateNestedOneWithoutAddressPersonsInput!
-  createdAt: DateTime
-  person: PersonCreateNestedOneWithoutPersonAddressesInput!
-}
-
-input AddressPersonCreateManyAddressInput {
-  createdAt: DateTime
-  personId: BigInt!
-}
-
-input AddressPersonCreateManyAddressInputEnvelope {
-  data: [AddressPersonCreateManyAddressInput!]!
-  skipDuplicates: Boolean
-}
-
-input AddressPersonCreateManyPersonInput {
-  addressId: BigInt!
-  createdAt: DateTime
-}
-
-input AddressPersonCreateManyPersonInputEnvelope {
-  data: [AddressPersonCreateManyPersonInput!]!
-  skipDuplicates: Boolean
-}
-
-input AddressPersonCreateNestedManyWithoutAddressInput {
-  connect: [AddressPersonWhereUniqueInput!]
-  connectOrCreate: [AddressPersonCreateOrConnectWithoutAddressInput!]
-  create: [AddressPersonCreateWithoutAddressInput!]
-  createMany: AddressPersonCreateManyAddressInputEnvelope
-}
-
-input AddressPersonCreateNestedManyWithoutPersonInput {
-  connect: [AddressPersonWhereUniqueInput!]
-  connectOrCreate: [AddressPersonCreateOrConnectWithoutPersonInput!]
-  create: [AddressPersonCreateWithoutPersonInput!]
-  createMany: AddressPersonCreateManyPersonInputEnvelope
-}
-
-input AddressPersonCreateOrConnectWithoutAddressInput {
-  create: AddressPersonCreateWithoutAddressInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonCreateOrConnectWithoutPersonInput {
-  create: AddressPersonCreateWithoutPersonInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonCreateWithoutAddressInput {
-  createdAt: DateTime
-  person: PersonCreateNestedOneWithoutPersonAddressesInput!
-}
-
-input AddressPersonCreateWithoutPersonInput {
-  address: AddressCreateNestedOneWithoutAddressPersonsInput!
-  createdAt: DateTime
-}
-
-input AddressPersonListRelationFilter {
-  every: AddressPersonWhereInput
-  none: AddressPersonWhereInput
-  some: AddressPersonWhereInput
-}
-
-type AddressPersonMaxAggregate {
-  addressId: BigInt
-  createdAt: DateTime
-  personId: BigInt
-}
-
-type AddressPersonMinAggregate {
-  addressId: BigInt
-  createdAt: DateTime
-  personId: BigInt
-}
-
-input AddressPersonScalarWhereInput {
-  AND: [AddressPersonScalarWhereInput!]
-  NOT: [AddressPersonScalarWhereInput!]
-  OR: [AddressPersonScalarWhereInput!]
-  addressId: BigIntFilter
-  createdAt: DateTimeFilter
-  personId: BigIntFilter
-}
-
-type AddressPersonSumAggregate {
-  addressId: BigInt
-  personId: BigInt
-}
-
-input AddressPersonUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
-}
-
-input AddressPersonUpdateManyWithWhereWithoutAddressInput {
-  data: AddressPersonUpdateManyMutationInput!
-  where: AddressPersonScalarWhereInput!
-}
-
-input AddressPersonUpdateManyWithWhereWithoutPersonInput {
-  data: AddressPersonUpdateManyMutationInput!
-  where: AddressPersonScalarWhereInput!
-}
-
-input AddressPersonUpdateManyWithoutAddressNestedInput {
-  connect: [AddressPersonWhereUniqueInput!]
-  connectOrCreate: [AddressPersonCreateOrConnectWithoutAddressInput!]
-  create: [AddressPersonCreateWithoutAddressInput!]
-  createMany: AddressPersonCreateManyAddressInputEnvelope
-  delete: [AddressPersonWhereUniqueInput!]
-  deleteMany: [AddressPersonScalarWhereInput!]
-  disconnect: [AddressPersonWhereUniqueInput!]
-  set: [AddressPersonWhereUniqueInput!]
-  update: [AddressPersonUpdateWithWhereUniqueWithoutAddressInput!]
-  updateMany: [AddressPersonUpdateManyWithWhereWithoutAddressInput!]
-  upsert: [AddressPersonUpsertWithWhereUniqueWithoutAddressInput!]
-}
-
-input AddressPersonUpdateManyWithoutPersonNestedInput {
-  connect: [AddressPersonWhereUniqueInput!]
-  connectOrCreate: [AddressPersonCreateOrConnectWithoutPersonInput!]
-  create: [AddressPersonCreateWithoutPersonInput!]
-  createMany: AddressPersonCreateManyPersonInputEnvelope
-  delete: [AddressPersonWhereUniqueInput!]
-  deleteMany: [AddressPersonScalarWhereInput!]
-  disconnect: [AddressPersonWhereUniqueInput!]
-  set: [AddressPersonWhereUniqueInput!]
-  update: [AddressPersonUpdateWithWhereUniqueWithoutPersonInput!]
-  updateMany: [AddressPersonUpdateManyWithWhereWithoutPersonInput!]
-  upsert: [AddressPersonUpsertWithWhereUniqueWithoutPersonInput!]
-}
-
-input AddressPersonUpdateWithWhereUniqueWithoutAddressInput {
-  data: AddressPersonUpdateWithoutAddressInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonUpdateWithWhereUniqueWithoutPersonInput {
-  data: AddressPersonUpdateWithoutPersonInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonUpdateWithoutAddressInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
-  person: PersonUpdateOneRequiredWithoutPersonAddressesNestedInput
-}
-
-input AddressPersonUpdateWithoutPersonInput {
-  address: AddressUpdateOneRequiredWithoutAddressPersonsNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-}
-
-input AddressPersonUpsertWithWhereUniqueWithoutAddressInput {
-  create: AddressPersonCreateWithoutAddressInput!
-  update: AddressPersonUpdateWithoutAddressInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonUpsertWithWhereUniqueWithoutPersonInput {
-  create: AddressPersonCreateWithoutPersonInput!
-  update: AddressPersonUpdateWithoutPersonInput!
-  where: AddressPersonWhereUniqueInput!
-}
-
-input AddressPersonWhereInput {
-  AND: [AddressPersonWhereInput!]
-  NOT: [AddressPersonWhereInput!]
-  OR: [AddressPersonWhereInput!]
-  address: AddressRelationFilter
-  addressId: BigIntFilter
-  createdAt: DateTimeFilter
-  person: PersonRelationFilter
-  personId: BigIntFilter
-}
-
-input AddressPersonWhereUniqueInput {
-  AND: [AddressPersonWhereInput!]
-  NOT: [AddressPersonWhereInput!]
-  OR: [AddressPersonWhereInput!]
-  address: AddressRelationFilter
-  addressId: BigIntFilter
-  addressId_personId: AddressPersonAddressIdPersonIdCompoundUniqueInput
-  createdAt: DateTimeFilter
-  person: PersonRelationFilter
-  personId: BigIntFilter
-}
-
 input AddressRelationFilter {
   is: AddressWhereInput
   isNot: AddressWhereInput
+}
+
+input AddressScalarWhereInput {
+  AND: [AddressScalarWhereInput!]
+  NOT: [AddressScalarWhereInput!]
+  OR: [AddressScalarWhereInput!]
+  addressId: BigIntFilter
+  buildingNo: StringFilter
+  city: StringFilter
+  country: StringFilter
+  flatNo: StringNullableFilter
+  postCode: StringFilter
+  region: StringFilter
+  street: StringNullableFilter
 }
 
 type AddressSumAggregate {
@@ -339,8 +145,18 @@ type AddressSumAggregate {
 }
 
 input AddressUpdateInput {
-  addressPersons: AddressPersonUpdateManyWithoutAddressNestedInput
   addressWorkshops: AddressWorkshopUpdateManyWithoutAddressNestedInput
+  buildingNo: StringFieldUpdateOperationsInput
+  city: StringFieldUpdateOperationsInput
+  country: StringFieldUpdateOperationsInput
+  flatNo: NullableStringFieldUpdateOperationsInput
+  persons: PersonUpdateManyWithoutAddressesNestedInput
+  postCode: StringFieldUpdateOperationsInput
+  region: StringFieldUpdateOperationsInput
+  street: NullableStringFieldUpdateOperationsInput
+}
+
+input AddressUpdateManyMutationInput {
   buildingNo: StringFieldUpdateOperationsInput
   city: StringFieldUpdateOperationsInput
   country: StringFieldUpdateOperationsInput
@@ -350,12 +166,22 @@ input AddressUpdateInput {
   street: NullableStringFieldUpdateOperationsInput
 }
 
-input AddressUpdateOneRequiredWithoutAddressPersonsNestedInput {
-  connect: AddressWhereUniqueInput
-  connectOrCreate: AddressCreateOrConnectWithoutAddressPersonsInput
-  create: AddressCreateWithoutAddressPersonsInput
-  update: AddressUpdateToOneWithWhereWithoutAddressPersonsInput
-  upsert: AddressUpsertWithoutAddressPersonsInput
+input AddressUpdateManyWithWhereWithoutPersonsInput {
+  data: AddressUpdateManyMutationInput!
+  where: AddressScalarWhereInput!
+}
+
+input AddressUpdateManyWithoutPersonsNestedInput {
+  connect: [AddressWhereUniqueInput!]
+  connectOrCreate: [AddressCreateOrConnectWithoutPersonsInput!]
+  create: [AddressCreateWithoutPersonsInput!]
+  delete: [AddressWhereUniqueInput!]
+  deleteMany: [AddressScalarWhereInput!]
+  disconnect: [AddressWhereUniqueInput!]
+  set: [AddressWhereUniqueInput!]
+  update: [AddressUpdateWithWhereUniqueWithoutPersonsInput!]
+  updateMany: [AddressUpdateManyWithWhereWithoutPersonsInput!]
+  upsert: [AddressUpsertWithWhereUniqueWithoutPersonsInput!]
 }
 
 input AddressUpdateOneRequiredWithoutAddressWorkshopsNestedInput {
@@ -366,17 +192,28 @@ input AddressUpdateOneRequiredWithoutAddressWorkshopsNestedInput {
   upsert: AddressUpsertWithoutAddressWorkshopsInput
 }
 
-input AddressUpdateToOneWithWhereWithoutAddressPersonsInput {
-  data: AddressUpdateWithoutAddressPersonsInput!
-  where: AddressWhereInput
-}
-
 input AddressUpdateToOneWithWhereWithoutAddressWorkshopsInput {
   data: AddressUpdateWithoutAddressWorkshopsInput!
   where: AddressWhereInput
 }
 
-input AddressUpdateWithoutAddressPersonsInput {
+input AddressUpdateWithWhereUniqueWithoutPersonsInput {
+  data: AddressUpdateWithoutPersonsInput!
+  where: AddressWhereUniqueInput!
+}
+
+input AddressUpdateWithoutAddressWorkshopsInput {
+  buildingNo: StringFieldUpdateOperationsInput
+  city: StringFieldUpdateOperationsInput
+  country: StringFieldUpdateOperationsInput
+  flatNo: NullableStringFieldUpdateOperationsInput
+  persons: PersonUpdateManyWithoutAddressesNestedInput
+  postCode: StringFieldUpdateOperationsInput
+  region: StringFieldUpdateOperationsInput
+  street: NullableStringFieldUpdateOperationsInput
+}
+
+input AddressUpdateWithoutPersonsInput {
   addressWorkshops: AddressWorkshopUpdateManyWithoutAddressNestedInput
   buildingNo: StringFieldUpdateOperationsInput
   city: StringFieldUpdateOperationsInput
@@ -387,21 +224,10 @@ input AddressUpdateWithoutAddressPersonsInput {
   street: NullableStringFieldUpdateOperationsInput
 }
 
-input AddressUpdateWithoutAddressWorkshopsInput {
-  addressPersons: AddressPersonUpdateManyWithoutAddressNestedInput
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-}
-
-input AddressUpsertWithoutAddressPersonsInput {
-  create: AddressCreateWithoutAddressPersonsInput!
-  update: AddressUpdateWithoutAddressPersonsInput!
-  where: AddressWhereInput
+input AddressUpsertWithWhereUniqueWithoutPersonsInput {
+  create: AddressCreateWithoutPersonsInput!
+  update: AddressUpdateWithoutPersonsInput!
+  where: AddressWhereUniqueInput!
 }
 
 input AddressUpsertWithoutAddressWorkshopsInput {
@@ -415,12 +241,12 @@ input AddressWhereInput {
   NOT: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   addressId: BigIntFilter
-  addressPersons: AddressPersonListRelationFilter
   addressWorkshops: AddressWorkshopListRelationFilter
   buildingNo: StringFilter
   city: StringFilter
   country: StringFilter
   flatNo: StringNullableFilter
+  persons: PersonListRelationFilter
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
@@ -431,12 +257,12 @@ input AddressWhereUniqueInput {
   NOT: [AddressWhereInput!]
   OR: [AddressWhereInput!]
   addressId: BigInt
-  addressPersons: AddressPersonListRelationFilter
   addressWorkshops: AddressWorkshopListRelationFilter
   buildingNo: StringFilter
   city: StringFilter
   country: StringFilter
   flatNo: StringNullableFilter
+  persons: PersonListRelationFilter
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
@@ -2302,8 +2128,6 @@ input JobWhereUniqueInput {
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
   deleteAddress(where: AddressWhereUniqueInput!): DeletePayload!
-  linkAddressToPerson(data: AddressPersonCreateInput!): AddressPerson!
-  unlinkAddressFromPerson(where: AddressPersonWhereUniqueInput!): DeletePayload!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
 }
 
@@ -2902,12 +2726,12 @@ input PermissionSetWhereUniqueInput {
 
 type Person {
   _count: PersonCount!
+  addresses: [Address!]
   customers: [Customer!]
   deletedAt: DateTime
   employees: [Employee!]
   firstName: String!
   lastName: String!
-  personAddresses: [AddressPerson!]
   personId: BigInt!
   serviceRequests: [ServiceRequest!]
   telephoneNumber: String
@@ -2921,9 +2745,9 @@ type PersonAvgAggregate {
 }
 
 type PersonCount {
+  addresses: Int!
   customers: Int!
   employees: Int!
-  personAddresses: Int!
   serviceRequests: Int!
   vehicles: Int!
   workshops: Int!
@@ -2938,6 +2762,12 @@ type PersonCountAggregate {
   telephoneNumber: Int!
 }
 
+input PersonCreateNestedManyWithoutAddressesInput {
+  connect: [PersonWhereUniqueInput!]
+  connectOrCreate: [PersonCreateOrConnectWithoutAddressesInput!]
+  create: [PersonCreateWithoutAddressesInput!]
+}
+
 input PersonCreateNestedOneWithoutCustomersInput {
   connect: PersonWhereUniqueInput
   connectOrCreate: PersonCreateOrConnectWithoutCustomersInput
@@ -2948,12 +2778,6 @@ input PersonCreateNestedOneWithoutEmployeesInput {
   connect: PersonWhereUniqueInput
   connectOrCreate: PersonCreateOrConnectWithoutEmployeesInput
   create: PersonCreateWithoutEmployeesInput
-}
-
-input PersonCreateNestedOneWithoutPersonAddressesInput {
-  connect: PersonWhereUniqueInput
-  connectOrCreate: PersonCreateOrConnectWithoutPersonAddressesInput
-  create: PersonCreateWithoutPersonAddressesInput
 }
 
 input PersonCreateNestedOneWithoutServiceRequestsInput {
@@ -2980,6 +2804,11 @@ input PersonCreateNestedOneWithoutWorkshopsInput {
   create: PersonCreateWithoutWorkshopsInput
 }
 
+input PersonCreateOrConnectWithoutAddressesInput {
+  create: PersonCreateWithoutAddressesInput!
+  where: PersonWhereUniqueInput!
+}
+
 input PersonCreateOrConnectWithoutCustomersInput {
   create: PersonCreateWithoutCustomersInput!
   where: PersonWhereUniqueInput!
@@ -2987,11 +2816,6 @@ input PersonCreateOrConnectWithoutCustomersInput {
 
 input PersonCreateOrConnectWithoutEmployeesInput {
   create: PersonCreateWithoutEmployeesInput!
-  where: PersonWhereUniqueInput!
-}
-
-input PersonCreateOrConnectWithoutPersonAddressesInput {
-  create: PersonCreateWithoutPersonAddressesInput!
   where: PersonWhereUniqueInput!
 }
 
@@ -3015,12 +2839,26 @@ input PersonCreateOrConnectWithoutWorkshopsInput {
   where: PersonWhereUniqueInput!
 }
 
-input PersonCreateWithoutCustomersInput {
+input PersonCreateWithoutAddressesInput {
+  customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
   employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
+  personId: BigInt
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutCustomersInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
+  deletedAt: DateTime
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
   personId: BigInt
   serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
   telephoneNumber: String
@@ -3030,23 +2868,9 @@ input PersonCreateWithoutCustomersInput {
 }
 
 input PersonCreateWithoutEmployeesInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
   customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
-  firstName: String!
-  lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
-  personId: BigInt
-  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
-  telephoneNumber: String
-  user: UserCreateNestedOneWithoutPersonInput
-  vehicles: VehicleCreateNestedManyWithoutPersonInput
-  workshops: WorkshopCreateNestedManyWithoutPersonInput
-}
-
-input PersonCreateWithoutPersonAddressesInput {
-  customers: CustomerCreateNestedManyWithoutPersonInput
-  deletedAt: DateTime
-  employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
   personId: BigInt
@@ -3058,12 +2882,12 @@ input PersonCreateWithoutPersonAddressesInput {
 }
 
 input PersonCreateWithoutServiceRequestsInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
   customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
   employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
   personId: BigInt
   telephoneNumber: String
   user: UserCreateNestedOneWithoutPersonInput
@@ -3072,12 +2896,12 @@ input PersonCreateWithoutServiceRequestsInput {
 }
 
 input PersonCreateWithoutUserInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
   customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
   employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
   personId: BigInt
   serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
   telephoneNumber: String
@@ -3086,12 +2910,12 @@ input PersonCreateWithoutUserInput {
 }
 
 input PersonCreateWithoutVehiclesInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
   customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
   employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
   personId: BigInt
   serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
   telephoneNumber: String
@@ -3100,17 +2924,23 @@ input PersonCreateWithoutVehiclesInput {
 }
 
 input PersonCreateWithoutWorkshopsInput {
+  addresses: AddressCreateNestedManyWithoutPersonsInput
   customers: CustomerCreateNestedManyWithoutPersonInput
   deletedAt: DateTime
   employees: EmployeeCreateNestedManyWithoutPersonInput
   firstName: String!
   lastName: String!
-  personAddresses: AddressPersonCreateNestedManyWithoutPersonInput
   personId: BigInt
   serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
   telephoneNumber: String
   user: UserCreateNestedOneWithoutPersonInput
   vehicles: VehicleCreateNestedManyWithoutPersonInput
+}
+
+input PersonListRelationFilter {
+  every: PersonWhereInput
+  none: PersonWhereInput
+  some: PersonWhereInput
 }
 
 type PersonMaxAggregate {
@@ -3139,8 +2969,45 @@ input PersonRelationFilter {
   isNot: PersonWhereInput
 }
 
+input PersonScalarWhereInput {
+  AND: [PersonScalarWhereInput!]
+  NOT: [PersonScalarWhereInput!]
+  OR: [PersonScalarWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  personId: BigIntFilter
+  telephoneNumber: StringNullableFilter
+}
+
 type PersonSumAggregate {
   personId: BigInt
+}
+
+input PersonUpdateManyMutationInput {
+  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  firstName: StringFieldUpdateOperationsInput
+  lastName: StringFieldUpdateOperationsInput
+  personId: BigIntFieldUpdateOperationsInput
+  telephoneNumber: NullableStringFieldUpdateOperationsInput
+}
+
+input PersonUpdateManyWithWhereWithoutAddressesInput {
+  data: PersonUpdateManyMutationInput!
+  where: PersonScalarWhereInput!
+}
+
+input PersonUpdateManyWithoutAddressesNestedInput {
+  connect: [PersonWhereUniqueInput!]
+  connectOrCreate: [PersonCreateOrConnectWithoutAddressesInput!]
+  create: [PersonCreateWithoutAddressesInput!]
+  delete: [PersonWhereUniqueInput!]
+  deleteMany: [PersonScalarWhereInput!]
+  disconnect: [PersonWhereUniqueInput!]
+  set: [PersonWhereUniqueInput!]
+  update: [PersonUpdateWithWhereUniqueWithoutAddressesInput!]
+  updateMany: [PersonUpdateManyWithWhereWithoutAddressesInput!]
+  upsert: [PersonUpsertWithWhereUniqueWithoutAddressesInput!]
 }
 
 input PersonUpdateOneRequiredWithoutCustomersNestedInput {
@@ -3157,14 +3024,6 @@ input PersonUpdateOneRequiredWithoutEmployeesNestedInput {
   create: PersonCreateWithoutEmployeesInput
   update: PersonUpdateToOneWithWhereWithoutEmployeesInput
   upsert: PersonUpsertWithoutEmployeesInput
-}
-
-input PersonUpdateOneRequiredWithoutPersonAddressesNestedInput {
-  connect: PersonWhereUniqueInput
-  connectOrCreate: PersonCreateOrConnectWithoutPersonAddressesInput
-  create: PersonCreateWithoutPersonAddressesInput
-  update: PersonUpdateToOneWithWhereWithoutPersonAddressesInput
-  upsert: PersonUpsertWithoutPersonAddressesInput
 }
 
 input PersonUpdateOneRequiredWithoutServiceRequestsNestedInput {
@@ -3211,11 +3070,6 @@ input PersonUpdateToOneWithWhereWithoutEmployeesInput {
   where: PersonWhereInput
 }
 
-input PersonUpdateToOneWithWhereWithoutPersonAddressesInput {
-  data: PersonUpdateWithoutPersonAddressesInput!
-  where: PersonWhereInput
-}
-
 input PersonUpdateToOneWithWhereWithoutServiceRequestsInput {
   data: PersonUpdateWithoutServiceRequestsInput!
   where: PersonWhereInput
@@ -3236,12 +3090,31 @@ input PersonUpdateToOneWithWhereWithoutWorkshopsInput {
   where: PersonWhereInput
 }
 
-input PersonUpdateWithoutCustomersInput {
+input PersonUpdateWithWhereUniqueWithoutAddressesInput {
+  data: PersonUpdateWithoutAddressesInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonUpdateWithoutAddressesInput {
+  customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
+  personId: BigIntFieldUpdateOperationsInput
+  serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
+  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  user: UserUpdateOneWithoutPersonNestedInput
+  vehicles: VehicleUpdateManyWithoutPersonNestedInput
+  workshops: WorkshopUpdateManyWithoutPersonNestedInput
+}
+
+input PersonUpdateWithoutCustomersInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
+  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  employees: EmployeeUpdateManyWithoutPersonNestedInput
+  firstName: StringFieldUpdateOperationsInput
+  lastName: StringFieldUpdateOperationsInput
   personId: BigIntFieldUpdateOperationsInput
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
   telephoneNumber: NullableStringFieldUpdateOperationsInput
@@ -3251,23 +3124,9 @@ input PersonUpdateWithoutCustomersInput {
 }
 
 input PersonUpdateWithoutEmployeesInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
-  personId: BigIntFieldUpdateOperationsInput
-  serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
-  user: UserUpdateOneWithoutPersonNestedInput
-  vehicles: VehicleUpdateManyWithoutPersonNestedInput
-  workshops: WorkshopUpdateManyWithoutPersonNestedInput
-}
-
-input PersonUpdateWithoutPersonAddressesInput {
-  customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
   personId: BigIntFieldUpdateOperationsInput
@@ -3279,12 +3138,12 @@ input PersonUpdateWithoutPersonAddressesInput {
 }
 
 input PersonUpdateWithoutServiceRequestsInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
   personId: BigIntFieldUpdateOperationsInput
   telephoneNumber: NullableStringFieldUpdateOperationsInput
   user: UserUpdateOneWithoutPersonNestedInput
@@ -3293,12 +3152,12 @@ input PersonUpdateWithoutServiceRequestsInput {
 }
 
 input PersonUpdateWithoutUserInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
   personId: BigIntFieldUpdateOperationsInput
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
   telephoneNumber: NullableStringFieldUpdateOperationsInput
@@ -3307,12 +3166,12 @@ input PersonUpdateWithoutUserInput {
 }
 
 input PersonUpdateWithoutVehiclesInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
   personId: BigIntFieldUpdateOperationsInput
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
   telephoneNumber: NullableStringFieldUpdateOperationsInput
@@ -3321,17 +3180,23 @@ input PersonUpdateWithoutVehiclesInput {
 }
 
 input PersonUpdateWithoutWorkshopsInput {
+  addresses: AddressUpdateManyWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   employees: EmployeeUpdateManyWithoutPersonNestedInput
   firstName: StringFieldUpdateOperationsInput
   lastName: StringFieldUpdateOperationsInput
-  personAddresses: AddressPersonUpdateManyWithoutPersonNestedInput
   personId: BigIntFieldUpdateOperationsInput
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
   telephoneNumber: NullableStringFieldUpdateOperationsInput
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
+}
+
+input PersonUpsertWithWhereUniqueWithoutAddressesInput {
+  create: PersonCreateWithoutAddressesInput!
+  update: PersonUpdateWithoutAddressesInput!
+  where: PersonWhereUniqueInput!
 }
 
 input PersonUpsertWithoutCustomersInput {
@@ -3343,12 +3208,6 @@ input PersonUpsertWithoutCustomersInput {
 input PersonUpsertWithoutEmployeesInput {
   create: PersonCreateWithoutEmployeesInput!
   update: PersonUpdateWithoutEmployeesInput!
-  where: PersonWhereInput
-}
-
-input PersonUpsertWithoutPersonAddressesInput {
-  create: PersonCreateWithoutPersonAddressesInput!
-  update: PersonUpdateWithoutPersonAddressesInput!
   where: PersonWhereInput
 }
 
@@ -3380,12 +3239,12 @@ input PersonWhereInput {
   AND: [PersonWhereInput!]
   NOT: [PersonWhereInput!]
   OR: [PersonWhereInput!]
+  addresses: AddressListRelationFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter
   employees: EmployeeListRelationFilter
   firstName: StringFilter
   lastName: StringFilter
-  personAddresses: AddressPersonListRelationFilter
   personId: BigIntFilter
   serviceRequests: ServiceRequestListRelationFilter
   telephoneNumber: StringNullableFilter
@@ -3398,12 +3257,12 @@ input PersonWhereUniqueInput {
   AND: [PersonWhereInput!]
   NOT: [PersonWhereInput!]
   OR: [PersonWhereInput!]
+  addresses: AddressListRelationFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter
   employees: EmployeeListRelationFilter
   firstName: StringFilter
   lastName: StringFilter
-  personAddresses: AddressPersonListRelationFilter
   personId: BigInt
   serviceRequests: ServiceRequestListRelationFilter
   telephoneNumber: StringNullableFilter
@@ -3414,9 +3273,6 @@ input PersonWhereUniqueInput {
 
 type Query {
   address(where: AddressWhereUniqueInput!): Address!
-  addressPersonByAddressId(addressId: BigInt!): [AddressPerson!]!
-  addressPersonByPersonId(personId: BigInt!): [AddressPerson!]!
-  addressPersons: [AddressPerson!]!
   addresses: [Address!]!
 }
 

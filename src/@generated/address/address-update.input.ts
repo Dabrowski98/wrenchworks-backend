@@ -4,8 +4,9 @@ import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update
 import { HideField } from '@nestjs/graphql';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
-import { AddressPersonUpdateManyWithoutAddressNestedInput } from '../address-person/address-person-update-many-without-address-nested.input';
-import { AddressWorkshopUpdateManyWithoutAddressNestedInput } from '../address-workshop/address-workshop-update-many-without-address-nested.input';
+import { PersonUpdateManyWithoutAddressesNestedInput } from '../person/person-update-many-without-addresses-nested.input';
+import { Type } from 'class-transformer';
+import { WorkshopUpdateManyWithoutAddressesNestedInput } from '../workshop/workshop-update-many-without-addresses-nested.input';
 
 @InputType()
 export class AddressUpdateInput {
@@ -34,9 +35,11 @@ export class AddressUpdateInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     postCode?: StringFieldUpdateOperationsInput;
 
-    @Field(() => AddressPersonUpdateManyWithoutAddressNestedInput, {nullable:true})
-    addressPersons?: AddressPersonUpdateManyWithoutAddressNestedInput;
+    @Field(() => PersonUpdateManyWithoutAddressesNestedInput, {nullable:true})
+    @Type(() => PersonUpdateManyWithoutAddressesNestedInput)
+    persons?: PersonUpdateManyWithoutAddressesNestedInput;
 
-    @Field(() => AddressWorkshopUpdateManyWithoutAddressNestedInput, {nullable:true})
-    addressWorkshops?: AddressWorkshopUpdateManyWithoutAddressNestedInput;
+    @Field(() => WorkshopUpdateManyWithoutAddressesNestedInput, {nullable:true})
+    @Type(() => WorkshopUpdateManyWithoutAddressesNestedInput)
+    workshops?: WorkshopUpdateManyWithoutAddressesNestedInput;
 }

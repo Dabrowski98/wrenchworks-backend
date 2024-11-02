@@ -4,7 +4,7 @@ import { BigIntFilter } from '../prisma/big-int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { AddressPersonListRelationFilter } from '../address-person/address-person-list-relation-filter.input';
+import { AddressListRelationFilter } from '../address/address-list-relation-filter.input';
 import { CustomerListRelationFilter } from '../customer/customer-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { EmployeeListRelationFilter } from '../employee/employee-list-relation-filter.input';
@@ -40,8 +40,8 @@ export class PersonWhereInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => AddressPersonListRelationFilter, {nullable:true})
-    personAddresses?: AddressPersonListRelationFilter;
+    @Field(() => AddressListRelationFilter, {nullable:true})
+    addresses?: AddressListRelationFilter;
 
     @Field(() => CustomerListRelationFilter, {nullable:true})
     @Type(() => CustomerListRelationFilter)

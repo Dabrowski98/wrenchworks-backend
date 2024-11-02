@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressPerson } from '../address-person/address-person.model';
+import { Address } from '../address/address.model';
 import { Customer } from '../customer/customer.model';
 import { Employee } from '../employee/employee.model';
 import { ServiceRequest } from '../service-request/service-request.model';
@@ -28,8 +28,8 @@ export class Person {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => [AddressPerson], {nullable:true})
-    personAddresses?: Array<AddressPerson>;
+    @Field(() => [Address], {nullable:true})
+    addresses?: Array<Address>;
 
     @Field(() => [Customer], {nullable:true})
     customers?: Array<Customer>;

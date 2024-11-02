@@ -1,5 +1,5 @@
 export { AddressModule } from './address/address.module';
-export { AddressPersonModule } from './address-person/address-person.module';
+// export { AddressPersonModule } from './address-person/address-person.module';
 // export { AddressWorkshopModule } from './address-workshop/address-workshop.module';
 // export { CustomerModule } from './customer/customer.module';
 // export { EmployeeModule } from './employee/employee.module';

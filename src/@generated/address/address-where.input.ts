@@ -3,8 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../prisma/big-int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
-import { AddressPersonListRelationFilter } from '../address-person/address-person-list-relation-filter.input';
-import { AddressWorkshopListRelationFilter } from '../address-workshop/address-workshop-list-relation-filter.input';
+import { PersonListRelationFilter } from '../person/person-list-relation-filter.input';
+import { Type } from 'class-transformer';
+import { WorkshopListRelationFilter } from '../workshop/workshop-list-relation-filter.input';
 
 @InputType()
 export class AddressWhereInput {
@@ -42,9 +43,11 @@ export class AddressWhereInput {
     @Field(() => StringFilter, {nullable:true})
     postCode?: StringFilter;
 
-    @Field(() => AddressPersonListRelationFilter, {nullable:true})
-    addressPersons?: AddressPersonListRelationFilter;
+    @Field(() => PersonListRelationFilter, {nullable:true})
+    @Type(() => PersonListRelationFilter)
+    persons?: PersonListRelationFilter;
 
-    @Field(() => AddressWorkshopListRelationFilter, {nullable:true})
-    addressWorkshops?: AddressWorkshopListRelationFilter;
+    @Field(() => WorkshopListRelationFilter, {nullable:true})
+    @Type(() => WorkshopListRelationFilter)
+    workshops?: WorkshopListRelationFilter;
 }

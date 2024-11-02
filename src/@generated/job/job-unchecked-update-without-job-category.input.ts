@@ -3,9 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
-import { ServiceRequestJobUncheckedUpdateManyWithoutJobNestedInput } from '../service-request-job/service-request-job-unchecked-update-many-without-job-nested.input';
-import { WorkshopJobUncheckedUpdateManyWithoutJobNestedInput } from '../workshop-job/workshop-job-unchecked-update-many-without-job-nested.input';
+import { ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput } from '../service-request/service-request-unchecked-update-many-without-jobs-nested.input';
 import { Type } from 'class-transformer';
+import { WorkshopJobUncheckedUpdateManyWithoutJobNestedInput } from '../workshop-job/workshop-job-unchecked-update-many-without-job-nested.input';
 
 @InputType()
 export class JobUncheckedUpdateWithoutJobCategoryInput {
@@ -22,8 +22,9 @@ export class JobUncheckedUpdateWithoutJobCategoryInput {
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     isPopular?: BoolFieldUpdateOperationsInput;
 
-    @Field(() => ServiceRequestJobUncheckedUpdateManyWithoutJobNestedInput, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobUncheckedUpdateManyWithoutJobNestedInput;
+    @Field(() => ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput, {nullable:true})
+    @Type(() => ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput)
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput;
 
     @Field(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput, {nullable:true})
     @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)

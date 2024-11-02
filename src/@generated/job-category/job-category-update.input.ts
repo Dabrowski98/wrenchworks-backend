@@ -8,7 +8,7 @@ import { JobCategoryUpdateOneWithoutChildrenNestedInput } from './job-category-u
 import { JobCategoryUpdateManyWithoutChildNestedInput } from './job-category-update-many-without-child-nested.input';
 import { JobUpdateManyWithoutJobCategoryNestedInput } from '../job/job-update-many-without-job-category-nested.input';
 import { Type } from 'class-transformer';
-import { WorkshopJobCategoryUpdateManyWithoutJobCategoryNestedInput } from '../workshop-job-category/workshop-job-category-update-many-without-job-category-nested.input';
+import { WorkshopUpdateManyWithoutJobCategoriesNestedInput } from '../workshop/workshop-update-many-without-job-categories-nested.input';
 
 @InputType()
 export class JobCategoryUpdateInput {
@@ -35,6 +35,7 @@ export class JobCategoryUpdateInput {
     @Type(() => JobUpdateManyWithoutJobCategoryNestedInput)
     jobs?: JobUpdateManyWithoutJobCategoryNestedInput;
 
-    @Field(() => WorkshopJobCategoryUpdateManyWithoutJobCategoryNestedInput, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryUpdateManyWithoutJobCategoryNestedInput;
+    @Field(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput, {nullable:true})
+    @Type(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput)
+    Workshops?: WorkshopUpdateManyWithoutJobCategoriesNestedInput;
 }
