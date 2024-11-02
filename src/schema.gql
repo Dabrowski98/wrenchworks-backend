@@ -140,6 +140,12 @@ type AddressPersonCountAggregate {
   personId: Int!
 }
 
+input AddressPersonCreateInput {
+  address: AddressCreateNestedOneWithoutAddressPersonsInput!
+  createdAt: DateTime
+  person: PersonCreateNestedOneWithoutPersonAddressesInput!
+}
+
 input AddressPersonCreateManyAddressInput {
   createdAt: DateTime
   personId: BigInt!
@@ -2296,6 +2302,8 @@ input JobWhereUniqueInput {
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
   deleteAddress(where: AddressWhereUniqueInput!): DeletePayload!
+  linkAddressToPerson(data: AddressPersonCreateInput!): AddressPerson!
+  unlinkAddressFromPerson(where: AddressPersonWhereUniqueInput!): DeletePayload!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
 }
 
@@ -2908,6 +2916,10 @@ type Person {
   workshops: [Workshop!]
 }
 
+type PersonAvgAggregate {
+  personId: Float
+}
+
 type PersonCount {
   customers: Int!
   employees: Int!
@@ -2915,6 +2927,15 @@ type PersonCount {
   serviceRequests: Int!
   vehicles: Int!
   workshops: Int!
+}
+
+type PersonCountAggregate {
+  _all: Int!
+  deletedAt: Int!
+  firstName: Int!
+  lastName: Int!
+  personId: Int!
+  telephoneNumber: Int!
 }
 
 input PersonCreateNestedOneWithoutCustomersInput {
@@ -3092,6 +3113,22 @@ input PersonCreateWithoutWorkshopsInput {
   vehicles: VehicleCreateNestedManyWithoutPersonInput
 }
 
+type PersonMaxAggregate {
+  deletedAt: DateTime
+  firstName: String
+  lastName: String
+  personId: BigInt
+  telephoneNumber: String
+}
+
+type PersonMinAggregate {
+  deletedAt: DateTime
+  firstName: String
+  lastName: String
+  personId: BigInt
+  telephoneNumber: String
+}
+
 input PersonNullableRelationFilter {
   is: PersonWhereInput
   isNot: PersonWhereInput
@@ -3100,6 +3137,10 @@ input PersonNullableRelationFilter {
 input PersonRelationFilter {
   is: PersonWhereInput
   isNot: PersonWhereInput
+}
+
+type PersonSumAggregate {
+  personId: BigInt
 }
 
 input PersonUpdateOneRequiredWithoutCustomersNestedInput {
@@ -3373,6 +3414,9 @@ input PersonWhereUniqueInput {
 
 type Query {
   address(where: AddressWhereUniqueInput!): Address!
+  addressPersonByAddressId(addressId: BigInt!): [AddressPerson!]!
+  addressPersonByPersonId(personId: BigInt!): [AddressPerson!]!
+  addressPersons: [AddressPerson!]!
   addresses: [Address!]!
 }
 

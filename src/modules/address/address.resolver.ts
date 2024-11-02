@@ -43,17 +43,17 @@ export class AddressResolver {
   }
 
   @Query(() => Address)
-  address(@Args() args: FindUniqueAddressArgs): Promise<Address>{
+  address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
     return this.addressService.findAddressById(args);
   }
 
   @ResolveField(() => [AddressPerson])
-  addressPersons(@Parent() address: Address): Promise<AddressPerson> {
-    return this.addressService.findAddressPersonsByAddressId(address.addressId);
+  addressPersons(@Parent() address: Address): Promise<AddressPerson[]> {
+    return this.addressService.resolveAddressPersons(address.addressId);
   }
 
   @ResolveField(() => [AddressWorkshop])
-  addressWorkshops(@Parent() address: Address): Promise<AddressWorkshop> {
-    return this.addressService.findAddressWorkshopsByAddressId(address.addressId);
+  addressWorkshops(@Parent() address: Address): Promise<AddressWorkshop[]> {
+    return this.addressService.resolveAddressWorkshops(address.addressId);
   }
 }
