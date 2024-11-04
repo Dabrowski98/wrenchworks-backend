@@ -24,7 +24,7 @@ model Address{
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   addressId        BigInt           @id @unique @default(autoincrement()) @db.UnsignedBigInt
-  country          String           @db.VarChar(30) 
+  country          String           @db.VarChar(30)
   region           String           @db.VarChar(30)
   city             String           @db.VarChar(30)
   street           String?          @db.VarChar(30)
@@ -42,6 +42,7 @@ model Person {
   firstName        String           @db.VarChar(30)
   lastName         String           @db.VarChar(30)
   telephoneNumber  String?          @db.VarChar(12)
+  /// @HideField({ match: '@(Person)@(Create)*Input' })
   deletedAt        DateTime?        @db.Timestamp(0)
   addresses        Address[]        @relation("AddressPersons")
   customers        Customer[]
@@ -60,6 +61,7 @@ model Customer {
   workshopId   BigInt     @db.UnsignedBigInt
   totalDue     Decimal    @default(0.00) @db.Decimal(10, 2)
   description  String?    @db.VarChar(255)
+  /// @HideField({ match: '@(Customer)@(Create)*Input' })
   deletedAt    DateTime?  @db.Timestamp(0)
   NIP          String?    @db.VarChar(10)
   companyName  String?    @db.VarChar(30)
@@ -77,6 +79,7 @@ model Employee {
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt            @db.UnsignedBigInt
   joinedAt          DateTime          @default(now()) @db.DateTime(0)
+    /// @HideField({ match: '@(Employee)@(Create)*Input' })
   deletedAt         DateTime?         @db.Timestamp(0)
   permissionSetId   BigInt?           @db.UnsignedBigInt
   permissionSet     PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
@@ -213,6 +216,7 @@ model ServiceRequest {
   status                                                  ServiceRequestsStatus? @default(pending)
   description                                             String?                  @db.VarChar(511)
   approvedServiceId                                       BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
+  /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   deletedAt                                               DateTime?                @db.Timestamp(0)
   jobs                                                    Job[]
   approvedService                                         Service?                @relation("service_requests_approved_service_idToservices", fields: [approvedServiceId], references: [serviceId], onDelete: NoAction, map: "fk_requestApprovedService")
@@ -266,6 +270,7 @@ model Service {
   serviceStartDate    DateTime          @default(now()) @db.DateTime(0)
   serviceEndDate      DateTime?         @db.DateTime(0)
   updatedAt           DateTime?         @default(now()) @db.Timestamp(0)
+  /// @HideField({ match: '@(Service)@(Create)*Input' })
   deletedAt           DateTime?         @db.Timestamp(0)
   serviceRequest      ServiceRequest? @relation("service_requests_approved_service_idToservices")
   tasks               Task[]
@@ -326,6 +331,7 @@ model User {
   status            UsersStatus?        @default(active)
   createdAt         DateTime?           @default(now()) @db.Timestamp(0)
   updatedAt         DateTime?           @default(now()) @db.Timestamp(0)
+  /// @HideField({ match: '@(User)@(Create)*Input' })
   deletedAt         DateTime?           @db.Timestamp(0)
   reviews           Review[]
   reviewResponses   ReviewResponse[]
@@ -343,6 +349,7 @@ model Vehicle {
   personId                          BigInt             @db.UnsignedBigInt
   brandName                         String             @db.VarChar(50)
   modelId                           BigInt             @db.UnsignedBigInt
+  /// @HideField({ match: '@(Vehicle)@(Create)*Input' })
   deletedAt                         DateTime?          @db.Timestamp(0)
   vehicleAssociatedServiceRequests  ServiceRequest[]
   services                          Service[]
@@ -366,7 +373,9 @@ model VehicleBrand {
 
 model VehicleDetails {
   /// @FieldType('Scalars.GraphQLBigInt')
-  vehicleId         BigInt    @id @db.UnsignedBigInt
+  vehicleDetailsId  BigInt    @id @unique(map: "vehicle_details_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  vehicleId         BigInt?   @db.UnsignedBigInt @unique
   yearOfProduction  Int?
   VIN               String?   @db.Char(17)
   engineCapacity    String?   @db.VarChar(5)
@@ -374,8 +383,10 @@ model VehicleDetails {
   fuelType          String?   @db.VarChar(16)
   engineNo          String?   @db.VarChar(16)
   bodyColor         String?   @db.VarChar(16)
+  /// @HideField({ match: '@(VehicleDetails)@(Create)*Input' })
   deletedAt         DateTime? @db.Timestamp(0)
-  vehicle           Vehicle   @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_vehicleHasDetails")
+  vehicle           Vehicle?  @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_vehicleHasDetails")
+  @@index([vehicleId])
 }
 
 model VehicleModel {
@@ -404,6 +415,7 @@ model Workshop {
   isManagingWork            Boolean?                    @default(false)
   createdAt                 DateTime?                   @default(now()) @db.Timestamp(0)
   updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
+  /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   deletedAt                 DateTime?                   @db.Timestamp(0)
   addresses                 Address[]                   @relation("AddressWorkshops")
   customers                 Customer[]
@@ -430,6 +442,7 @@ model WorkshopDetails {
   logoURL          String?                   @db.VarChar(255)
   status           WorkshopsDetailsStatus?   @default(active)
   NIP              String?                   @db.VarChar(10)
+  /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   deletedAt        DateTime?                 @db.Timestamp(0)
   workshop         Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDetails")
 }
