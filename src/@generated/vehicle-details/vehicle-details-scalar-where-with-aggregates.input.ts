@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../prisma/big-int-with-aggregates-filter.input';
+import { BigIntNullableWithAggregatesFilter } from '../prisma/big-int-nullable-with-aggregates-filter.input';
 import { IntNullableWithAggregatesFilter } from '../prisma/int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../prisma/string-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../prisma/date-time-nullable-with-aggregates-filter.input';
@@ -18,7 +19,10 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     NOT?: Array<VehicleDetailsScalarWhereWithAggregatesInput>;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
-    vehicleId?: BigIntWithAggregatesFilter;
+    vehicleDetailsId?: BigIntWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    vehicleId?: BigIntNullableWithAggregatesFilter;
 
     @Field(() => IntNullableWithAggregatesFilter, {nullable:true})
     yearOfProduction?: IntNullableWithAggregatesFilter;

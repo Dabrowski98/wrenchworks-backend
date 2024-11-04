@@ -24,7 +24,7 @@ export class PersonCreateWithoutCustomersInput {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => AddressCreateNestedManyWithoutPersonsInput, {nullable:true})

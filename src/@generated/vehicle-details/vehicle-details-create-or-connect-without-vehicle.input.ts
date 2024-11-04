@@ -10,7 +10,7 @@ export class VehicleDetailsCreateOrConnectWithoutVehicleInput {
 
     @Field(() => VehicleDetailsWhereUniqueInput, {nullable:false})
     @Type(() => VehicleDetailsWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleId'>;
+    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
 
     @Field(() => VehicleDetailsCreateWithoutVehicleInput, {nullable:false})
     @Type(() => VehicleDetailsCreateWithoutVehicleInput)

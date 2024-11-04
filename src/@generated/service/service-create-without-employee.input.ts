@@ -46,7 +46,7 @@ export class ServiceCreateWithoutEmployeeInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => ServiceRequestCreateNestedOneWithoutApprovedServiceInput, {nullable:true})

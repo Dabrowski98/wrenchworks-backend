@@ -1,9 +1,14 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import * as Scalars from 'graphql-scalars';
 import { Int } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleDetailsCreateWithoutVehicleInput {
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleDetailsId?: bigint | number;
 
     @Field(() => Int, {nullable:true})
     yearOfProduction?: number;
@@ -26,6 +31,6 @@ export class VehicleDetailsCreateWithoutVehicleInput {
     @Field(() => String, {nullable:true})
     bodyColor?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

@@ -15,6 +15,6 @@ export class VehicleCreateManyVehicleModelInput {
     @Field(() => String, {nullable:false})
     brandName!: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

@@ -4,12 +4,13 @@ import { VehicleCreateWithoutVehiclesDetailsInput } from './vehicle-create-witho
 import { Type } from 'class-transformer';
 import { VehicleCreateOrConnectWithoutVehiclesDetailsInput } from './vehicle-create-or-connect-without-vehicles-details.input';
 import { VehicleUpsertWithoutVehiclesDetailsInput } from './vehicle-upsert-without-vehicles-details.input';
+import { VehicleWhereInput } from './vehicle-where.input';
 import { Prisma } from '@prisma/client';
 import { VehicleWhereUniqueInput } from './vehicle-where-unique.input';
 import { VehicleUpdateToOneWithWhereWithoutVehiclesDetailsInput } from './vehicle-update-to-one-with-where-without-vehicles-details.input';
 
 @InputType()
-export class VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput {
+export class VehicleUpdateOneWithoutVehiclesDetailsNestedInput {
 
     @Field(() => VehicleCreateWithoutVehiclesDetailsInput, {nullable:true})
     @Type(() => VehicleCreateWithoutVehiclesDetailsInput)
@@ -22,6 +23,14 @@ export class VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput {
     @Field(() => VehicleUpsertWithoutVehiclesDetailsInput, {nullable:true})
     @Type(() => VehicleUpsertWithoutVehiclesDetailsInput)
     upsert?: VehicleUpsertWithoutVehiclesDetailsInput;
+
+    @Field(() => VehicleWhereInput, {nullable:true})
+    @Type(() => VehicleWhereInput)
+    disconnect?: VehicleWhereInput;
+
+    @Field(() => VehicleWhereInput, {nullable:true})
+    @Type(() => VehicleWhereInput)
+    delete?: VehicleWhereInput;
 
     @Field(() => VehicleWhereUniqueInput, {nullable:true})
     @Type(() => VehicleWhereUniqueInput)

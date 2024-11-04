@@ -5,11 +5,14 @@ import { VehicleDetailsWhereInput } from './vehicle-details-where.input';
 import { IntNullableFilter } from '../prisma/int-nullable-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { VehicleRelationFilter } from '../vehicle/vehicle-relation-filter.input';
+import { VehicleNullableRelationFilter } from '../vehicle/vehicle-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
 
 @InputType()
 export class VehicleDetailsWhereUniqueInput {
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleDetailsId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     vehicleId?: bigint | number;
@@ -47,7 +50,7 @@ export class VehicleDetailsWhereUniqueInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => VehicleRelationFilter, {nullable:true})
-    @Type(() => VehicleRelationFilter)
-    vehicle?: VehicleRelationFilter;
+    @Field(() => VehicleNullableRelationFilter, {nullable:true})
+    @Type(() => VehicleNullableRelationFilter)
+    vehicle?: VehicleNullableRelationFilter;
 }

@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class EmployeeCreateManyInput {
@@ -14,7 +15,7 @@ export class EmployeeCreateManyInput {
     @Field(() => Date, {nullable:true})
     joinedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => String, {nullable:true})

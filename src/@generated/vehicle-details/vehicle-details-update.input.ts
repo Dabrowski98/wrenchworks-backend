@@ -1,13 +1,17 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
 import { NullableIntFieldUpdateOperationsInput } from '../prisma/nullable-int-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput } from '../vehicle/vehicle-update-one-required-without-vehicles-details-nested.input';
+import { VehicleUpdateOneWithoutVehiclesDetailsNestedInput } from '../vehicle/vehicle-update-one-without-vehicles-details-nested.input';
 import { Type } from 'class-transformer';
 
 @InputType()
 export class VehicleDetailsUpdateInput {
+
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    vehicleDetailsId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
     yearOfProduction?: NullableIntFieldUpdateOperationsInput;
@@ -33,7 +37,7 @@ export class VehicleDetailsUpdateInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput)
-    vehicle?: VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput;
+    @Field(() => VehicleUpdateOneWithoutVehiclesDetailsNestedInput, {nullable:true})
+    @Type(() => VehicleUpdateOneWithoutVehiclesDetailsNestedInput)
+    vehicle?: VehicleUpdateOneWithoutVehiclesDetailsNestedInput;
 }

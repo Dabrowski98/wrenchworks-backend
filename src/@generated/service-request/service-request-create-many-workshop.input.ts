@@ -28,6 +28,6 @@ export class ServiceRequestCreateManyWorkshopInput {
     @Field(() => String, {nullable:true})
     approvedServiceId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

@@ -23,7 +23,7 @@ export class ServiceRequestCreateWithoutApprovedServiceInput {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => JobCreateNestedManyWithoutServiceRequestsInput, {nullable:true})

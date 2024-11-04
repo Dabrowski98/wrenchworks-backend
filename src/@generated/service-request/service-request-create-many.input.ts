@@ -31,6 +31,6 @@ export class ServiceRequestCreateManyInput {
     @Field(() => String, {nullable:true})
     approvedServiceId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

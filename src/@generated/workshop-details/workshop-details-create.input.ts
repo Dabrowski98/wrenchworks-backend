@@ -6,6 +6,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { WorkshopsDetailsStatus } from '../prisma/workshops-details-status.enum';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateNestedOneWithoutWorkshopDetailsInput } from '../workshop/workshop-create-nested-one-without-workshop-details.input';
 
 @InputType()
@@ -34,7 +35,7 @@ export class WorkshopDetailsCreateInput {
     @Field(() => String, {nullable:true})
     NIP?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => WorkshopCreateNestedOneWithoutWorkshopDetailsInput, {nullable:false})

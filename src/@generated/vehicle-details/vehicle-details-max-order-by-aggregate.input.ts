@@ -6,6 +6,9 @@ import { SortOrder } from '../prisma/sort-order.enum';
 export class VehicleDetailsMaxOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
+    vehicleDetailsId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     vehicleId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

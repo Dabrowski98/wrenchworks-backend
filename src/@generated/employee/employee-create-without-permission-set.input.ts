@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateNestedOneWithoutEmployeesInput } from '../workshop/workshop-create-nested-one-without-employees.input';
 import { Type } from 'class-transformer';
 import { PersonCreateNestedOneWithoutEmployeesInput } from '../person/person-create-nested-one-without-employees.input';
@@ -12,7 +13,7 @@ export class EmployeeCreateWithoutPermissionSetInput {
     @Field(() => Date, {nullable:true})
     joinedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => WorkshopCreateNestedOneWithoutEmployeesInput, {nullable:false})

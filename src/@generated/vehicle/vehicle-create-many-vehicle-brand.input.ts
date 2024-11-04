@@ -15,6 +15,6 @@ export class VehicleCreateManyVehicleBrandInput {
     @Field(() => String, {nullable:false})
     modelId!: bigint | number;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

@@ -54,6 +54,7 @@ export { VehicleMaxOrderByAggregateInput } from './vehicle-max-order-by-aggregat
 export { VehicleMinAggregateInput } from './vehicle-min-aggregate.input';
 export { VehicleMinAggregate } from './vehicle-min-aggregate.output';
 export { VehicleMinOrderByAggregateInput } from './vehicle-min-order-by-aggregate.input';
+export { VehicleNullableRelationFilter } from './vehicle-nullable-relation-filter.input';
 export { VehicleOrderByRelationAggregateInput } from './vehicle-order-by-relation-aggregate.input';
 export { VehicleOrderByWithAggregationInput } from './vehicle-order-by-with-aggregation.input';
 export { VehicleOrderByWithRelationInput } from './vehicle-order-by-with-relation.input';
@@ -97,7 +98,7 @@ export { VehicleUpdateManyWithoutVehicleBrandNestedInput } from './vehicle-updat
 export { VehicleUpdateManyWithoutVehicleModelNestedInput } from './vehicle-update-many-without-vehicle-model-nested.input';
 export { VehicleUpdateOneRequiredWithoutServicesNestedInput } from './vehicle-update-one-required-without-services-nested.input';
 export { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from './vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
-export { VehicleUpdateOneRequiredWithoutVehiclesDetailsNestedInput } from './vehicle-update-one-required-without-vehicles-details-nested.input';
+export { VehicleUpdateOneWithoutVehiclesDetailsNestedInput } from './vehicle-update-one-without-vehicles-details-nested.input';
 export { VehicleUpdateToOneWithWhereWithoutServicesInput } from './vehicle-update-to-one-with-where-without-services.input';
 export { VehicleUpdateToOneWithWhereWithoutVehicleAssociatedServiceRequestsInput } from './vehicle-update-to-one-with-where-without-vehicle-associated-service-requests.input';
 export { VehicleUpdateToOneWithWhereWithoutVehiclesDetailsInput } from './vehicle-update-to-one-with-where-without-vehicles-details.input';

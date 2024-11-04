@@ -14,7 +14,7 @@ export class VehicleCreateWithoutVehicleBrandInput {
     @HideField()
     vehicleId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => ServiceRequestCreateNestedManyWithoutVehicleInput, {nullable:true})

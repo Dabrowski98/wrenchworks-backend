@@ -1,10 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../prisma/big-int-filter.input';
+import { BigIntNullableFilter } from '../prisma/big-int-nullable-filter.input';
 import { IntNullableFilter } from '../prisma/int-nullable-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { VehicleRelationFilter } from '../vehicle/vehicle-relation-filter.input';
+import { VehicleNullableRelationFilter } from '../vehicle/vehicle-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
 
 @InputType()
@@ -20,7 +21,10 @@ export class VehicleDetailsWhereInput {
     NOT?: Array<VehicleDetailsWhereInput>;
 
     @Field(() => BigIntFilter, {nullable:true})
-    vehicleId?: BigIntFilter;
+    vehicleDetailsId?: BigIntFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    vehicleId?: BigIntNullableFilter;
 
     @Field(() => IntNullableFilter, {nullable:true})
     yearOfProduction?: IntNullableFilter;
@@ -46,7 +50,7 @@ export class VehicleDetailsWhereInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => VehicleRelationFilter, {nullable:true})
-    @Type(() => VehicleRelationFilter)
-    vehicle?: VehicleRelationFilter;
+    @Field(() => VehicleNullableRelationFilter, {nullable:true})
+    @Type(() => VehicleNullableRelationFilter)
+    vehicle?: VehicleNullableRelationFilter;
 }

@@ -46,7 +46,7 @@ export class ServiceCreateWithoutServiceRequestInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => TaskCreateNestedManyWithoutServiceInput, {nullable:true})

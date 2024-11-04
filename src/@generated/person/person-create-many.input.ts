@@ -17,6 +17,6 @@ export class PersonCreateManyInput {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

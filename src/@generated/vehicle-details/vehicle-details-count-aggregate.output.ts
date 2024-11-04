@@ -6,6 +6,9 @@ import { Int } from '@nestjs/graphql';
 export class VehicleDetailsCountAggregate {
 
     @Field(() => Int, {nullable:false})
+    vehicleDetailsId!: number;
+
+    @Field(() => Int, {nullable:false})
     vehicleId!: number;
 
     @Field(() => Int, {nullable:false})

@@ -9,7 +9,10 @@ import { Type } from 'class-transformer';
 export class VehicleDetailsOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
-    vehicleId?: keyof typeof SortOrder;
+    vehicleDetailsId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    vehicleId?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     yearOfProduction?: SortOrderInput;

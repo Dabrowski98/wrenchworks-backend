@@ -34,7 +34,7 @@ export class UserCreateWithoutReviewsInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => ReviewResponseCreateNestedManyWithoutUserInput, {nullable:true})
