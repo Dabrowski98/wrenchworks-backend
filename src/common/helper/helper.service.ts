@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import {
-  DeletedAtFieldNotFound,
+  DeletedAtFieldNotFoundError,
   RecordNotFoundError,
 } from '../custom-errors/errors.config';
 
@@ -17,7 +17,7 @@ export class HelperService {
     if (!entity) throw new RecordNotFoundError();
 
     if (!('deletedAt' in entity))
-      throw new DeletedAtFieldNotFound(
+      throw new DeletedAtFieldNotFoundError(
         `${this.modelName} does not implement soft deletion concept`,
       );
 
