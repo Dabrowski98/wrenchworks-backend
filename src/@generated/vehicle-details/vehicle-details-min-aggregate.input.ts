@@ -5,6 +5,9 @@ import { InputType } from '@nestjs/graphql';
 export class VehicleDetailsMinAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
+    vehicleDetailsId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     vehicleId?: true;
 
     @Field(() => Boolean, {nullable:true})

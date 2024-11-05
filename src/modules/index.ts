@@ -7,7 +7,7 @@ export { AddressModule } from './address/address.module';
 // export { JobModule } from './job/job.module';
 // export { JobCategoryModule } from './job-category/job-category.module';
 // export { PermissionSetModule } from './permission-set/permission-set.module';
-// export { PersonModule } from './person/person.module';
+export { PersonModule } from './person/person.module';
 // export { ReviewModule } from './review/review.module';
 // export { ReviewResponseModule } from './review-response/review-response.module';
 // export { ServiceModule } from './service/service.module';

@@ -1,20 +1,21 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
 import { NullableEnumServiceRequestsStatusFieldUpdateOperationsInput } from '../prisma/nullable-enum-service-requests-status-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput } from '../service-request-job/service-request-job-update-many-without-service-request-nested.input';
-import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../vehicle/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
+import { JobUpdateManyWithoutServiceRequestsNestedInput } from '../job/job-update-many-without-service-requests-nested.input';
 import { Type } from 'class-transformer';
+import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../vehicle/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../workshop/workshop-update-one-required-without-service-requests-nested.input';
 import { PersonUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../person/person-update-one-required-without-service-requests-nested.input';
 
 @InputType()
 export class ServiceRequestUpdateWithoutApprovedServiceInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     serviceRequestId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29,8 +30,9 @@ export class ServiceRequestUpdateWithoutApprovedServiceInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobUpdateManyWithoutServiceRequestNestedInput;
+    @Field(() => JobUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
+    jobs?: JobUpdateManyWithoutServiceRequestsNestedInput;
 
     @Field(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput, {nullable:true})
     @Type(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput)

@@ -1,16 +1,16 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { JobCategoryCreateNestedOneWithoutChildrenInput } from './job-category-create-nested-one-without-children.input';
 import { JobCategoryCreateNestedManyWithoutChildInput } from './job-category-create-nested-many-without-child.input';
 import { JobCreateNestedManyWithoutJobCategoryInput } from '../job/job-create-nested-many-without-job-category.input';
 import { Type } from 'class-transformer';
-import { WorkshopJobCategoryCreateNestedManyWithoutJobCategoryInput } from '../workshop-job-category/workshop-job-category-create-nested-many-without-job-category.input';
+import { WorkshopCreateNestedManyWithoutJobCategoriesInput } from '../workshop/workshop-create-nested-many-without-job-categories.input';
 
 @InputType()
 export class JobCategoryCreateInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     categoryId?: bigint | number;
 
     @Field(() => String, {nullable:false})
@@ -32,6 +32,7 @@ export class JobCategoryCreateInput {
     @Type(() => JobCreateNestedManyWithoutJobCategoryInput)
     jobs?: JobCreateNestedManyWithoutJobCategoryInput;
 
-    @Field(() => WorkshopJobCategoryCreateNestedManyWithoutJobCategoryInput, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryCreateNestedManyWithoutJobCategoryInput;
+    @Field(() => WorkshopCreateNestedManyWithoutJobCategoriesInput, {nullable:true})
+    @Type(() => WorkshopCreateNestedManyWithoutJobCategoriesInput)
+    Workshops?: WorkshopCreateNestedManyWithoutJobCategoriesInput;
 }

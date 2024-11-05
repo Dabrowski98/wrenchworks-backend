@@ -11,6 +11,6 @@ export class VehicleSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     personId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
 }

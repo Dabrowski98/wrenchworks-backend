@@ -3,9 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
 import { SortOrderInput } from '../prisma/sort-order.input';
 import { JobCategoryOrderByWithRelationInput } from '../job-category/job-category-order-by-with-relation.input';
-import { ServiceRequestJobOrderByRelationAggregateInput } from '../service-request-job/service-request-job-order-by-relation-aggregate.input';
-import { WorkshopJobOrderByRelationAggregateInput } from '../workshop-job/workshop-job-order-by-relation-aggregate.input';
+import { ServiceRequestOrderByRelationAggregateInput } from '../service-request/service-request-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
+import { WorkshopJobOrderByRelationAggregateInput } from '../workshop-job/workshop-job-order-by-relation-aggregate.input';
 
 @InputType()
 export class JobOrderByWithRelationInput {
@@ -28,8 +28,9 @@ export class JobOrderByWithRelationInput {
     @Field(() => JobCategoryOrderByWithRelationInput, {nullable:true})
     jobCategory?: JobCategoryOrderByWithRelationInput;
 
-    @Field(() => ServiceRequestJobOrderByRelationAggregateInput, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobOrderByRelationAggregateInput;
+    @Field(() => ServiceRequestOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => ServiceRequestOrderByRelationAggregateInput)
+    serviceRequests?: ServiceRequestOrderByRelationAggregateInput;
 
     @Field(() => WorkshopJobOrderByRelationAggregateInput, {nullable:true})
     @Type(() => WorkshopJobOrderByRelationAggregateInput)

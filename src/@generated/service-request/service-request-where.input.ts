@@ -6,9 +6,9 @@ import { EnumServiceRequestsStatusNullableFilter } from '../prisma/enum-service-
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { BigIntNullableFilter } from '../prisma/big-int-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { ServiceRequestJobListRelationFilter } from '../service-request-job/service-request-job-list-relation-filter.input';
-import { ServiceNullableRelationFilter } from '../service/service-nullable-relation-filter.input';
+import { JobListRelationFilter } from '../job/job-list-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ServiceNullableRelationFilter } from '../service/service-nullable-relation-filter.input';
 import { VehicleRelationFilter } from '../vehicle/vehicle-relation-filter.input';
 import { WorkshopRelationFilter } from '../workshop/workshop-relation-filter.input';
 import { PersonRelationFilter } from '../person/person-relation-filter.input';
@@ -52,8 +52,9 @@ export class ServiceRequestWhereInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => ServiceRequestJobListRelationFilter, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobListRelationFilter;
+    @Field(() => JobListRelationFilter, {nullable:true})
+    @Type(() => JobListRelationFilter)
+    jobs?: JobListRelationFilter;
 
     @Field(() => ServiceNullableRelationFilter, {nullable:true})
     @Type(() => ServiceNullableRelationFilter)

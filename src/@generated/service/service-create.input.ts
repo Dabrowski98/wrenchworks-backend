@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServicesStatus } from '../prisma/services-status.enum';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -17,7 +18,7 @@ import { WorkshopCreateNestedOneWithoutServicesInput } from '../workshop/worksho
 @InputType()
 export class ServiceCreateInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
@@ -46,7 +47,7 @@ export class ServiceCreateInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => ServiceRequestCreateNestedOneWithoutApprovedServiceInput, {nullable:true})

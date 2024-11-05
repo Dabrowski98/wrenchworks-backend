@@ -12,7 +12,10 @@ import { VehicleDetailsMaxAggregate } from './vehicle-details-max-aggregate.outp
 export class VehicleDetailsGroupBy {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    vehicleId!: bigint | number;
+    vehicleDetailsId!: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleId?: bigint | number;
 
     @Field(() => Int, {nullable:true})
     yearOfProduction?: number;

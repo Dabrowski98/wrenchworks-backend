@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressWorkshop } from '../address-workshop/address-workshop.model';
+import { Address } from '../address/address.model';
 import { Customer } from '../customer/customer.model';
 import { Employee } from '../employee/employee.model';
 import { PermissionSet } from '../permission-set/permission-set.model';
@@ -11,7 +11,7 @@ import { Service } from '../service/service.model';
 import { Person } from '../person/person.model';
 import { WorkshopDetails } from '../workshop-details/workshop-details.model';
 import { WorkshopJob } from '../workshop-job/workshop-job.model';
-import { WorkshopJobCategory } from '../workshop-job-category/workshop-job-category.model';
+import { JobCategory } from '../job-category/job-category.model';
 import { WorkshopCount } from './workshop-count.output';
 
 @ObjectType()
@@ -41,8 +41,8 @@ export class Workshop {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => [AddressWorkshop], {nullable:true})
-    workshopAddresses?: Array<AddressWorkshop>;
+    @Field(() => [Address], {nullable:true})
+    addresses?: Array<Address>;
 
     @Field(() => [Customer], {nullable:true})
     customers?: Array<Customer>;
@@ -71,8 +71,8 @@ export class Workshop {
     @Field(() => [WorkshopJob], {nullable:true})
     workshopJobs?: Array<WorkshopJob>;
 
-    @Field(() => [WorkshopJobCategory], {nullable:true})
-    workshopJobCategories?: Array<WorkshopJobCategory>;
+    @Field(() => [JobCategory], {nullable:true})
+    jobCategories?: Array<JobCategory>;
 
     @Field(() => WorkshopCount, {nullable:false})
     _count?: WorkshopCount;

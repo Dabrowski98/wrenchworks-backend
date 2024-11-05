@@ -8,7 +8,10 @@ import { Vehicle } from '../vehicle/vehicle.model';
 export class VehicleDetails {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    vehicleId!: bigint;
+    vehicleDetailsId!: bigint;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleId!: bigint | null;
 
     @Field(() => Int, {nullable:true})
     yearOfProduction!: number | null;
@@ -34,6 +37,6 @@ export class VehicleDetails {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => Vehicle, {nullable:false})
-    vehicle?: Vehicle;
+    @Field(() => Vehicle, {nullable:true})
+    vehicle?: Vehicle | null;
 }

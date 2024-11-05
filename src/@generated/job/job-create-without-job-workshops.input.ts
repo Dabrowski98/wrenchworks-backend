@@ -1,13 +1,14 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { JobCategoryCreateNestedOneWithoutJobsInput } from '../job-category/job-category-create-nested-one-without-jobs.input';
-import { ServiceRequestJobCreateNestedManyWithoutJobInput } from '../service-request-job/service-request-job-create-nested-many-without-job.input';
+import { ServiceRequestCreateNestedManyWithoutJobsInput } from '../service-request/service-request-create-nested-many-without-jobs.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class JobCreateWithoutJobWorkshopsInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     jobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
@@ -22,6 +23,7 @@ export class JobCreateWithoutJobWorkshopsInput {
     @Field(() => JobCategoryCreateNestedOneWithoutJobsInput, {nullable:false})
     jobCategory!: JobCategoryCreateNestedOneWithoutJobsInput;
 
-    @Field(() => ServiceRequestJobCreateNestedManyWithoutJobInput, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobCreateNestedManyWithoutJobInput;
+    @Field(() => ServiceRequestCreateNestedManyWithoutJobsInput, {nullable:true})
+    @Type(() => ServiceRequestCreateNestedManyWithoutJobsInput)
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutJobsInput;
 }

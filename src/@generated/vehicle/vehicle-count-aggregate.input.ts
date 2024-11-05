@@ -11,9 +11,6 @@ export class VehicleCountAggregateInput {
     personId?: true;
 
     @Field(() => Boolean, {nullable:true})
-    brandName?: true;
-
-    @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
     @Field(() => Boolean, {nullable:true})

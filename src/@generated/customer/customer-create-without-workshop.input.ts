@@ -5,6 +5,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { PersonCreateNestedOneWithoutCustomersInput } from '../person/person-create-nested-one-without-customers.input';
 import { ServiceCreateNestedManyWithoutCustomerInput } from '../service/service-create-nested-many-without-customer.input';
 
@@ -19,7 +20,7 @@ export class CustomerCreateWithoutWorkshopInput {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => String, {nullable:true})

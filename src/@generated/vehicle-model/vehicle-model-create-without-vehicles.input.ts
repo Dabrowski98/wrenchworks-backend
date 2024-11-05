@@ -1,12 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { VehicleBrandCreateNestedOneWithoutVehicleModelsInput } from '../vehicle-brand/vehicle-brand-create-nested-one-without-vehicle-models.input';
 
 @InputType()
 export class VehicleModelCreateWithoutVehiclesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     modelId?: bigint | number;
 
     @Field(() => String, {nullable:false})

@@ -1,12 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ReviewsResponsesStatus } from '../prisma/reviews-responses-status.enum';
 
 @InputType()
 export class ReviewResponseCreateManyReviewResponseInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     reviewResponseId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})

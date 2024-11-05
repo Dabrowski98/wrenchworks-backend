@@ -17,6 +17,9 @@ export class PersonCountAggregateInput {
     telephoneNumber?: true;
 
     @Field(() => Boolean, {nullable:true})
+    addressId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     deletedAt?: true;
 
     @Field(() => Boolean, {nullable:true})

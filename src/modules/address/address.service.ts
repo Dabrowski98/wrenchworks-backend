@@ -1,24 +1,26 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import {
+  Address,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from 'src/@generated/address';
-import { EntityNotFoundError } from 'src/config/errors.config';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { DeletePayload } from 'src/common/payloads/delete.payload';
+import { Person } from 'src/@generated/person';
+import { Workshop } from 'src/@generated/workshop';
 
 @Injectable()
 export class AddressService {
   constructor(private readonly prisma: DatabaseService) {}
 
-  async createAddress(args: CreateOneAddressArgs): Promise<any> {
+  async createAddress(args: CreateOneAddressArgs): Promise<Address> {
     return this.prisma.address.create(args);
   }
 
-  async updateAddress(args: UpdateOneAddressArgs): Promise<any> {
+  async updateAddress(args: UpdateOneAddressArgs): Promise<Address> {
     const { data, where } = args;
     return this.prisma.address.update({
       where: { addressId: where.addressId },
@@ -26,7 +28,7 @@ export class AddressService {
     });
   }
 
-  async deleteAddress(args: DeleteOneAddressArgs): Promise<any> {
+  async deleteAddress(args: DeleteOneAddressArgs): Promise<DeletePayload> {
     const { where } = args;
 
     await this.prisma.address.delete({
@@ -36,35 +38,29 @@ export class AddressService {
     return { success: true, error: 'null' };
   }
 
-  async findAllAddresses(): Promise<any> {
+  async findAllAddresses(): Promise<Address[]> {
     return this.prisma.address.findMany();
   }
 
-  async findAddressById(args: FindUniqueAddressArgs): Promise<any> {
+  async findAddressById(args: FindUniqueAddressArgs): Promise<Address> {
     const { where } = args;
 
-    const entity = await this.prisma.address.findUnique({
+    const record = await this.prisma.address.findUnique({
       where: { addressId: where.addressId },
     });
 
-    if (!entity) {
-      throw new EntityNotFoundError(
-        `Address with id ${args.where.addressId} was not found.`,
-      );
-    }
+    if (!record) throw new RecordNotFoundError();
 
-    return entity;
+    return record;
   }
 
-  async findAddressPersonsByAddressId(addressId: bigint): Promise<any> {
-    return this.prisma.addressPerson.findMany({
-      where: { addressId: addressId },
-    });
+  //RESOLVE METHODS
+
+  async resolvePersons(addressId: bigint): Promise<Person[]> {
+    return this.prisma.address.findUnique({ where: { addressId } }).persons();
   }
 
-  async findAddressWorkshopsByAddressId(addressId: bigint): Promise<any> {
-    return this.prisma.addressWorkshop.findMany({
-      where: { addressId: addressId },
-    });
+  async resolveWorkshops(addressId: bigint): Promise<Workshop[]> {
+    return this.prisma.address.findUnique({ where: { addressId } }).workshops();
   }
 }

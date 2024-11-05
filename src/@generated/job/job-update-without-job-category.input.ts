@@ -1,16 +1,17 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
-import { ServiceRequestJobUpdateManyWithoutJobNestedInput } from '../service-request-job/service-request-job-update-many-without-job-nested.input';
-import { WorkshopJobUpdateManyWithoutJobNestedInput } from '../workshop-job/workshop-job-update-many-without-job-nested.input';
+import { ServiceRequestUpdateManyWithoutJobsNestedInput } from '../service-request/service-request-update-many-without-jobs-nested.input';
 import { Type } from 'class-transformer';
+import { WorkshopJobUpdateManyWithoutJobNestedInput } from '../workshop-job/workshop-job-update-many-without-job-nested.input';
 
 @InputType()
 export class JobUpdateWithoutJobCategoryInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     jobId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -22,8 +23,9 @@ export class JobUpdateWithoutJobCategoryInput {
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     isPopular?: BoolFieldUpdateOperationsInput;
 
-    @Field(() => ServiceRequestJobUpdateManyWithoutJobNestedInput, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobUpdateManyWithoutJobNestedInput;
+    @Field(() => ServiceRequestUpdateManyWithoutJobsNestedInput, {nullable:true})
+    @Type(() => ServiceRequestUpdateManyWithoutJobsNestedInput)
+    serviceRequests?: ServiceRequestUpdateManyWithoutJobsNestedInput;
 
     @Field(() => WorkshopJobUpdateManyWithoutJobNestedInput, {nullable:true})
     @Type(() => WorkshopJobUpdateManyWithoutJobNestedInput)

@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { NullableBigIntFieldUpdateOperationsInput } from '../prisma/nullable-big-int-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
@@ -12,7 +13,7 @@ import { Type } from 'class-transformer';
 @InputType()
 export class TaskUpdateManyMutationInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     taskId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})

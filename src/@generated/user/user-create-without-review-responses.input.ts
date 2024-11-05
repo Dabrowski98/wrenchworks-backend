@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { UsersStatus } from '../prisma/users-status.enum';
 import { ReviewCreateNestedManyWithoutUserInput } from '../review/review-create-nested-many-without-user.input';
 import { Type } from 'class-transformer';
@@ -10,7 +10,7 @@ import { PersonCreateNestedOneWithoutUserInput } from '../person/person-create-n
 @InputType()
 export class UserCreateWithoutReviewResponsesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     userId?: bigint | number;
 
     @Field(() => String, {nullable:false})
@@ -34,7 +34,7 @@ export class UserCreateWithoutReviewResponsesInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => ReviewCreateNestedManyWithoutUserInput, {nullable:true})

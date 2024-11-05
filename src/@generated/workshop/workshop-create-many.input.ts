@@ -1,11 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class WorkshopCreateManyInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     workshopId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
@@ -26,6 +27,6 @@ export class WorkshopCreateManyInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

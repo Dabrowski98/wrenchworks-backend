@@ -6,6 +6,9 @@ import { Float } from '@nestjs/graphql';
 export class VehicleDetailsAvgAggregate {
 
     @Field(() => Float, {nullable:true})
+    vehicleDetailsId?: number;
+
+    @Field(() => Float, {nullable:true})
     vehicleId?: number;
 
     @Field(() => Float, {nullable:true})

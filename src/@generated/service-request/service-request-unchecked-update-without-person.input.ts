@@ -6,7 +6,8 @@ import { NullableEnumServiceRequestsStatusFieldUpdateOperationsInput } from '../
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableBigIntFieldUpdateOperationsInput } from '../prisma/nullable-big-int-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { ServiceRequestJobUncheckedUpdateManyWithoutServiceRequestNestedInput } from '../service-request-job/service-request-job-unchecked-update-many-without-service-request-nested.input';
+import { JobUncheckedUpdateManyWithoutServiceRequestsNestedInput } from '../job/job-unchecked-update-many-without-service-requests-nested.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class ServiceRequestUncheckedUpdateWithoutPersonInput {
@@ -35,6 +36,7 @@ export class ServiceRequestUncheckedUpdateWithoutPersonInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => ServiceRequestJobUncheckedUpdateManyWithoutServiceRequestNestedInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobUncheckedUpdateManyWithoutServiceRequestNestedInput;
+    @Field(() => JobUncheckedUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => JobUncheckedUpdateManyWithoutServiceRequestsNestedInput)
+    jobs?: JobUncheckedUpdateManyWithoutServiceRequestsNestedInput;
 }

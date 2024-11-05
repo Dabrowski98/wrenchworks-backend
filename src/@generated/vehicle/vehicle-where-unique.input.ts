@@ -3,12 +3,10 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { VehicleWhereInput } from './vehicle-where.input';
 import { BigIntFilter } from '../prisma/big-int-filter.input';
-import { StringFilter } from '../prisma/string-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
 import { ServiceRequestListRelationFilter } from '../service-request/service-request-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ServiceListRelationFilter } from '../service/service-list-relation-filter.input';
-import { VehicleBrandRelationFilter } from '../vehicle-brand/vehicle-brand-relation-filter.input';
 import { VehicleModelRelationFilter } from '../vehicle-model/vehicle-model-relation-filter.input';
 import { PersonRelationFilter } from '../person/person-relation-filter.input';
 import { VehicleDetailsNullableRelationFilter } from '../vehicle-details/vehicle-details-nullable-relation-filter.input';
@@ -31,9 +29,6 @@ export class VehicleWhereUniqueInput {
     @Field(() => BigIntFilter, {nullable:true})
     personId?: BigIntFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    brandName?: StringFilter;
-
     @Field(() => BigIntFilter, {nullable:true})
     modelId?: BigIntFilter;
 
@@ -47,9 +42,6 @@ export class VehicleWhereUniqueInput {
     @Field(() => ServiceListRelationFilter, {nullable:true})
     @Type(() => ServiceListRelationFilter)
     services?: ServiceListRelationFilter;
-
-    @Field(() => VehicleBrandRelationFilter, {nullable:true})
-    vehicleBrand?: VehicleBrandRelationFilter;
 
     @Field(() => VehicleModelRelationFilter, {nullable:true})
     vehicleModel?: VehicleModelRelationFilter;

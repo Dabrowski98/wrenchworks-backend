@@ -1,6 +1,7 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum VehicleDetailsScalarFieldEnum {
+    vehicleDetailsId = "vehicleDetailsId",
     vehicleId = "vehicleId",
     yearOfProduction = "yearOfProduction",
     VIN = "VIN",

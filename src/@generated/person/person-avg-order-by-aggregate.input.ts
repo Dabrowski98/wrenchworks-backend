@@ -7,4 +7,7 @@ export class PersonAvgOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     personId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    addressId?: keyof typeof SortOrder;
 }

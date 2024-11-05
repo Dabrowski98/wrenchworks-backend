@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { EnumUserReportsReportedTypeFieldUpdateOperationsInput } from '../prisma/enum-user-reports-reported-type-field-update-operations.input';
 import { EnumUserReportsStatusFieldUpdateOperationsInput } from '../prisma/enum-user-reports-status-field-update-operations.input';
@@ -10,7 +11,7 @@ import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-d
 @InputType()
 export class UserReportUpdateManyMutationInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     reportId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})

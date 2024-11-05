@@ -7,6 +7,9 @@ import { Int } from '@nestjs/graphql';
 export class VehicleDetailsMinAggregate {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleDetailsId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     vehicleId?: bigint | number;
 
     @Field(() => Int, {nullable:true})

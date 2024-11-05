@@ -19,5 +19,5 @@ export class VehicleDetailsUncheckedCreateNestedOneWithoutVehicleInput {
 
     @Field(() => VehicleDetailsWhereUniqueInput, {nullable:true})
     @Type(() => VehicleDetailsWhereUniqueInput)
-    connect?: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleId'>;
+    connect?: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
 }

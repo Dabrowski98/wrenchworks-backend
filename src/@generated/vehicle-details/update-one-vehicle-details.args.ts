@@ -14,5 +14,5 @@ export class UpdateOneVehicleDetailsArgs {
 
     @Field(() => VehicleDetailsWhereUniqueInput, {nullable:false})
     @Type(() => VehicleDetailsWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleId'>;
+    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
 }

@@ -14,52 +14,48 @@ import {
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from 'src/@generated/address';
-import { AddressPerson } from 'src/@generated/address-person';
-import { AddressWorkshop } from 'src/@generated/address-workshop';
+import { Person } from 'src/@generated/person';
 import { DeletePayload } from '../../common/payloads/delete.payload';
-
+import { Workshop } from 'src/@generated/workshop'  ;
 
 @Resolver(() => Address)
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
   @Mutation(() => Address)
-  async createAddress(@Args() args: CreateOneAddressArgs) {
+  createAddress(@Args() args: CreateOneAddressArgs): Promise<Address> {
     return this.addressService.createAddress(args);
   }
 
   @Mutation(() => Address)
-  async updateAddress(@Args() args: UpdateOneAddressArgs) {
+  updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
     return this.addressService.updateAddress(args);
   }
 
   @Mutation(() => DeletePayload)
-  async deleteAddress(@Args() args: DeleteOneAddressArgs) {
+  deleteAddress(@Args() args: DeleteOneAddressArgs): Promise<DeletePayload> {
     return this.addressService.deleteAddress(args);
   }
 
   @Query(() => [Address])
-  async addresses(): Promise<Address[]> {
+  addresses(): Promise<Address[]> {
     return this.addressService.findAllAddresses();
   }
 
-
   @Query(() => Address)
-  async address(@Args() args: FindUniqueAddressArgs)  {
+  address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
     return this.addressService.findAddressById(args);
   }
 
-  @ResolveField(() => [AddressPerson])
-  async addressPersons(@Parent() address: Address) {
-    return this.addressService.findAddressPersonsByAddressId(address.addressId);
+  //RESOLVE FIELDS
+
+  @ResolveField(() => [Person])
+  persons(@Parent() address: Address): Promise<Person[]> {
+    return this.addressService.resolvePersons(address.addressId);
   }
 
-  @ResolveField(() => [AddressWorkshop!])
-  async addressWorkshops(
-    @Parent() address: Address,
-  ){
-    return this.addressService.findAddressWorkshopsByAddressId(
-      address.addressId,
-    );
+  @ResolveField(() => [Workshop])
+  workshops(@Parent() address: Address): Promise<Workshop[]> {
+    return this.addressService.resolveWorkshops(address.addressId);
   }
 }

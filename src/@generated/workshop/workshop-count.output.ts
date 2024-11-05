@@ -6,7 +6,7 @@ import { Int } from '@nestjs/graphql';
 export class WorkshopCount {
 
     @Field(() => Int, {nullable:false})
-    workshopAddresses?: number;
+    addresses?: number;
 
     @Field(() => Int, {nullable:false})
     customers?: number;
@@ -30,5 +30,5 @@ export class WorkshopCount {
     workshopJobs?: number;
 
     @Field(() => Int, {nullable:false})
-    workshopJobCategories?: number;
+    jobCategories?: number;
 }

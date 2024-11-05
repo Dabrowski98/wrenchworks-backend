@@ -4,9 +4,9 @@ import { BigIntFilter } from '../prisma/big-int-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
 import { JobCategoryRelationFilter } from '../job-category/job-category-relation-filter.input';
-import { ServiceRequestJobListRelationFilter } from '../service-request-job/service-request-job-list-relation-filter.input';
-import { WorkshopJobListRelationFilter } from '../workshop-job/workshop-job-list-relation-filter.input';
+import { ServiceRequestListRelationFilter } from '../service-request/service-request-list-relation-filter.input';
 import { Type } from 'class-transformer';
+import { WorkshopJobListRelationFilter } from '../workshop-job/workshop-job-list-relation-filter.input';
 
 @InputType()
 export class JobWhereInput {
@@ -38,8 +38,9 @@ export class JobWhereInput {
     @Field(() => JobCategoryRelationFilter, {nullable:true})
     jobCategory?: JobCategoryRelationFilter;
 
-    @Field(() => ServiceRequestJobListRelationFilter, {nullable:true})
-    jobServiceRequests?: ServiceRequestJobListRelationFilter;
+    @Field(() => ServiceRequestListRelationFilter, {nullable:true})
+    @Type(() => ServiceRequestListRelationFilter)
+    serviceRequests?: ServiceRequestListRelationFilter;
 
     @Field(() => WorkshopJobListRelationFilter, {nullable:true})
     @Type(() => WorkshopJobListRelationFilter)

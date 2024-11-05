@@ -1,8 +1,9 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { AddressPersonUncheckedCreateNestedManyWithoutAddressInput } from '../address-person/address-person-unchecked-create-nested-many-without-address.input';
-import { AddressWorkshopUncheckedCreateNestedManyWithoutAddressInput } from '../address-workshop/address-workshop-unchecked-create-nested-many-without-address.input';
+import { PersonUncheckedCreateNestedManyWithoutAddressInput } from '../person/person-unchecked-create-nested-many-without-address.input';
+import { Type } from 'class-transformer';
+import { WorkshopUncheckedCreateNestedManyWithoutAddressesInput } from '../workshop/workshop-unchecked-create-nested-many-without-addresses.input';
 
 @InputType()
 export class AddressUncheckedCreateInput {
@@ -31,9 +32,11 @@ export class AddressUncheckedCreateInput {
     @Field(() => String, {nullable:false})
     postCode!: string;
 
-    @Field(() => AddressPersonUncheckedCreateNestedManyWithoutAddressInput, {nullable:true})
-    addressPersons?: AddressPersonUncheckedCreateNestedManyWithoutAddressInput;
+    @Field(() => PersonUncheckedCreateNestedManyWithoutAddressInput, {nullable:true})
+    @Type(() => PersonUncheckedCreateNestedManyWithoutAddressInput)
+    persons?: PersonUncheckedCreateNestedManyWithoutAddressInput;
 
-    @Field(() => AddressWorkshopUncheckedCreateNestedManyWithoutAddressInput, {nullable:true})
-    addressWorkshops?: AddressWorkshopUncheckedCreateNestedManyWithoutAddressInput;
+    @Field(() => WorkshopUncheckedCreateNestedManyWithoutAddressesInput, {nullable:true})
+    @Type(() => WorkshopUncheckedCreateNestedManyWithoutAddressesInput)
+    workshops?: WorkshopUncheckedCreateNestedManyWithoutAddressesInput;
 }

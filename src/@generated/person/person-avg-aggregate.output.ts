@@ -7,4 +7,7 @@ export class PersonAvgAggregate {
 
     @Field(() => Float, {nullable:true})
     personId?: number;
+
+    @Field(() => Float, {nullable:true})
+    addressId?: number;
 }

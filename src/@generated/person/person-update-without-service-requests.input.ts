@@ -1,10 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { AddressPersonUpdateManyWithoutPersonNestedInput } from '../address-person/address-person-update-many-without-person-nested.input';
+import { AddressUpdateOneWithoutPersonsNestedInput } from '../address/address-update-one-without-persons-nested.input';
 import { CustomerUpdateManyWithoutPersonNestedInput } from '../customer/customer-update-many-without-person-nested.input';
 import { Type } from 'class-transformer';
 import { EmployeeUpdateManyWithoutPersonNestedInput } from '../employee/employee-update-many-without-person-nested.input';
@@ -15,7 +16,7 @@ import { WorkshopUpdateManyWithoutPersonNestedInput } from '../workshop/workshop
 @InputType()
 export class PersonUpdateWithoutServiceRequestsInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     personId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
@@ -30,8 +31,8 @@ export class PersonUpdateWithoutServiceRequestsInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => AddressPersonUpdateManyWithoutPersonNestedInput, {nullable:true})
-    personAddresses?: AddressPersonUpdateManyWithoutPersonNestedInput;
+    @Field(() => AddressUpdateOneWithoutPersonsNestedInput, {nullable:true})
+    address?: AddressUpdateOneWithoutPersonsNestedInput;
 
     @Field(() => CustomerUpdateManyWithoutPersonNestedInput, {nullable:true})
     @Type(() => CustomerUpdateManyWithoutPersonNestedInput)

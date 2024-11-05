@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Job } from '../job/job.model';
-import { WorkshopJobCategory } from '../workshop-job-category/workshop-job-category.model';
+import { Workshop } from '../workshop/workshop.model';
 import { JobCategoryCount } from './job-category-count.output';
 
 @ObjectType()
@@ -32,8 +32,8 @@ export class JobCategory {
     @Field(() => [Job], {nullable:true})
     jobs?: Array<Job>;
 
-    @Field(() => [WorkshopJobCategory], {nullable:true})
-    jobCategoryWorkshops?: Array<WorkshopJobCategory>;
+    @Field(() => [Workshop], {nullable:true})
+    Workshops?: Array<Workshop>;
 
     @Field(() => JobCategoryCount, {nullable:false})
     _count?: JobCategoryCount;

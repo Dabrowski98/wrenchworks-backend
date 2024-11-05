@@ -1,9 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import * as Scalars from 'graphql-scalars';
 import { Int } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleDetailsUncheckedCreateWithoutVehicleInput {
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    vehicleDetailsId?: bigint | number;
 
     @Field(() => Int, {nullable:true})
     yearOfProduction?: number;

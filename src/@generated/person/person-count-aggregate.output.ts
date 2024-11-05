@@ -18,6 +18,9 @@ export class PersonCountAggregate {
     telephoneNumber!: number;
 
     @Field(() => Int, {nullable:false})
+    addressId!: number;
+
+    @Field(() => Int, {nullable:false})
     deletedAt!: number;
 
     @Field(() => Int, {nullable:false})

@@ -1,17 +1,17 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
-import { ServiceRequestJobCreateNestedManyWithoutServiceRequestInput } from '../service-request-job/service-request-job-create-nested-many-without-service-request.input';
-import { VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput } from '../vehicle/vehicle-create-nested-one-without-vehicle-associated-service-requests.input';
+import { JobCreateNestedManyWithoutServiceRequestsInput } from '../job/job-create-nested-many-without-service-requests.input';
 import { Type } from 'class-transformer';
+import { VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput } from '../vehicle/vehicle-create-nested-one-without-vehicle-associated-service-requests.input';
 import { WorkshopCreateNestedOneWithoutServiceRequestsInput } from '../workshop/workshop-create-nested-one-without-service-requests.input';
 import { PersonCreateNestedOneWithoutServiceRequestsInput } from '../person/person-create-nested-one-without-service-requests.input';
 
 @InputType()
 export class ServiceRequestCreateWithoutApprovedServiceInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     serviceRequestId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
@@ -23,11 +23,12 @@ export class ServiceRequestCreateWithoutApprovedServiceInput {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => ServiceRequestJobCreateNestedManyWithoutServiceRequestInput, {nullable:true})
-    serviceRequestJobs?: ServiceRequestJobCreateNestedManyWithoutServiceRequestInput;
+    @Field(() => JobCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
+    @Type(() => JobCreateNestedManyWithoutServiceRequestsInput)
+    jobs?: JobCreateNestedManyWithoutServiceRequestsInput;
 
     @Field(() => VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput, {nullable:false})
     @Type(() => VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput)

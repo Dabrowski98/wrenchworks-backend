@@ -1,12 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequestsStatus } from '../prisma/service-requests-status.enum';
 
 @InputType()
 export class ServiceRequestCreateManyInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     serviceRequestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
@@ -30,6 +31,6 @@ export class ServiceRequestCreateManyInput {
     @Field(() => String, {nullable:true})
     approvedServiceId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

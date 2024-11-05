@@ -18,5 +18,8 @@ export class PersonMinOrderByAggregateInput {
     telephoneNumber?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    addressId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     deletedAt?: keyof typeof SortOrder;
 }

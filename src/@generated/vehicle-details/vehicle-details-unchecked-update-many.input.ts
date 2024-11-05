@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { NullableBigIntFieldUpdateOperationsInput } from '../prisma/nullable-big-int-field-update-operations.input';
 import { NullableIntFieldUpdateOperationsInput } from '../prisma/nullable-int-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
@@ -9,7 +10,10 @@ import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-d
 export class VehicleDetailsUncheckedUpdateManyInput {
 
     @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
-    vehicleId?: BigIntFieldUpdateOperationsInput;
+    vehicleDetailsId?: BigIntFieldUpdateOperationsInput;
+
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    vehicleId?: NullableBigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
     yearOfProduction?: NullableIntFieldUpdateOperationsInput;

@@ -5,7 +5,7 @@ import { SortOrderInput } from '../prisma/sort-order.input';
 import { JobCategoryOrderByRelationAggregateInput } from './job-category-order-by-relation-aggregate.input';
 import { JobOrderByRelationAggregateInput } from '../job/job-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
-import { WorkshopJobCategoryOrderByRelationAggregateInput } from '../workshop-job-category/workshop-job-category-order-by-relation-aggregate.input';
+import { WorkshopOrderByRelationAggregateInput } from '../workshop/workshop-order-by-relation-aggregate.input';
 
 @InputType()
 export class JobCategoryOrderByWithRelationInput {
@@ -35,6 +35,7 @@ export class JobCategoryOrderByWithRelationInput {
     @Type(() => JobOrderByRelationAggregateInput)
     jobs?: JobOrderByRelationAggregateInput;
 
-    @Field(() => WorkshopJobCategoryOrderByRelationAggregateInput, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryOrderByRelationAggregateInput;
+    @Field(() => WorkshopOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => WorkshopOrderByRelationAggregateInput)
+    Workshops?: WorkshopOrderByRelationAggregateInput;
 }

@@ -19,7 +19,7 @@ export class FindFirstVehicleDetailsOrThrowArgs {
     orderBy?: Array<VehicleDetailsOrderByWithRelationInput>;
 
     @Field(() => VehicleDetailsWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleId'>;
+    cursor?: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

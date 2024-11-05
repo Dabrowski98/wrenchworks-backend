@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { TasksStatus } from '../prisma/tasks-status.enum';
 import { Float } from '@nestjs/graphql';
@@ -12,7 +13,7 @@ import { Type } from 'class-transformer';
 @InputType()
 export class TaskCreateManyServiceInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     taskId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})

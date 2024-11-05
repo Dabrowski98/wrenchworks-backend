@@ -1,13 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateNestedOneWithoutPermissionSetsInput } from '../workshop/workshop-create-nested-one-without-permission-sets.input';
 import { Type } from 'class-transformer';
 
 @InputType()
 export class PermissionSetCreateWithoutEmployeesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     permissionSetId?: bigint | number;
 
     @Field(() => String, {nullable:true})

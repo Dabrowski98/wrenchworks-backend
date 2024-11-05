@@ -1,11 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class JobCategoryCreateManyInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     categoryId?: bigint | number;
 
     @Field(() => String, {nullable:false})

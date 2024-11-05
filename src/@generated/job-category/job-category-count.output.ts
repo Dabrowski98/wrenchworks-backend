@@ -12,5 +12,5 @@ export class JobCategoryCount {
     jobs?: number;
 
     @Field(() => Int, {nullable:false})
-    jobCategoryWorkshops?: number;
+    Workshops?: number;
 }

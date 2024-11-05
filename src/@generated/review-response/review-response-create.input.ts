@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { ReviewsResponsesStatus } from '../prisma/reviews-responses-status.enum';
 import { ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput } from './review-response-create-nested-one-without-other-review-responses.input';
 import { Type } from 'class-transformer';
@@ -11,7 +11,7 @@ import { UserCreateNestedOneWithoutReviewResponsesInput } from '../user/user-cre
 @InputType()
 export class ReviewResponseCreateInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:false})

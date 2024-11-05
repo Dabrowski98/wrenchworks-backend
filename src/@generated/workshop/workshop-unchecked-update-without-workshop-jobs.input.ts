@@ -4,7 +4,7 @@ import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableBoolFieldUpdateOperationsInput } from '../prisma/nullable-bool-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { AddressWorkshopUncheckedUpdateManyWithoutWorkshopNestedInput } from '../address-workshop/address-workshop-unchecked-update-many-without-workshop-nested.input';
+import { AddressUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../address/address-unchecked-update-many-without-workshops-nested.input';
 import { CustomerUncheckedUpdateManyWithoutWorkshopNestedInput } from '../customer/customer-unchecked-update-many-without-workshop-nested.input';
 import { Type } from 'class-transformer';
 import { EmployeeUncheckedUpdateManyWithoutWorkshopNestedInput } from '../employee/employee-unchecked-update-many-without-workshop-nested.input';
@@ -13,7 +13,7 @@ import { ReviewUncheckedUpdateManyWithoutWorkshopNestedInput } from '../review/r
 import { ServiceRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../service-request/service-request-unchecked-update-many-without-workshop-nested.input';
 import { ServiceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../service/service-unchecked-update-many-without-workshop-nested.input';
 import { WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput } from '../workshop-details/workshop-details-unchecked-update-one-without-workshop-nested.input';
-import { WorkshopJobCategoryUncheckedUpdateManyWithoutWorkshopNestedInput } from '../workshop-job-category/workshop-job-category-unchecked-update-many-without-workshop-nested.input';
+import { JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../job-category/job-category-unchecked-update-many-without-workshops-nested.input';
 
 @InputType()
 export class WorkshopUncheckedUpdateWithoutWorkshopJobsInput {
@@ -42,8 +42,8 @@ export class WorkshopUncheckedUpdateWithoutWorkshopJobsInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => AddressWorkshopUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    workshopAddresses?: AddressWorkshopUncheckedUpdateManyWithoutWorkshopNestedInput;
+    @Field(() => AddressUncheckedUpdateManyWithoutWorkshopsNestedInput, {nullable:true})
+    addresses?: AddressUncheckedUpdateManyWithoutWorkshopsNestedInput;
 
     @Field(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     @Type(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput)
@@ -72,6 +72,6 @@ export class WorkshopUncheckedUpdateWithoutWorkshopJobsInput {
     @Type(() => WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput)
     workshopDetails?: WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput;
 
-    @Field(() => WorkshopJobCategoryUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    workshopJobCategories?: WorkshopJobCategoryUncheckedUpdateManyWithoutWorkshopNestedInput;
+    @Field(() => JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput, {nullable:true})
+    jobCategories?: JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput;
 }

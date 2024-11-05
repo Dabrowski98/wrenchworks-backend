@@ -10,7 +10,7 @@ import { JobCategoryNullableRelationFilter } from './job-category-nullable-relat
 import { JobCategoryListRelationFilter } from './job-category-list-relation-filter.input';
 import { JobListRelationFilter } from '../job/job-list-relation-filter.input';
 import { Type } from 'class-transformer';
-import { WorkshopJobCategoryListRelationFilter } from '../workshop-job-category/workshop-job-category-list-relation-filter.input';
+import { WorkshopListRelationFilter } from '../workshop/workshop-list-relation-filter.input';
 
 @InputType()
 export class JobCategoryWhereUniqueInput {
@@ -49,6 +49,7 @@ export class JobCategoryWhereUniqueInput {
     @Type(() => JobListRelationFilter)
     jobs?: JobListRelationFilter;
 
-    @Field(() => WorkshopJobCategoryListRelationFilter, {nullable:true})
-    jobCategoryWorkshops?: WorkshopJobCategoryListRelationFilter;
+    @Field(() => WorkshopListRelationFilter, {nullable:true})
+    @Type(() => WorkshopListRelationFilter)
+    Workshops?: WorkshopListRelationFilter;
 }

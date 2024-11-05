@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
+import { HideField } from '@nestjs/graphql';
 import { NullableBigIntFieldUpdateOperationsInput } from '../prisma/nullable-big-int-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableEnumServicesStatusFieldUpdateOperationsInput } from '../prisma/nullable-enum-services-status-field-update-operations.input';
@@ -18,7 +19,7 @@ import { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from '../workshop
 @InputType()
 export class ServiceUpdateWithoutTasksInput {
 
-    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     serviceId?: BigIntFieldUpdateOperationsInput;
 
     @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})

@@ -1,11 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class PersonCreateManyInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @HideField()
     personId?: bigint | number;
 
     @Field(() => String, {nullable:false})
@@ -17,6 +18,9 @@ export class PersonCreateManyInput {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
-    @Field(() => Date, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    addressId?: bigint | number;
+
+    @HideField()
     deletedAt?: Date | string;
 }

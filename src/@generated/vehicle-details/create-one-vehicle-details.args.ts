@@ -6,7 +6,7 @@ import { Type } from 'class-transformer';
 @ArgsType()
 export class CreateOneVehicleDetailsArgs {
 
-    @Field(() => VehicleDetailsCreateInput, {nullable:false})
+    @Field(() => VehicleDetailsCreateInput, {nullable:true})
     @Type(() => VehicleDetailsCreateInput)
-    data!: VehicleDetailsCreateInput;
+    data?: VehicleDetailsCreateInput;
 }

@@ -9,5 +9,5 @@ export class DeleteOneVehicleDetailsArgs {
 
     @Field(() => VehicleDetailsWhereUniqueInput, {nullable:false})
     @Type(() => VehicleDetailsWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleId'>;
+    where!: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
 }

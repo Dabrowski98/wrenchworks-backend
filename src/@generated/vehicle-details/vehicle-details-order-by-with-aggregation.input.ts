@@ -12,7 +12,10 @@ import { VehicleDetailsSumOrderByAggregateInput } from './vehicle-details-sum-or
 export class VehicleDetailsOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
-    vehicleId?: keyof typeof SortOrder;
+    vehicleDetailsId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    vehicleId?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     yearOfProduction?: SortOrderInput;
