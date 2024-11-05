@@ -25,11 +25,14 @@ export class Person {
     @Field(() => String, {nullable:true})
     telephoneNumber!: string | null;
 
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    addressId!: bigint | null;
+
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => [Address], {nullable:true})
-    addresses?: Array<Address>;
+    @Field(() => Address, {nullable:true})
+    address?: Address | null;
 
     @Field(() => [Customer], {nullable:true})
     customers?: Array<Customer>;

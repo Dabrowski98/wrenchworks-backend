@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../prisma/big-int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
+import { BigIntNullableFilter } from '../prisma/big-int-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
 
 @InputType()
@@ -28,6 +29,9 @@ export class PersonScalarWhereInput {
 
     @Field(() => StringNullableFilter, {nullable:true})
     telephoneNumber?: StringNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    addressId?: BigIntNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;

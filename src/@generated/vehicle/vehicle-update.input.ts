@@ -6,7 +6,6 @@ import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-d
 import { ServiceRequestUpdateManyWithoutVehicleNestedInput } from '../service-request/service-request-update-many-without-vehicle-nested.input';
 import { Type } from 'class-transformer';
 import { ServiceUpdateManyWithoutVehicleNestedInput } from '../service/service-update-many-without-vehicle-nested.input';
-import { VehicleBrandUpdateOneRequiredWithoutVehiclesNestedInput } from '../vehicle-brand/vehicle-brand-update-one-required-without-vehicles-nested.input';
 import { VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput } from '../vehicle-model/vehicle-model-update-one-required-without-vehicles-nested.input';
 import { PersonUpdateOneRequiredWithoutVehiclesNestedInput } from '../person/person-update-one-required-without-vehicles-nested.input';
 import { VehicleDetailsUpdateOneWithoutVehicleNestedInput } from '../vehicle-details/vehicle-details-update-one-without-vehicle-nested.input';
@@ -27,9 +26,6 @@ export class VehicleUpdateInput {
     @Field(() => ServiceUpdateManyWithoutVehicleNestedInput, {nullable:true})
     @Type(() => ServiceUpdateManyWithoutVehicleNestedInput)
     services?: ServiceUpdateManyWithoutVehicleNestedInput;
-
-    @Field(() => VehicleBrandUpdateOneRequiredWithoutVehiclesNestedInput, {nullable:true})
-    vehicleBrand?: VehicleBrandUpdateOneRequiredWithoutVehiclesNestedInput;
 
     @Field(() => VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput, {nullable:true})
     vehicleModel?: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput;

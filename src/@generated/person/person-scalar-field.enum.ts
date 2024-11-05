@@ -5,6 +5,7 @@ export enum PersonScalarFieldEnum {
     firstName = "firstName",
     lastName = "lastName",
     telephoneNumber = "telephoneNumber",
+    addressId = "addressId",
     deletedAt = "deletedAt"
 }
 

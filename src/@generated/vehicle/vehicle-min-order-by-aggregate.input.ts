@@ -12,9 +12,6 @@ export class VehicleMinOrderByAggregateInput {
     personId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    brandName?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

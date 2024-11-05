@@ -31,7 +31,7 @@ model Address{
   buildingNo       String           @db.VarChar(6)
   flatNo           String?          @db.VarChar(6)
   postCode         String           @db.VarChar(10)
-  persons          Person[]         @relation("AddressPersons")
+  persons          Person[]         
   workshops        Workshop[]       @relation("AddressWorkshops")
 }
 
@@ -42,9 +42,11 @@ model Person {
   firstName        String           @db.VarChar(30)
   lastName         String           @db.VarChar(30)
   telephoneNumber  String?          @db.VarChar(12)
+  /// @FieldType('Scalars.GraphQLBigInt')
+  addressId        BigInt?          @db.UnsignedBigInt
   /// @HideField({ match: '@(Person)@(Create)*Input' })
   deletedAt        DateTime?        @db.Timestamp(0)
-  addresses        Address[]        @relation("AddressPersons")
+  address          Address?         @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
   customers        Customer[]
   employees        Employee[]
   serviceRequests  ServiceRequest[]
@@ -347,18 +349,16 @@ model Vehicle {
   vehicleId                         BigInt             @id @unique(map: "vehicle_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   personId                          BigInt             @db.UnsignedBigInt
-  brandName                         String             @db.VarChar(50)
+  /// @FieldType('Scalars.GraphQLBigInt')
   modelId                           BigInt             @db.UnsignedBigInt
   /// @HideField({ match: '@(Vehicle)@(Create)*Input' })
   deletedAt                         DateTime?          @db.Timestamp(0)
   vehicleAssociatedServiceRequests  ServiceRequest[]
   services                          Service[]
-  vehicleBrand                      VehicleBrand       @relation(fields: [brandName], references: [brandName], onDelete: NoAction, map: "fk_vehicleHasBrand")
   vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
   person                            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_vehicleHasOwner")
   vehiclesDetails                   VehicleDetails?
 
-  @@index([brandName])
   @@index([modelId])
   @@index([personId])
 }
@@ -367,7 +367,6 @@ model VehicleBrand {
   brandName       String            @id @unique(map: "brand_name") @db.VarChar(50)
   createdAt       DateTime?         @default(now()) @db.Timestamp(0)
   updatedAt       DateTime?         @default(now()) @db.Timestamp(0)
-  vehicles        Vehicle[]
   vehicleModels   VehicleModel[]
 }
 

@@ -1,6 +1,5 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
-import { Vehicle } from '../vehicle/vehicle.model';
 import { VehicleModel } from '../vehicle-model/vehicle-model.model';
 import { VehicleBrandCount } from './vehicle-brand-count.output';
 
@@ -15,9 +14,6 @@ export class VehicleBrand {
 
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
-
-    @Field(() => [Vehicle], {nullable:true})
-    vehicles?: Array<Vehicle>;
 
     @Field(() => [VehicleModel], {nullable:true})
     vehicleModels?: Array<VehicleModel>;

@@ -1,7 +1,5 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { VehicleCreateNestedManyWithoutVehicleBrandInput } from '../vehicle/vehicle-create-nested-many-without-vehicle-brand.input';
-import { Type } from 'class-transformer';
 
 @InputType()
 export class VehicleBrandCreateWithoutVehicleModelsInput {
@@ -14,8 +12,4 @@ export class VehicleBrandCreateWithoutVehicleModelsInput {
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-
-    @Field(() => VehicleCreateNestedManyWithoutVehicleBrandInput, {nullable:true})
-    @Type(() => VehicleCreateNestedManyWithoutVehicleBrandInput)
-    vehicles?: VehicleCreateNestedManyWithoutVehicleBrandInput;
 }

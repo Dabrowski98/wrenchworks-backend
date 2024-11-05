@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
-import { PersonCreateNestedManyWithoutAddressesInput } from '../person/person-create-nested-many-without-addresses.input';
+import { PersonCreateNestedManyWithoutAddressInput } from '../person/person-create-nested-many-without-address.input';
 import { Type } from 'class-transformer';
 import { WorkshopCreateNestedManyWithoutAddressesInput } from '../workshop/workshop-create-nested-many-without-addresses.input';
 
@@ -32,9 +32,9 @@ export class AddressCreateInput {
     @Field(() => String, {nullable:false})
     postCode!: string;
 
-    @Field(() => PersonCreateNestedManyWithoutAddressesInput, {nullable:true})
-    @Type(() => PersonCreateNestedManyWithoutAddressesInput)
-    persons?: PersonCreateNestedManyWithoutAddressesInput;
+    @Field(() => PersonCreateNestedManyWithoutAddressInput, {nullable:true})
+    @Type(() => PersonCreateNestedManyWithoutAddressInput)
+    persons?: PersonCreateNestedManyWithoutAddressInput;
 
     @Field(() => WorkshopCreateNestedManyWithoutAddressesInput, {nullable:true})
     @Type(() => WorkshopCreateNestedManyWithoutAddressesInput)

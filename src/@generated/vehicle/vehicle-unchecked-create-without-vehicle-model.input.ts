@@ -15,9 +15,6 @@ export class VehicleUncheckedCreateWithoutVehicleModelInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     personId!: bigint | number;
 
-    @Field(() => String, {nullable:false})
-    brandName!: string;
-
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 

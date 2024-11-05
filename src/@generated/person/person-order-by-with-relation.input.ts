@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
 import { SortOrderInput } from '../prisma/sort-order.input';
-import { AddressOrderByRelationAggregateInput } from '../address/address-order-by-relation-aggregate.input';
+import { AddressOrderByWithRelationInput } from '../address/address-order-by-with-relation.input';
 import { CustomerOrderByRelationAggregateInput } from '../customer/customer-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
 import { EmployeeOrderByRelationAggregateInput } from '../employee/employee-order-by-relation-aggregate.input';
@@ -27,10 +27,13 @@ export class PersonOrderByWithRelationInput {
     telephoneNumber?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    addressId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     deletedAt?: SortOrderInput;
 
-    @Field(() => AddressOrderByRelationAggregateInput, {nullable:true})
-    addresses?: AddressOrderByRelationAggregateInput;
+    @Field(() => AddressOrderByWithRelationInput, {nullable:true})
+    address?: AddressOrderByWithRelationInput;
 
     @Field(() => CustomerOrderByRelationAggregateInput, {nullable:true})
     @Type(() => CustomerOrderByRelationAggregateInput)

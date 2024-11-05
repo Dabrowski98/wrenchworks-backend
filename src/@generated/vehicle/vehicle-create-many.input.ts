@@ -12,10 +12,7 @@ export class VehicleCreateManyInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     personId!: bigint | number;
 
-    @Field(() => String, {nullable:false})
-    brandName!: string;
-
-    @Field(() => String, {nullable:false})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;
 
     @HideField()

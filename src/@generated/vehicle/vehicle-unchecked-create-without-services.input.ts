@@ -14,10 +14,7 @@ export class VehicleUncheckedCreateWithoutServicesInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     personId!: bigint | number;
 
-    @Field(() => String, {nullable:false})
-    brandName!: string;
-
-    @Field(() => String, {nullable:false})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;
 
     @Field(() => Date, {nullable:true})

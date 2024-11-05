@@ -17,5 +17,8 @@ export class PersonMaxAggregateInput {
     telephoneNumber?: true;
 
     @Field(() => Boolean, {nullable:true})
+    addressId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     deletedAt?: true;
 }

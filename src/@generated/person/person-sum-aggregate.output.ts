@@ -7,4 +7,7 @@ export class PersonSumAggregate {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     personId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    addressId?: bigint | number;
 }

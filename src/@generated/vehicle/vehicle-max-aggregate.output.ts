@@ -11,10 +11,7 @@ export class VehicleMaxAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     personId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
-    brandName?: string;
-
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
 
     @Field(() => Date, {nullable:true})

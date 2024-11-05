@@ -17,6 +17,9 @@ export class PersonMinAggregate {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    addressId?: bigint | number;
+
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;
 }

@@ -24,6 +24,9 @@ export class PersonOrderByWithAggregationInput {
     telephoneNumber?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    addressId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     deletedAt?: SortOrderInput;
 
     @Field(() => PersonCountOrderByAggregateInput, {nullable:true})

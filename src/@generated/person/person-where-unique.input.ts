@@ -4,8 +4,9 @@ import * as Scalars from 'graphql-scalars';
 import { PersonWhereInput } from './person-where.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
+import { BigIntNullableFilter } from '../prisma/big-int-nullable-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
-import { AddressListRelationFilter } from '../address/address-list-relation-filter.input';
+import { AddressNullableRelationFilter } from '../address/address-nullable-relation-filter.input';
 import { CustomerListRelationFilter } from '../customer/customer-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { EmployeeListRelationFilter } from '../employee/employee-list-relation-filter.input';
@@ -38,11 +39,14 @@ export class PersonWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     telephoneNumber?: StringNullableFilter;
 
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    addressId?: BigIntNullableFilter;
+
     @Field(() => DateTimeNullableFilter, {nullable:true})
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => AddressListRelationFilter, {nullable:true})
-    addresses?: AddressListRelationFilter;
+    @Field(() => AddressNullableRelationFilter, {nullable:true})
+    address?: AddressNullableRelationFilter;
 
     @Field(() => CustomerListRelationFilter, {nullable:true})
     @Type(() => CustomerListRelationFilter)

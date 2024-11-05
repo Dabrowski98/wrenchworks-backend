@@ -5,7 +5,7 @@ import { HideField } from '@nestjs/graphql';
 import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
-import { AddressUpdateManyWithoutPersonsNestedInput } from '../address/address-update-many-without-persons-nested.input';
+import { AddressUpdateOneWithoutPersonsNestedInput } from '../address/address-update-one-without-persons-nested.input';
 import { CustomerUpdateManyWithoutPersonNestedInput } from '../customer/customer-update-many-without-person-nested.input';
 import { Type } from 'class-transformer';
 import { ServiceRequestUpdateManyWithoutPersonNestedInput } from '../service-request/service-request-update-many-without-person-nested.input';
@@ -31,8 +31,8 @@ export class PersonUpdateWithoutEmployeesInput {
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput;
 
-    @Field(() => AddressUpdateManyWithoutPersonsNestedInput, {nullable:true})
-    addresses?: AddressUpdateManyWithoutPersonsNestedInput;
+    @Field(() => AddressUpdateOneWithoutPersonsNestedInput, {nullable:true})
+    address?: AddressUpdateOneWithoutPersonsNestedInput;
 
     @Field(() => CustomerUpdateManyWithoutPersonNestedInput, {nullable:true})
     @Type(() => CustomerUpdateManyWithoutPersonNestedInput)

@@ -3,7 +3,6 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ServiceRequest } from '../service-request/service-request.model';
 import { Service } from '../service/service.model';
-import { VehicleBrand } from '../vehicle-brand/vehicle-brand.model';
 import { VehicleModel } from '../vehicle-model/vehicle-model.model';
 import { Person } from '../person/person.model';
 import { VehicleDetails } from '../vehicle-details/vehicle-details.model';
@@ -18,10 +17,7 @@ export class Vehicle {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     personId!: bigint;
 
-    @Field(() => String, {nullable:false})
-    brandName!: string;
-
-    @Field(() => String, {nullable:false})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint;
 
     @Field(() => Date, {nullable:true})
@@ -32,9 +28,6 @@ export class Vehicle {
 
     @Field(() => [Service], {nullable:true})
     services?: Array<Service>;
-
-    @Field(() => VehicleBrand, {nullable:false})
-    vehicleBrand?: VehicleBrand;
 
     @Field(() => VehicleModel, {nullable:false})
     vehicleModel?: VehicleModel;

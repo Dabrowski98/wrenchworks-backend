@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFieldUpdateOperationsInput } from '../prisma/big-int-field-update-operations.input';
-import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-operations.input';
 import { NullableDateTimeFieldUpdateOperationsInput } from '../prisma/nullable-date-time-field-update-operations.input';
 import { ServiceRequestUncheckedUpdateManyWithoutVehicleNestedInput } from '../service-request/service-request-unchecked-update-many-without-vehicle-nested.input';
 import { Type } from 'class-transformer';
@@ -16,9 +15,6 @@ export class VehicleUncheckedUpdateInput {
 
     @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
     personId?: BigIntFieldUpdateOperationsInput;
-
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    brandName?: StringFieldUpdateOperationsInput;
 
     @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
     modelId?: BigIntFieldUpdateOperationsInput;

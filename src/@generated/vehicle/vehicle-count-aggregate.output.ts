@@ -12,9 +12,6 @@ export class VehicleCountAggregate {
     personId!: number;
 
     @Field(() => Int, {nullable:false})
-    brandName!: number;
-
-    @Field(() => Int, {nullable:false})
     modelId!: number;
 
     @Field(() => Int, {nullable:false})

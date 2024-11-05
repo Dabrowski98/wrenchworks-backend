@@ -6,8 +6,5 @@ import { Int } from '@nestjs/graphql';
 export class VehicleBrandCount {
 
     @Field(() => Int, {nullable:false})
-    vehicles?: number;
-
-    @Field(() => Int, {nullable:false})
     vehicleModels?: number;
 }

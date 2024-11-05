@@ -5,7 +5,6 @@ import { SortOrderInput } from '../prisma/sort-order.input';
 import { ServiceRequestOrderByRelationAggregateInput } from '../service-request/service-request-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
 import { ServiceOrderByRelationAggregateInput } from '../service/service-order-by-relation-aggregate.input';
-import { VehicleBrandOrderByWithRelationInput } from '../vehicle-brand/vehicle-brand-order-by-with-relation.input';
 import { VehicleModelOrderByWithRelationInput } from '../vehicle-model/vehicle-model-order-by-with-relation.input';
 import { PersonOrderByWithRelationInput } from '../person/person-order-by-with-relation.input';
 import { VehicleDetailsOrderByWithRelationInput } from '../vehicle-details/vehicle-details-order-by-with-relation.input';
@@ -20,9 +19,6 @@ export class VehicleOrderByWithRelationInput {
     personId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    brandName?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
@@ -35,9 +31,6 @@ export class VehicleOrderByWithRelationInput {
     @Field(() => ServiceOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ServiceOrderByRelationAggregateInput)
     services?: ServiceOrderByRelationAggregateInput;
-
-    @Field(() => VehicleBrandOrderByWithRelationInput, {nullable:true})
-    vehicleBrand?: VehicleBrandOrderByWithRelationInput;
 
     @Field(() => VehicleModelOrderByWithRelationInput, {nullable:true})
     vehicleModel?: VehicleModelOrderByWithRelationInput;
