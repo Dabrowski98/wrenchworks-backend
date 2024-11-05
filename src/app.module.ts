@@ -1,5 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
-import { DatabaseModule } from './database/database.module';
+import { PrismaModule } from './database/prisma.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
@@ -27,7 +27,7 @@ import { HelperModule } from './common/helper/helper.module';
       },
     }),
 
-    DatabaseModule,
+    PrismaModule,
     HelperModule,
     AddressModule,
     PersonModule,
