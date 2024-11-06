@@ -4,7 +4,4 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class DeletePayload {
   @Field(() => Boolean)
   success: Boolean;
-
-  @Field(() => String)
-  error?: String;
 }

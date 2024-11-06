@@ -8,19 +8,17 @@ export class CustomError extends Error {
 }
 
 export class RecordNotFoundError extends CustomError {
-  constructor(message: string = `Record not found`) {
-    super(message);
+  constructor(model: { name: string }) {
+    super(`${model.name || 'Record'} not found.`);
     this.name = 'RecordNotFoundError';
     this.code = 404;
     this.status = 'NOT_FOUND';
   }
 }
 
-export class DeletedAtFieldNotFoundError extends CustomError {
-  constructor(
-    message: string = `Model does not implement soft deletion concept`,
-  ) {
-    super(message);
+export class DeletedAtFieldNotFound extends CustomError {
+  constructor(model: { name: string }) {
+    super(`${model.name} does not implement soft-deletion model.`);
     this.name = 'DeletedAtFieldNotFound';
     this.code = 400;
     this.status = 'BAD_REQUEST';
@@ -28,10 +26,9 @@ export class DeletedAtFieldNotFoundError extends CustomError {
 }
 
 export class RecordNotSoftDeletedError extends CustomError {
-  constructor(
-    message: string = `Record needs to be soft-deleted first in order to proceed action`,
+  constructor(model: { name: string }
   ) {
-    super(message);
+    super(`${model.name} needs to be soft-deleted first in order to proceed action`);
     this.name = 'RecordNotSoftDeletedError';
     this.code = 400;
     this.status = 'BAD_REQUEST';

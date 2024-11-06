@@ -1,12 +1,15 @@
-
-import { PrismaClient } from "@prisma/client";
-import { existsExtension } from "./extensions/exists.extension";
-import { softDeleteExtension } from "./extensions/soft-delete.extension";
-import { resolverExtension } from "./extensions/resolver.extension";
-
+import { PrismaClient } from '@prisma/client';
+import { existsExtension } from './extensions/exists.extension';
+import { softDeleteExtension } from './extensions/soft-delete.extension';
+import { resolverExtension } from './extensions/resolver.extension';
+import { existsOrThrowExtension } from './extensions/exists-or-throw.extension';
 
 function extendClient(base: PrismaClient) {
-  return base.$extends(existsExtension).$extends(softDeleteExtension).$extends(resolverExtension);
+  return base
+    .$extends(existsExtension)
+    .$extends(existsOrThrowExtension)
+    .$extends(softDeleteExtension)
+    .$extends(resolverExtension);
 }
 
 class UntypedExtendedClient extends PrismaClient {
@@ -18,7 +21,7 @@ class UntypedExtendedClient extends PrismaClient {
 }
 
 const ExtendedPrismaClient = UntypedExtendedClient as unknown as new (
-  options?: ConstructorParameters<typeof PrismaClient>[0]
+  options?: ConstructorParameters<typeof PrismaClient>[0],
 ) => ReturnType<typeof extendClient>;
 
 export { ExtendedPrismaClient };

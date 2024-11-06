@@ -712,7 +712,6 @@ input DecimalNullableFilter {
 }
 
 type DeletePayload {
-  error: String!
   success: Boolean!
 }
 
