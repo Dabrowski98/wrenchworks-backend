@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/database/prisma.service';
 import {
   CreateOnePersonArgs,
   UpdateOnePersonArgs,
   Person,
+  PersonCount,
 } from 'src/@generated/person';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
@@ -14,14 +15,10 @@ import { ServiceRequest } from 'src/@generated/service-request';
 import { User } from 'src/@generated/user';
 import { Vehicle } from 'src/@generated/vehicle';
 import { Workshop } from 'src/@generated/workshop';
-import { HelperService } from 'src/common/helper/helper.service';
 
 @Injectable()
 export class PersonService {
-  constructor(
-    private readonly prisma: DatabaseService,
-    private readonly helperService: HelperService
-  ) {helperService.setModelName(Person);}
+  constructor(private readonly prisma: PrismaService) {}
 
   async createPerson(args: CreateOnePersonArgs): Promise<Person> {
     return this.prisma.person.create(args);
@@ -29,43 +26,27 @@ export class PersonService {
 
   async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
     const { data, where } = args;
+    await this.prisma.person.existsOrThrow({ where });
+
     return this.prisma.person.update({
       where: { personId: where.personId },
       data,
     });
   }
 
-  async softDeletePerson(personId: bigint): Promise<Person> {
-    return this.prisma.person.update({
-      where: { personId },
-      data: { deletedAt: new Date() },
-    });
+  async findAllPersons(): Promise<Person[]> {
+    return this.prisma.person.findMany();
   }
 
-  async recoverPerson(personId: bigint): Promise<Person> {
+  async findPersonById(personId: bigint): Promise<Person> {
     const person = await this.prisma.person.findUnique({ where: { personId } });
-    
-    
-    const isSoftDeleted = await this.helperService.isSoftDeleted(person);
+    if (!person) throw new RecordNotFoundError(Person);
 
-    if (!isSoftDeleted) {
-      throw new Error('Record is not soft-deleted and cannot be recovered.');
-    }
-
-    return this.prisma.person.update({
-      where: { personId },
-      data: { deletedAt: null },
-    });
+    return person;
   }
 
   async deletePerson(personId: bigint): Promise<DeletePayload> {
-    const person = await this.prisma.person.findUnique({ where: { personId } });
-
-    const isSoftDeleted = await this.helperService.isSoftDeleted(person);
-
-    if (!isSoftDeleted) {
-      throw new Error('Record is not soft-deleted and cannot be permanently deleted.');
-    }
+    await this.prisma.person.existsOrThrow({ where: { personId } });
 
     await this.prisma.person.delete({
       where: { personId },
@@ -74,45 +55,78 @@ export class PersonService {
     return { success: true };
   }
 
-  async findAllPersons(): Promise<Person[]> {
-    return this.prisma.person.findMany();
-  }
-
-  async findPersonById(personId: bigint): Promise<Person> {
-    const record = await this.prisma.person.findUnique({
-      where: { personId },
-    });
-    if (!record) throw new RecordNotFoundError();
-    return record;
-  }
-
   // RESOLVE METHODS
 
-  async resolveAddresses(personId: bigint): Promise<Address[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).addresses();
+  async address(personId: bigint): Promise<Address | null> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { address: true },
+      })
+    ).address;
   }
 
-  async resolveCustomers(personId: bigint): Promise<Customer[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).customers();
+  async customers(personId: bigint): Promise<Customer[]> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { customers: true },
+      })
+    ).customers;
   }
 
-  async resolveEmployees(personId: bigint): Promise<Employee[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).employees();
+  async employees(personId: bigint): Promise<Employee[]> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { employees: true },
+      })
+    ).employees;
   }
 
-  async resolveServiceRequests(personId: bigint): Promise<ServiceRequest[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).serviceRequests();
+  async serviceRequests(personId: bigint): Promise<ServiceRequest[]> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { serviceRequests: true },
+      })
+    ).serviceRequests;
   }
 
-  async resolveUser(personId: bigint): Promise<User> {
-    return this.prisma.person.findUnique({ where: { personId } }).user();
+  async user(personId: bigint): Promise<User | null> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { user: true },
+      })
+    ).user;
   }
 
-  async resolveVehicles(personId: bigint): Promise<Vehicle[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).vehicles();
+  async vehicles(personId: bigint): Promise<Vehicle[]> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { vehicles: true },
+      })
+    ).vehicles;
   }
 
-  async resolveWorkshops(personId: bigint): Promise<Workshop[]> {
-    return this.prisma.person.findUnique({ where: { personId } }).workshops();
+  async workshops(personId: bigint): Promise<Workshop[]> {
+    return (
+      await this.prisma.person.findUnique({
+        where: { personId },
+        include: { workshops: true },
+      })
+    ).workshops;
+  }
+
+  async resolveCount(personId: bigint): Promise<PersonCount> {
+    return {
+      vehicles: (await this.vehicles(personId)).length,
+      serviceRequests: (await this.serviceRequests(personId)).length,
+      workshops: (await this.workshops(personId)).length,
+      customers: (await this.customers(personId)).length,
+      employees: (await this.employees(personId)).length,
+    };
   }
 }

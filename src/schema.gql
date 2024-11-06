@@ -1990,7 +1990,7 @@ input JobWhereUniqueInput {
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
   createPerson(data: PersonCreateInput!): Person!
-  deleteAddress(where: AddressWhereUniqueInput!): DeletePayload!
+  deleteAddress(addressId: BigInt!): DeletePayload!
   deletePerson(personId: BigInt!): DeletePayload!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person!
@@ -3157,7 +3157,7 @@ input PersonWhereUniqueInput {
 }
 
 type Query {
-  address(where: AddressWhereUniqueInput!): Address!
+  address(addressId: BigInt!): Address!
   addresses: [Address!]!
   person(personId: BigInt!): Person!
   persons: [Person!]!
