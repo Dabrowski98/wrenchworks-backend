@@ -3,15 +3,17 @@ generator client {
 }
 
 generator nestgraphql {
-    provider = "node node_modules/prisma-nestjs-graphql"
-    output = "../src/@generated"
-    reExport = Directories
-    fields_Validator_from = "class-validator"
-    noTypeId = true
-
-    fields_Scalars_from = "graphql-scalars"
-    fields_Scalars_input = true
-    fields_Scalars_output = true
+    provider                     = "node node_modules/prisma-nestjs-graphql"
+    //output = "../generated"
+    output                       = "../src/modules"
+    outputFilePattern            = "{model}/dto/generated/{name}.{type}.ts"
+    fields_Validator_from        = "class-validator"
+    fields_validator_input       = true
+    noTypeId                     = true
+    fields_Scalars_from          = "graphql-scalars"
+    fields_Scalars_input         = true
+    fields_Scalars_output        = true
+    emitBlocks                   = ["models", "enums"]
 }
 
 datasource db {
@@ -32,7 +34,7 @@ model Address{
   flatNo           String?          @db.VarChar(6)
   postCode         String           @db.VarChar(10)
   persons          Person[]         
-  workshops        Workshop[]       @relation("AddressWorkshops")
+  workshop         Workshop?
 }
 
 model Person {
@@ -409,6 +411,8 @@ model Workshop {
   workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   personId                  BigInt                      @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  addressId                 BigInt?                     @db.UnsignedBigInt @unique
   email                     String?                     @db.VarChar(50)
   isVerified                Boolean?                    @default(false)
   isManagingWork            Boolean?                    @default(false)
@@ -416,7 +420,7 @@ model Workshop {
   updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   deletedAt                 DateTime?                   @db.Timestamp(0)
-  addresses                 Address[]                   @relation("AddressWorkshops")
+  address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
   customers                 Customer[]
   employees                 Employee[]
   permissionSets            PermissionSet[]

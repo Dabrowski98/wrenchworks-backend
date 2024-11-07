@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import {
-  Address,
-  AddressCount,
-  CreateOneAddressArgs,
-  DeleteOneAddressArgs,
-  FindUniqueAddressArgs,
-  UpdateOneAddressArgs,
-} from 'src/@generated/address';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
-import { Person } from 'src/@generated/person';
-import { Workshop } from 'src/@generated/workshop';
+import { Address } from './dto/generated/address.model';
+import { Person } from '../person/dto/generated/person.model';
+import { Workshop } from '../workshop/dto/generated/workshop.model';
+import { AddressCount } from './dto/generated/address-count.output';
+
 
 @Injectable()
 export class AddressService {
@@ -64,19 +59,18 @@ export class AddressService {
     ).persons;
   }
 
-  async workshops(addressId: bigint): Promise<Workshop[]> {
+  async workshop(addressId: bigint): Promise<Workshop> {
     return (
       await this.prisma.address.findUnique({
         where: { addressId },
-        include: { workshops: true },
+        include: { workshop: true },
       })
-    ).workshops;
+    ).workshop;
   }
 
   async resolveCount(address: Address): Promise<AddressCount> {
     return {
       persons: (await this.persons(address.addressId)).length,
-      workshops: (await this.workshops(address.addressId)).length,
     };
   }
 }

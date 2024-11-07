@@ -1,28 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import {
-  CreateOnePersonArgs,
-  UpdateOnePersonArgs,
-  Person,
-  PersonCount,
-} from 'src/@generated/person';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { Address } from 'src/@generated/address';
-import { Customer } from 'src/@generated/customer';
-import { Employee } from 'src/@generated/employee';
-import { ServiceRequest } from 'src/@generated/service-request';
-import { User } from 'src/@generated/user';
-import { Vehicle } from 'src/@generated/vehicle';
-import { Workshop } from 'src/@generated/workshop';
+import { PersonCount } from './dto/generated/person-count.output';
+import { Person } from './dto/generated/person.model';
+import { Address } from '../address/dto/generated/address.model';
+import { Customer } from '../customer/dto/generated/customer.model';
+import { Employee } from '../employee/dto/generated/employee.model';
+import { ServiceRequest } from '../service-request/dto/generated/service-request.model';
+import { User } from '../user/dto/generated/user.model';
+import { Vehicle } from '../vehicle/dto/generated/vehicle.model';
+import { Workshop } from '../workshop/dto/generated/workshop.model';
 
 @Injectable()
 export class PersonService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createPerson(args: CreateOnePersonArgs): Promise<Person> {
-    return this.prisma.person.create(args);
-  }
+    return this.prisma.person.create(args); 
+  }  
 
   async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
     const { data, where } = args;

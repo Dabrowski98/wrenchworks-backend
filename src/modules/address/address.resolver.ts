@@ -7,18 +7,16 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AddressService } from './address.service';
-import {
-  Address,
-  AddressCount,
-  CreateOneAddressArgs,
-  DeleteOneAddressArgs,
-  FindUniqueAddressArgs,
-  UpdateOneAddressArgs,
-} from 'src/@generated/address';
-import { Person } from 'src/@generated/person';
 import { DeletePayload } from '../../common/payloads/delete.payload';
-import { Workshop } from 'src/@generated/workshop';
 import { GraphQLBigInt } from 'graphql-scalars';
+import { Address } from './dto/generated/address.model';
+import { PersonCount } from '../person/dto/generated/person-count.output';
+import { Workshop } from '../workshop/dto/generated/workshop.model';
+import { AddressCount } from './dto/generated/address-count.output';
+import { Person } from '../person/dto/generated/person.model';
+import { CreateOneAddressArgs } from './dto/create-one-address.args';
+import { UpdateOneAddressArgs } from './dto/update-one-address.args';
+import { DeleteOneAddressArgs } from './dto/delete-one-address.args';
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -48,21 +46,20 @@ export class AddressResolver {
 
   @Mutation(() => DeletePayload)
   deleteAddress(
-    @Args('addressId', { type: () => GraphQLBigInt }) addressId,
-  ): Promise<DeletePayload> {
-    return this.addressService.deleteAddress(addressId);
+    @Args() args: DeleteOneAddressArgs): Promise<DeletePayload> {
+    return this.addressService.deleteAddress(args);
   }
 
   //RESOLVE FIELDS
 
-  @ResolveField(() => [Person])
+  @ResolveField(() => [PersonCount])
   persons(@Parent() address: Address): Promise<Person[]> {
     return this.addressService.persons(address.addressId);
   }
 
-  @ResolveField(() => [Workshop])
-  workshops(@Parent() address: Address): Promise<Workshop[]> {
-    return this.addressService.workshops(address.addressId);
+  @ResolveField(() => Workshop)
+  workshop(@Parent() address: Address): Promise<Workshop> {
+    return this.addressService.workshop(address.addressId);
   }
 
   @ResolveField(() => AddressCount)
