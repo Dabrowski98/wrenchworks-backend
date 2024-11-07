@@ -20,7 +20,7 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
     } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       gqlError = this.handlePrismaError(exception);
       this.logger.error(
-        `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} - ${stackTrace}`,
+        `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} - ${stackTrace} \n ${exception.message}`,
       );
     } else {
       gqlError = this.handleOtherError(exception);

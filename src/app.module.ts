@@ -3,7 +3,9 @@ import { PrismaModule } from './database/prisma.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { AddressModule, PersonModule } from './modules/index';
+import { 
+  //AddressModule,
+   PersonModule } from './modules/index';
 import { AppController } from './app.controller';
 import { HelperModule } from './common/helper/helper.module';
 
@@ -29,7 +31,7 @@ import { HelperModule } from './common/helper/helper.module';
 
     PrismaModule,
     HelperModule,
-    AddressModule,
+    // AddressModule,
     PersonModule,
   ],
   providers: [Logger],

@@ -13,7 +13,7 @@ type Address {
   postCode: String!
   region: String!
   street: String
-  workshops: [Workshop!]
+  workshop: Workshop
 }
 
 type AddressAvgAggregate {
@@ -22,7 +22,6 @@ type AddressAvgAggregate {
 
 type AddressCount {
   persons: Int!
-  workshops: Int!
 }
 
 type AddressCountAggregate {
@@ -46,13 +45,7 @@ input AddressCreateInput {
   postCode: String!
   region: String!
   street: String
-  workshops: WorkshopCreateNestedManyWithoutAddressesInput
-}
-
-input AddressCreateNestedManyWithoutWorkshopsInput {
-  connect: [AddressWhereUniqueInput!]
-  connectOrCreate: [AddressCreateOrConnectWithoutWorkshopsInput!]
-  create: [AddressCreateWithoutWorkshopsInput!]
+  workshop: WorkshopCreateNestedOneWithoutAddressInput
 }
 
 input AddressCreateNestedOneWithoutPersonsInput {
@@ -61,13 +54,19 @@ input AddressCreateNestedOneWithoutPersonsInput {
   create: AddressCreateWithoutPersonsInput
 }
 
+input AddressCreateNestedOneWithoutWorkshopInput {
+  connect: AddressWhereUniqueInput
+  connectOrCreate: AddressCreateOrConnectWithoutWorkshopInput
+  create: AddressCreateWithoutWorkshopInput
+}
+
 input AddressCreateOrConnectWithoutPersonsInput {
   create: AddressCreateWithoutPersonsInput!
   where: AddressWhereUniqueInput!
 }
 
-input AddressCreateOrConnectWithoutWorkshopsInput {
-  create: AddressCreateWithoutWorkshopsInput!
+input AddressCreateOrConnectWithoutWorkshopInput {
+  create: AddressCreateWithoutWorkshopInput!
   where: AddressWhereUniqueInput!
 }
 
@@ -79,10 +78,10 @@ input AddressCreateWithoutPersonsInput {
   postCode: String!
   region: String!
   street: String
-  workshops: WorkshopCreateNestedManyWithoutAddressesInput
+  workshop: WorkshopCreateNestedOneWithoutAddressInput
 }
 
-input AddressCreateWithoutWorkshopsInput {
+input AddressCreateWithoutWorkshopInput {
   buildingNo: String!
   city: String!
   country: String!
@@ -91,12 +90,6 @@ input AddressCreateWithoutWorkshopsInput {
   postCode: String!
   region: String!
   street: String
-}
-
-input AddressListRelationFilter {
-  every: AddressWhereInput
-  none: AddressWhereInput
-  some: AddressWhereInput
 }
 
 type AddressMaxAggregate {
@@ -126,20 +119,6 @@ input AddressNullableRelationFilter {
   isNot: AddressWhereInput
 }
 
-input AddressScalarWhereInput {
-  AND: [AddressScalarWhereInput!]
-  NOT: [AddressScalarWhereInput!]
-  OR: [AddressScalarWhereInput!]
-  addressId: BigIntFilter
-  buildingNo: StringFilter
-  city: StringFilter
-  country: StringFilter
-  flatNo: StringNullableFilter
-  postCode: StringFilter
-  region: StringFilter
-  street: StringNullableFilter
-}
-
 type AddressSumAggregate {
   addressId: BigInt
 }
@@ -153,35 +132,7 @@ input AddressUpdateInput {
   postCode: StringFieldUpdateOperationsInput
   region: StringFieldUpdateOperationsInput
   street: NullableStringFieldUpdateOperationsInput
-  workshops: WorkshopUpdateManyWithoutAddressesNestedInput
-}
-
-input AddressUpdateManyMutationInput {
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-}
-
-input AddressUpdateManyWithWhereWithoutWorkshopsInput {
-  data: AddressUpdateManyMutationInput!
-  where: AddressScalarWhereInput!
-}
-
-input AddressUpdateManyWithoutWorkshopsNestedInput {
-  connect: [AddressWhereUniqueInput!]
-  connectOrCreate: [AddressCreateOrConnectWithoutWorkshopsInput!]
-  create: [AddressCreateWithoutWorkshopsInput!]
-  delete: [AddressWhereUniqueInput!]
-  deleteMany: [AddressScalarWhereInput!]
-  disconnect: [AddressWhereUniqueInput!]
-  set: [AddressWhereUniqueInput!]
-  update: [AddressUpdateWithWhereUniqueWithoutWorkshopsInput!]
-  updateMany: [AddressUpdateManyWithWhereWithoutWorkshopsInput!]
-  upsert: [AddressUpsertWithWhereUniqueWithoutWorkshopsInput!]
+  workshop: WorkshopUpdateOneWithoutAddressNestedInput
 }
 
 input AddressUpdateOneWithoutPersonsNestedInput {
@@ -194,14 +145,24 @@ input AddressUpdateOneWithoutPersonsNestedInput {
   upsert: AddressUpsertWithoutPersonsInput
 }
 
+input AddressUpdateOneWithoutWorkshopNestedInput {
+  connect: AddressWhereUniqueInput
+  connectOrCreate: AddressCreateOrConnectWithoutWorkshopInput
+  create: AddressCreateWithoutWorkshopInput
+  delete: AddressWhereInput
+  disconnect: AddressWhereInput
+  update: AddressUpdateToOneWithWhereWithoutWorkshopInput
+  upsert: AddressUpsertWithoutWorkshopInput
+}
+
 input AddressUpdateToOneWithWhereWithoutPersonsInput {
   data: AddressUpdateWithoutPersonsInput!
   where: AddressWhereInput
 }
 
-input AddressUpdateWithWhereUniqueWithoutWorkshopsInput {
-  data: AddressUpdateWithoutWorkshopsInput!
-  where: AddressWhereUniqueInput!
+input AddressUpdateToOneWithWhereWithoutWorkshopInput {
+  data: AddressUpdateWithoutWorkshopInput!
+  where: AddressWhereInput
 }
 
 input AddressUpdateWithoutPersonsInput {
@@ -212,10 +173,10 @@ input AddressUpdateWithoutPersonsInput {
   postCode: StringFieldUpdateOperationsInput
   region: StringFieldUpdateOperationsInput
   street: NullableStringFieldUpdateOperationsInput
-  workshops: WorkshopUpdateManyWithoutAddressesNestedInput
+  workshop: WorkshopUpdateOneWithoutAddressNestedInput
 }
 
-input AddressUpdateWithoutWorkshopsInput {
+input AddressUpdateWithoutWorkshopInput {
   buildingNo: StringFieldUpdateOperationsInput
   city: StringFieldUpdateOperationsInput
   country: StringFieldUpdateOperationsInput
@@ -226,15 +187,15 @@ input AddressUpdateWithoutWorkshopsInput {
   street: NullableStringFieldUpdateOperationsInput
 }
 
-input AddressUpsertWithWhereUniqueWithoutWorkshopsInput {
-  create: AddressCreateWithoutWorkshopsInput!
-  update: AddressUpdateWithoutWorkshopsInput!
-  where: AddressWhereUniqueInput!
-}
-
 input AddressUpsertWithoutPersonsInput {
   create: AddressCreateWithoutPersonsInput!
   update: AddressUpdateWithoutPersonsInput!
+  where: AddressWhereInput
+}
+
+input AddressUpsertWithoutWorkshopInput {
+  create: AddressCreateWithoutWorkshopInput!
+  update: AddressUpdateWithoutWorkshopInput!
   where: AddressWhereInput
 }
 
@@ -251,7 +212,7 @@ input AddressWhereInput {
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
-  workshops: WorkshopListRelationFilter
+  workshop: WorkshopNullableRelationFilter
 }
 
 input AddressWhereUniqueInput {
@@ -267,7 +228,7 @@ input AddressWhereUniqueInput {
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
-  workshops: WorkshopListRelationFilter
+  workshop: WorkshopNullableRelationFilter
 }
 
 """
@@ -712,7 +673,6 @@ input DecimalNullableFilter {
 }
 
 type DeletePayload {
-  error: String!
   success: Boolean!
 }
 
@@ -1991,7 +1951,7 @@ input JobWhereUniqueInput {
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
   createPerson(data: PersonCreateInput!): Person!
-  deleteAddress(where: AddressWhereUniqueInput!): DeletePayload!
+  deleteAddress(addressId: BigInt!): DeletePayload!
   deletePerson(personId: BigInt!): DeletePayload!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person!
@@ -3158,7 +3118,7 @@ input PersonWhereUniqueInput {
 }
 
 type Query {
-  address(where: AddressWhereUniqueInput!): Address!
+  address(addressId: BigInt!): Address!
   addresses: [Address!]!
   person(personId: BigInt!): Person!
   persons: [Person!]!
@@ -6201,7 +6161,8 @@ input VehicleWhereUniqueInput {
 
 type Workshop {
   _count: WorkshopCount!
-  addresses: [Address!]
+  address: Address
+  addressId: BigInt
   createdAt: DateTime
   customers: [Customer!]
   deletedAt: DateTime
@@ -6223,12 +6184,12 @@ type Workshop {
 }
 
 type WorkshopAvgAggregate {
+  addressId: Float
   personId: Float
   workshopId: Float
 }
 
 type WorkshopCount {
-  addresses: Int!
   customers: Int!
   employees: Int!
   jobCategories: Int!
@@ -6241,6 +6202,7 @@ type WorkshopCount {
 
 type WorkshopCountAggregate {
   _all: Int!
+  addressId: Int!
   createdAt: Int!
   deletedAt: Int!
   email: Int!
@@ -6252,6 +6214,7 @@ type WorkshopCountAggregate {
 }
 
 input WorkshopCreateManyPersonInput {
+  addressId: BigInt
   createdAt: DateTime
   email: String
   isManagingWork: Boolean
@@ -6262,12 +6225,6 @@ input WorkshopCreateManyPersonInput {
 input WorkshopCreateManyPersonInputEnvelope {
   data: [WorkshopCreateManyPersonInput!]!
   skipDuplicates: Boolean
-}
-
-input WorkshopCreateNestedManyWithoutAddressesInput {
-  connect: [WorkshopWhereUniqueInput!]
-  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressesInput!]
-  create: [WorkshopCreateWithoutAddressesInput!]
 }
 
 input WorkshopCreateNestedManyWithoutJobCategoriesInput {
@@ -6281,6 +6238,12 @@ input WorkshopCreateNestedManyWithoutPersonInput {
   connectOrCreate: [WorkshopCreateOrConnectWithoutPersonInput!]
   create: [WorkshopCreateWithoutPersonInput!]
   createMany: WorkshopCreateManyPersonInputEnvelope
+}
+
+input WorkshopCreateNestedOneWithoutAddressInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutAddressInput
+  create: WorkshopCreateWithoutAddressInput
 }
 
 input WorkshopCreateNestedOneWithoutCustomersInput {
@@ -6325,8 +6288,8 @@ input WorkshopCreateNestedOneWithoutWorkshopJobsInput {
   create: WorkshopCreateWithoutWorkshopJobsInput
 }
 
-input WorkshopCreateOrConnectWithoutAddressesInput {
-  create: WorkshopCreateWithoutAddressesInput!
+input WorkshopCreateOrConnectWithoutAddressInput {
+  create: WorkshopCreateWithoutAddressInput!
   where: WorkshopWhereUniqueInput!
 }
 
@@ -6375,7 +6338,7 @@ input WorkshopCreateOrConnectWithoutWorkshopJobsInput {
   where: WorkshopWhereUniqueInput!
 }
 
-input WorkshopCreateWithoutAddressesInput {
+input WorkshopCreateWithoutAddressInput {
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6394,7 +6357,7 @@ input WorkshopCreateWithoutAddressesInput {
 }
 
 input WorkshopCreateWithoutCustomersInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   email: String
   employees: EmployeeCreateNestedManyWithoutWorkshopInput
@@ -6412,7 +6375,7 @@ input WorkshopCreateWithoutCustomersInput {
 }
 
 input WorkshopCreateWithoutEmployeesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6430,7 +6393,7 @@ input WorkshopCreateWithoutEmployeesInput {
 }
 
 input WorkshopCreateWithoutJobCategoriesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6448,7 +6411,7 @@ input WorkshopCreateWithoutJobCategoriesInput {
 }
 
 input WorkshopCreateWithoutPermissionSetsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6466,7 +6429,7 @@ input WorkshopCreateWithoutPermissionSetsInput {
 }
 
 input WorkshopCreateWithoutPersonInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6484,7 +6447,7 @@ input WorkshopCreateWithoutPersonInput {
 }
 
 input WorkshopCreateWithoutReviewsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6502,7 +6465,7 @@ input WorkshopCreateWithoutReviewsInput {
 }
 
 input WorkshopCreateWithoutServiceRequestsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6520,7 +6483,7 @@ input WorkshopCreateWithoutServiceRequestsInput {
 }
 
 input WorkshopCreateWithoutServicesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6538,7 +6501,7 @@ input WorkshopCreateWithoutServicesInput {
 }
 
 input WorkshopCreateWithoutWorkshopJobsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6892,6 +6855,7 @@ input WorkshopListRelationFilter {
 }
 
 type WorkshopMaxAggregate {
+  addressId: BigInt
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -6903,6 +6867,7 @@ type WorkshopMaxAggregate {
 }
 
 type WorkshopMinAggregate {
+  addressId: BigInt
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -6927,6 +6892,7 @@ input WorkshopScalarWhereInput {
   AND: [WorkshopScalarWhereInput!]
   NOT: [WorkshopScalarWhereInput!]
   OR: [WorkshopScalarWhereInput!]
+  addressId: BigIntNullableFilter
   createdAt: DateTimeNullableFilter
   deletedAt: DateTimeNullableFilter
   email: StringNullableFilter
@@ -6938,6 +6904,7 @@ input WorkshopScalarWhereInput {
 }
 
 type WorkshopSumAggregate {
+  addressId: BigInt
   personId: BigInt
   workshopId: BigInt
 }
@@ -6951,11 +6918,6 @@ input WorkshopUpdateManyMutationInput {
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
-input WorkshopUpdateManyWithWhereWithoutAddressesInput {
-  data: WorkshopUpdateManyMutationInput!
-  where: WorkshopScalarWhereInput!
-}
-
 input WorkshopUpdateManyWithWhereWithoutJobCategoriesInput {
   data: WorkshopUpdateManyMutationInput!
   where: WorkshopScalarWhereInput!
@@ -6964,19 +6926,6 @@ input WorkshopUpdateManyWithWhereWithoutJobCategoriesInput {
 input WorkshopUpdateManyWithWhereWithoutPersonInput {
   data: WorkshopUpdateManyMutationInput!
   where: WorkshopScalarWhereInput!
-}
-
-input WorkshopUpdateManyWithoutAddressesNestedInput {
-  connect: [WorkshopWhereUniqueInput!]
-  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressesInput!]
-  create: [WorkshopCreateWithoutAddressesInput!]
-  delete: [WorkshopWhereUniqueInput!]
-  deleteMany: [WorkshopScalarWhereInput!]
-  disconnect: [WorkshopWhereUniqueInput!]
-  set: [WorkshopWhereUniqueInput!]
-  update: [WorkshopUpdateWithWhereUniqueWithoutAddressesInput!]
-  updateMany: [WorkshopUpdateManyWithWhereWithoutAddressesInput!]
-  upsert: [WorkshopUpsertWithWhereUniqueWithoutAddressesInput!]
 }
 
 input WorkshopUpdateManyWithoutJobCategoriesNestedInput {
@@ -7054,6 +7003,16 @@ input WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput {
   upsert: WorkshopUpsertWithoutWorkshopJobsInput
 }
 
+input WorkshopUpdateOneWithoutAddressNestedInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutAddressInput
+  create: WorkshopCreateWithoutAddressInput
+  delete: WorkshopWhereInput
+  disconnect: WorkshopWhereInput
+  update: WorkshopUpdateToOneWithWhereWithoutAddressInput
+  upsert: WorkshopUpsertWithoutAddressInput
+}
+
 input WorkshopUpdateOneWithoutPermissionSetsNestedInput {
   connect: WorkshopWhereUniqueInput
   connectOrCreate: WorkshopCreateOrConnectWithoutPermissionSetsInput
@@ -7062,6 +7021,11 @@ input WorkshopUpdateOneWithoutPermissionSetsNestedInput {
   disconnect: WorkshopWhereInput
   update: WorkshopUpdateToOneWithWhereWithoutPermissionSetsInput
   upsert: WorkshopUpsertWithoutPermissionSetsInput
+}
+
+input WorkshopUpdateToOneWithWhereWithoutAddressInput {
+  data: WorkshopUpdateWithoutAddressInput!
+  where: WorkshopWhereInput
 }
 
 input WorkshopUpdateToOneWithWhereWithoutCustomersInput {
@@ -7099,11 +7063,6 @@ input WorkshopUpdateToOneWithWhereWithoutWorkshopJobsInput {
   where: WorkshopWhereInput
 }
 
-input WorkshopUpdateWithWhereUniqueWithoutAddressesInput {
-  data: WorkshopUpdateWithoutAddressesInput!
-  where: WorkshopWhereUniqueInput!
-}
-
 input WorkshopUpdateWithWhereUniqueWithoutJobCategoriesInput {
   data: WorkshopUpdateWithoutJobCategoriesInput!
   where: WorkshopWhereUniqueInput!
@@ -7114,7 +7073,7 @@ input WorkshopUpdateWithWhereUniqueWithoutPersonInput {
   where: WorkshopWhereUniqueInput!
 }
 
-input WorkshopUpdateWithoutAddressesInput {
+input WorkshopUpdateWithoutAddressInput {
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7134,7 +7093,7 @@ input WorkshopUpdateWithoutAddressesInput {
 }
 
 input WorkshopUpdateWithoutCustomersInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
   email: NullableStringFieldUpdateOperationsInput
@@ -7153,7 +7112,7 @@ input WorkshopUpdateWithoutCustomersInput {
 }
 
 input WorkshopUpdateWithoutEmployeesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7172,7 +7131,7 @@ input WorkshopUpdateWithoutEmployeesInput {
 }
 
 input WorkshopUpdateWithoutJobCategoriesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7191,7 +7150,7 @@ input WorkshopUpdateWithoutJobCategoriesInput {
 }
 
 input WorkshopUpdateWithoutPermissionSetsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7210,7 +7169,7 @@ input WorkshopUpdateWithoutPermissionSetsInput {
 }
 
 input WorkshopUpdateWithoutPersonInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7229,7 +7188,7 @@ input WorkshopUpdateWithoutPersonInput {
 }
 
 input WorkshopUpdateWithoutReviewsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7248,7 +7207,7 @@ input WorkshopUpdateWithoutReviewsInput {
 }
 
 input WorkshopUpdateWithoutServiceRequestsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7267,7 +7226,7 @@ input WorkshopUpdateWithoutServiceRequestsInput {
 }
 
 input WorkshopUpdateWithoutServicesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7286,7 +7245,7 @@ input WorkshopUpdateWithoutServicesInput {
 }
 
 input WorkshopUpdateWithoutWorkshopJobsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
+  address: AddressUpdateOneWithoutWorkshopNestedInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
   deletedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -7304,12 +7263,6 @@ input WorkshopUpdateWithoutWorkshopJobsInput {
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
 }
 
-input WorkshopUpsertWithWhereUniqueWithoutAddressesInput {
-  create: WorkshopCreateWithoutAddressesInput!
-  update: WorkshopUpdateWithoutAddressesInput!
-  where: WorkshopWhereUniqueInput!
-}
-
 input WorkshopUpsertWithWhereUniqueWithoutJobCategoriesInput {
   create: WorkshopCreateWithoutJobCategoriesInput!
   update: WorkshopUpdateWithoutJobCategoriesInput!
@@ -7320,6 +7273,12 @@ input WorkshopUpsertWithWhereUniqueWithoutPersonInput {
   create: WorkshopCreateWithoutPersonInput!
   update: WorkshopUpdateWithoutPersonInput!
   where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopUpsertWithoutAddressInput {
+  create: WorkshopCreateWithoutAddressInput!
+  update: WorkshopUpdateWithoutAddressInput!
+  where: WorkshopWhereInput
 }
 
 input WorkshopUpsertWithoutCustomersInput {
@@ -7368,7 +7327,8 @@ input WorkshopWhereInput {
   AND: [WorkshopWhereInput!]
   NOT: [WorkshopWhereInput!]
   OR: [WorkshopWhereInput!]
-  addresses: AddressListRelationFilter
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
   createdAt: DateTimeNullableFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter
@@ -7393,7 +7353,8 @@ input WorkshopWhereUniqueInput {
   AND: [WorkshopWhereInput!]
   NOT: [WorkshopWhereInput!]
   OR: [WorkshopWhereInput!]
-  addresses: AddressListRelationFilter
+  address: AddressNullableRelationFilter
+  addressId: BigInt
   createdAt: DateTimeNullableFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter
