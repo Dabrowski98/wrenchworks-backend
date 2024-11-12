@@ -46,19 +46,19 @@ input AddressCreateInput {
   postCode: String!
   region: String!
   street: String
-  workshops: WorkshopCreateNestedManyWithoutAddressesInput
-}
-
-input AddressCreateNestedManyWithoutWorkshopsInput {
-  connect: [AddressWhereUniqueInput!]
-  connectOrCreate: [AddressCreateOrConnectWithoutWorkshopsInput!]
-  create: [AddressCreateWithoutWorkshopsInput!]
+  workshops: WorkshopCreateNestedManyWithoutAddressInput
 }
 
 input AddressCreateNestedOneWithoutPersonsInput {
   connect: AddressWhereUniqueInput
   connectOrCreate: AddressCreateOrConnectWithoutPersonsInput
   create: AddressCreateWithoutPersonsInput
+}
+
+input AddressCreateNestedOneWithoutWorkshopsInput {
+  connect: AddressWhereUniqueInput
+  connectOrCreate: AddressCreateOrConnectWithoutWorkshopsInput
+  create: AddressCreateWithoutWorkshopsInput
 }
 
 input AddressCreateOrConnectWithoutPersonsInput {
@@ -79,7 +79,7 @@ input AddressCreateWithoutPersonsInput {
   postCode: String!
   region: String!
   street: String
-  workshops: WorkshopCreateNestedManyWithoutAddressesInput
+  workshops: WorkshopCreateNestedManyWithoutAddressInput
 }
 
 input AddressCreateWithoutWorkshopsInput {
@@ -91,12 +91,6 @@ input AddressCreateWithoutWorkshopsInput {
   postCode: String!
   region: String!
   street: String
-}
-
-input AddressListRelationFilter {
-  every: AddressWhereInput
-  none: AddressWhereInput
-  some: AddressWhereInput
 }
 
 type AddressMaxAggregate {
@@ -126,62 +120,20 @@ input AddressNullableRelationFilter {
   isNot: AddressWhereInput
 }
 
-input AddressScalarWhereInput {
-  AND: [AddressScalarWhereInput!]
-  NOT: [AddressScalarWhereInput!]
-  OR: [AddressScalarWhereInput!]
-  addressId: BigIntFilter
-  buildingNo: StringFilter
-  city: StringFilter
-  country: StringFilter
-  flatNo: StringNullableFilter
-  postCode: StringFilter
-  region: StringFilter
-  street: StringNullableFilter
-}
-
 type AddressSumAggregate {
   addressId: BigInt
 }
 
 input AddressUpdateInput {
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
+  buildingNo: String
+  city: String
+  country: String
+  flatNo: String
   persons: PersonUpdateManyWithoutAddressNestedInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-  workshops: WorkshopUpdateManyWithoutAddressesNestedInput
-}
-
-input AddressUpdateManyMutationInput {
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-}
-
-input AddressUpdateManyWithWhereWithoutWorkshopsInput {
-  data: AddressUpdateManyMutationInput!
-  where: AddressScalarWhereInput!
-}
-
-input AddressUpdateManyWithoutWorkshopsNestedInput {
-  connect: [AddressWhereUniqueInput!]
-  connectOrCreate: [AddressCreateOrConnectWithoutWorkshopsInput!]
-  create: [AddressCreateWithoutWorkshopsInput!]
-  delete: [AddressWhereUniqueInput!]
-  deleteMany: [AddressScalarWhereInput!]
-  disconnect: [AddressWhereUniqueInput!]
-  set: [AddressWhereUniqueInput!]
-  update: [AddressUpdateWithWhereUniqueWithoutWorkshopsInput!]
-  updateMany: [AddressUpdateManyWithWhereWithoutWorkshopsInput!]
-  upsert: [AddressUpsertWithWhereUniqueWithoutWorkshopsInput!]
+  postCode: String
+  region: String
+  street: String
+  workshops: WorkshopUpdateManyWithoutAddressNestedInput
 }
 
 input AddressUpdateOneWithoutPersonsNestedInput {
@@ -194,47 +146,57 @@ input AddressUpdateOneWithoutPersonsNestedInput {
   upsert: AddressUpsertWithoutPersonsInput
 }
 
+input AddressUpdateOneWithoutWorkshopsNestedInput {
+  connect: AddressWhereUniqueInput
+  connectOrCreate: AddressCreateOrConnectWithoutWorkshopsInput
+  create: AddressCreateWithoutWorkshopsInput
+  delete: AddressWhereInput
+  disconnect: AddressWhereInput
+  update: AddressUpdateToOneWithWhereWithoutWorkshopsInput
+  upsert: AddressUpsertWithoutWorkshopsInput
+}
+
 input AddressUpdateToOneWithWhereWithoutPersonsInput {
   data: AddressUpdateWithoutPersonsInput!
   where: AddressWhereInput
 }
 
-input AddressUpdateWithWhereUniqueWithoutWorkshopsInput {
+input AddressUpdateToOneWithWhereWithoutWorkshopsInput {
   data: AddressUpdateWithoutWorkshopsInput!
-  where: AddressWhereUniqueInput!
+  where: AddressWhereInput
 }
 
 input AddressUpdateWithoutPersonsInput {
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-  workshops: WorkshopUpdateManyWithoutAddressesNestedInput
+  buildingNo: String
+  city: String
+  country: String
+  flatNo: String
+  postCode: String
+  region: String
+  street: String
+  workshops: WorkshopUpdateManyWithoutAddressNestedInput
 }
 
 input AddressUpdateWithoutWorkshopsInput {
-  buildingNo: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: StringFieldUpdateOperationsInput
-  flatNo: NullableStringFieldUpdateOperationsInput
+  buildingNo: String
+  city: String
+  country: String
+  flatNo: String
   persons: PersonUpdateManyWithoutAddressNestedInput
-  postCode: StringFieldUpdateOperationsInput
-  region: StringFieldUpdateOperationsInput
-  street: NullableStringFieldUpdateOperationsInput
-}
-
-input AddressUpsertWithWhereUniqueWithoutWorkshopsInput {
-  create: AddressCreateWithoutWorkshopsInput!
-  update: AddressUpdateWithoutWorkshopsInput!
-  where: AddressWhereUniqueInput!
+  postCode: String
+  region: String
+  street: String
 }
 
 input AddressUpsertWithoutPersonsInput {
   create: AddressCreateWithoutPersonsInput!
   update: AddressUpdateWithoutPersonsInput!
+  where: AddressWhereInput
+}
+
+input AddressUpsertWithoutWorkshopsInput {
+  create: AddressCreateWithoutWorkshopsInput!
+  update: AddressUpdateWithoutWorkshopsInput!
   where: AddressWhereInput
 }
 
@@ -275,14 +237,6 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
-input BigIntFieldUpdateOperationsInput {
-  decrement: String
-  divide: String
-  increment: String
-  multiply: String
-  set: String
-}
-
 input BigIntFilter {
   equals: String
   gt: String
@@ -305,8 +259,17 @@ input BigIntNullableFilter {
   notIn: [String!]
 }
 
-input BoolFieldUpdateOperationsInput {
-  set: Boolean
+enum BodyColors {
+  black
+  blue
+  brown
+  gray
+  green
+  other
+  red
+  silver
+  white
+  yellow
 }
 
 input BoolFilter {
@@ -498,11 +461,11 @@ type CustomerSumAggregate {
 }
 
 input CustomerUpdateManyMutationInput {
-  NIP: NullableStringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  totalDue: DecimalFieldUpdateOperationsInput
+  NIP: String
+  companyName: String
+  deletedAt: DateTime
+  description: String
+  totalDue: Decimal
 }
 
 input CustomerUpdateManyWithWhereWithoutPersonInput {
@@ -567,33 +530,33 @@ input CustomerUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input CustomerUpdateWithoutPersonInput {
-  NIP: NullableStringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  NIP: String
+  companyName: String
+  deletedAt: DateTime
+  description: String
   services: ServiceUpdateManyWithoutCustomerNestedInput
-  totalDue: DecimalFieldUpdateOperationsInput
+  totalDue: Decimal
   workshop: WorkshopUpdateOneRequiredWithoutCustomersNestedInput
 }
 
 input CustomerUpdateWithoutServicesInput {
-  NIP: NullableStringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  NIP: String
+  companyName: String
+  deletedAt: DateTime
+  description: String
   person: PersonUpdateOneRequiredWithoutCustomersNestedInput
-  totalDue: DecimalFieldUpdateOperationsInput
+  totalDue: Decimal
   workshop: WorkshopUpdateOneRequiredWithoutCustomersNestedInput
 }
 
 input CustomerUpdateWithoutWorkshopInput {
-  NIP: NullableStringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  NIP: String
+  companyName: String
+  deletedAt: DateTime
+  description: String
   person: PersonUpdateOneRequiredWithoutCustomersNestedInput
   services: ServiceUpdateManyWithoutCustomerNestedInput
-  totalDue: DecimalFieldUpdateOperationsInput
+  totalDue: Decimal
 }
 
 input CustomerUpsertWithWhereUniqueWithoutPersonInput {
@@ -652,10 +615,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input DateTimeFieldUpdateOperationsInput {
-  set: DateTime
-}
-
 input DateTimeFilter {
   equals: DateTime
   gt: DateTime
@@ -680,14 +639,6 @@ input DateTimeNullableFilter {
 
 """An arbitrary-precision Decimal type"""
 scalar Decimal
-
-input DecimalFieldUpdateOperationsInput {
-  decrement: Decimal
-  divide: Decimal
-  increment: Decimal
-  multiply: Decimal
-  set: Decimal
-}
 
 input DecimalFilter {
   equals: Decimal
@@ -722,7 +673,7 @@ type Employee {
   employeeTasks: [EmployeeTask!]
   joinedAt: DateTime!
   permissionSet: PermissionSet
-  permissionSetId: String
+  permissionSetId: Int
   person: Person!
   services: [Service!]
   workshop: Workshop!
@@ -762,7 +713,7 @@ input EmployeeCreateManyPermissionSetInputEnvelope {
 
 input EmployeeCreateManyPersonInput {
   joinedAt: DateTime
-  permissionSetId: String
+  permissionSetId: Int
   workshopId: BigInt!
 }
 
@@ -774,7 +725,7 @@ input EmployeeCreateManyPersonInputEnvelope {
 input EmployeeCreateManyWorkshopInput {
   employeeId: BigInt!
   joinedAt: DateTime
-  permissionSetId: String
+  permissionSetId: Int
 }
 
 input EmployeeCreateManyWorkshopInputEnvelope {
@@ -895,7 +846,7 @@ type EmployeeMaxAggregate {
   deletedAt: DateTime
   employeeId: BigInt
   joinedAt: DateTime
-  permissionSetId: String
+  permissionSetId: Int
   workshopId: BigInt
 }
 
@@ -903,7 +854,7 @@ type EmployeeMinAggregate {
   deletedAt: DateTime
   employeeId: BigInt
   joinedAt: DateTime
-  permissionSetId: String
+  permissionSetId: Int
   workshopId: BigInt
 }
 
@@ -919,13 +870,13 @@ input EmployeeScalarWhereInput {
   deletedAt: DateTimeNullableFilter
   employeeId: BigIntFilter
   joinedAt: DateTimeFilter
-  permissionSetId: BigIntNullableFilter
+  permissionSetId: IntNullableFilter
   workshopId: BigIntFilter
 }
 
 type EmployeeSumAggregate {
   employeeId: BigInt
-  permissionSetId: String
+  permissionSetId: Int
   workshopId: BigInt
 }
 
@@ -1016,7 +967,7 @@ input EmployeeTaskScalarWhereInput {
 }
 
 input EmployeeTaskUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
 }
 
 input EmployeeTaskUpdateManyWithWhereWithoutEmployeeInput {
@@ -1069,11 +1020,11 @@ input EmployeeTaskUpdateWithWhereUniqueWithoutTaskInput {
 
 input EmployeeTaskUpdateWithoutEmployeeInput {
   Task: TaskUpdateOneRequiredWithoutTaskEmployeesNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
 }
 
 input EmployeeTaskUpdateWithoutTaskInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
   employee: EmployeeUpdateOneRequiredWithoutEmployeeTasksNestedInput
 }
 
@@ -1115,8 +1066,8 @@ input EmployeeTaskWhereUniqueInput {
 }
 
 input EmployeeUpdateManyMutationInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
+  joinedAt: DateTime
 }
 
 input EmployeeUpdateManyWithWhereWithoutPermissionSetInput {
@@ -1218,8 +1169,8 @@ input EmployeeUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input EmployeeUpdateWithoutEmployeeTasksInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
+  joinedAt: DateTime
   permissionSet: PermissionSetUpdateOneWithoutEmployeesNestedInput
   person: PersonUpdateOneRequiredWithoutEmployeesNestedInput
   services: ServiceUpdateManyWithoutEmployeeNestedInput
@@ -1227,36 +1178,36 @@ input EmployeeUpdateWithoutEmployeeTasksInput {
 }
 
 input EmployeeUpdateWithoutPermissionSetInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employeeTasks: EmployeeTaskUpdateManyWithoutEmployeeNestedInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  joinedAt: DateTime
   person: PersonUpdateOneRequiredWithoutEmployeesNestedInput
   services: ServiceUpdateManyWithoutEmployeeNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutEmployeesNestedInput
 }
 
 input EmployeeUpdateWithoutPersonInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employeeTasks: EmployeeTaskUpdateManyWithoutEmployeeNestedInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  joinedAt: DateTime
   permissionSet: PermissionSetUpdateOneWithoutEmployeesNestedInput
   services: ServiceUpdateManyWithoutEmployeeNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutEmployeesNestedInput
 }
 
 input EmployeeUpdateWithoutServicesInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employeeTasks: EmployeeTaskUpdateManyWithoutEmployeeNestedInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  joinedAt: DateTime
   permissionSet: PermissionSetUpdateOneWithoutEmployeesNestedInput
   person: PersonUpdateOneRequiredWithoutEmployeesNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutEmployeesNestedInput
 }
 
 input EmployeeUpdateWithoutWorkshopInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employeeTasks: EmployeeTaskUpdateManyWithoutEmployeeNestedInput
-  joinedAt: DateTimeFieldUpdateOperationsInput
+  joinedAt: DateTime
   permissionSet: PermissionSetUpdateOneWithoutEmployeesNestedInput
   person: PersonUpdateOneRequiredWithoutEmployeesNestedInput
   services: ServiceUpdateManyWithoutEmployeeNestedInput
@@ -1301,7 +1252,7 @@ input EmployeeWhereInput {
   employeeTasks: EmployeeTaskListRelationFilter
   joinedAt: DateTimeFilter
   permissionSet: PermissionSetNullableRelationFilter
-  permissionSetId: BigIntNullableFilter
+  permissionSetId: IntNullableFilter
   person: PersonRelationFilter
   services: ServiceListRelationFilter
   workshop: WorkshopRelationFilter
@@ -1318,15 +1269,25 @@ input EmployeeWhereUniqueInput {
   employeeTasks: EmployeeTaskListRelationFilter
   joinedAt: DateTimeFilter
   permissionSet: PermissionSetNullableRelationFilter
-  permissionSetId: BigIntNullableFilter
+  permissionSetId: IntNullableFilter
   person: PersonRelationFilter
   services: ServiceListRelationFilter
   workshop: WorkshopRelationFilter
   workshopId: BigIntFilter
 }
 
-input EnumReviewsResponsesStatusFieldUpdateOperationsInput {
-  set: ReviewsResponsesStatus
+input EnumBodyColorsNullableFilter {
+  equals: BodyColors
+  in: [BodyColors!]
+  not: NestedEnumBodyColorsNullableFilter
+  notIn: [BodyColors!]
+}
+
+input EnumFuelTypeNullableFilter {
+  equals: FuelType
+  in: [FuelType!]
+  not: NestedEnumFuelTypeNullableFilter
+  notIn: [FuelType!]
 }
 
 input EnumReviewsResponsesStatusFilter {
@@ -1334,10 +1295,6 @@ input EnumReviewsResponsesStatusFilter {
   in: [ReviewsResponsesStatus!]
   not: NestedEnumReviewsResponsesStatusFilter
   notIn: [ReviewsResponsesStatus!]
-}
-
-input EnumReviewsStatusFieldUpdateOperationsInput {
-  set: ReviewsStatus
 }
 
 input EnumReviewsStatusFilter {
@@ -1368,19 +1325,11 @@ input EnumTasksStatusNullableFilter {
   notIn: [TasksStatus!]
 }
 
-input EnumUserReportsReportedTypeFieldUpdateOperationsInput {
-  set: UserReportsReportedType
-}
-
 input EnumUserReportsReportedTypeFilter {
   equals: UserReportsReportedType
   in: [UserReportsReportedType!]
   not: NestedEnumUserReportsReportedTypeFilter
   notIn: [UserReportsReportedType!]
-}
-
-input EnumUserReportsStatusFieldUpdateOperationsInput {
-  set: UserReportsStatus
 }
 
 input EnumUserReportsStatusFilter {
@@ -1404,14 +1353,6 @@ input EnumWorkshopsDetailsStatusNullableFilter {
   notIn: [WorkshopsDetailsStatus!]
 }
 
-input FloatFieldUpdateOperationsInput {
-  decrement: Float
-  divide: Float
-  increment: Float
-  multiply: Float
-  set: Float
-}
-
 input FloatFilter {
   equals: Float
   gt: Float
@@ -1421,6 +1362,28 @@ input FloatFilter {
   lte: Float
   not: NestedFloatFilter
   notIn: [Float!]
+}
+
+enum FuelType {
+  CNG
+  LPG
+  diesel
+  electric
+  hybrid
+  other
+  petrol
+  rocket
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
 }
 
 input IntNullableFilter {
@@ -1585,9 +1548,9 @@ input JobCategoryScalarWhereInput {
 }
 
 input JobCategoryUpdateManyMutationInput {
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
+  name: String
 }
 
 input JobCategoryUpdateManyWithWhereWithoutChildInput {
@@ -1668,37 +1631,37 @@ input JobCategoryUpdateWithWhereUniqueWithoutWorkshopsInput {
 input JobCategoryUpdateWithoutChildInput {
   Workshops: WorkshopUpdateManyWithoutJobCategoriesNestedInput
   children: JobCategoryUpdateManyWithoutChildNestedInput
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobs: JobUpdateManyWithoutJobCategoryNestedInput
-  name: StringFieldUpdateOperationsInput
+  name: String
 }
 
 input JobCategoryUpdateWithoutChildrenInput {
   Workshops: WorkshopUpdateManyWithoutJobCategoriesNestedInput
   child: JobCategoryUpdateOneWithoutChildrenNestedInput
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobs: JobUpdateManyWithoutJobCategoryNestedInput
-  name: StringFieldUpdateOperationsInput
+  name: String
 }
 
 input JobCategoryUpdateWithoutJobsInput {
   Workshops: WorkshopUpdateManyWithoutJobCategoriesNestedInput
   child: JobCategoryUpdateOneWithoutChildrenNestedInput
   children: JobCategoryUpdateManyWithoutChildNestedInput
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
+  name: String
 }
 
 input JobCategoryUpdateWithoutWorkshopsInput {
   child: JobCategoryUpdateOneWithoutChildrenNestedInput
   children: JobCategoryUpdateManyWithoutChildNestedInput
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobs: JobUpdateManyWithoutJobCategoryNestedInput
-  name: StringFieldUpdateOperationsInput
+  name: String
 }
 
 input JobCategoryUpsertWithWhereUniqueWithoutChildInput {
@@ -1852,9 +1815,9 @@ input JobScalarWhereInput {
 }
 
 input JobUpdateManyMutationInput {
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
-  name: NullableStringFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
+  name: String
 }
 
 input JobUpdateManyWithWhereWithoutJobCategoryInput {
@@ -1918,27 +1881,27 @@ input JobUpdateWithWhereUniqueWithoutServiceRequestsInput {
 }
 
 input JobUpdateWithoutJobCategoryInput {
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobWorkshops: WorkshopJobUpdateManyWithoutJobNestedInput
-  name: NullableStringFieldUpdateOperationsInput
+  name: String
   serviceRequests: ServiceRequestUpdateManyWithoutJobsNestedInput
 }
 
 input JobUpdateWithoutJobWorkshopsInput {
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobCategory: JobCategoryUpdateOneRequiredWithoutJobsNestedInput
-  name: NullableStringFieldUpdateOperationsInput
+  name: String
   serviceRequests: ServiceRequestUpdateManyWithoutJobsNestedInput
 }
 
 input JobUpdateWithoutServiceRequestsInput {
-  description: NullableStringFieldUpdateOperationsInput
-  isPopular: BoolFieldUpdateOperationsInput
+  description: String
+  isPopular: Boolean
   jobCategory: JobCategoryUpdateOneRequiredWithoutJobsNestedInput
   jobWorkshops: WorkshopJobUpdateManyWithoutJobNestedInput
-  name: NullableStringFieldUpdateOperationsInput
+  name: String
 }
 
 input JobUpsertWithWhereUniqueWithoutJobCategoryInput {
@@ -2072,6 +2035,20 @@ input NestedDecimalNullableFilter {
   notIn: [Decimal!]
 }
 
+input NestedEnumBodyColorsNullableFilter {
+  equals: BodyColors
+  in: [BodyColors!]
+  not: NestedEnumBodyColorsNullableFilter
+  notIn: [BodyColors!]
+}
+
+input NestedEnumFuelTypeNullableFilter {
+  equals: FuelType
+  in: [FuelType!]
+  not: NestedEnumFuelTypeNullableFilter
+  notIn: [FuelType!]
+}
+
 input NestedEnumReviewsResponsesStatusFilter {
   equals: ReviewsResponsesStatus
   in: [ReviewsResponsesStatus!]
@@ -2146,6 +2123,17 @@ input NestedFloatFilter {
   notIn: [Float!]
 }
 
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
 input NestedIntNullableFilter {
   equals: Int
   gt: Int
@@ -2183,62 +2171,6 @@ input NestedStringNullableFilter {
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
-}
-
-input NullableBigIntFieldUpdateOperationsInput {
-  decrement: String
-  divide: String
-  increment: String
-  multiply: String
-  set: String
-}
-
-input NullableBoolFieldUpdateOperationsInput {
-  set: Boolean
-}
-
-input NullableDateTimeFieldUpdateOperationsInput {
-  set: DateTime
-}
-
-input NullableDecimalFieldUpdateOperationsInput {
-  decrement: Decimal
-  divide: Decimal
-  increment: Decimal
-  multiply: Decimal
-  set: Decimal
-}
-
-input NullableEnumServiceRequestsStatusFieldUpdateOperationsInput {
-  set: ServiceRequestsStatus
-}
-
-input NullableEnumServicesStatusFieldUpdateOperationsInput {
-  set: ServicesStatus
-}
-
-input NullableEnumTasksStatusFieldUpdateOperationsInput {
-  set: TasksStatus
-}
-
-input NullableEnumUsersStatusFieldUpdateOperationsInput {
-  set: UsersStatus
-}
-
-input NullableEnumWorkshopsDetailsStatusFieldUpdateOperationsInput {
-  set: WorkshopsDetailsStatus
-}
-
-input NullableIntFieldUpdateOperationsInput {
-  decrement: Int
-  divide: Int
-  increment: Int
-  multiply: Int
-  set: Int
-}
-
-input NullableStringFieldUpdateOperationsInput {
-  set: String
 }
 
 type PermissionSet {
@@ -2401,31 +2333,31 @@ input PermissionSetScalarWhereInput {
   canUpdateServices: BoolFilter
   canUpdateTasks: BoolFilter
   canUpdateWorkshopDetails: BoolFilter
-  permissionSetId: BigIntFilter
+  permissionSetId: IntFilter
   setName: StringFilter
   workshopId: BigIntNullableFilter
 }
 
 input PermissionSetUpdateManyMutationInput {
-  canGenerateReports: BoolFieldUpdateOperationsInput
-  canModifyCustomers: BoolFieldUpdateOperationsInput
-  canModifyEmployees: BoolFieldUpdateOperationsInput
-  canModifyPermissions: BoolFieldUpdateOperationsInput
-  canModifyServices: BoolFieldUpdateOperationsInput
-  canModifyTasks: BoolFieldUpdateOperationsInput
-  canModifyWorkshopDetails: BoolFieldUpdateOperationsInput
-  canReadCustomers: BoolFieldUpdateOperationsInput
-  canReadEmployees: BoolFieldUpdateOperationsInput
-  canReadReports: BoolFieldUpdateOperationsInput
-  canReadServices: BoolFieldUpdateOperationsInput
-  canReadTasks: BoolFieldUpdateOperationsInput
-  canReadWorkshopDetails: BoolFieldUpdateOperationsInput
-  canUpdateCustomers: BoolFieldUpdateOperationsInput
-  canUpdateEmployees: BoolFieldUpdateOperationsInput
-  canUpdateServices: BoolFieldUpdateOperationsInput
-  canUpdateTasks: BoolFieldUpdateOperationsInput
-  canUpdateWorkshopDetails: BoolFieldUpdateOperationsInput
-  setName: StringFieldUpdateOperationsInput
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
+  setName: String
 }
 
 input PermissionSetUpdateManyWithWhereWithoutWorkshopInput {
@@ -2468,49 +2400,49 @@ input PermissionSetUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input PermissionSetUpdateWithoutEmployeesInput {
-  canGenerateReports: BoolFieldUpdateOperationsInput
-  canModifyCustomers: BoolFieldUpdateOperationsInput
-  canModifyEmployees: BoolFieldUpdateOperationsInput
-  canModifyPermissions: BoolFieldUpdateOperationsInput
-  canModifyServices: BoolFieldUpdateOperationsInput
-  canModifyTasks: BoolFieldUpdateOperationsInput
-  canModifyWorkshopDetails: BoolFieldUpdateOperationsInput
-  canReadCustomers: BoolFieldUpdateOperationsInput
-  canReadEmployees: BoolFieldUpdateOperationsInput
-  canReadReports: BoolFieldUpdateOperationsInput
-  canReadServices: BoolFieldUpdateOperationsInput
-  canReadTasks: BoolFieldUpdateOperationsInput
-  canReadWorkshopDetails: BoolFieldUpdateOperationsInput
-  canUpdateCustomers: BoolFieldUpdateOperationsInput
-  canUpdateEmployees: BoolFieldUpdateOperationsInput
-  canUpdateServices: BoolFieldUpdateOperationsInput
-  canUpdateTasks: BoolFieldUpdateOperationsInput
-  canUpdateWorkshopDetails: BoolFieldUpdateOperationsInput
-  setName: StringFieldUpdateOperationsInput
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
+  setName: String
   workshop: WorkshopUpdateOneWithoutPermissionSetsNestedInput
 }
 
 input PermissionSetUpdateWithoutWorkshopInput {
-  canGenerateReports: BoolFieldUpdateOperationsInput
-  canModifyCustomers: BoolFieldUpdateOperationsInput
-  canModifyEmployees: BoolFieldUpdateOperationsInput
-  canModifyPermissions: BoolFieldUpdateOperationsInput
-  canModifyServices: BoolFieldUpdateOperationsInput
-  canModifyTasks: BoolFieldUpdateOperationsInput
-  canModifyWorkshopDetails: BoolFieldUpdateOperationsInput
-  canReadCustomers: BoolFieldUpdateOperationsInput
-  canReadEmployees: BoolFieldUpdateOperationsInput
-  canReadReports: BoolFieldUpdateOperationsInput
-  canReadServices: BoolFieldUpdateOperationsInput
-  canReadTasks: BoolFieldUpdateOperationsInput
-  canReadWorkshopDetails: BoolFieldUpdateOperationsInput
-  canUpdateCustomers: BoolFieldUpdateOperationsInput
-  canUpdateEmployees: BoolFieldUpdateOperationsInput
-  canUpdateServices: BoolFieldUpdateOperationsInput
-  canUpdateTasks: BoolFieldUpdateOperationsInput
-  canUpdateWorkshopDetails: BoolFieldUpdateOperationsInput
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
   employees: EmployeeUpdateManyWithoutPermissionSetNestedInput
-  setName: StringFieldUpdateOperationsInput
+  setName: String
 }
 
 input PermissionSetUpsertWithWhereUniqueWithoutWorkshopInput {
@@ -2548,7 +2480,7 @@ input PermissionSetWhereInput {
   canUpdateTasks: BoolFilter
   canUpdateWorkshopDetails: BoolFilter
   employees: EmployeeListRelationFilter
-  permissionSetId: BigIntFilter
+  permissionSetId: IntFilter
   setName: StringFilter
   workshop: WorkshopNullableRelationFilter
   workshopId: BigIntNullableFilter
@@ -2863,22 +2795,22 @@ type PersonSumAggregate {
 input PersonUpdateInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
 }
 
 input PersonUpdateManyMutationInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  firstName: String
+  lastName: String
+  telephoneNumber: String
 }
 
 input PersonUpdateManyWithWhereWithoutAddressInput {
@@ -2987,12 +2919,12 @@ input PersonUpdateWithWhereUniqueWithoutAddressInput {
 
 input PersonUpdateWithoutAddressInput {
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
@@ -3000,12 +2932,12 @@ input PersonUpdateWithoutAddressInput {
 
 input PersonUpdateWithoutCustomersInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
@@ -3014,11 +2946,11 @@ input PersonUpdateWithoutCustomersInput {
 input PersonUpdateWithoutEmployeesInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
@@ -3027,11 +2959,11 @@ input PersonUpdateWithoutEmployeesInput {
 input PersonUpdateWithoutServiceRequestsInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
@@ -3040,12 +2972,12 @@ input PersonUpdateWithoutServiceRequestsInput {
 input PersonUpdateWithoutUserInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
 }
@@ -3053,12 +2985,12 @@ input PersonUpdateWithoutUserInput {
 input PersonUpdateWithoutVehiclesInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   workshops: WorkshopUpdateManyWithoutPersonNestedInput
 }
@@ -3066,12 +2998,12 @@ input PersonUpdateWithoutVehiclesInput {
 input PersonUpdateWithoutWorkshopsInput {
   address: AddressUpdateOneWithoutPersonsNestedInput
   customers: CustomerUpdateManyWithoutPersonNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   employees: EmployeeUpdateManyWithoutPersonNestedInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
+  firstName: String
+  lastName: String
   serviceRequests: ServiceRequestUpdateManyWithoutPersonNestedInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
+  telephoneNumber: String
   user: UserUpdateOneWithoutPersonNestedInput
   vehicles: VehicleUpdateManyWithoutPersonNestedInput
 }
@@ -3446,9 +3378,9 @@ input ReviewResponseScalarWhereInput {
 }
 
 input ReviewResponseUpdateManyMutationInput {
-  responseDate: DateTimeFieldUpdateOperationsInput
-  responseText: StringFieldUpdateOperationsInput
-  status: EnumReviewsResponsesStatusFieldUpdateOperationsInput
+  responseDate: DateTime
+  responseText: String
+  status: ReviewsResponsesStatus
 }
 
 input ReviewResponseUpdateManyWithWhereWithoutReviewInput {
@@ -3539,39 +3471,39 @@ input ReviewResponseUpdateWithWhereUniqueWithoutUserInput {
 }
 
 input ReviewResponseUpdateWithoutOtherReviewResponsesInput {
-  responseDate: DateTimeFieldUpdateOperationsInput
-  responseText: StringFieldUpdateOperationsInput
+  responseDate: DateTime
+  responseText: String
   review: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput
   reviewResponse: ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput
-  status: EnumReviewsResponsesStatusFieldUpdateOperationsInput
+  status: ReviewsResponsesStatus
   user: UserUpdateOneRequiredWithoutReviewResponsesNestedInput
 }
 
 input ReviewResponseUpdateWithoutReviewInput {
   otherReviewResponses: ReviewResponseUpdateManyWithoutReviewResponseNestedInput
-  responseDate: DateTimeFieldUpdateOperationsInput
-  responseText: StringFieldUpdateOperationsInput
+  responseDate: DateTime
+  responseText: String
   reviewResponse: ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput
-  status: EnumReviewsResponsesStatusFieldUpdateOperationsInput
+  status: ReviewsResponsesStatus
   user: UserUpdateOneRequiredWithoutReviewResponsesNestedInput
 }
 
 input ReviewResponseUpdateWithoutReviewResponseInput {
   otherReviewResponses: ReviewResponseUpdateManyWithoutReviewResponseNestedInput
-  responseDate: DateTimeFieldUpdateOperationsInput
-  responseText: StringFieldUpdateOperationsInput
+  responseDate: DateTime
+  responseText: String
   review: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput
-  status: EnumReviewsResponsesStatusFieldUpdateOperationsInput
+  status: ReviewsResponsesStatus
   user: UserUpdateOneRequiredWithoutReviewResponsesNestedInput
 }
 
 input ReviewResponseUpdateWithoutUserInput {
   otherReviewResponses: ReviewResponseUpdateManyWithoutReviewResponseNestedInput
-  responseDate: DateTimeFieldUpdateOperationsInput
-  responseText: StringFieldUpdateOperationsInput
+  responseDate: DateTime
+  responseText: String
   review: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput
   reviewResponse: ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput
-  status: EnumReviewsResponsesStatusFieldUpdateOperationsInput
+  status: ReviewsResponsesStatus
 }
 
 input ReviewResponseUpsertWithWhereUniqueWithoutReviewInput {
@@ -3646,10 +3578,10 @@ input ReviewScalarWhereInput {
 }
 
 input ReviewUpdateManyMutationInput {
-  rating: DecimalFieldUpdateOperationsInput
-  reviewDate: DateTimeFieldUpdateOperationsInput
-  reviewText: StringFieldUpdateOperationsInput
-  status: EnumReviewsStatusFieldUpdateOperationsInput
+  rating: Decimal
+  reviewDate: DateTime
+  reviewText: String
+  status: ReviewsStatus
 }
 
 input ReviewUpdateManyWithWhereWithoutUserInput {
@@ -3714,29 +3646,29 @@ input ReviewUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input ReviewUpdateWithoutReviewResponsesInput {
-  rating: DecimalFieldUpdateOperationsInput
-  reviewDate: DateTimeFieldUpdateOperationsInput
-  reviewText: StringFieldUpdateOperationsInput
-  status: EnumReviewsStatusFieldUpdateOperationsInput
+  rating: Decimal
+  reviewDate: DateTime
+  reviewText: String
+  status: ReviewsStatus
   user: UserUpdateOneRequiredWithoutReviewsNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 input ReviewUpdateWithoutUserInput {
-  rating: DecimalFieldUpdateOperationsInput
-  reviewDate: DateTimeFieldUpdateOperationsInput
+  rating: Decimal
+  reviewDate: DateTime
   reviewResponses: ReviewResponseUpdateManyWithoutReviewNestedInput
-  reviewText: StringFieldUpdateOperationsInput
-  status: EnumReviewsStatusFieldUpdateOperationsInput
+  reviewText: String
+  status: ReviewsStatus
   workshop: WorkshopUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 input ReviewUpdateWithoutWorkshopInput {
-  rating: DecimalFieldUpdateOperationsInput
-  reviewDate: DateTimeFieldUpdateOperationsInput
+  rating: Decimal
+  reviewDate: DateTime
   reviewResponses: ReviewResponseUpdateManyWithoutReviewNestedInput
-  reviewText: StringFieldUpdateOperationsInput
-  status: EnumReviewsStatusFieldUpdateOperationsInput
+  reviewText: String
+  status: ReviewsStatus
   user: UserUpdateOneRequiredWithoutReviewsNestedInput
 }
 
@@ -4089,7 +4021,7 @@ input ServiceRelationFilter {
 type ServiceRequest {
   _count: ServiceRequestCount!
   approvedService: Service
-  approvedServiceId: String
+  approvedServiceId: BigInt
   deletedAt: DateTime
   description: String
   jobs: [Job!]
@@ -4130,7 +4062,7 @@ type ServiceRequestCountAggregate {
 }
 
 input ServiceRequestCreateManyPersonInput {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   description: String
   requestedAt: DateTime
   status: ServiceRequestsStatus
@@ -4144,7 +4076,7 @@ input ServiceRequestCreateManyPersonInputEnvelope {
 }
 
 input ServiceRequestCreateManyVehicleInput {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   description: String
   personId: BigInt!
   requestedAt: DateTime
@@ -4158,7 +4090,7 @@ input ServiceRequestCreateManyVehicleInputEnvelope {
 }
 
 input ServiceRequestCreateManyWorkshopInput {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   description: String
   personId: BigInt!
   requestedAt: DateTime
@@ -4286,7 +4218,7 @@ input ServiceRequestListRelationFilter {
 }
 
 type ServiceRequestMaxAggregate {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   deletedAt: DateTime
   description: String
   personId: BigInt
@@ -4298,7 +4230,7 @@ type ServiceRequestMaxAggregate {
 }
 
 type ServiceRequestMinAggregate {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   deletedAt: DateTime
   description: String
   personId: BigInt
@@ -4330,7 +4262,7 @@ input ServiceRequestScalarWhereInput {
 }
 
 type ServiceRequestSumAggregate {
-  approvedServiceId: String
+  approvedServiceId: BigInt
   personId: BigInt
   serviceRequestId: BigInt
   vehicleId: BigInt
@@ -4338,10 +4270,10 @@ type ServiceRequestSumAggregate {
 }
 
 input ServiceRequestUpdateManyMutationInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
 }
 
 input ServiceRequestUpdateManyWithWhereWithoutJobsInput {
@@ -4455,57 +4387,57 @@ input ServiceRequestUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input ServiceRequestUpdateWithoutApprovedServiceInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   jobs: JobUpdateManyWithoutServiceRequestsNestedInput
   person: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
   vehicle: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput
 }
 
 input ServiceRequestUpdateWithoutJobsInput {
   approvedService: ServiceUpdateOneWithoutServiceRequestNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   person: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
   vehicle: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput
 }
 
 input ServiceRequestUpdateWithoutPersonInput {
   approvedService: ServiceUpdateOneWithoutServiceRequestNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   jobs: JobUpdateManyWithoutServiceRequestsNestedInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
   vehicle: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput
 }
 
 input ServiceRequestUpdateWithoutVehicleInput {
   approvedService: ServiceUpdateOneWithoutServiceRequestNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   jobs: JobUpdateManyWithoutServiceRequestsNestedInput
   person: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
   workshop: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput
 }
 
 input ServiceRequestUpdateWithoutWorkshopInput {
   approvedService: ServiceUpdateOneWithoutServiceRequestNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   jobs: JobUpdateManyWithoutServiceRequestsNestedInput
   person: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput
-  requestedAt: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServiceRequestsStatusFieldUpdateOperationsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
   vehicle: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput
 }
 
@@ -4564,7 +4496,7 @@ input ServiceRequestWhereUniqueInput {
   NOT: [ServiceRequestWhereInput!]
   OR: [ServiceRequestWhereInput!]
   approvedService: ServiceNullableRelationFilter
-  approvedServiceId: String
+  approvedServiceId: BigInt
   deletedAt: DateTimeNullableFilter
   description: StringNullableFilter
   jobs: JobListRelationFilter
@@ -4606,15 +4538,15 @@ input ServiceScalarWhereInput {
 }
 
 input ServiceUpdateManyMutationInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
 }
 
 input ServiceUpdateManyWithWhereWithoutCustomerInput {
@@ -4742,104 +4674,104 @@ input ServiceUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input ServiceUpdateWithoutCustomerInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   employee: EmployeeUpdateOneRequiredWithoutServicesNestedInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
   serviceRequest: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
   tasks: TaskUpdateManyWithoutServiceNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceUpdateWithoutEmployeeInput {
   customer: CustomerUpdateOneRequiredWithoutServicesNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
   serviceRequest: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
   tasks: TaskUpdateManyWithoutServiceNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceUpdateWithoutServiceRequestInput {
   customer: CustomerUpdateOneRequiredWithoutServicesNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   employee: EmployeeUpdateOneRequiredWithoutServicesNestedInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
   tasks: TaskUpdateManyWithoutServiceNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceUpdateWithoutTasksInput {
   customer: CustomerUpdateOneRequiredWithoutServicesNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   employee: EmployeeUpdateOneRequiredWithoutServicesNestedInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
   serviceRequest: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
   vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
   workshop: WorkshopUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceUpdateWithoutVehicleInput {
   customer: CustomerUpdateOneRequiredWithoutServicesNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   employee: EmployeeUpdateOneRequiredWithoutServicesNestedInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
   serviceRequest: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
   tasks: TaskUpdateManyWithoutServiceNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshop: WorkshopUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceUpdateWithoutWorkshopInput {
   customer: CustomerUpdateOneRequiredWithoutServicesNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  description: String
   employee: EmployeeUpdateOneRequiredWithoutServicesNestedInput
-  payedOff: BoolFieldUpdateOperationsInput
-  paymentAmount: DecimalFieldUpdateOperationsInput
-  serviceEndDate: NullableDateTimeFieldUpdateOperationsInput
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
   serviceRequest: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput
-  serviceRequestId: NullableBigIntFieldUpdateOperationsInput
-  serviceStartDate: DateTimeFieldUpdateOperationsInput
-  status: NullableEnumServicesStatusFieldUpdateOperationsInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
   tasks: TaskUpdateManyWithoutServiceNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
 }
 
@@ -4935,10 +4867,6 @@ enum ServicesStatus {
   cancelled
   completed
   pending
-}
-
-input StringFieldUpdateOperationsInput {
-  set: String
 }
 
 input StringFilter {
@@ -5070,12 +4998,12 @@ input TaskScalarWhereInput {
 }
 
 input TaskUpdateManyMutationInput {
-  customName: NullableStringFieldUpdateOperationsInput
-  description: StringFieldUpdateOperationsInput
-  executionTime: FloatFieldUpdateOperationsInput
-  jobId: NullableBigIntFieldUpdateOperationsInput
-  partsCost: DecimalFieldUpdateOperationsInput
-  status: NullableEnumTasksStatusFieldUpdateOperationsInput
+  customName: String
+  description: String
+  executionTime: Float
+  jobId: BigInt
+  partsCost: Decimal
+  status: TasksStatus
 }
 
 input TaskUpdateManyWithWhereWithoutServiceInput {
@@ -5116,23 +5044,23 @@ input TaskUpdateWithWhereUniqueWithoutServiceInput {
 }
 
 input TaskUpdateWithoutServiceInput {
-  customName: NullableStringFieldUpdateOperationsInput
-  description: StringFieldUpdateOperationsInput
-  executionTime: FloatFieldUpdateOperationsInput
-  jobId: NullableBigIntFieldUpdateOperationsInput
-  partsCost: DecimalFieldUpdateOperationsInput
-  status: NullableEnumTasksStatusFieldUpdateOperationsInput
+  customName: String
+  description: String
+  executionTime: Float
+  jobId: BigInt
+  partsCost: Decimal
+  status: TasksStatus
   taskEmployees: EmployeeTaskUpdateManyWithoutTaskNestedInput
 }
 
 input TaskUpdateWithoutTaskEmployeesInput {
-  customName: NullableStringFieldUpdateOperationsInput
-  description: StringFieldUpdateOperationsInput
-  executionTime: FloatFieldUpdateOperationsInput
-  jobId: NullableBigIntFieldUpdateOperationsInput
-  partsCost: DecimalFieldUpdateOperationsInput
+  customName: String
+  description: String
+  executionTime: Float
+  jobId: BigInt
+  partsCost: Decimal
   service: ServiceUpdateOneRequiredWithoutTasksNestedInput
-  status: NullableEnumTasksStatusFieldUpdateOperationsInput
+  status: TasksStatus
 }
 
 input TaskUpsertWithWhereUniqueWithoutServiceInput {
@@ -5187,6 +5115,7 @@ enum TasksStatus {
 
 type User {
   _count: UserCount!
+  avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -5215,6 +5144,7 @@ type UserCount {
 
 type UserCountAggregate {
   _all: Int!
+  avatarURL: Int!
   createdAt: Int!
   deletedAt: Int!
   email: Int!
@@ -5260,6 +5190,7 @@ input UserCreateOrConnectWithoutReviewsInput {
 }
 
 input UserCreateWithoutPersonInput {
+  avatarURL: String
   createdAt: DateTime
   email: String
   isVerified: Boolean
@@ -5273,6 +5204,7 @@ input UserCreateWithoutPersonInput {
 }
 
 input UserCreateWithoutReviewResponsesInput {
+  avatarURL: String
   createdAt: DateTime
   email: String
   isVerified: Boolean
@@ -5286,6 +5218,7 @@ input UserCreateWithoutReviewResponsesInput {
 }
 
 input UserCreateWithoutReviewsInput {
+  avatarURL: String
   createdAt: DateTime
   email: String
   isVerified: Boolean
@@ -5299,6 +5232,7 @@ input UserCreateWithoutReviewsInput {
 }
 
 type UserMaxAggregate {
+  avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -5311,6 +5245,7 @@ type UserMaxAggregate {
 }
 
 type UserMinAggregate {
+  avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -5336,7 +5271,7 @@ type UserReport {
   createdAt: DateTime!
   reportId: BigInt!
   reportText: String!
-  reportedId: String!
+  reportedId: BigInt!
   reportedType: UserReportsReportedType!
   status: UserReportsStatus!
   updatedAt: DateTime
@@ -5347,7 +5282,7 @@ type UserReport {
 input UserReportCreateManyUserInput {
   createdAt: DateTime
   reportText: String!
-  reportedId: String!
+  reportedId: BigInt!
   reportedType: UserReportsReportedType!
   status: UserReportsStatus
   updatedAt: DateTime
@@ -5373,7 +5308,7 @@ input UserReportCreateOrConnectWithoutUserInput {
 input UserReportCreateWithoutUserInput {
   createdAt: DateTime
   reportText: String!
-  reportedId: String!
+  reportedId: BigInt!
   reportedType: UserReportsReportedType!
   status: UserReportsStatus
   updatedAt: DateTime
@@ -5400,12 +5335,12 @@ input UserReportScalarWhereInput {
 }
 
 input UserReportUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
-  reportText: StringFieldUpdateOperationsInput
-  reportedId: BigIntFieldUpdateOperationsInput
-  reportedType: EnumUserReportsReportedTypeFieldUpdateOperationsInput
-  status: EnumUserReportsStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
+  reportText: String
+  reportedId: BigInt
+  reportedType: UserReportsReportedType
+  status: UserReportsStatus
+  updatedAt: DateTime
 }
 
 input UserReportUpdateManyWithWhereWithoutUserInput {
@@ -5433,12 +5368,12 @@ input UserReportUpdateWithWhereUniqueWithoutUserInput {
 }
 
 input UserReportUpdateWithoutUserInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
-  reportText: StringFieldUpdateOperationsInput
-  reportedId: BigIntFieldUpdateOperationsInput
-  reportedType: EnumUserReportsReportedTypeFieldUpdateOperationsInput
-  status: EnumUserReportsStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
+  reportText: String
+  reportedId: BigInt
+  reportedType: UserReportsReportedType
+  status: UserReportsStatus
+  updatedAt: DateTime
 }
 
 input UserReportUpsertWithWhereUniqueWithoutUserInput {
@@ -5537,45 +5472,48 @@ input UserUpdateToOneWithWhereWithoutReviewsInput {
 }
 
 input UserUpdateWithoutPersonInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
-  password: StringFieldUpdateOperationsInput
+  avatarURL: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  isVerified: Boolean
+  password: String
   reviewResponses: ReviewResponseUpdateManyWithoutUserNestedInput
   reviews: ReviewUpdateManyWithoutUserNestedInput
-  status: NullableEnumUsersStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  status: UsersStatus
+  updatedAt: DateTime
   userReports: UserReportUpdateManyWithoutUserNestedInput
-  username: StringFieldUpdateOperationsInput
+  username: String
 }
 
 input UserUpdateWithoutReviewResponsesInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
-  password: StringFieldUpdateOperationsInput
+  avatarURL: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  isVerified: Boolean
+  password: String
   person: PersonUpdateOneWithoutUserNestedInput
   reviews: ReviewUpdateManyWithoutUserNestedInput
-  status: NullableEnumUsersStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  status: UsersStatus
+  updatedAt: DateTime
   userReports: UserReportUpdateManyWithoutUserNestedInput
-  username: StringFieldUpdateOperationsInput
+  username: String
 }
 
 input UserUpdateWithoutReviewsInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
-  password: StringFieldUpdateOperationsInput
+  avatarURL: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  isVerified: Boolean
+  password: String
   person: PersonUpdateOneWithoutUserNestedInput
   reviewResponses: ReviewResponseUpdateManyWithoutUserNestedInput
-  status: NullableEnumUsersStatusFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  status: UsersStatus
+  updatedAt: DateTime
   userReports: UserReportUpdateManyWithoutUserNestedInput
-  username: StringFieldUpdateOperationsInput
+  username: String
 }
 
 input UserUpsertWithoutPersonInput {
@@ -5600,6 +5538,7 @@ input UserWhereInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
+  avatarURL: StringNullableFilter
   createdAt: DateTimeNullableFilter
   deletedAt: DateTimeNullableFilter
   email: StringNullableFilter
@@ -5620,6 +5559,7 @@ input UserWhereUniqueInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
+  avatarURL: StringNullableFilter
   createdAt: DateTimeNullableFilter
   deletedAt: DateTimeNullableFilter
   email: StringNullableFilter
@@ -5708,9 +5648,9 @@ input VehicleBrandUpdateToOneWithWhereWithoutVehicleModelsInput {
 }
 
 input VehicleBrandUpdateWithoutVehicleModelsInput {
-  brandName: StringFieldUpdateOperationsInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  brandName: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input VehicleBrandUpsertWithoutVehicleModelsInput {
@@ -5818,11 +5758,12 @@ input VehicleCreateWithoutVehicleAssociatedServiceRequestsInput {
 
 type VehicleDetails {
   VIN: String
-  bodyColor: String
+  bodyColor: BodyColors
+  countryOfRegistration: String
   deletedAt: DateTime
   engineCapacity: String
   engineNo: String
-  fuelType: String
+  fuelType: FuelType
   licensePlate: String
   vehicle: Vehicle
   vehicleDetailsId: BigInt!
@@ -5843,10 +5784,11 @@ input VehicleDetailsCreateOrConnectWithoutVehicleInput {
 
 input VehicleDetailsCreateWithoutVehicleInput {
   VIN: String
-  bodyColor: String
+  bodyColor: BodyColors
+  countryOfRegistration: String
   engineCapacity: String
   engineNo: String
-  fuelType: String
+  fuelType: FuelType
   licensePlate: String
   vehicleDetailsId: BigInt
   yearOfProduction: Int
@@ -5873,15 +5815,16 @@ input VehicleDetailsUpdateToOneWithWhereWithoutVehicleInput {
 }
 
 input VehicleDetailsUpdateWithoutVehicleInput {
-  VIN: NullableStringFieldUpdateOperationsInput
-  bodyColor: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  engineCapacity: NullableStringFieldUpdateOperationsInput
-  engineNo: NullableStringFieldUpdateOperationsInput
-  fuelType: NullableStringFieldUpdateOperationsInput
-  licensePlate: NullableStringFieldUpdateOperationsInput
-  vehicleDetailsId: BigIntFieldUpdateOperationsInput
-  yearOfProduction: NullableIntFieldUpdateOperationsInput
+  VIN: String
+  bodyColor: BodyColors
+  countryOfRegistration: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
 }
 
 input VehicleDetailsUpsertWithoutVehicleInput {
@@ -5895,11 +5838,12 @@ input VehicleDetailsWhereInput {
   NOT: [VehicleDetailsWhereInput!]
   OR: [VehicleDetailsWhereInput!]
   VIN: StringNullableFilter
-  bodyColor: StringNullableFilter
+  bodyColor: EnumBodyColorsNullableFilter
+  countryOfRegistration: StringNullableFilter
   deletedAt: DateTimeNullableFilter
   engineCapacity: StringNullableFilter
   engineNo: StringNullableFilter
-  fuelType: StringNullableFilter
+  fuelType: EnumFuelTypeNullableFilter
   licensePlate: StringNullableFilter
   vehicle: VehicleNullableRelationFilter
   vehicleDetailsId: BigIntFilter
@@ -5912,11 +5856,12 @@ input VehicleDetailsWhereUniqueInput {
   NOT: [VehicleDetailsWhereInput!]
   OR: [VehicleDetailsWhereInput!]
   VIN: StringNullableFilter
-  bodyColor: StringNullableFilter
+  bodyColor: EnumBodyColorsNullableFilter
+  countryOfRegistration: StringNullableFilter
   deletedAt: DateTimeNullableFilter
   engineCapacity: StringNullableFilter
   engineNo: StringNullableFilter
-  fuelType: StringNullableFilter
+  fuelType: EnumFuelTypeNullableFilter
   licensePlate: StringNullableFilter
   vehicle: VehicleNullableRelationFilter
   vehicleDetailsId: BigInt
@@ -6007,9 +5952,9 @@ input VehicleModelUpdateToOneWithWhereWithoutVehiclesInput {
 }
 
 input VehicleModelUpdateWithoutVehiclesInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  modelName: StringFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
+  modelName: String
+  updatedAt: DateTime
   vehiclesBrand: VehicleBrandUpdateOneRequiredWithoutVehicleModelsNestedInput
 }
 
@@ -6073,7 +6018,7 @@ type VehicleSumAggregate {
 }
 
 input VehicleUpdateManyMutationInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
 }
 
 input VehicleUpdateManyWithWhereWithoutPersonInput {
@@ -6127,7 +6072,7 @@ input VehicleUpdateWithWhereUniqueWithoutPersonInput {
 }
 
 input VehicleUpdateWithoutPersonInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   services: ServiceUpdateManyWithoutVehicleNestedInput
   vehicleAssociatedServiceRequests: ServiceRequestUpdateManyWithoutVehicleNestedInput
   vehicleModel: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput
@@ -6135,7 +6080,7 @@ input VehicleUpdateWithoutPersonInput {
 }
 
 input VehicleUpdateWithoutServicesInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   person: PersonUpdateOneRequiredWithoutVehiclesNestedInput
   vehicleAssociatedServiceRequests: ServiceRequestUpdateManyWithoutVehicleNestedInput
   vehicleModel: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput
@@ -6143,7 +6088,7 @@ input VehicleUpdateWithoutServicesInput {
 }
 
 input VehicleUpdateWithoutVehicleAssociatedServiceRequestsInput {
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
+  deletedAt: DateTime
   person: PersonUpdateOneRequiredWithoutVehiclesNestedInput
   services: ServiceUpdateManyWithoutVehicleNestedInput
   vehicleModel: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput
@@ -6200,7 +6145,8 @@ input VehicleWhereUniqueInput {
 
 type Workshop {
   _count: WorkshopCount!
-  addresses: [Address!]
+  address: Address
+  addressId: BigInt
   createdAt: DateTime
   customers: [Customer!]
   deletedAt: DateTime
@@ -6222,12 +6168,12 @@ type Workshop {
 }
 
 type WorkshopAvgAggregate {
+  addressId: Float
   personId: Float
   workshopId: Float
 }
 
 type WorkshopCount {
-  addresses: Int!
   customers: Int!
   employees: Int!
   jobCategories: Int!
@@ -6240,6 +6186,7 @@ type WorkshopCount {
 
 type WorkshopCountAggregate {
   _all: Int!
+  addressId: Int!
   createdAt: Int!
   deletedAt: Int!
   email: Int!
@@ -6250,7 +6197,22 @@ type WorkshopCountAggregate {
   workshopId: Int!
 }
 
+input WorkshopCreateManyAddressInput {
+  createdAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  personId: BigInt!
+  updatedAt: DateTime
+}
+
+input WorkshopCreateManyAddressInputEnvelope {
+  data: [WorkshopCreateManyAddressInput!]!
+  skipDuplicates: Boolean
+}
+
 input WorkshopCreateManyPersonInput {
+  addressId: BigInt
   createdAt: DateTime
   email: String
   isManagingWork: Boolean
@@ -6263,10 +6225,11 @@ input WorkshopCreateManyPersonInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input WorkshopCreateNestedManyWithoutAddressesInput {
+input WorkshopCreateNestedManyWithoutAddressInput {
   connect: [WorkshopWhereUniqueInput!]
-  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressesInput!]
-  create: [WorkshopCreateWithoutAddressesInput!]
+  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressInput!]
+  create: [WorkshopCreateWithoutAddressInput!]
+  createMany: WorkshopCreateManyAddressInputEnvelope
 }
 
 input WorkshopCreateNestedManyWithoutJobCategoriesInput {
@@ -6324,8 +6287,8 @@ input WorkshopCreateNestedOneWithoutWorkshopJobsInput {
   create: WorkshopCreateWithoutWorkshopJobsInput
 }
 
-input WorkshopCreateOrConnectWithoutAddressesInput {
-  create: WorkshopCreateWithoutAddressesInput!
+input WorkshopCreateOrConnectWithoutAddressInput {
+  create: WorkshopCreateWithoutAddressInput!
   where: WorkshopWhereUniqueInput!
 }
 
@@ -6374,7 +6337,7 @@ input WorkshopCreateOrConnectWithoutWorkshopJobsInput {
   where: WorkshopWhereUniqueInput!
 }
 
-input WorkshopCreateWithoutAddressesInput {
+input WorkshopCreateWithoutAddressInput {
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6393,7 +6356,7 @@ input WorkshopCreateWithoutAddressesInput {
 }
 
 input WorkshopCreateWithoutCustomersInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   email: String
   employees: EmployeeCreateNestedManyWithoutWorkshopInput
@@ -6411,7 +6374,7 @@ input WorkshopCreateWithoutCustomersInput {
 }
 
 input WorkshopCreateWithoutEmployeesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6429,7 +6392,7 @@ input WorkshopCreateWithoutEmployeesInput {
 }
 
 input WorkshopCreateWithoutJobCategoriesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6447,7 +6410,7 @@ input WorkshopCreateWithoutJobCategoriesInput {
 }
 
 input WorkshopCreateWithoutPermissionSetsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6465,7 +6428,7 @@ input WorkshopCreateWithoutPermissionSetsInput {
 }
 
 input WorkshopCreateWithoutPersonInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6483,7 +6446,7 @@ input WorkshopCreateWithoutPersonInput {
 }
 
 input WorkshopCreateWithoutReviewsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6501,7 +6464,7 @@ input WorkshopCreateWithoutReviewsInput {
 }
 
 input WorkshopCreateWithoutServiceRequestsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6519,7 +6482,7 @@ input WorkshopCreateWithoutServiceRequestsInput {
 }
 
 input WorkshopCreateWithoutServicesInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6537,7 +6500,7 @@ input WorkshopCreateWithoutServicesInput {
 }
 
 input WorkshopCreateWithoutWorkshopJobsInput {
-  addresses: AddressCreateNestedManyWithoutWorkshopsInput
+  address: AddressCreateNestedOneWithoutWorkshopsInput
   createdAt: DateTime
   customers: CustomerCreateNestedManyWithoutWorkshopInput
   email: String
@@ -6559,7 +6522,7 @@ type WorkshopDetails {
   deletedAt: DateTime
   description: String
   logoURL: String
-  rating: Decimal!
+  rating: Decimal
   status: WorkshopsDetailsStatus
   telephoneNumber: String
   workshop: Workshop!
@@ -6609,14 +6572,14 @@ input WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput {
 }
 
 input WorkshopDetailsUpdateWithoutWorkshopInput {
-  NIP: NullableStringFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  logoURL: NullableStringFieldUpdateOperationsInput
-  rating: DecimalFieldUpdateOperationsInput
-  status: NullableEnumWorkshopsDetailsStatusFieldUpdateOperationsInput
-  telephoneNumber: NullableStringFieldUpdateOperationsInput
-  workshopName: StringFieldUpdateOperationsInput
+  NIP: String
+  deletedAt: DateTime
+  description: String
+  logoURL: String
+  rating: Decimal
+  status: WorkshopsDetailsStatus
+  telephoneNumber: String
+  workshopName: String
 }
 
 input WorkshopDetailsUpsertWithoutWorkshopInput {
@@ -6633,7 +6596,7 @@ input WorkshopDetailsWhereInput {
   deletedAt: DateTimeNullableFilter
   description: StringNullableFilter
   logoURL: StringNullableFilter
-  rating: DecimalFilter
+  rating: DecimalNullableFilter
   status: EnumWorkshopsDetailsStatusNullableFilter
   telephoneNumber: StringNullableFilter
   workshop: WorkshopRelationFilter
@@ -6649,7 +6612,7 @@ input WorkshopDetailsWhereUniqueInput {
   deletedAt: DateTimeNullableFilter
   description: StringNullableFilter
   logoURL: StringNullableFilter
-  rating: DecimalFilter
+  rating: DecimalNullableFilter
   status: EnumWorkshopsDetailsStatusNullableFilter
   telephoneNumber: StringNullableFilter
   workshop: WorkshopRelationFilter
@@ -6663,10 +6626,9 @@ type WorkshopJob {
   jobId: BigInt!
   maxPrice: Decimal
   minPrice: Decimal
-  price: Decimal
   workshop: Workshop!
-  workshopDescription: String
   workshopId: BigInt!
+  workshopJobDescription: String
   workshopJobId: BigInt!
 }
 
@@ -6674,9 +6636,8 @@ input WorkshopJobCreateManyJobInput {
   availability: Boolean
   maxPrice: Decimal
   minPrice: Decimal
-  price: Decimal
-  workshopDescription: String
   workshopId: BigInt!
+  workshopJobDescription: String
 }
 
 input WorkshopJobCreateManyJobInputEnvelope {
@@ -6689,8 +6650,7 @@ input WorkshopJobCreateManyWorkshopInput {
   jobId: BigInt!
   maxPrice: Decimal
   minPrice: Decimal
-  price: Decimal
-  workshopDescription: String
+  workshopJobDescription: String
 }
 
 input WorkshopJobCreateManyWorkshopInputEnvelope {
@@ -6726,9 +6686,8 @@ input WorkshopJobCreateWithoutJobInput {
   availability: Boolean
   maxPrice: Decimal
   minPrice: Decimal
-  price: Decimal
   workshop: WorkshopCreateNestedOneWithoutWorkshopJobsInput!
-  workshopDescription: String
+  workshopJobDescription: String
 }
 
 input WorkshopJobCreateWithoutWorkshopInput {
@@ -6736,8 +6695,7 @@ input WorkshopJobCreateWithoutWorkshopInput {
   job: JobCreateNestedOneWithoutJobWorkshopsInput!
   maxPrice: Decimal
   minPrice: Decimal
-  price: Decimal
-  workshopDescription: String
+  workshopJobDescription: String
 }
 
 input WorkshopJobListRelationFilter {
@@ -6754,18 +6712,16 @@ input WorkshopJobScalarWhereInput {
   jobId: BigIntFilter
   maxPrice: DecimalNullableFilter
   minPrice: DecimalNullableFilter
-  price: DecimalNullableFilter
-  workshopDescription: StringNullableFilter
   workshopId: BigIntFilter
+  workshopJobDescription: StringNullableFilter
   workshopJobId: BigIntFilter
 }
 
 input WorkshopJobUpdateManyMutationInput {
-  availability: BoolFieldUpdateOperationsInput
-  maxPrice: NullableDecimalFieldUpdateOperationsInput
-  minPrice: NullableDecimalFieldUpdateOperationsInput
-  price: NullableDecimalFieldUpdateOperationsInput
-  workshopDescription: NullableStringFieldUpdateOperationsInput
+  availability: Boolean
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
 }
 
 input WorkshopJobUpdateManyWithWhereWithoutJobInput {
@@ -6817,21 +6773,19 @@ input WorkshopJobUpdateWithWhereUniqueWithoutWorkshopInput {
 }
 
 input WorkshopJobUpdateWithoutJobInput {
-  availability: BoolFieldUpdateOperationsInput
-  maxPrice: NullableDecimalFieldUpdateOperationsInput
-  minPrice: NullableDecimalFieldUpdateOperationsInput
-  price: NullableDecimalFieldUpdateOperationsInput
+  availability: Boolean
+  maxPrice: Decimal
+  minPrice: Decimal
   workshop: WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput
-  workshopDescription: NullableStringFieldUpdateOperationsInput
+  workshopJobDescription: String
 }
 
 input WorkshopJobUpdateWithoutWorkshopInput {
-  availability: BoolFieldUpdateOperationsInput
+  availability: Boolean
   job: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput
-  maxPrice: NullableDecimalFieldUpdateOperationsInput
-  minPrice: NullableDecimalFieldUpdateOperationsInput
-  price: NullableDecimalFieldUpdateOperationsInput
-  workshopDescription: NullableStringFieldUpdateOperationsInput
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
 }
 
 input WorkshopJobUpsertWithWhereUniqueWithoutJobInput {
@@ -6855,10 +6809,9 @@ input WorkshopJobWhereInput {
   jobId: BigIntFilter
   maxPrice: DecimalNullableFilter
   minPrice: DecimalNullableFilter
-  price: DecimalNullableFilter
   workshop: WorkshopRelationFilter
-  workshopDescription: StringNullableFilter
   workshopId: BigIntFilter
+  workshopJobDescription: StringNullableFilter
   workshopJobId: BigIntFilter
 }
 
@@ -6871,11 +6824,10 @@ input WorkshopJobWhereUniqueInput {
   jobId: BigIntFilter
   maxPrice: DecimalNullableFilter
   minPrice: DecimalNullableFilter
-  price: DecimalNullableFilter
   workshop: WorkshopRelationFilter
-  workshopDescription: StringNullableFilter
   workshopId: BigIntFilter
   workshopId_jobId: WorkshopJobWorkshopIdJobIdCompoundUniqueInput
+  workshopJobDescription: StringNullableFilter
   workshopJobId: BigInt
 }
 
@@ -6891,6 +6843,7 @@ input WorkshopListRelationFilter {
 }
 
 type WorkshopMaxAggregate {
+  addressId: BigInt
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -6902,6 +6855,7 @@ type WorkshopMaxAggregate {
 }
 
 type WorkshopMinAggregate {
+  addressId: BigInt
   createdAt: DateTime
   deletedAt: DateTime
   email: String
@@ -6926,6 +6880,7 @@ input WorkshopScalarWhereInput {
   AND: [WorkshopScalarWhereInput!]
   NOT: [WorkshopScalarWhereInput!]
   OR: [WorkshopScalarWhereInput!]
+  addressId: BigIntNullableFilter
   createdAt: DateTimeNullableFilter
   deletedAt: DateTimeNullableFilter
   email: StringNullableFilter
@@ -6937,20 +6892,21 @@ input WorkshopScalarWhereInput {
 }
 
 type WorkshopSumAggregate {
+  addressId: BigInt
   personId: BigInt
   workshopId: BigInt
 }
 
 input WorkshopUpdateManyMutationInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  updatedAt: DateTime
 }
 
-input WorkshopUpdateManyWithWhereWithoutAddressesInput {
+input WorkshopUpdateManyWithWhereWithoutAddressInput {
   data: WorkshopUpdateManyMutationInput!
   where: WorkshopScalarWhereInput!
 }
@@ -6965,17 +6921,18 @@ input WorkshopUpdateManyWithWhereWithoutPersonInput {
   where: WorkshopScalarWhereInput!
 }
 
-input WorkshopUpdateManyWithoutAddressesNestedInput {
+input WorkshopUpdateManyWithoutAddressNestedInput {
   connect: [WorkshopWhereUniqueInput!]
-  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressesInput!]
-  create: [WorkshopCreateWithoutAddressesInput!]
+  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressInput!]
+  create: [WorkshopCreateWithoutAddressInput!]
+  createMany: WorkshopCreateManyAddressInputEnvelope
   delete: [WorkshopWhereUniqueInput!]
   deleteMany: [WorkshopScalarWhereInput!]
   disconnect: [WorkshopWhereUniqueInput!]
   set: [WorkshopWhereUniqueInput!]
-  update: [WorkshopUpdateWithWhereUniqueWithoutAddressesInput!]
-  updateMany: [WorkshopUpdateManyWithWhereWithoutAddressesInput!]
-  upsert: [WorkshopUpsertWithWhereUniqueWithoutAddressesInput!]
+  update: [WorkshopUpdateWithWhereUniqueWithoutAddressInput!]
+  updateMany: [WorkshopUpdateManyWithWhereWithoutAddressInput!]
+  upsert: [WorkshopUpsertWithWhereUniqueWithoutAddressInput!]
 }
 
 input WorkshopUpdateManyWithoutJobCategoriesNestedInput {
@@ -7098,8 +7055,8 @@ input WorkshopUpdateToOneWithWhereWithoutWorkshopJobsInput {
   where: WorkshopWhereInput
 }
 
-input WorkshopUpdateWithWhereUniqueWithoutAddressesInput {
-  data: WorkshopUpdateWithoutAddressesInput!
+input WorkshopUpdateWithWhereUniqueWithoutAddressInput {
+  data: WorkshopUpdateWithoutAddressInput!
   where: WorkshopWhereUniqueInput!
 }
 
@@ -7113,199 +7070,199 @@ input WorkshopUpdateWithWhereUniqueWithoutPersonInput {
   where: WorkshopWhereUniqueInput!
 }
 
-input WorkshopUpdateWithoutAddressesInput {
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+input WorkshopUpdateWithoutAddressInput {
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutCustomersInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutEmployeesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutJobCategoriesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutPermissionSetsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutPersonInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutReviewsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutServiceRequestsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutServicesInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
   workshopJobs: WorkshopJobUpdateManyWithoutWorkshopNestedInput
 }
 
 input WorkshopUpdateWithoutWorkshopJobsInput {
-  addresses: AddressUpdateManyWithoutWorkshopsNestedInput
-  createdAt: NullableDateTimeFieldUpdateOperationsInput
+  address: AddressUpdateOneWithoutWorkshopsNestedInput
+  createdAt: DateTime
   customers: CustomerUpdateManyWithoutWorkshopNestedInput
-  deletedAt: NullableDateTimeFieldUpdateOperationsInput
-  email: NullableStringFieldUpdateOperationsInput
+  deletedAt: DateTime
+  email: String
   employees: EmployeeUpdateManyWithoutWorkshopNestedInput
-  isManagingWork: NullableBoolFieldUpdateOperationsInput
-  isVerified: NullableBoolFieldUpdateOperationsInput
+  isManagingWork: Boolean
+  isVerified: Boolean
   jobCategories: JobCategoryUpdateManyWithoutWorkshopsNestedInput
   permissionSets: PermissionSetUpdateManyWithoutWorkshopNestedInput
   person: PersonUpdateOneRequiredWithoutWorkshopsNestedInput
   reviews: ReviewUpdateManyWithoutWorkshopNestedInput
   serviceRequests: ServiceRequestUpdateManyWithoutWorkshopNestedInput
   services: ServiceUpdateManyWithoutWorkshopNestedInput
-  updatedAt: NullableDateTimeFieldUpdateOperationsInput
+  updatedAt: DateTime
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
 }
 
-input WorkshopUpsertWithWhereUniqueWithoutAddressesInput {
-  create: WorkshopCreateWithoutAddressesInput!
-  update: WorkshopUpdateWithoutAddressesInput!
+input WorkshopUpsertWithWhereUniqueWithoutAddressInput {
+  create: WorkshopCreateWithoutAddressInput!
+  update: WorkshopUpdateWithoutAddressInput!
   where: WorkshopWhereUniqueInput!
 }
 
@@ -7367,7 +7324,8 @@ input WorkshopWhereInput {
   AND: [WorkshopWhereInput!]
   NOT: [WorkshopWhereInput!]
   OR: [WorkshopWhereInput!]
-  addresses: AddressListRelationFilter
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
   createdAt: DateTimeNullableFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter
@@ -7392,7 +7350,8 @@ input WorkshopWhereUniqueInput {
   AND: [WorkshopWhereInput!]
   NOT: [WorkshopWhereInput!]
   OR: [WorkshopWhereInput!]
-  addresses: AddressListRelationFilter
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
   createdAt: DateTimeNullableFilter
   customers: CustomerListRelationFilter
   deletedAt: DateTimeNullableFilter

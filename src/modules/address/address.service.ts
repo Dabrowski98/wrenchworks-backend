@@ -1,31 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { DeletePayload } from 'src/common/payloads/delete.payload';
 import {
   Address,
   AddressCount,
+  AddressUpdateInput,
+  AddressWhereUniqueInput,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
-  FindUniqueAddressArgs,
   UpdateOneAddressArgs,
-} from 'src/@generated/address';
-import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
-import { Person } from 'src/@generated/person';
-import { Workshop } from 'src/@generated/workshop';
+} from './dto';
+import { Person } from '../person/dto';
+import { Workshop } from '../workshop';
 
 @Injectable()
 export class AddressService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAddress(args: CreateOneAddressArgs): Promise<Address> {
-    return this.prisma.address.create(args);
+  async createAddress(//{ 
+    data 
+  //}
+  : CreateOneAddressArgs): Promise<Address> {
+    return this.prisma.address.create(
+      //{
+      data
+    //}
+    );
   }
 
-  async updateAddress(args: UpdateOneAddressArgs): Promise<Address> {
-    const { data, where } = args;
+  async updateAddress(data: AddressUpdateInput, where: AddressWhereUniqueInput): Promise<Address> {
+    const addressId = BigInt(where.addressId);
+    
+    const address = await this.prisma.address.findUnique({
+        where: { addressId }
+    });
+
+    if (!address) {
+        throw new RecordNotFoundError(Address);
+    }
+
     return this.prisma.address.update({
-      where: { addressId: where.addressId },
-      data,
+        data,
+        where: { addressId }
     });
   }
 

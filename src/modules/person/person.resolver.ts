@@ -7,22 +7,16 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { PersonService } from './person.service';
-import {
-  CreateOnePersonArgs,
-  DeleteOnePersonArgs,
-  Person,
-  PersonCount,
-  UpdateOnePersonArgs,
-} from 'src/@generated/person';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
+import { CreateOnePersonArgs, Person, PersonCount, UpdateOnePersonArgs } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { Address } from 'src/@generated/address';
-import { Customer } from 'src/@generated/customer';
-import { Employee } from 'src/@generated/employee';
-import { ServiceRequest } from 'src/@generated/service-request';
-import { User } from 'src/@generated/user';
-import { Vehicle } from 'src/@generated/vehicle';
-import { Workshop } from 'src/@generated/workshop';
+import { DeletePayload } from 'src/common/payloads/delete.payload';
+import { Address } from '../address/dto';
+import { Customer } from '../customer';
+import { Employee } from '../employee';
+import { ServiceRequest } from '../service-request';
+import { User } from '../user';
+import { Vehicle } from '../vehicle';
+import { Workshop } from '../workshop';
 
 @Resolver(() => Person)
 export class PersonResolver {

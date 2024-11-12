@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import { Address } from 'src/@generated/address';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 
 export const existsOrThrowExtension = Prisma.defineExtension({

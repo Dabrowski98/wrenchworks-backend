@@ -7,12 +7,13 @@ generator nestgraphql {
     output = "../src/modules"
     reExport = Directories
     fields_Validator_from = "class-validator"
-    fields_validator_input = true
+    fields_Validator_input = true
     noTypeId = true
     outputFilePattern = "{model}/dto/{name}.{type}.ts"
     fields_Scalars_from = "graphql-scalars"
     fields_Scalars_input = true
     fields_Scalars_output = true
+    noAtomicOperations = true
 }
 
 datasource db {
@@ -26,33 +27,40 @@ model Address{
   /// @FieldType('Scalars.GraphQLBigInt')
   addressId        BigInt           @id @unique @default(autoincrement()) @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Country must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Country is required' })
   /// @Validator.Length(2, 30, { message: 'Country must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Country is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   country          String           @db.VarChar(30)
   /// @Validator.IsString({ message: 'Region must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Region is required' })
   /// @Validator.Length(2, 30, { message: 'Region must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Region is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   region           String           @db.VarChar(30)
   /// @Validator.IsString({ message: 'City must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'City is required' })
   /// @Validator.Length(2, 30, { message: 'City must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'City is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   city             String           @db.VarChar(30)
   /// @Validator.IsString({ message: 'Street must be a string' })
   /// @Validator.Length(2, 30, { message: 'Street must be between 2 and 30 characters' })
+  /// @Validator.IsOptional()
   street           String?          @db.VarChar(30)
   /// @Validator.IsString({ message: 'Building number must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Building number is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Building number is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(1, 6, { message: 'Building number must be between 1 and 6 characters' })
   buildingNo       String           @db.VarChar(6)
   /// @Validator.IsString({ message: 'Flat number must be a string' })
   /// @Validator.Length(1, 6, { message: 'Flat number must be between 1 and 6 characters' })
+  /// @Validator.IsOptional()
   flatNo           String?          @db.VarChar(6)
   /// @Validator.IsString({ message: 'Post code must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Post code is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Post code is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(4, 10, { message: 'Post code must be between 4 and 10 characters' })
   postCode         String           @db.VarChar(10)
   persons          Person[]         
-  workshops        Workshop[]       @relation("AddressWorkshops")
+  workshops        Workshop[]
 }
 
 model Person {
@@ -60,16 +68,19 @@ model Person {
   /// @FieldType('Scalars.GraphQLBigInt')
   personId         BigInt           @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'First name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'First name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'First name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   firstName        String           @db.VarChar(30)
   /// @Validator.IsString({ message: 'Last name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Last name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Last name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
   lastName         String           @db.VarChar(30)
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsOptional()
   telephoneNumber  String?          @db.VarChar(12)
   /// @FieldType('Scalars.GraphQLBigInt')
   addressId        BigInt?          @db.UnsignedBigInt
@@ -90,21 +101,25 @@ model Customer {
   customerId   BigInt     @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId   BigInt     @db.UnsignedBigInt
+  /// @Validator.IsOptional()
   /// @Validator.IsNumber({}, { message: 'Total due must be a number' })
   /// @Validator.Min(0, { message: 'Total due cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Total due cannot exceed 9999999.99' })
   totalDue     Decimal    @default(0.00) @db.Decimal(10, 2)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+  /// @Validator.IsOptional()
   description  String?    @db.VarChar(5000)
   /// @HideField({ match: '@(Customer)@(Create)*Input' })
   deletedAt    DateTime?  @db.Timestamp(0)
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
+  /// @Validator.IsOptional()
   NIP          String?    @db.VarChar(10)
   /// @Validator.IsString({ message: 'Company name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
+  /// @Validator.IsOptional()
   companyName  String?    @db.VarChar(30)
   person       Person     @relation(fields: [customerId], references: [personId], onDelete: NoAction, map: "fk_customerIsPerson")
   workshop     Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
@@ -141,13 +156,15 @@ model JobCategory {
   /// @FieldType('Scalars.GraphQLBigInt')
   categoryId                 BigInt                      @id @unique(map: "category_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
   name                       String                      @db.VarChar(50)
   /// @FieldType('Scalars.GraphQLBigInt')
   parentId                   BigInt?                     @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
+  /// @Validator.IsOptional()
   description                String?                     @db.VarChar(500)
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   isPopular                  Boolean                     @default(false)
@@ -167,9 +184,11 @@ model Job {
   categoryId           BigInt                 @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+  /// @Validator.IsOptional()
   name                 String?                @db.VarChar(50)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
+  /// @Validator.IsOptional()
   description          String?                @db.VarChar(500)
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   isPopular            Boolean                @default(false)
@@ -188,6 +207,7 @@ model PermissionSet {
   workshopId                  BigInt?      @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Set name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Set name must be between 2 and 30 characters' })
+  /// @Validator.IsOptional()
   setName                     String       @default("CUSTOM") @db.VarChar(30)
   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
   canReadWorkshopDetails      Boolean      @default(false)
@@ -246,7 +266,8 @@ model Review {
   /// @Validator.Max(5, { message: 'Rating cannot exceed 5' })
   rating            Decimal             @default(0.00) @db.Decimal(3, 2)
   /// @Validator.IsString({ message: 'Review text must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Review text is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Review text is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
   reviewText        String              @db.VarChar(10000)
   /// @Validator.IsDate({ message: 'Review date must be a valid date' })
@@ -272,7 +293,8 @@ model ReviewResponse {
   /// @FieldType('Scalars.GraphQLBigInt')
   parentResponseId       BigInt?                  @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Response text must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Response text is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]}) 
   /// @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
   responseText           String                   @db.VarChar(5000)
   /// @Validator.IsDate({ message: 'Response date must be a valid date' })
@@ -305,6 +327,7 @@ model ServiceRequest {
   status                ServiceRequestsStatus?    @default(pending)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+  /// @Validator.IsOptional()
   description           String?                   @db.VarChar(5000)
   /// @FieldType('Scalars.GraphQLBigInt')
   approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
@@ -331,9 +354,11 @@ model Task {
   jobId                BigInt?               @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Custom name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Custom name must be between 2 and 50 characters' })
+  /// @Validator.IsOptional()
   customName           String?               @db.VarChar(50)
   /// @Validator.IsString({ message: 'Description must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Description is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Description is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
   description          String                @db.VarChar(2500)
   /// @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
@@ -369,6 +394,7 @@ model Service {
   employeeId          BigInt            @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+  /// @Validator.IsOptional()
   description         String?           @db.VarChar(5000)
   /// @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
   status              ServicesStatus?   @default(pending)
@@ -381,6 +407,7 @@ model Service {
   /// @Validator.IsDate({ message: 'Service start date must be a valid date' })   
   serviceStartDate    DateTime          @default(now()) @db.DateTime(0)
   /// @Validator.IsDate({ message: 'Service end date must be a valid date' })
+  /// @Validator.IsOptional()
   serviceEndDate      DateTime?         @db.DateTime(0)
   updatedAt           DateTime?         @default(now()) @db.Timestamp(0)
   /// @HideField({ match: '@(Service)@(Create)*Input' })
@@ -421,7 +448,8 @@ model UserReport {
   /// @FieldType('Scalars.GraphQLBigInt')
   userId             BigInt                     @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Report text must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Report text is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Report text is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(0, 2500, { message: 'Report text cannot exceed 2500 characters' })
   reportText         String                     @db.VarChar(2500)
   /// @Validator.IsEnum(UserReportsReportedType, { message: 'Invalid reported type' })
@@ -445,18 +473,20 @@ model User {
   /// @FieldType('Scalars.GraphQLBigInt')
   personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Username must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Username is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Username is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
   username          String              @db.VarChar(30)
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Password is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
   /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
   /// Note: Password will be hashed before storage
   password          String              @db.VarChar(255)
-  /// @Validator.IsEmail({ message: 'Invalid email format' })
+  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   email             String?             @db.VarChar(320)
   /// @Validator.IsString({ message: 'Avatar URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Avatar URL cannot exceed 255 characters' })
@@ -519,7 +549,7 @@ model VehicleDetails {
   /// @Validator.IsInt({ message: 'Year of production must be an integer' })
   /// @Validator.Min(1900, { message: 'Year of production must be after 1900' })
   // TODO: Check if this works \/
-  /// @Validator.Max(() => new Date().getFullYear(), { message: 'Year of production cannot be in the future' })
+  /// @Validator.Max(new Date().getFullYear(), { message: 'Year of production cannot be in the future' })
   yearOfProduction  Int?     @db.Int
   /// @Validator.IsString({ message: 'VIN must be a string' })
   /// @Validator.Length(17, 17, { message: 'VIN must be exactly 17 characters' })
@@ -541,7 +571,7 @@ model VehicleDetails {
   /// @Validator.IsString({ message: 'Engine number must be a string' })
   /// @Validator.Length(2, 16, { message: 'Engine number must be between 2 and 16 characters' })
   engineNo          String?   @db.VarChar(16)
-  /// @Validator.IsEnum(Colors, { message: 'Invalid body color' })
+  /// @Validator.IsEnum(BodyColors, { message: 'Invalid body color' })
   bodyColor         BodyColors?
   /// @HideField({ match: '@(VehicleDetails)@(Create)*Input' })
   deletedAt         DateTime? @db.Timestamp(0)
@@ -554,11 +584,13 @@ model VehicleModel {
   /// @FieldType('Scalars.GraphQLBigInt')
   modelId        BigInt          @id @unique(map: "model_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Model name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Model name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Model name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 50, { message: 'Model name must be between 2 and 50 characters' })
   modelName      String          @db.VarChar(50)
   /// @Validator.IsString({ message: 'Brand name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Brand name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Brand name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brandName      String          @db.VarChar(50)
   createdAt      DateTime?       @default(now()) @db.Timestamp(0)
@@ -576,7 +608,9 @@ model Workshop {
   workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   personId                  BigInt                      @db.UnsignedBigInt
-  /// @Validator.IsEmail({ message: 'Invalid email format' })
+  /// @FieldType('Scalars.GraphQLBigInt')
+  addressId                 BigInt?                      @db.UnsignedBigInt
+  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   email                     String?                     @db.VarChar(50)
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   isVerified                Boolean?                    @default(false)
@@ -586,7 +620,7 @@ model Workshop {
   updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   deletedAt                 DateTime?                   @db.Timestamp(0)
-  addresses                 Address[]                   @relation("AddressWorkshops")
+  address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
   customers                 Customer[]
   employees                 Employee[]
   permissionSets            PermissionSet[]
@@ -609,7 +643,8 @@ model WorkshopDetails {
   /// @Validator.Max(5, { message: 'Rating cannot exceed 5' })
   rating           Decimal?                   @default(0.00) @db.Decimal(3, 2)
   /// @Validator.IsString({ message: 'Workshop name must be a string' })
-  /// @Validator.IsNotEmpty({ message: 'Workshop name is required' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Workshop name is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(2, 100, { message: 'Workshop name must be between 2 and 100 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9\s,\-&$]+$/, { message: 'Workshop name can only contain letters, numbers, spaces and signs like , - & $' })
   workshopName     String                    @db.VarChar(100)

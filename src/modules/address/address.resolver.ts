@@ -7,31 +7,42 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AddressService } from './address.service';
-import {
-  Address,
-  AddressCount,
-  CreateOneAddressArgs,
-  DeleteOneAddressArgs,
-  FindUniqueAddressArgs,
-  UpdateOneAddressArgs,
-} from 'src/@generated/address';
-import { Person } from 'src/@generated/person';
-import { DeletePayload } from '../../common/payloads/delete.payload';
-import { Workshop } from 'src/@generated/workshop';
+import { Address, AddressCount, AddressCreateInput, AddressUpdateInput, AddressWhereUniqueInput, CreateOneAddressArgs, UpdateOneAddressArgs } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
+import { DeletePayload } from 'src/common/payloads/delete.payload';
+import { Person } from '../person/dto';
+import { Workshop } from '../workshop';
 
 @Resolver(() => Address)
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
   @Mutation(() => Address)
-  createAddress(@Args() args: CreateOneAddressArgs): Promise<Address> {
-    return this.addressService.createAddress(args);
+  createAddress(
+    @Args(
+      //'data', { type: () => AddressCreateInput }
+      ) data: CreateOneAddressArgs 
+      //AddressCreateInput
+  ): Promise<Address> {
+    return this.addressService.createAddress(//{ 
+      data 
+      //}
+    ); 
   }
 
   @Mutation(() => Address)
-  updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
-    return this.addressService.updateAddress(args);
+  async updateAddress(
+    @Args('data') data: AddressUpdateInput,
+    @Args('where') where: AddressWhereUniqueInput,
+  ) {
+    console.log('Resolver where:', where); // Debug log
+    console.log('Resolver where.addressId:', where.addressId); // Debug log
+    
+    if (!where?.addressId) {
+        throw new Error(`Address ID is required for update. Received: ${JSON.stringify(where)}`);
+    }
+
+    return this.addressService.updateAddress(data, where);
   }
 
   @Query(() => [Address])

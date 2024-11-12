@@ -1,20 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import {
-  CreateOnePersonArgs,
-  UpdateOnePersonArgs,
-  Person,
-  PersonCount,
-} from 'src/@generated/person';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { Address } from 'src/@generated/address';
-import { Customer } from 'src/@generated/customer';
-import { Employee } from 'src/@generated/employee';
-import { ServiceRequest } from 'src/@generated/service-request';
-import { User } from 'src/@generated/user';
-import { Vehicle } from 'src/@generated/vehicle';
-import { Workshop } from 'src/@generated/workshop';
+import { Prisma } from '@prisma/client';
+import {
+  CreateOnePersonArgs,
+  Person,
+  PersonCount,
+  UpdateOnePersonArgs,
+} from './dto';
+import { Address } from '../address/dto';
+import { Customer } from '../customer';
+import { Employee } from '../employee';
+import { ServiceRequest } from '../service-request';
+import { User } from '../user';
+import { Vehicle } from '../vehicle';
+import { Workshop } from '../workshop';
 
 @Injectable()
 export class PersonService {
@@ -25,13 +26,10 @@ export class PersonService {
   }
 
   async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
-    const { data, where } = args;
-    await this.prisma.person.existsOrThrow({ where });
 
-    return this.prisma.person.update({
-      where: { personId: where.personId },
-      data,
-    });
+    await this.prisma.person.existsOrThrow({ where: args.where });
+
+    return this.prisma.person.update(args);
   }
 
   async findAllPersons(): Promise<Person[]> {
