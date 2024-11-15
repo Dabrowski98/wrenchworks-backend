@@ -4,7 +4,8 @@ generator client {
 
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
-    output = "../src/modules"
+    //output = "../src/modules"
+    output = "../generated"
     reExport = Directories
     fields_Validator_from = "class-validator"
     fields_Validator_input = true
@@ -59,7 +60,7 @@ model Address{
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// @Validator.Length(4, 10, { message: 'Post code must be between 4 and 10 characters' })
   postCode         String           @db.VarChar(10)
-  persons          Person[]         
+  persons          Person[]
   workshops        Workshop[]
 }
 
@@ -351,7 +352,7 @@ model Task {
   /// @FieldType('Scalars.GraphQLBigInt')
   serviceId            BigInt                @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  jobId                BigInt?               @db.UnsignedBigInt
+  workshopJobId        BigInt                @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Custom name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Custom name must be between 2 and 50 characters' })
   /// @Validator.IsOptional()
@@ -371,6 +372,7 @@ model Task {
   /// @Validator.Min(0, { message: 'Parts cost cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
+  workshopJob          WorkshopJob           @relation(fields: [workshopJobId], references: [workshopJobId], onDelete: noAction,)
   service              Service              @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
   taskEmployees        EmployeeTask[]
 
@@ -690,7 +692,8 @@ model WorkshopJob {
   maxPrice             Decimal?  @db.Decimal(10, 2)
   /// @Validator.IsBoolean({ message: 'Availability must be a boolean' })
   availability         Boolean   @default(true)
-  job                  Job       @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
+  tasks                Task[]    
+  job                  Job        @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
   workshop             Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
 
   @@unique([workshopId, jobId], map: "workshop_id")
