@@ -9,6 +9,8 @@ import { EmployeeCreateNestedManyWithoutPersonInput } from '../../employee/dto/e
 import { ServiceRequestCreateNestedManyWithoutPersonInput } from '../../service-request/dto/service-request-create-nested-many-without-person.input';
 import { VehicleCreateNestedManyWithoutPersonInput } from '../../vehicle/dto/vehicle-create-nested-many-without-person.input';
 import { WorkshopCreateNestedManyWithoutPersonInput } from '../../workshop/dto/workshop-create-nested-many-without-person.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class PersonCreateWithoutUserInput {

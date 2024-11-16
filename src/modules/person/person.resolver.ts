@@ -7,7 +7,13 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { PersonService } from './person.service';
-import { CreateOnePersonArgs, Person, PersonCount, UpdateOnePersonArgs } from './dto';
+import {
+  CreateOnePersonArgs,
+  Person,
+  PersonCount,
+  PersonCreateInput,
+  UpdateOnePersonArgs,
+} from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { Address } from '../address/dto';
@@ -22,15 +28,19 @@ import { Workshop } from '../workshop';
 export class PersonResolver {
   constructor(private readonly personService: PersonService) {}
 
-  @Mutation(() => Person)
-  createPerson(@Args() args: CreateOnePersonArgs): Promise<Person> {
-    return this.personService.createPerson(args);
-  }
+  // @Mutation(() => Person)
+  // createPerson(
+  //   @Args('data', { type: () => PersonCreateInput }) data: PersonCreateInput,
+  // ): Promise<Person> {
+  //   return this.personService.createPerson({
+  //     data, 
+  //   });
+  // }
 
-  @Mutation(() => Person)
-  updatePerson(@Args() args: UpdateOnePersonArgs): Promise<Person> {
-    return this.personService.updatePerson(args);
-  }
+  // @Mutation(() => Person)
+  // updatePerson(@Args() args: UpdateOnePersonArgs): Promise<Person> {
+  //   return this.personService.updatePerson(args);
+  // }
 
   @Query(() => [Person])
   persons(): Promise<Person[]> {

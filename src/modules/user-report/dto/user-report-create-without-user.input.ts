@@ -5,6 +5,8 @@ import * as Validator from 'class-validator';
 import { UserReportsReportedType } from '../../prisma/dto/user-reports-reported-type.enum';
 import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserReportCreateWithoutUserInput {

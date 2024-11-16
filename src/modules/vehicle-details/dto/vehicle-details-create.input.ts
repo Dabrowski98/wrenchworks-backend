@@ -8,12 +8,10 @@ import { BodyColors } from '../../prisma/dto/body-colors.enum';
 import { HideField } from '@nestjs/graphql';
 import { VehicleCreateNestedOneWithoutVehiclesDetailsInput } from '../../vehicle/dto/vehicle-create-nested-one-without-vehicles-details.input';
 import { Type } from 'class-transformer';
+import { CREATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class VehicleDetailsCreateInput {
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    vehicleDetailsId?: bigint | number;
 
     @Field(() => Int, {nullable:true})
     @Validator.IsInt({ message: 'Year of production must be an integer' })
@@ -57,10 +55,7 @@ export class VehicleDetailsCreateInput {
     @Validator.IsEnum(BodyColors, { message: 'Invalid body color' })
     bodyColor?: keyof typeof BodyColors;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @Field(() => VehicleCreateNestedOneWithoutVehiclesDetailsInput, {nullable:true})
-    @Type(() => VehicleCreateNestedOneWithoutVehiclesDetailsInput)
-    vehicle?: VehicleCreateNestedOneWithoutVehiclesDetailsInput;
+    @Field(() => Scalars.GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Vehicle ID is required' })
+    vehicleId!: bigint;
 }

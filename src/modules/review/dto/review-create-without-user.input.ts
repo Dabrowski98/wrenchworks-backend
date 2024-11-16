@@ -10,6 +10,8 @@ import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewCreateWithoutUserInput {

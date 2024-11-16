@@ -9,6 +9,9 @@ import * as Validator from 'class-validator';
 import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateNestedOneWithoutWorkshopDetailsInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-details.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { GraphQLBigInt } from 'graphql-scalars';
+
 
 @InputType()
 export class WorkshopDetailsCreateInput {
@@ -55,10 +58,7 @@ export class WorkshopDetailsCreateInput {
     @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
     NIP?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @Field(() => WorkshopCreateNestedOneWithoutWorkshopDetailsInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutWorkshopDetailsInput)
-    workshop!: WorkshopCreateNestedOneWithoutWorkshopDetailsInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Workshop ID is required' })
+    workshopId!: bigint;
 }

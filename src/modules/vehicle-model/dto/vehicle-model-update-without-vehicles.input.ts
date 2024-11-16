@@ -3,6 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { VehicleBrandUpdateOneRequiredWithoutVehicleModelsNestedInput } from '../../vehicle-brand/dto/vehicle-brand-update-one-required-without-vehicle-models-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class VehicleModelUpdateWithoutVehiclesInput {

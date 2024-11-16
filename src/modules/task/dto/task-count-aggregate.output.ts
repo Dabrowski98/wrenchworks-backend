@@ -12,7 +12,7 @@ export class TaskCountAggregate {
     serviceId!: number;
 
     @Field(() => Int, {nullable:false})
-    jobId!: number;
+    workshopJobId!: number;
 
     @Field(() => Int, {nullable:false})
     customName!: number;

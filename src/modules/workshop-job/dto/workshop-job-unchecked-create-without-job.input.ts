@@ -7,6 +7,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { TaskUncheckedCreateNestedManyWithoutWorkshopJobInput } from '../../task/dto/task-unchecked-create-nested-many-without-workshop-job.input';
 
 @InputType()
 export class WorkshopJobUncheckedCreateWithoutJobInput {
@@ -41,4 +42,8 @@ export class WorkshopJobUncheckedCreateWithoutJobInput {
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Availability must be a boolean' })
     availability?: boolean;
+
+    @Field(() => TaskUncheckedCreateNestedManyWithoutWorkshopJobInput, {nullable:true})
+    @Type(() => TaskUncheckedCreateNestedManyWithoutWorkshopJobInput)
+    tasks?: TaskUncheckedCreateNestedManyWithoutWorkshopJobInput;
 }

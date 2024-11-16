@@ -10,12 +10,13 @@ import { ServiceRequestCreateNestedManyWithoutPersonInput } from '../../service-
 import { UserCreateNestedOneWithoutPersonInput } from '../../user/dto/user-create-nested-one-without-person.input';
 import { VehicleCreateNestedManyWithoutPersonInput } from '../../vehicle/dto/vehicle-create-nested-many-without-person.input';
 import { WorkshopCreateNestedManyWithoutPersonInput } from '../../workshop/dto/workshop-create-nested-many-without-person.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { ServiceRequestCreateManyPersonInputEnvelope } from 'src/modules/service-request';
+import { VehicleCreateManyPersonInputEnvelope } from 'src/modules/vehicle';
+
 
 @InputType()
 export class PersonCreateInput {
-
-    @HideField()
-    personId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'First name must be a string' })
@@ -38,33 +39,15 @@ export class PersonCreateInput {
     @Validator.IsOptional()
     telephoneNumber?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => AddressCreateNestedOneWithoutPersonsInput, {nullable:true})
     address?: AddressCreateNestedOneWithoutPersonsInput;
 
-    @Field(() => CustomerCreateNestedManyWithoutPersonInput, {nullable:true})
-    @Type(() => CustomerCreateNestedManyWithoutPersonInput)
-    customers?: CustomerCreateNestedManyWithoutPersonInput;
+    @Field(() => ServiceRequestCreateManyPersonInputEnvelope, {nullable:true})
+    @Type(() => ServiceRequestCreateManyPersonInputEnvelope)
+    serviceRequests?: ServiceRequestCreateManyPersonInputEnvelope;
 
-    @Field(() => EmployeeCreateNestedManyWithoutPersonInput, {nullable:true})
-    @Type(() => EmployeeCreateNestedManyWithoutPersonInput)
-    employees?: EmployeeCreateNestedManyWithoutPersonInput;
+    @Field(() => VehicleCreateManyPersonInputEnvelope, {nullable:true})
+    @Type(() => VehicleCreateManyPersonInputEnvelope)
+    vehicles?: VehicleCreateManyPersonInputEnvelope;
 
-    @Field(() => ServiceRequestCreateNestedManyWithoutPersonInput, {nullable:true})
-    @Type(() => ServiceRequestCreateNestedManyWithoutPersonInput)
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutPersonInput;
-
-    @Field(() => UserCreateNestedOneWithoutPersonInput, {nullable:true})
-    @Type(() => UserCreateNestedOneWithoutPersonInput)
-    user?: UserCreateNestedOneWithoutPersonInput;
-
-    @Field(() => VehicleCreateNestedManyWithoutPersonInput, {nullable:true})
-    @Type(() => VehicleCreateNestedManyWithoutPersonInput)
-    vehicles?: VehicleCreateNestedManyWithoutPersonInput;
-
-    @Field(() => WorkshopCreateNestedManyWithoutPersonInput, {nullable:true})
-    @Type(() => WorkshopCreateNestedManyWithoutPersonInput)
-    workshops?: WorkshopCreateNestedManyWithoutPersonInput;
 }

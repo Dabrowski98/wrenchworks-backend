@@ -3,17 +3,13 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
-import { ReviewCreateNestedManyWithoutUserInput } from '../../review/dto/review-create-nested-many-without-user.input';
 import { Type } from 'class-transformer';
-import { ReviewResponseCreateNestedManyWithoutUserInput } from '../../review-response/dto/review-response-create-nested-many-without-user.input';
-import { UserReportCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-create-nested-many-without-user.input';
-import { PersonCreateNestedOneWithoutUserInput } from '../../person/dto/person-create-nested-one-without-user.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { PersonCreateWithoutUserInput } from 'src/modules/person/dto';
+
 
 @InputType()
 export class UserCreateInput {
-
-    @HideField()
-    userId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -48,29 +44,7 @@ export class UserCreateInput {
     @Validator.IsEnum(UsersStatus, { message: 'Invalid user status' })
     status?: keyof typeof UsersStatus;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Created at must be a valid date' })
-    createdAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Updated at must be a valid date' })
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @Field(() => ReviewCreateNestedManyWithoutUserInput, {nullable:true})
-    @Type(() => ReviewCreateNestedManyWithoutUserInput)
-    reviews?: ReviewCreateNestedManyWithoutUserInput;
-
-    @Field(() => ReviewResponseCreateNestedManyWithoutUserInput, {nullable:true})
-    @Type(() => ReviewResponseCreateNestedManyWithoutUserInput)
-    reviewResponses?: ReviewResponseCreateNestedManyWithoutUserInput;
-
-    @Field(() => UserReportCreateNestedManyWithoutUserInput, {nullable:true})
-    userReports?: UserReportCreateNestedManyWithoutUserInput;
-
-    @Field(() => PersonCreateNestedOneWithoutUserInput, {nullable:true})
-    @Type(() => PersonCreateNestedOneWithoutUserInput)
-    person?: PersonCreateNestedOneWithoutUserInput;
+    @Field(() => PersonCreateWithoutUserInput, {nullable:true})
+    @Type(() => PersonCreateWithoutUserInput)
+    person?: PersonCreateWithoutUserInput;
 }

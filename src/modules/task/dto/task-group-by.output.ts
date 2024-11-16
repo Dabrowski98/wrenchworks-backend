@@ -20,8 +20,8 @@ export class TaskGroupBy {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     serviceId!: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    workshopJobId!: bigint | number;
 
     @Field(() => String, {nullable:true})
     customName?: string;

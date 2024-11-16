@@ -21,16 +21,15 @@ import { Workshop } from '../workshop';
 export class PersonService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createPerson(args: CreateOnePersonArgs): Promise<Person> {
-    return this.prisma.person.create(args);
-  }
+  // async createPerson({ data }: CreateOnePersonArgs): Promise<Person> {
+  //   return this.prisma.person.create({ data });
+  // }
 
-  async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
+  // async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
+  //   await this.prisma.person.existsOrThrow({ where: args.where });
 
-    await this.prisma.person.existsOrThrow({ where: args.where });
-
-    return this.prisma.person.update(args);
-  }
+  //   return this.prisma.person.update(args);
+  // }
 
   async findAllPersons(): Promise<Person[]> {
     return this.prisma.person.findMany();

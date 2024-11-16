@@ -18,6 +18,7 @@ export { WorkshopJobAvgOrderByAggregateInput } from './workshop-job-avg-order-by
 export { WorkshopJobCountAggregateInput } from './workshop-job-count-aggregate.input';
 export { WorkshopJobCountAggregate } from './workshop-job-count-aggregate.output';
 export { WorkshopJobCountOrderByAggregateInput } from './workshop-job-count-order-by-aggregate.input';
+export { WorkshopJobCount } from './workshop-job-count.output';
 export { WorkshopJobCreateManyJobInputEnvelope } from './workshop-job-create-many-job-input-envelope.input';
 export { WorkshopJobCreateManyJobInput } from './workshop-job-create-many-job.input';
 export { WorkshopJobCreateManyWorkshopInputEnvelope } from './workshop-job-create-many-workshop-input-envelope.input';
@@ -25,9 +26,12 @@ export { WorkshopJobCreateManyWorkshopInput } from './workshop-job-create-many-w
 export { WorkshopJobCreateManyInput } from './workshop-job-create-many.input';
 export { WorkshopJobCreateNestedManyWithoutJobInput } from './workshop-job-create-nested-many-without-job.input';
 export { WorkshopJobCreateNestedManyWithoutWorkshopInput } from './workshop-job-create-nested-many-without-workshop.input';
+export { WorkshopJobCreateNestedOneWithoutTasksInput } from './workshop-job-create-nested-one-without-tasks.input';
 export { WorkshopJobCreateOrConnectWithoutJobInput } from './workshop-job-create-or-connect-without-job.input';
+export { WorkshopJobCreateOrConnectWithoutTasksInput } from './workshop-job-create-or-connect-without-tasks.input';
 export { WorkshopJobCreateOrConnectWithoutWorkshopInput } from './workshop-job-create-or-connect-without-workshop.input';
 export { WorkshopJobCreateWithoutJobInput } from './workshop-job-create-without-job.input';
+export { WorkshopJobCreateWithoutTasksInput } from './workshop-job-create-without-tasks.input';
 export { WorkshopJobCreateWithoutWorkshopInput } from './workshop-job-create-without-workshop.input';
 export { WorkshopJobCreateInput } from './workshop-job-create.input';
 export { WorkshopJobGroupByArgs } from './workshop-job-group-by.args';
@@ -42,6 +46,7 @@ export { WorkshopJobMinOrderByAggregateInput } from './workshop-job-min-order-by
 export { WorkshopJobOrderByRelationAggregateInput } from './workshop-job-order-by-relation-aggregate.input';
 export { WorkshopJobOrderByWithAggregationInput } from './workshop-job-order-by-with-aggregation.input';
 export { WorkshopJobOrderByWithRelationInput } from './workshop-job-order-by-with-relation.input';
+export { WorkshopJobRelationFilter } from './workshop-job-relation-filter.input';
 export { WorkshopJobScalarFieldEnum } from './workshop-job-scalar-field.enum';
 export { WorkshopJobScalarWhereWithAggregatesInput } from './workshop-job-scalar-where-with-aggregates.input';
 export { WorkshopJobScalarWhereInput } from './workshop-job-scalar-where.input';
@@ -51,6 +56,7 @@ export { WorkshopJobSumOrderByAggregateInput } from './workshop-job-sum-order-by
 export { WorkshopJobUncheckedCreateNestedManyWithoutJobInput } from './workshop-job-unchecked-create-nested-many-without-job.input';
 export { WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput } from './workshop-job-unchecked-create-nested-many-without-workshop.input';
 export { WorkshopJobUncheckedCreateWithoutJobInput } from './workshop-job-unchecked-create-without-job.input';
+export { WorkshopJobUncheckedCreateWithoutTasksInput } from './workshop-job-unchecked-create-without-tasks.input';
 export { WorkshopJobUncheckedCreateWithoutWorkshopInput } from './workshop-job-unchecked-create-without-workshop.input';
 export { WorkshopJobUncheckedCreateInput } from './workshop-job-unchecked-create.input';
 export { WorkshopJobUncheckedUpdateManyWithoutJobNestedInput } from './workshop-job-unchecked-update-many-without-job-nested.input';
@@ -59,6 +65,7 @@ export { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from './work
 export { WorkshopJobUncheckedUpdateManyWithoutWorkshopInput } from './workshop-job-unchecked-update-many-without-workshop.input';
 export { WorkshopJobUncheckedUpdateManyInput } from './workshop-job-unchecked-update-many.input';
 export { WorkshopJobUncheckedUpdateWithoutJobInput } from './workshop-job-unchecked-update-without-job.input';
+export { WorkshopJobUncheckedUpdateWithoutTasksInput } from './workshop-job-unchecked-update-without-tasks.input';
 export { WorkshopJobUncheckedUpdateWithoutWorkshopInput } from './workshop-job-unchecked-update-without-workshop.input';
 export { WorkshopJobUncheckedUpdateInput } from './workshop-job-unchecked-update.input';
 export { WorkshopJobUpdateManyMutationInput } from './workshop-job-update-many-mutation.input';
@@ -66,13 +73,17 @@ export { WorkshopJobUpdateManyWithWhereWithoutJobInput } from './workshop-job-up
 export { WorkshopJobUpdateManyWithWhereWithoutWorkshopInput } from './workshop-job-update-many-with-where-without-workshop.input';
 export { WorkshopJobUpdateManyWithoutJobNestedInput } from './workshop-job-update-many-without-job-nested.input';
 export { WorkshopJobUpdateManyWithoutWorkshopNestedInput } from './workshop-job-update-many-without-workshop-nested.input';
+export { WorkshopJobUpdateOneRequiredWithoutTasksNestedInput } from './workshop-job-update-one-required-without-tasks-nested.input';
+export { WorkshopJobUpdateToOneWithWhereWithoutTasksInput } from './workshop-job-update-to-one-with-where-without-tasks.input';
 export { WorkshopJobUpdateWithWhereUniqueWithoutJobInput } from './workshop-job-update-with-where-unique-without-job.input';
 export { WorkshopJobUpdateWithWhereUniqueWithoutWorkshopInput } from './workshop-job-update-with-where-unique-without-workshop.input';
 export { WorkshopJobUpdateWithoutJobInput } from './workshop-job-update-without-job.input';
+export { WorkshopJobUpdateWithoutTasksInput } from './workshop-job-update-without-tasks.input';
 export { WorkshopJobUpdateWithoutWorkshopInput } from './workshop-job-update-without-workshop.input';
 export { WorkshopJobUpdateInput } from './workshop-job-update.input';
 export { WorkshopJobUpsertWithWhereUniqueWithoutJobInput } from './workshop-job-upsert-with-where-unique-without-job.input';
 export { WorkshopJobUpsertWithWhereUniqueWithoutWorkshopInput } from './workshop-job-upsert-with-where-unique-without-workshop.input';
+export { WorkshopJobUpsertWithoutTasksInput } from './workshop-job-upsert-without-tasks.input';
 export { WorkshopJobWhereUniqueInput } from './workshop-job-where-unique.input';
 export { WorkshopJobWhereInput } from './workshop-job-where.input';
 export { WorkshopJobWorkshopIdJobIdCompoundUniqueInput } from './workshop-job-workshop-id-job-id-compound-unique.input';

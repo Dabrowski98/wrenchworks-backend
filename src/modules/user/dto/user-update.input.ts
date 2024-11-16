@@ -8,6 +8,8 @@ import { Type } from 'class-transformer';
 import { ReviewResponseUpdateManyWithoutUserNestedInput } from '../../review-response/dto/review-response-update-many-without-user-nested.input';
 import { UserReportUpdateManyWithoutUserNestedInput } from '../../user-report/dto/user-report-update-many-without-user-nested.input';
 import { PersonUpdateOneWithoutUserNestedInput } from '../../person/dto/person-update-one-without-user-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserUpdateInput {

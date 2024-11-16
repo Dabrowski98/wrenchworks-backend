@@ -5,6 +5,7 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DecimalNullableFilter } from '../../prisma/dto/decimal-nullable-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
+import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
 import { JobRelationFilter } from '../../job/dto/job-relation-filter.input';
 import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 
@@ -45,6 +46,10 @@ export class WorkshopJobWhereInput {
 
     @Field(() => BoolFilter, {nullable:true})
     availability?: BoolFilter;
+
+    @Field(() => TaskListRelationFilter, {nullable:true})
+    @Type(() => TaskListRelationFilter)
+    tasks?: TaskListRelationFilter;
 
     @Field(() => JobRelationFilter, {nullable:true})
     @Type(() => JobRelationFilter)

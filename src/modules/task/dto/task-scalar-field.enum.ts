@@ -3,7 +3,7 @@ import { registerEnumType } from '@nestjs/graphql';
 export enum TaskScalarFieldEnum {
     taskId = "taskId",
     serviceId = "serviceId",
-    jobId = "jobId",
+    workshopJobId = "workshopJobId",
     customName = "customName",
     description = "description",
     status = "status",

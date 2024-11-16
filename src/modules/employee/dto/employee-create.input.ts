@@ -8,6 +8,7 @@ import { Type } from 'class-transformer';
 import { PersonCreateNestedOneWithoutEmployeesInput } from '../../person/dto/person-create-nested-one-without-employees.input';
 import { ServiceCreateNestedManyWithoutEmployeeInput } from '../../service/dto/service-create-nested-many-without-employee.input';
 import { EmployeeTaskCreateNestedManyWithoutEmployeeInput } from '../../employee-task/dto/employee-task-create-nested-many-without-employee.input';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType()
 export class EmployeeCreateInput {
@@ -16,25 +17,14 @@ export class EmployeeCreateInput {
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     joinedAt?: Date | string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => PermissionSetCreateNestedOneWithoutEmployeesInput, {nullable:true})
     permissionSet?: PermissionSetCreateNestedOneWithoutEmployeesInput;
 
-    @Field(() => WorkshopCreateNestedOneWithoutEmployeesInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutEmployeesInput)
-    workshop!: WorkshopCreateNestedOneWithoutEmployeesInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ message: 'Workshop ID is required' })
+    workshopId!: bigint | number;
 
     @Field(() => PersonCreateNestedOneWithoutEmployeesInput, {nullable:false})
     @Type(() => PersonCreateNestedOneWithoutEmployeesInput)
     person!: PersonCreateNestedOneWithoutEmployeesInput;
-
-    @Field(() => ServiceCreateNestedManyWithoutEmployeeInput, {nullable:true})
-    @Type(() => ServiceCreateNestedManyWithoutEmployeeInput)
-    services?: ServiceCreateNestedManyWithoutEmployeeInput;
-
-    @Field(() => EmployeeTaskCreateNestedManyWithoutEmployeeInput, {nullable:true})
-    @Type(() => EmployeeTaskCreateNestedManyWithoutEmployeeInput)
-    employeeTasks?: EmployeeTaskCreateNestedManyWithoutEmployeeInput;
 }

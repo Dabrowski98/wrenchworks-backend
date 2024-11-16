@@ -8,16 +8,7 @@ import { AddressWhereUniqueInput } from './address-where-unique.input';
 
 @InputType()
 export class AddressCreateNestedOneWithoutPersonsInput {
-
-    @Field(() => AddressCreateWithoutPersonsInput, {nullable:true})
-    @Type(() => AddressCreateWithoutPersonsInput)
-    create?: AddressCreateWithoutPersonsInput;
-
     @Field(() => AddressCreateOrConnectWithoutPersonsInput, {nullable:true})
     @Type(() => AddressCreateOrConnectWithoutPersonsInput)
     connectOrCreate?: AddressCreateOrConnectWithoutPersonsInput;
-
-    @Field(() => AddressWhereUniqueInput, {nullable:true})
-    @Type(() => AddressWhereUniqueInput)
-    connect?: Prisma.AtLeast<AddressWhereUniqueInput, 'addressId'>;
 }

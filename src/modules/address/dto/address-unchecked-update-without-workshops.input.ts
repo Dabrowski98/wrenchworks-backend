@@ -4,6 +4,8 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { PersonUncheckedUpdateManyWithoutAddressNestedInput } from '../../person/dto/person-unchecked-update-many-without-address-nested.input';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class AddressUncheckedUpdateWithoutWorkshopsInput {

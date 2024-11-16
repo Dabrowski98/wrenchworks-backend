@@ -7,12 +7,11 @@ import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-create-nested-one-without-user-reports.input';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserReportCreateInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -25,19 +24,14 @@ export class UserReportCreateInput {
     @Validator.IsEnum(UserReportsReportedType, { message: 'Invalid reported type' })
     reportedType!: keyof typeof UserReportsReportedType;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    reportedId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Reported ID is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    reportedId!: bigint;
 
     @Field(() => UserReportsStatus, {nullable:true})
     @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
     status?: keyof typeof UserReportsStatus;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Created at must be a valid date' })
-    createdAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
 
     @Field(() => UserCreateNestedOneWithoutUserReportsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutUserReportsInput)

@@ -2,7 +2,6 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
-import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { EnumTasksStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-tasks-status-nullable-with-aggregates-filter.input';
@@ -30,8 +29,8 @@ export class TaskScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     serviceId?: BigIntWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
-    jobId?: BigIntNullableWithAggregatesFilter;
+    @Field(() => BigIntWithAggregatesFilter, {nullable:true})
+    workshopJobId?: BigIntWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     customName?: StringNullableWithAggregatesFilter;

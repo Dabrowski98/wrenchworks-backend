@@ -7,6 +7,8 @@ import { ReviewCreateNestedManyWithoutUserInput } from '../../review/dto/review-
 import { Type } from 'class-transformer';
 import { UserReportCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-create-nested-many-without-user.input';
 import { PersonCreateNestedOneWithoutUserInput } from '../../person/dto/person-create-nested-one-without-user.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserCreateWithoutReviewResponsesInput {

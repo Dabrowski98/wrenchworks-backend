@@ -1,8 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
-import * as Validator from 'class-validator';
 import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
 import { Float } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -10,17 +8,16 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { WorkshopJobCreateNestedOneWithoutTasksInput } from '../../workshop-job/dto/workshop-job-create-nested-one-without-tasks.input';
 import { ServiceCreateNestedOneWithoutTasksInput } from '../../service/dto/service-create-nested-one-without-tasks.input';
 import { EmployeeTaskCreateNestedManyWithoutTaskInput } from '../../employee-task/dto/employee-task-create-nested-many-without-task.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import * as Scalars from 'graphql-scalars';
+import * as Validator from 'class-validator';
+import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
 
 @InputType()
 export class TaskCreateInput {
-
-    @HideField()
-    taskId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -53,11 +50,20 @@ export class TaskCreateInput {
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
     partsCost?: Decimal;
 
-    @Field(() => ServiceCreateNestedOneWithoutTasksInput, {nullable:false})
-    @Type(() => ServiceCreateNestedOneWithoutTasksInput)
-    service!: ServiceCreateNestedOneWithoutTasksInput;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    @Validator.IsNotEmpty({ message: 'Workshop Job ID is required' })
+    workshopJobId!: bigint | number;
 
-    @Field(() => EmployeeTaskCreateNestedManyWithoutTaskInput, {nullable:true})
-    @Type(() => EmployeeTaskCreateNestedManyWithoutTaskInput)
-    taskEmployees?: EmployeeTaskCreateNestedManyWithoutTaskInput;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    @Validator.IsNotEmpty({ message: 'Service ID is required' })
+    serviceId!: bigint | number;
+
+    @Field(() => [EmployeeEmployeeIdWorkshopIdCompoundUniqueInput], { nullable: true })
+    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
+    @Validator.IsOptional()
+    @Validator.IsArray({ message: 'Employee assignments must be an array' })
+    @Validator.ArrayNotEmpty({ message: 'Employee assignments cannot be empty' })
+    @Validator.ValidateNested({ each: true })
+    employeeId_WorkshopIds?: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput[];
+    
 }

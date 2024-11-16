@@ -8,16 +8,7 @@ import { VehicleBrandWhereUniqueInput } from './vehicle-brand-where-unique.input
 
 @InputType()
 export class VehicleBrandCreateNestedOneWithoutVehicleModelsInput {
-
-    @Field(() => VehicleBrandCreateWithoutVehicleModelsInput, {nullable:true})
-    @Type(() => VehicleBrandCreateWithoutVehicleModelsInput)
-    create?: VehicleBrandCreateWithoutVehicleModelsInput;
-
     @Field(() => VehicleBrandCreateOrConnectWithoutVehicleModelsInput, {nullable:true})
     @Type(() => VehicleBrandCreateOrConnectWithoutVehicleModelsInput)
     connectOrCreate?: VehicleBrandCreateOrConnectWithoutVehicleModelsInput;
-
-    @Field(() => VehicleBrandWhereUniqueInput, {nullable:true})
-    @Type(() => VehicleBrandWhereUniqueInput)
-    connect?: Prisma.AtLeast<VehicleBrandWhereUniqueInput, 'brandName'>;
 }

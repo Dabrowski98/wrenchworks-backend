@@ -3,6 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserUncheckedUpdateManyInput {

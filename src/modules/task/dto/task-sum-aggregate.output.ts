@@ -15,7 +15,7 @@ export class TaskSumAggregate {
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
+    workshopJobId?: bigint | number;
 
     @Field(() => Float, {nullable:true})
     executionTime?: number;

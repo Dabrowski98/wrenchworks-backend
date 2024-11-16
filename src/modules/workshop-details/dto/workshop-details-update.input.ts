@@ -8,6 +8,8 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
 import { WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-details-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopDetailsUpdateInput {

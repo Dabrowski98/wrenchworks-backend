@@ -7,6 +7,7 @@ import { Type } from 'class-transformer';
 import { WorkshopUpdateManyWithoutAddressNestedInput } from '../../workshop/dto/workshop-update-many-without-address-nested.input';
 import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
+
 @InputType()
 export class AddressUpdateInput {
 

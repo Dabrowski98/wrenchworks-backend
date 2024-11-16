@@ -7,12 +7,13 @@ import { JobCategoryCreateNestedManyWithoutChildInput } from './job-category-cre
 import { JobCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-create-nested-many-without-job-category.input';
 import { Type } from 'class-transformer';
 import { WorkshopCreateNestedManyWithoutJobCategoriesInput } from '../../workshop/dto/workshop-create-nested-many-without-job-categories.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { JobCategoryCreateManyChildInputEnvelope } from './job-category-create-many-child-input-envelope.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+
 
 @InputType()
 export class JobCategoryCreateInput {
-
-    @HideField()
-    categoryId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -31,17 +32,10 @@ export class JobCategoryCreateInput {
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
     isPopular?: boolean;
 
-    @Field(() => JobCategoryCreateNestedOneWithoutChildrenInput, {nullable:true})
-    child?: JobCategoryCreateNestedOneWithoutChildrenInput;
+    @Field(() => GraphQLBigInt, { nullable: true })
+    parentJobCategoryId?: bigint;
 
-    @Field(() => JobCategoryCreateNestedManyWithoutChildInput, {nullable:true})
-    children?: JobCategoryCreateNestedManyWithoutChildInput;
-
-    @Field(() => JobCreateNestedManyWithoutJobCategoryInput, {nullable:true})
-    @Type(() => JobCreateNestedManyWithoutJobCategoryInput)
-    jobs?: JobCreateNestedManyWithoutJobCategoryInput;
-
-    @Field(() => WorkshopCreateNestedManyWithoutJobCategoriesInput, {nullable:true})
-    @Type(() => WorkshopCreateNestedManyWithoutJobCategoriesInput)
-    Workshops?: WorkshopCreateNestedManyWithoutJobCategoriesInput;
+    @Field(() => JobCategoryCreateManyChildInputEnvelope, {nullable:true})
+    @Type(() => JobCategoryCreateManyChildInputEnvelope)
+    children?: JobCategoryCreateManyChildInputEnvelope;
 }

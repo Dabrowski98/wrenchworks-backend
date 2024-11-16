@@ -7,7 +7,15 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AddressService } from './address.service';
-import { Address, AddressCount, AddressCreateInput, AddressUpdateInput, AddressWhereUniqueInput, CreateOneAddressArgs, UpdateOneAddressArgs } from './dto';
+import {
+  Address,
+  AddressCount,
+  AddressCreateInput,
+  AddressUpdateInput,
+  AddressWhereUniqueInput,
+  CreateOneAddressArgs,
+  UpdateOneAddressArgs,
+} from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { Person } from '../person/dto';
@@ -19,31 +27,26 @@ export class AddressResolver {
 
   @Mutation(() => Address)
   createAddress(
-    @Args(
-      //'data', { type: () => AddressCreateInput }
-      ) data: CreateOneAddressArgs 
-      //AddressCreateInput
+    @Args('data', { type: () => AddressCreateInput }) data: AddressCreateInput,
   ): Promise<Address> {
-    return this.addressService.createAddress(//{ 
-      data 
-      //}
-    ); 
+    return this.addressService.createAddress({
+      data,
+    });
   }
 
-  @Mutation(() => Address)
-  async updateAddress(
-    @Args('data') data: AddressUpdateInput,
-    @Args('where') where: AddressWhereUniqueInput,
-  ) {
-    console.log('Resolver where:', where); // Debug log
-    console.log('Resolver where.addressId:', where.addressId); // Debug log
-    
-    if (!where?.addressId) {
-        throw new Error(`Address ID is required for update. Received: ${JSON.stringify(where)}`);
-    }
+  // @Mutation(() => Address)
+  // async updateAddress(
+  //   @Args('data') data: AddressUpdateInput,
+  //   @Args('where') where: AddressWhereUniqueInput,
+  // ) {
+  //   if (!where?.addressId) {
+  //     throw new Error(
+  //       `Address ID is required for update. Received: ${JSON.stringify(where)}`,
+  //     );
+  //   }
 
-    return this.addressService.updateAddress(data, where);
-  }
+  //   return this.addressService.updateAddress(data, where);
+  // }
 
   @Query(() => [Address])
   addresses(): Promise<Address[]> {

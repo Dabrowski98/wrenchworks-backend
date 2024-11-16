@@ -6,6 +6,8 @@ import { UsersStatus } from '../../prisma/dto/users-status.enum';
 import { ReviewUncheckedCreateNestedManyWithoutUserInput } from '../../review/dto/review-unchecked-create-nested-many-without-user.input';
 import { Type } from 'class-transformer';
 import { UserReportUncheckedCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-unchecked-create-nested-many-without-user.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserUncheckedCreateWithoutReviewResponsesInput {

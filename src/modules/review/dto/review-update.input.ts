@@ -11,6 +11,8 @@ import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserUpdateOneRequiredWithoutReviewsNestedInput } from '../../user/dto/user-update-one-required-without-reviews-nested.input';
 import { WorkshopUpdateOneRequiredWithoutReviewsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-reviews-nested.input';
 import { ReviewResponseUpdateManyWithoutReviewNestedInput } from '../../review-response/dto/review-response-update-many-without-review-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewUpdateInput {

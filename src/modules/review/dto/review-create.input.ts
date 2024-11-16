@@ -11,12 +11,12 @@ import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserCreateNestedOneWithoutReviewsInput } from '../../user/dto/user-create-nested-one-without-reviews.input';
 import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { GraphQLBigInt } from 'graphql-scalars';
+
 
 @InputType()
 export class ReviewCreateInput {
-
-    @HideField()
-    reviewId?: bigint | number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -33,23 +33,17 @@ export class ReviewCreateInput {
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     reviewText!: string;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Review date must be a valid date' })
-    reviewDate?: Date | string;
-
     @Field(() => ReviewsStatus, {nullable:true})
     @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
     status?: keyof typeof ReviewsStatus;
 
-    @Field(() => UserCreateNestedOneWithoutReviewsInput, {nullable:false})
-    @Type(() => UserCreateNestedOneWithoutReviewsInput)
-    user!: UserCreateNestedOneWithoutReviewsInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'User ID is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    userId!: bigint;
 
-    @Field(() => WorkshopCreateNestedOneWithoutReviewsInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutReviewsInput)
-    workshop!: WorkshopCreateNestedOneWithoutReviewsInput;
-
-    @Field(() => ReviewResponseCreateNestedManyWithoutReviewInput, {nullable:true})
-    @Type(() => ReviewResponseCreateNestedManyWithoutReviewInput)
-    reviewResponses?: ReviewResponseCreateNestedManyWithoutReviewInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'WorkshopId is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    workshopId!: bigint;
 }

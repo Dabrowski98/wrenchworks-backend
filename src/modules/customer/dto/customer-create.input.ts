@@ -10,6 +10,8 @@ import { HideField } from '@nestjs/graphql';
 import { PersonCreateNestedOneWithoutCustomersInput } from '../../person/dto/person-create-nested-one-without-customers.input';
 import { WorkshopCreateNestedOneWithoutCustomersInput } from '../../workshop/dto/workshop-create-nested-one-without-customers.input';
 import { ServiceCreateNestedManyWithoutCustomerInput } from '../../service/dto/service-create-nested-many-without-customer.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+import { CREATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class CustomerCreateInput {
@@ -29,9 +31,6 @@ export class CustomerCreateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'NIP must be a string' })
     @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
@@ -49,9 +48,9 @@ export class CustomerCreateInput {
     @Type(() => PersonCreateNestedOneWithoutCustomersInput)
     person!: PersonCreateNestedOneWithoutCustomersInput;
 
-    @Field(() => WorkshopCreateNestedOneWithoutCustomersInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutCustomersInput)
-    workshop!: WorkshopCreateNestedOneWithoutCustomersInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Workshop ID is required' })
+    workshopId!: bigint;
 
     @Field(() => ServiceCreateNestedManyWithoutCustomerInput, {nullable:true})
     @Type(() => ServiceCreateNestedManyWithoutCustomerInput)

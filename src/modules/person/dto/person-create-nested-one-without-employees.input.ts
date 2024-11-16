@@ -9,15 +9,8 @@ import { PersonWhereUniqueInput } from './person-where-unique.input';
 @InputType()
 export class PersonCreateNestedOneWithoutEmployeesInput {
 
-    @Field(() => PersonCreateWithoutEmployeesInput, {nullable:true})
-    @Type(() => PersonCreateWithoutEmployeesInput)
-    create?: PersonCreateWithoutEmployeesInput;
-
     @Field(() => PersonCreateOrConnectWithoutEmployeesInput, {nullable:true})
     @Type(() => PersonCreateOrConnectWithoutEmployeesInput)
     connectOrCreate?: PersonCreateOrConnectWithoutEmployeesInput;
 
-    @Field(() => PersonWhereUniqueInput, {nullable:true})
-    @Type(() => PersonWhereUniqueInput)
-    connect?: Prisma.AtLeast<PersonWhereUniqueInput, 'personId'>;
 }

@@ -7,6 +7,8 @@ import { ReviewResponseUpdateManyWithoutReviewResponseNestedInput } from './revi
 import { Type } from 'class-transformer';
 import { ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../review/dto/review-update-one-required-without-review-responses-nested.input';
 import { UserUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../user/dto/user-update-one-required-without-review-responses-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseUpdateWithoutReviewResponseInput {

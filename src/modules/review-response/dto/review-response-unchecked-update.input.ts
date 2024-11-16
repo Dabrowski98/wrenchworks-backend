@@ -5,6 +5,8 @@ import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { ReviewResponseUncheckedUpdateManyWithoutReviewResponseNestedInput } from './review-response-unchecked-update-many-without-review-response-nested.input';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseUncheckedUpdateInput {

@@ -9,14 +9,6 @@ import { ReviewWhereUniqueInput } from './review-where-unique.input';
 @InputType()
 export class ReviewCreateNestedOneWithoutReviewResponsesInput {
 
-    @Field(() => ReviewCreateWithoutReviewResponsesInput, {nullable:true})
-    @Type(() => ReviewCreateWithoutReviewResponsesInput)
-    create?: ReviewCreateWithoutReviewResponsesInput;
-
-    @Field(() => ReviewCreateOrConnectWithoutReviewResponsesInput, {nullable:true})
-    @Type(() => ReviewCreateOrConnectWithoutReviewResponsesInput)
-    connectOrCreate?: ReviewCreateOrConnectWithoutReviewResponsesInput;
-
     @Field(() => ReviewWhereUniqueInput, {nullable:true})
     @Type(() => ReviewWhereUniqueInput)
     connect?: Prisma.AtLeast<ReviewWhereUniqueInput, 'reviewId'>;

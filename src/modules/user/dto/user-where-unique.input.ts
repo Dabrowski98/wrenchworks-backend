@@ -13,6 +13,8 @@ import { Type } from 'class-transformer';
 import { ReviewResponseListRelationFilter } from '../../review-response/dto/review-response-list-relation-filter.input';
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { PersonNullableRelationFilter } from '../../person/dto/person-nullable-relation-filter.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class UserWhereUniqueInput {

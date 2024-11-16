@@ -9,14 +9,6 @@ import { WorkshopWhereUniqueInput } from './workshop-where-unique.input';
 @InputType()
 export class WorkshopCreateNestedOneWithoutReviewsInput {
 
-    @Field(() => WorkshopCreateWithoutReviewsInput, {nullable:true})
-    @Type(() => WorkshopCreateWithoutReviewsInput)
-    create?: WorkshopCreateWithoutReviewsInput;
-
-    @Field(() => WorkshopCreateOrConnectWithoutReviewsInput, {nullable:true})
-    @Type(() => WorkshopCreateOrConnectWithoutReviewsInput)
-    connectOrCreate?: WorkshopCreateOrConnectWithoutReviewsInput;
-
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId'>;

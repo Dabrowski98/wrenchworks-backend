@@ -14,12 +14,13 @@ import { PersonCreateNestedOneWithoutWorkshopsInput } from '../../person/dto/per
 import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { WorkshopDetailsCreateWithoutWorkshopInput } from 'src/modules/workshop-details';
+import { WorkshopJobCreateManyWorkshopInputEnvelope } from 'src/modules/workshop-job';
 
 @InputType()
 export class WorkshopCreateInput {
-
-    @HideField()
-    workshopId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -33,53 +34,26 @@ export class WorkshopCreateInput {
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     isManagingWork?: boolean;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => AddressCreateNestedOneWithoutWorkshopsInput, {nullable:true})
     address?: AddressCreateNestedOneWithoutWorkshopsInput;
 
-    @Field(() => CustomerCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => CustomerCreateNestedManyWithoutWorkshopInput)
-    customers?: CustomerCreateNestedManyWithoutWorkshopInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Person ID is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    personId!: bigint;
 
-    @Field(() => EmployeeCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => EmployeeCreateNestedManyWithoutWorkshopInput)
-    employees?: EmployeeCreateNestedManyWithoutWorkshopInput;
+    @Field(() => WorkshopDetailsCreateWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDetailsCreateWithoutWorkshopInput)
+    workshopDetails?: WorkshopDetailsCreateWithoutWorkshopInput;
 
-    @Field(() => PermissionSetCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    permissionSets?: PermissionSetCreateNestedManyWithoutWorkshopInput;
+    @Field(() => WorkshopJobCreateManyWorkshopInputEnvelope, {nullable:true})
+    @Type(() => WorkshopJobCreateManyWorkshopInputEnvelope)
+    workshopJobs?: WorkshopJobCreateManyWorkshopInputEnvelope;
 
-    @Field(() => ReviewCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ReviewCreateNestedManyWithoutWorkshopInput)
-    reviews?: ReviewCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => ServiceRequestCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ServiceRequestCreateNestedManyWithoutWorkshopInput)
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => ServiceCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ServiceCreateNestedManyWithoutWorkshopInput)
-    services?: ServiceCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => PersonCreateNestedOneWithoutWorkshopsInput, {nullable:false})
-    @Type(() => PersonCreateNestedOneWithoutWorkshopsInput)
-    person!: PersonCreateNestedOneWithoutWorkshopsInput;
-
-    @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput)
-    workshopDetails?: WorkshopDetailsCreateNestedOneWithoutWorkshopInput;
-
-    @Field(() => WorkshopJobCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopJobCreateNestedManyWithoutWorkshopInput)
-    workshopJobs?: WorkshopJobCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => JobCategoryCreateNestedManyWithoutWorkshopsInput, {nullable:true})
-    jobCategories?: JobCategoryCreateNestedManyWithoutWorkshopsInput;
+    @Field(() => [GraphQLBigInt], { nullable: true })
+    @Validator.IsOptional()
+    @Validator.IsArray({ message: 'Category IDs must be an array' })
+    @Validator.ArrayNotEmpty({ message: 'Category IDs array cannot be empty' })
+    categoryIds?: bigint[];
+ 
 }

@@ -9,15 +9,8 @@ import { JobCategoryWhereUniqueInput } from './job-category-where-unique.input';
 @InputType()
 export class JobCategoryCreateNestedOneWithoutJobsInput {
 
-    @Field(() => JobCategoryCreateWithoutJobsInput, {nullable:true})
-    @Type(() => JobCategoryCreateWithoutJobsInput)
-    create?: JobCategoryCreateWithoutJobsInput;
-
     @Field(() => JobCategoryCreateOrConnectWithoutJobsInput, {nullable:true})
     @Type(() => JobCategoryCreateOrConnectWithoutJobsInput)
     connectOrCreate?: JobCategoryCreateOrConnectWithoutJobsInput;
-
-    @Field(() => JobCategoryWhereUniqueInput, {nullable:true})
-    @Type(() => JobCategoryWhereUniqueInput)
-    connect?: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
+    
 }

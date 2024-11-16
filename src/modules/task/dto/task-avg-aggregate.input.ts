@@ -11,7 +11,7 @@ export class TaskAvgAggregateInput {
     serviceId?: true;
 
     @Field(() => Boolean, {nullable:true})
-    jobId?: true;
+    workshopJobId?: true;
 
     @Field(() => Boolean, {nullable:true})
     executionTime?: true;

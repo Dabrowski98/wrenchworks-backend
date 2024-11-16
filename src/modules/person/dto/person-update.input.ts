@@ -10,6 +10,8 @@ import { ServiceRequestUpdateManyWithoutPersonNestedInput } from '../../service-
 import { UserUpdateOneWithoutPersonNestedInput } from '../../user/dto/user-update-one-without-person-nested.input';
 import { VehicleUpdateManyWithoutPersonNestedInput } from '../../vehicle/dto/vehicle-update-many-without-person-nested.input';
 import { WorkshopUpdateManyWithoutPersonNestedInput } from '../../workshop/dto/workshop-update-many-without-person-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class PersonUpdateInput {

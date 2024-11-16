@@ -18,8 +18,8 @@ export class TaskOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     serviceId?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    jobId?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    workshopJobId?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     customName?: SortOrderInput;

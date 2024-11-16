@@ -8,6 +8,8 @@ import { EmployeeUncheckedUpdateManyWithoutPersonNestedInput } from '../../emplo
 import { ServiceRequestUncheckedUpdateManyWithoutPersonNestedInput } from '../../service-request/dto/service-request-unchecked-update-many-without-person-nested.input';
 import { UserUncheckedUpdateOneWithoutPersonNestedInput } from '../../user/dto/user-unchecked-update-one-without-person-nested.input';
 import { WorkshopUncheckedUpdateManyWithoutPersonNestedInput } from '../../workshop/dto/workshop-unchecked-update-many-without-person-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class PersonUncheckedUpdateWithoutVehiclesInput {

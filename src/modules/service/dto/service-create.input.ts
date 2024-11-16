@@ -15,37 +15,19 @@ import { CustomerCreateNestedOneWithoutServicesInput } from '../../customer/dto/
 import { EmployeeCreateNestedOneWithoutServicesInput } from '../../employee/dto/employee-create-nested-one-without-services.input';
 import { VehicleCreateNestedOneWithoutServicesInput } from '../../vehicle/dto/vehicle-create-nested-one-without-services.input';
 import { WorkshopCreateNestedOneWithoutServicesInput } from '../../workshop/dto/workshop-create-nested-one-without-services.input';
+import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
+import { CustomerCustomerIdWorkshopIdCompoundUniqueInput } from 'src/modules/customer';
+import { TaskCreateManyServiceInputEnvelope } from 'src/modules/task';
 
 @InputType()
 export class ServiceCreateInput {
 
-    @HideField()
-    serviceId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    serviceRequestId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
     @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
     @Validator.IsOptional()
     description?: string;
-
-    @Field(() => ServicesStatus, {nullable:true})
-    @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
-    status?: keyof typeof ServicesStatus;
-
-    @Field(() => Boolean, {nullable:true})
-    @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
-    payedOff?: boolean;
-
-    @Field(() => GraphQLDecimal, {nullable:true})
-    @Type(() => Object)
-    @Transform(transformToDecimal)
-    @Validator.IsNumber({}, { message: 'Payment amount must be a number' })
-    @Validator.Min(0, { message: 'Payment amount cannot be negative' })
-    @Validator.Max(9999999.99, { message: 'Payment amount cannot exceed 9999999.99' })
-    paymentAmount?: Decimal;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service start date must be a valid date' })
@@ -56,33 +38,27 @@ export class ServiceCreateInput {
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    serviceRequestId?: bigint | number;
 
-    @HideField()
-    deletedAt?: Date | string;
+    @Field(() => TaskCreateManyServiceInputEnvelope, {nullable:true})
+    @Type(() => TaskCreateManyServiceInputEnvelope)
+    tasks?: TaskCreateManyServiceInputEnvelope;
 
-    @Field(() => ServiceRequestCreateNestedOneWithoutApprovedServiceInput, {nullable:true})
-    @Type(() => ServiceRequestCreateNestedOneWithoutApprovedServiceInput)
-    serviceRequest?: ServiceRequestCreateNestedOneWithoutApprovedServiceInput;
+    @Field(() => CustomerCustomerIdWorkshopIdCompoundUniqueInput, {nullable:false}) 
+    @Type(() => CustomerCustomerIdWorkshopIdCompoundUniqueInput)
+    customerId_workshopId!: CustomerCustomerIdWorkshopIdCompoundUniqueInput;
 
-    @Field(() => TaskCreateNestedManyWithoutServiceInput, {nullable:true})
-    @Type(() => TaskCreateNestedManyWithoutServiceInput)
-    tasks?: TaskCreateNestedManyWithoutServiceInput;
+    @Field(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput, {nullable:false})
+    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
+    employeeId_workshopId!: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput;
 
-    @Field(() => CustomerCreateNestedOneWithoutServicesInput, {nullable:false})
-    @Type(() => CustomerCreateNestedOneWithoutServicesInput)
-    customer!: CustomerCreateNestedOneWithoutServicesInput;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    @Validator.IsNotEmpty({ message: 'Vehicle ID is required' })
+    vehicleId!: bigint | number;
 
-    @Field(() => EmployeeCreateNestedOneWithoutServicesInput, {nullable:false})
-    @Type(() => EmployeeCreateNestedOneWithoutServicesInput)
-    employee!: EmployeeCreateNestedOneWithoutServicesInput;
-
-    @Field(() => VehicleCreateNestedOneWithoutServicesInput, {nullable:false})
-    @Type(() => VehicleCreateNestedOneWithoutServicesInput)
-    vehicle!: VehicleCreateNestedOneWithoutServicesInput;
-
-    @Field(() => WorkshopCreateNestedOneWithoutServicesInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutServicesInput)
-    workshop!: WorkshopCreateNestedOneWithoutServicesInput;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    @Validator.IsNotEmpty({ message: 'Workshop ID is required' })
+    workshopId!: bigint | number;
 }

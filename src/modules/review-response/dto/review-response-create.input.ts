@@ -8,12 +8,12 @@ import { Type } from 'class-transformer';
 import { ReviewResponseCreateNestedManyWithoutReviewResponseInput } from './review-response-create-nested-many-without-review-response.input';
 import { ReviewCreateNestedOneWithoutReviewResponsesInput } from '../../review/dto/review-create-nested-one-without-review-responses.input';
 import { UserCreateNestedOneWithoutReviewResponsesInput } from '../../user/dto/user-create-nested-one-without-review-responses.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { GraphQLBigInt } from 'graphql-scalars';
+
 
 @InputType()
 export class ReviewResponseCreateInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
@@ -22,27 +22,20 @@ export class ReviewResponseCreateInput {
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText!: string;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Response date must be a valid date' })
-    responseDate?: Date | string;
-
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
     status?: keyof typeof ReviewsResponsesStatus;
 
-    @Field(() => ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput, {nullable:true})
-    @Type(() => ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput)
-    reviewResponse?: ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput;
-
-    @Field(() => ReviewResponseCreateNestedManyWithoutReviewResponseInput, {nullable:true})
-    @Type(() => ReviewResponseCreateNestedManyWithoutReviewResponseInput)
-    otherReviewResponses?: ReviewResponseCreateNestedManyWithoutReviewResponseInput;
-
-    @Field(() => ReviewCreateNestedOneWithoutReviewResponsesInput, {nullable:false})
-    @Type(() => ReviewCreateNestedOneWithoutReviewResponsesInput)
-    review!: ReviewCreateNestedOneWithoutReviewResponsesInput;
-
-    @Field(() => UserCreateNestedOneWithoutReviewResponsesInput, {nullable:false})
-    @Type(() => UserCreateNestedOneWithoutReviewResponsesInput)
-    user!: UserCreateNestedOneWithoutReviewResponsesInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review ID is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    reviewId!: bigint;
+  
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'User ID is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    userId!: bigint;
+  
+    @Field(() => GraphQLBigInt, { nullable: true })
+    parentResponseId?: bigint;
 }

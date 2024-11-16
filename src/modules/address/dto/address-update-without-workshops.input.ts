@@ -4,6 +4,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { PersonUpdateManyWithoutAddressNestedInput } from '../../person/dto/person-update-many-without-address-nested.input';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class AddressUpdateWithoutWorkshopsInput {

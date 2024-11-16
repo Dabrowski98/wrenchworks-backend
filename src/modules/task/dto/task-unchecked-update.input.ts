@@ -10,6 +10,8 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { EmployeeTaskUncheckedUpdateManyWithoutTaskNestedInput } from '../../employee-task/dto/employee-task-unchecked-update-many-without-task-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class TaskUncheckedUpdateInput {
@@ -21,7 +23,7 @@ export class TaskUncheckedUpdateInput {
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
+    workshopJobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })

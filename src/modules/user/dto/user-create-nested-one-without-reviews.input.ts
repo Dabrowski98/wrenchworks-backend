@@ -9,14 +9,6 @@ import { UserWhereUniqueInput } from './user-where-unique.input';
 @InputType()
 export class UserCreateNestedOneWithoutReviewsInput {
 
-    @Field(() => UserCreateWithoutReviewsInput, {nullable:true})
-    @Type(() => UserCreateWithoutReviewsInput)
-    create?: UserCreateWithoutReviewsInput;
-
-    @Field(() => UserCreateOrConnectWithoutReviewsInput, {nullable:true})
-    @Type(() => UserCreateOrConnectWithoutReviewsInput)
-    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput;
-
     @Field(() => UserWhereUniqueInput, {nullable:true})
     @Type(() => UserWhereUniqueInput)
     connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'personId' | 'username' | 'username'>;

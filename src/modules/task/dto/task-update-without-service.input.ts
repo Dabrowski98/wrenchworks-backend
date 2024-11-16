@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
 import { Float } from '@nestjs/graphql';
@@ -10,16 +9,16 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { WorkshopJobUpdateOneRequiredWithoutTasksNestedInput } from '../../workshop-job/dto/workshop-job-update-one-required-without-tasks-nested.input';
 import { EmployeeTaskUpdateManyWithoutTaskNestedInput } from '../../employee-task/dto/employee-task-update-many-without-task-nested.input';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class TaskUpdateWithoutServiceInput {
 
     @HideField()
     taskId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -51,6 +50,10 @@ export class TaskUpdateWithoutServiceInput {
     @Validator.Min(0, { message: 'Parts cost cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
     partsCost?: Decimal;
+
+    @Field(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput, {nullable:true})
+    @Type(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput)
+    workshopJob?: WorkshopJobUpdateOneRequiredWithoutTasksNestedInput;
 
     @Field(() => EmployeeTaskUpdateManyWithoutTaskNestedInput, {nullable:true})
     @Type(() => EmployeeTaskUpdateManyWithoutTaskNestedInput)

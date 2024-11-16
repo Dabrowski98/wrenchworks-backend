@@ -4,6 +4,8 @@ import * as Validator from 'class-validator';
 import { EmployeeCreateNestedManyWithoutPermissionSetInput } from '../../employee/dto/employee-create-nested-many-without-permission-set.input';
 import { Type } from 'class-transformer';
 import { WorkshopCreateNestedOneWithoutPermissionSetsInput } from '../../workshop/dto/workshop-create-nested-one-without-permission-sets.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+import { CREATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class PermissionSetCreateInput {
@@ -86,11 +88,7 @@ export class PermissionSetCreateInput {
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyPermissions?: boolean;
 
-    @Field(() => EmployeeCreateNestedManyWithoutPermissionSetInput, {nullable:true})
-    @Type(() => EmployeeCreateNestedManyWithoutPermissionSetInput)
-    employees?: EmployeeCreateNestedManyWithoutPermissionSetInput;
-
-    @Field(() => WorkshopCreateNestedOneWithoutPermissionSetsInput, {nullable:true})
-    @Type(() => WorkshopCreateNestedOneWithoutPermissionSetsInput)
-    workshop?: WorkshopCreateNestedOneWithoutPermissionSetsInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ message: 'Workshop ID is required' })
+    workshopId!: bigint;
 }

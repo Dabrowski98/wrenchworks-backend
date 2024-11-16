@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { Type } from 'class-transformer';
+import { TaskOrderByRelationAggregateInput } from '../../task/dto/task-order-by-relation-aggregate.input';
 import { JobOrderByWithRelationInput } from '../../job/dto/job-order-by-with-relation.input';
 import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 
@@ -31,6 +32,10 @@ export class WorkshopJobOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     availability?: keyof typeof SortOrder;
+
+    @Field(() => TaskOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => TaskOrderByRelationAggregateInput)
+    tasks?: TaskOrderByRelationAggregateInput;
 
     @Field(() => JobOrderByWithRelationInput, {nullable:true})
     @Type(() => JobOrderByWithRelationInput)

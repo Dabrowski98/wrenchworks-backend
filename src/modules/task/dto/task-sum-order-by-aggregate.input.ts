@@ -12,7 +12,7 @@ export class TaskSumOrderByAggregateInput {
     serviceId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    jobId?: keyof typeof SortOrder;
+    workshopJobId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     executionTime?: keyof typeof SortOrder;

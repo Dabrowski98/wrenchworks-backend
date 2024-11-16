@@ -9,6 +9,8 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class TaskUncheckedUpdateWithoutTaskEmployeesInput {
@@ -20,7 +22,7 @@ export class TaskUncheckedUpdateWithoutTaskEmployeesInput {
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
+    workshopJobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })

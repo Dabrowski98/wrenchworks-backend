@@ -14,7 +14,7 @@ export class TaskAvgAggregate {
     serviceId?: number;
 
     @Field(() => Float, {nullable:true})
-    jobId?: number;
+    workshopJobId?: number;
 
     @Field(() => Float, {nullable:true})
     executionTime?: number;

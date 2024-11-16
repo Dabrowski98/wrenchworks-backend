@@ -8,6 +8,8 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewUncheckedUpdateManyInput {

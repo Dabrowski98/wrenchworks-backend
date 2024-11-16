@@ -16,7 +16,7 @@ export class TaskMinAggregate {
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    jobId?: bigint | number;
+    workshopJobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     customName?: string;

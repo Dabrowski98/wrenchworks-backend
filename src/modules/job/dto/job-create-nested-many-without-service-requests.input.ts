@@ -8,15 +8,6 @@ import { JobWhereUniqueInput } from './job-where-unique.input';
 
 @InputType()
 export class JobCreateNestedManyWithoutServiceRequestsInput {
-
-    @Field(() => [JobCreateWithoutServiceRequestsInput], {nullable:true})
-    @Type(() => JobCreateWithoutServiceRequestsInput)
-    create?: Array<JobCreateWithoutServiceRequestsInput>;
-
-    @Field(() => [JobCreateOrConnectWithoutServiceRequestsInput], {nullable:true})
-    @Type(() => JobCreateOrConnectWithoutServiceRequestsInput)
-    connectOrCreate?: Array<JobCreateOrConnectWithoutServiceRequestsInput>;
-
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;

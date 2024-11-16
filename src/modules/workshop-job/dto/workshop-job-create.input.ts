@@ -1,20 +1,16 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { JobCreateNestedOneWithoutJobWorkshopsInput } from '../../job/dto/job-create-nested-one-without-job-workshops.input';
-import { WorkshopCreateNestedOneWithoutWorkshopJobsInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-jobs.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+import { CREATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class WorkshopJobCreateInput {
-
-    @HideField()
-    workshopJobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Workshop description must be a string' })
@@ -41,11 +37,11 @@ export class WorkshopJobCreateInput {
     @Validator.IsBoolean({ message: 'Availability must be a boolean' })
     availability?: boolean;
 
-    @Field(() => JobCreateNestedOneWithoutJobWorkshopsInput, {nullable:false})
-    @Type(() => JobCreateNestedOneWithoutJobWorkshopsInput)
-    job!: JobCreateNestedOneWithoutJobWorkshopsInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Job ID is required' })
+    jobId!: bigint;
 
-    @Field(() => WorkshopCreateNestedOneWithoutWorkshopJobsInput, {nullable:false})
-    @Type(() => WorkshopCreateNestedOneWithoutWorkshopJobsInput)
-    workshop!: WorkshopCreateNestedOneWithoutWorkshopJobsInput;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Workshop ID is required' })
+    workshopId!: bigint;
 }

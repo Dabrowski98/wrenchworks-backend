@@ -4,6 +4,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { VehicleCreateNestedManyWithoutVehicleModelInput } from '../../vehicle/dto/vehicle-create-nested-many-without-vehicle-model.input';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class VehicleModelCreateWithoutVehiclesBrandInput {

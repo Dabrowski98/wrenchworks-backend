@@ -4,6 +4,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { CREATE, UPDATE } from 'src/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseCreateManyReviewInput {
