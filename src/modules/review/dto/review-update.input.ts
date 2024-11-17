@@ -17,41 +17,23 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 @InputType()
 export class ReviewUpdateInput {
 
-    @HideField()
-    reviewId?: bigint | number;
-
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    @Validator.IsOptional()
     @Validator.IsNumber({}, { message: 'Rating must be a number' })
     @Validator.Min(0, { message: 'Rating cannot be negative' })
     @Validator.Max(5, { message: 'Rating cannot exceed 5' })
     rating?: Decimal;
 
     @Field(() => String, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Review text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     reviewText?: string;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Review date must be a valid date' })
-    reviewDate?: Date | string;
-
     @Field(() => ReviewsStatus, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
     status?: keyof typeof ReviewsStatus;
-
-    @Field(() => UserUpdateOneRequiredWithoutReviewsNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneRequiredWithoutReviewsNestedInput)
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutReviewsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutReviewsNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutReviewsNestedInput;
-
-    @Field(() => ReviewResponseUpdateManyWithoutReviewNestedInput, {nullable:true})
-    @Type(() => ReviewResponseUpdateManyWithoutReviewNestedInput)
-    reviewResponses?: ReviewResponseUpdateManyWithoutReviewNestedInput;
 }

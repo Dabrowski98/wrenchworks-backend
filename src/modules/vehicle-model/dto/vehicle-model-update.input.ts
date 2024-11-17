@@ -11,26 +11,10 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 @InputType()
 export class VehicleModelUpdateInput {
 
-    @HideField()
-    modelId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Model name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Model name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(2, 50, { message: 'Model name must be between 2 and 50 characters' })
     modelName?: string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
-
-    @Field(() => VehicleUpdateManyWithoutVehicleModelNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateManyWithoutVehicleModelNestedInput)
-    vehicles?: VehicleUpdateManyWithoutVehicleModelNestedInput;
-
-    @Field(() => VehicleBrandUpdateOneRequiredWithoutVehicleModelsNestedInput, {nullable:true})
-    vehiclesBrand?: VehicleBrandUpdateOneRequiredWithoutVehicleModelsNestedInput;
 }

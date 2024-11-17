@@ -13,13 +13,11 @@ import { WorkshopJobUpdateOneRequiredWithoutTasksNestedInput } from '../../works
 import { ServiceUpdateOneRequiredWithoutTasksNestedInput } from '../../service/dto/service-update-one-required-without-tasks-nested.input';
 import { EmployeeTaskUpdateManyWithoutTaskNestedInput } from '../../employee-task/dto/employee-task-update-many-without-task-nested.input';
 import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
 
 
 @InputType()
 export class TaskUpdateInput {
-
-    @HideField()
-    taskId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -29,17 +27,18 @@ export class TaskUpdateInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Description is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
     description?: string;
 
     @Field(() => TasksStatus, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
     status?: keyof typeof TasksStatus;
 
     @Field(() => Float, {nullable:true})
     @Validator.IsNumber({}, { message: 'Execution time must be a number' })
+    @Validator.IsOptional()
     @Validator.Min(0, { message: 'Execution time cannot be negative' })
     @Validator.Max(9999.99, { message: 'Whoa Cowboy! Execution time cannot exceed 9999.99!' })
     executionTime?: number;
@@ -48,19 +47,16 @@ export class TaskUpdateInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     @Validator.IsNumber({}, { message: 'Parts cost must be a number' })
+    @Validator.IsOptional()
     @Validator.Min(0, { message: 'Parts cost cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
     partsCost?: Decimal;
 
-    @Field(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput, {nullable:true})
-    @Type(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput)
-    workshopJob?: WorkshopJobUpdateOneRequiredWithoutTasksNestedInput;
-
-    @Field(() => ServiceUpdateOneRequiredWithoutTasksNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateOneRequiredWithoutTasksNestedInput)
-    service?: ServiceUpdateOneRequiredWithoutTasksNestedInput;
-
-    @Field(() => EmployeeTaskUpdateManyWithoutTaskNestedInput, {nullable:true})
-    @Type(() => EmployeeTaskUpdateManyWithoutTaskNestedInput)
-    taskEmployees?: EmployeeTaskUpdateManyWithoutTaskNestedInput;
+    @Field(() => [EmployeeEmployeeIdWorkshopIdCompoundUniqueInput], { nullable: true })
+    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
+    @Validator.IsOptional()
+    @Validator.IsArray({ message: 'Employee assignments must be an array' })
+    @Validator.ArrayNotEmpty({ message: 'Employee assignments cannot be empty' })
+    @Validator.ValidateNested({ each: true })
+    employeeId_WorkshopIds?: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput[];
 }

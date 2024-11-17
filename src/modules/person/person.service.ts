@@ -7,6 +7,7 @@ import {
   CreateOnePersonArgs,
   Person,
   PersonCount,
+  PersonUpdateInput,
   UpdateOnePersonArgs,
 } from './dto';
 import { Address } from '../address/dto';
@@ -21,15 +22,45 @@ import { Workshop } from '../workshop';
 export class PersonService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // async createPerson({ data }: CreateOnePersonArgs): Promise<Person> {
-  //   return this.prisma.person.create({ data });
-  // }
+  async createPerson(args: CreateOnePersonArgs): Promise<Person> {
+    if (!args?.data) {
+      throw new Error('Person data is required');
+    }
 
-  // async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
-  //   await this.prisma.person.existsOrThrow({ where: args.where });
+    const { firstName, lastName, telephoneNumber, ...rest } = args.data;
 
-  //   return this.prisma.person.update(args);
-  // }
+    return this.prisma.person.create({
+      data: {
+        firstName,
+        lastName,
+        telephoneNumber,
+        ...rest,
+        serviceRequests: args.data.serviceRequests ? {
+          createMany: args.data.serviceRequests
+        } : undefined,
+        vehicles: args.data.vehicles ? {
+          createMany: args.data.vehicles
+        } : undefined
+      }
+    });
+  }
+
+  async updatePerson(
+    where: Prisma.PersonWhereUniqueInput,
+    args: PersonUpdateInput
+  ): Promise<Person> {
+    const prismaUpdateArgs: Prisma.PersonUpdateArgs = {
+      where,
+      data: {
+        ...args,
+        address: args.address && {
+          update: args.address
+        }
+      }
+    };
+
+    return this.prisma.person.update(prismaUpdateArgs);
+  }
 
   async findAllPersons(): Promise<Person[]> {
     return this.prisma.person.findMany();

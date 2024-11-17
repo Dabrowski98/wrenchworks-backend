@@ -14,11 +14,9 @@ import { WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput } from '../../w
 @InputType()
 export class WorkshopJobUpdateInput {
 
-    @HideField()
-    workshopJobId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Workshop description must be a string' })
+    @Validator.IsOptional()
     @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 5000 characters' })
     workshopJobDescription?: string;
 
@@ -26,6 +24,7 @@ export class WorkshopJobUpdateInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     @Validator.IsNumber({}, { message: 'Minimum price must be a number' })
+    @Validator.IsOptional()
     @Validator.Min(0, { message: 'Minimum price cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Minimum price cannot exceed 9999999.99' })
     minPrice?: Decimal;
@@ -34,23 +33,14 @@ export class WorkshopJobUpdateInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     @Validator.IsNumber({}, { message: 'Maximum price must be a number' })
+    @Validator.IsOptional()
     @Validator.Min(0, { message: 'Maximum price cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Maximum price cannot exceed 9999999.99' })
     maxPrice?: Decimal;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Availability must be a boolean' })
+    @Validator.IsOptional()
     availability?: boolean;
-
-    @Field(() => TaskUpdateManyWithoutWorkshopJobNestedInput, {nullable:true})
-    @Type(() => TaskUpdateManyWithoutWorkshopJobNestedInput)
-    tasks?: TaskUpdateManyWithoutWorkshopJobNestedInput;
-
-    @Field(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput, {nullable:true})
-    @Type(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput)
-    job?: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput;
+    
 }

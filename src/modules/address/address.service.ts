@@ -18,31 +18,13 @@ import { Workshop } from '../workshop';
 export class AddressService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAddress({ data }: CreateOneAddressArgs): Promise<Address> {
-    return this.prisma.address.create({
-      data,
-    });
+  async createAddress(args: CreateOneAddressArgs): Promise<Address> {
+    return this.prisma.address.create(args);
   }
 
-  // async updateAddress(
-  //   data: AddressUpdateInput,
-  //   where: AddressWhereUniqueInput,
-  // ): Promise<Address> {
-  //   const addressId = BigInt(where.addressId);
-
-  //   const address = await this.prisma.address.findUnique({
-  //     where: { addressId },
-  //   });
-
-  //   if (!address) {
-  //     throw new RecordNotFoundError(Address);
-  //   }
-
-  //   return this.prisma.address.update({
-  //     data,
-  //     where: { addressId },
-  //   });
-  // }
+  async updateAddress(args: UpdateOneAddressArgs): Promise<Address> {
+    return this.prisma.address.update(args);
+  }
 
   async findAllAddresses(): Promise<Address[]> {
     return this.prisma.address.findMany();

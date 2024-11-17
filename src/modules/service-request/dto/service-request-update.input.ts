@@ -9,18 +9,13 @@ import { ServiceUpdateOneWithoutServiceRequestNestedInput } from '../../service/
 import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-service-requests-nested.input';
 import { PersonUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../person/dto/person-update-one-required-without-service-requests-nested.input';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType()
 export class ServiceRequestUpdateInput {
 
-    @HideField()
-    serviceRequestId?: bigint | number;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
-
     @Field(() => ServiceRequestsStatus, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
     status?: keyof typeof ServiceRequestsStatus;
 
@@ -30,26 +25,13 @@ export class ServiceRequestUpdateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
+    @Field(() => [GraphQLBigInt], {nullable:true})
+    @Validator.IsOptional()
+    @Validator.IsArray({ message: 'Jobs ids must be an array' })
+    @Validator.ArrayNotEmpty({ message: 'Jobs ids must not be empty' })
+    jobsIds?: bigint[];
 
-    @Field(() => JobUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
-    @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
-    jobs?: JobUpdateManyWithoutServiceRequestsNestedInput;
-
-    @Field(() => ServiceUpdateOneWithoutServiceRequestNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateOneWithoutServiceRequestNestedInput)
-    approvedService?: ServiceUpdateOneWithoutServiceRequestNestedInput;
-
-    @Field(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput)
-    vehicle?: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput;
-
-    @Field(() => PersonUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutServiceRequestsNestedInput)
-    person?: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput;
+    @Field(() => GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    vehicleId?: bigint | number;
 }

@@ -14,72 +14,42 @@ import { PersonUpdateOneRequiredWithoutWorkshopsNestedInput } from '../../person
 import { WorkshopDetailsUpdateOneWithoutWorkshopNestedInput } from '../../workshop-details/dto/workshop-details-update-one-without-workshop-nested.input';
 import { WorkshopJobUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-update-many-without-workshop-nested.input';
 import { JobCategoryUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-update-many-without-workshops-nested.input';
+import { WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput, WorkshopDetailsUpdateWithoutWorkshopInput } from 'src/modules/workshop-details';
+import { AddressUpdateToOneWithWhereWithoutWorkshopsInput, AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType()
 export class WorkshopUpdateInput {
 
-    @HideField()
-    workshopId?: bigint | number;
-
     @Field(() => String, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     email?: string;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
     isVerified?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     isManagingWork?: boolean;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => GraphQLBigInt, { nullable: true })
+    @Validator.IsOptional()
+    personId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    //TODO: If someone else is assigned to the address, create a new address instead of updating the existing one.
+    @Field(() => AddressUpdateWithoutWorkshopsInput, {nullable:true})
+    @Type(() => AddressUpdateWithoutWorkshopsInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    address?: AddressUpdateWithoutWorkshopsInput;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => AddressUpdateOneWithoutWorkshopsNestedInput, {nullable:true})
-    address?: AddressUpdateOneWithoutWorkshopsNestedInput;
-
-    @Field(() => CustomerUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => CustomerUpdateManyWithoutWorkshopNestedInput)
-    customers?: CustomerUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => EmployeeUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => EmployeeUpdateManyWithoutWorkshopNestedInput)
-    employees?: EmployeeUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => PermissionSetUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    permissionSets?: PermissionSetUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => ReviewUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => ReviewUpdateManyWithoutWorkshopNestedInput)
-    reviews?: ReviewUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => ServiceRequestUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateManyWithoutWorkshopNestedInput)
-    serviceRequests?: ServiceRequestUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => ServiceUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateManyWithoutWorkshopNestedInput)
-    services?: ServiceUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => PersonUpdateOneRequiredWithoutWorkshopsNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutWorkshopsNestedInput)
-    person?: PersonUpdateOneRequiredWithoutWorkshopsNestedInput;
-
-    @Field(() => WorkshopDetailsUpdateOneWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => WorkshopDetailsUpdateOneWithoutWorkshopNestedInput)
-    workshopDetails?: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput;
-
-    @Field(() => WorkshopJobUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @Type(() => WorkshopJobUpdateManyWithoutWorkshopNestedInput)
-    workshopJobs?: WorkshopJobUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => JobCategoryUpdateManyWithoutWorkshopsNestedInput, {nullable:true})
-    jobCategories?: JobCategoryUpdateManyWithoutWorkshopsNestedInput;
+    @Field(() => WorkshopDetailsUpdateWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDetailsUpdateWithoutWorkshopInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    workshopDetails?: WorkshopDetailsUpdateWithoutWorkshopInput;
 }

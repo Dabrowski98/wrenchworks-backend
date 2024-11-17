@@ -26,27 +26,14 @@ export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
   @Mutation(() => Address)
-  createAddress(
-    @Args('data', { type: () => AddressCreateInput }) data: AddressCreateInput,
-  ): Promise<Address> {
-    return this.addressService.createAddress({
-      data,
-    });
+  createAddress(@Args() args: CreateOneAddressArgs): Promise<Address> {
+    return this.addressService.createAddress(args);
   }
 
-  // @Mutation(() => Address)
-  // async updateAddress(
-  //   @Args('data') data: AddressUpdateInput,
-  //   @Args('where') where: AddressWhereUniqueInput,
-  // ) {
-  //   if (!where?.addressId) {
-  //     throw new Error(
-  //       `Address ID is required for update. Received: ${JSON.stringify(where)}`,
-  //     );
-  //   }
-
-  //   return this.addressService.updateAddress(data, where);
-  // }
+  @Mutation(() => Address)
+  async updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
+    return this.addressService.updateAddress(args);
+  }
 
   @Query(() => [Address])
   addresses(): Promise<Address[]> {

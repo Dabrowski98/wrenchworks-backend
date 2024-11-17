@@ -7,31 +7,20 @@ import { ServiceUpdateManyWithoutVehicleNestedInput } from '../../service/dto/se
 import { VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput } from '../../vehicle-model/dto/vehicle-model-update-one-required-without-vehicles-nested.input';
 import { PersonUpdateOneRequiredWithoutVehiclesNestedInput } from '../../person/dto/person-update-one-required-without-vehicles-nested.input';
 import { VehicleDetailsUpdateOneWithoutVehicleNestedInput } from '../../vehicle-details/dto/vehicle-details-update-one-without-vehicle-nested.input';
+import { GraphQLBigInt } from 'graphql-scalars';
+import * as Validator from 'class-validator';
+import { VehicleDetailsUpdateWithoutVehicleInput } from 'src/modules/vehicle-details';
 
 @InputType()
 export class VehicleUpdateInput {
 
-    @HideField()
-    vehicleId?: bigint | number;
+    @Field(() => GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    vehicleModelId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => ServiceRequestUpdateManyWithoutVehicleNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateManyWithoutVehicleNestedInput)
-    vehicleAssociatedServiceRequests?: ServiceRequestUpdateManyWithoutVehicleNestedInput;
-
-    @Field(() => ServiceUpdateManyWithoutVehicleNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateManyWithoutVehicleNestedInput)
-    services?: ServiceUpdateManyWithoutVehicleNestedInput;
-
-    @Field(() => VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput, {nullable:true})
-    vehicleModel?: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput;
-
-    @Field(() => PersonUpdateOneRequiredWithoutVehiclesNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutVehiclesNestedInput)
-    person?: PersonUpdateOneRequiredWithoutVehiclesNestedInput;
-
-    @Field(() => VehicleDetailsUpdateOneWithoutVehicleNestedInput, {nullable:true})
-    vehiclesDetails?: VehicleDetailsUpdateOneWithoutVehicleNestedInput;
+    @Field(() => VehicleDetailsUpdateWithoutVehicleInput, {nullable:true})
+    @Type(() => VehicleDetailsUpdateWithoutVehicleInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    vehiclesDetails?: VehicleDetailsUpdateWithoutVehicleInput;
 }

@@ -10,9 +10,6 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 @InputType()
 export class AddressUpdateWithoutWorkshopsInput {
 
-    @HideField()
-    addressId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Country must be a string' })
     @Validator.Length(2, 30, { message: 'Country must be between 2 and 30 characters' })
@@ -60,7 +57,4 @@ export class AddressUpdateWithoutWorkshopsInput {
     @Validator.Length(4, 10, { message: 'Post code must be between 4 and 10 characters' })
     postCode?: string;
 
-    @Field(() => PersonUpdateManyWithoutAddressNestedInput, {nullable:true})
-    @Type(() => PersonUpdateManyWithoutAddressNestedInput)
-    persons?: PersonUpdateManyWithoutAddressNestedInput;
 }

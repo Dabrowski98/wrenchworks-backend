@@ -44,14 +44,17 @@ export class ServiceCreateInput {
 
     @Field(() => TaskCreateManyServiceInputEnvelope, {nullable:true})
     @Type(() => TaskCreateManyServiceInputEnvelope)
+    @Validator.ValidateNested({ each: true })
     tasks?: TaskCreateManyServiceInputEnvelope;
 
     @Field(() => CustomerCustomerIdWorkshopIdCompoundUniqueInput, {nullable:false}) 
     @Type(() => CustomerCustomerIdWorkshopIdCompoundUniqueInput)
+    @Validator.ValidateNested({ each: true })
     customerId_workshopId!: CustomerCustomerIdWorkshopIdCompoundUniqueInput;
 
     @Field(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput, {nullable:false})
     @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
+    @Validator.ValidateNested({ each: true })
     employeeId_workshopId!: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})

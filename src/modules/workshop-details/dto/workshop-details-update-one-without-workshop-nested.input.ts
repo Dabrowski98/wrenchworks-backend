@@ -12,30 +12,6 @@ import { WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput } from './works
 @InputType()
 export class WorkshopDetailsUpdateOneWithoutWorkshopNestedInput {
 
-    @Field(() => WorkshopDetailsCreateWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDetailsCreateWithoutWorkshopInput)
-    create?: WorkshopDetailsCreateWithoutWorkshopInput;
-
-    @Field(() => WorkshopDetailsCreateOrConnectWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDetailsCreateOrConnectWithoutWorkshopInput)
-    connectOrCreate?: WorkshopDetailsCreateOrConnectWithoutWorkshopInput;
-
-    @Field(() => WorkshopDetailsUpsertWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDetailsUpsertWithoutWorkshopInput)
-    upsert?: WorkshopDetailsUpsertWithoutWorkshopInput;
-
-    @Field(() => WorkshopDetailsWhereInput, {nullable:true})
-    @Type(() => WorkshopDetailsWhereInput)
-    disconnect?: WorkshopDetailsWhereInput;
-
-    @Field(() => WorkshopDetailsWhereInput, {nullable:true})
-    @Type(() => WorkshopDetailsWhereInput)
-    delete?: WorkshopDetailsWhereInput;
-
-    @Field(() => WorkshopDetailsWhereUniqueInput, {nullable:true})
-    @Type(() => WorkshopDetailsWhereUniqueInput)
-    connect?: Prisma.AtLeast<WorkshopDetailsWhereUniqueInput, 'workshopId'>;
-
     @Field(() => WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput)
     update?: WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput;

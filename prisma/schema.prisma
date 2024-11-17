@@ -598,7 +598,7 @@ model VehicleModel {
   createdAt      DateTime?       @default(now()) @db.Timestamp(0)
   updatedAt      DateTime?       @default(now()) @db.Timestamp(0)
   vehicles       Vehicle[]
-  vehiclesBrand  VehicleBrand @relation(fields: [brandName], references: [brandName], onDelete: NoAction, map: "fk_modelMadeByBrand")
+  vehiclesBrand  VehicleBrand @relation(fields: [brandName], references: [brandName], onDelete: NoAction, onUpdate: Cascade, map: "fk_modelMadeByBrand")
 
   @@unique([modelName, brandName], map: "model_name")
   @@index([brandName])

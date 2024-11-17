@@ -1,7 +1,3 @@
-export { AddressAggregateArgs } from './address-aggregate.args';
-export { AddressAvgAggregateInput } from './address-avg-aggregate.input';
-export { AddressAvgAggregate } from './address-avg-aggregate.output';
-export { AddressAvgOrderByAggregateInput } from './address-avg-order-by-aggregate.input';
 export { AddressCountAggregateInput } from './address-count-aggregate.input';
 export { AddressCountAggregate } from './address-count-aggregate.output';
 export { AddressCountOrderByAggregateInput } from './address-count-order-by-aggregate.input';
@@ -14,8 +10,6 @@ export { AddressCreateOrConnectWithoutWorkshopsInput } from './address-create-or
 export { AddressCreateWithoutPersonsInput } from './address-create-without-persons.input';
 export { AddressCreateWithoutWorkshopsInput } from './address-create-without-workshops.input';
 export { AddressCreateInput } from './address-create.input';
-export { AddressGroupByArgs } from './address-group-by.args';
-export { AddressGroupBy } from './address-group-by.output';
 export { AddressMaxAggregateInput } from './address-max-aggregate.input';
 export { AddressMaxAggregate } from './address-max-aggregate.output';
 export { AddressMaxOrderByAggregateInput } from './address-max-order-by-aggregate.input';
@@ -23,7 +17,6 @@ export { AddressMinAggregateInput } from './address-min-aggregate.input';
 export { AddressMinAggregate } from './address-min-aggregate.output';
 export { AddressMinOrderByAggregateInput } from './address-min-order-by-aggregate.input';
 export { AddressNullableRelationFilter } from './address-nullable-relation-filter.input';
-export { AddressOrderByWithAggregationInput } from './address-order-by-with-aggregation.input';
 export { AddressOrderByWithRelationInput } from './address-order-by-with-relation.input';
 export { AddressScalarFieldEnum } from './address-scalar-field.enum';
 export { AddressScalarWhereWithAggregatesInput } from './address-scalar-where-with-aggregates.input';
@@ -50,7 +43,6 @@ export { AddressUpsertWithoutWorkshopsInput } from './address-upsert-without-wor
 export { AddressWhereUniqueInput } from './address-where-unique.input';
 export { AddressWhereInput } from './address-where.input';
 export { Address } from './address.model';
-export { AggregateAddress } from './aggregate-address.output';
 export { CreateManyAddressArgs } from './create-many-address.args';
 export { CreateOneAddressArgs } from './create-one-address.args';
 export { DeleteManyAddressArgs } from './delete-many-address.args';

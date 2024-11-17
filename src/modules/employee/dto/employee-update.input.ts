@@ -1,4 +1,5 @@
-import { Field } from '@nestjs/graphql';
+import { Field} from '@nestjs/graphql';
+import * as Scalar from 'graphql-scalars'
 import { InputType } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { PermissionSetUpdateOneWithoutEmployeesNestedInput } from '../../permission-set/dto/permission-set-update-one-without-employees-nested.input';
@@ -11,29 +12,13 @@ import { EmployeeTaskUpdateManyWithoutEmployeeNestedInput } from '../../employee
 @InputType()
 export class EmployeeUpdateInput {
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Joined at must be a valid date' })
-    joinedAt?: Date | string;
+    @Field(() => Date, { nullable: true })
+    @Validator.IsOptional()
+    @Validator.IsDate({ message: 'JoinedAt must be a valid date' })
+    joinedAt?: Date;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => PermissionSetUpdateOneWithoutEmployeesNestedInput, {nullable:true})
-    permissionSet?: PermissionSetUpdateOneWithoutEmployeesNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutEmployeesNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutEmployeesNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutEmployeesNestedInput;
-
-    @Field(() => PersonUpdateOneRequiredWithoutEmployeesNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutEmployeesNestedInput)
-    person?: PersonUpdateOneRequiredWithoutEmployeesNestedInput;
-
-    @Field(() => ServiceUpdateManyWithoutEmployeeNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateManyWithoutEmployeeNestedInput)
-    services?: ServiceUpdateManyWithoutEmployeeNestedInput;
-
-    @Field(() => EmployeeTaskUpdateManyWithoutEmployeeNestedInput, {nullable:true})
-    @Type(() => EmployeeTaskUpdateManyWithoutEmployeeNestedInput)
-    employeeTasks?: EmployeeTaskUpdateManyWithoutEmployeeNestedInput;
+    @Field(() => Scalar.GraphQLBigInt, { nullable: true })
+    @Validator.IsOptional()
+    permissionSetId?: bigint | number;
+    
 }

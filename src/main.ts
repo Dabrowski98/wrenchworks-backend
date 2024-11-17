@@ -16,6 +16,10 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
       whitelist: true,
+      forbidNonWhitelisted: true,
+      // transformOptions: {
+      //   exposeUnsetFields: false,
+      // },
       enableDebugMessages: true,
       groups: [UPDATE, CREATE],
       exceptionFactory: (errors) => {

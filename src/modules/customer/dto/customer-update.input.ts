@@ -28,9 +28,6 @@ export class CustomerUpdateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'NIP must be a string' })
     @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
@@ -43,16 +40,4 @@ export class CustomerUpdateInput {
     @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
     @Validator.IsOptional()
     companyName?: string;
-
-    @Field(() => PersonUpdateOneRequiredWithoutCustomersNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutCustomersNestedInput)
-    person?: PersonUpdateOneRequiredWithoutCustomersNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutCustomersNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutCustomersNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutCustomersNestedInput;
-
-    @Field(() => ServiceUpdateManyWithoutCustomerNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateManyWithoutCustomerNestedInput)
-    services?: ServiceUpdateManyWithoutCustomerNestedInput;
 }

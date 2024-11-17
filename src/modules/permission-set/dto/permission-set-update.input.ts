@@ -15,6 +15,7 @@ export class PermissionSetUpdateInput {
     setName?: string;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadWorkshopDetails?: boolean;
 
@@ -23,74 +24,83 @@ export class PermissionSetUpdateInput {
     canUpdateWorkshopDetails?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyWorkshopDetails?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadEmployees?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canUpdateEmployees?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyEmployees?: boolean;
 
+    @Validator.IsOptional()
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadCustomers?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canUpdateCustomers?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyCustomers?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadServices?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canUpdateServices?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyServices?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadTasks?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canUpdateTasks?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyTasks?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canReadReports?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canGenerateReports?: boolean;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     canModifyPermissions?: boolean;
-
-    @Field(() => EmployeeUpdateManyWithoutPermissionSetNestedInput, {nullable:true})
-    @Type(() => EmployeeUpdateManyWithoutPermissionSetNestedInput)
-    employees?: EmployeeUpdateManyWithoutPermissionSetNestedInput;
-
-    @Field(() => WorkshopUpdateOneWithoutPermissionSetsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneWithoutPermissionSetsNestedInput)
-    workshop?: WorkshopUpdateOneWithoutPermissionSetsNestedInput;
 }

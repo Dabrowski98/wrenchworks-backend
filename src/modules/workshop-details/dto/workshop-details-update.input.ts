@@ -55,11 +55,4 @@ export class WorkshopDetailsUpdateInput {
     @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
     @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
     NIP?: string;
-
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput;
 }

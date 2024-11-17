@@ -11,15 +11,5 @@ export class VehicleBrandUpdateInput {
     @Validator.IsNotEmpty({ message: 'Brand name is required' })
     @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
     brandName?: string;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Created at must be a valid date' })
-    createdAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Updated at must be a valid date' })
-    updatedAt?: Date | string;
-
-    @Field(() => VehicleModelUpdateManyWithoutVehiclesBrandNestedInput, {nullable:true})
-    vehicleModels?: VehicleModelUpdateManyWithoutVehiclesBrandNestedInput;
+    
 }

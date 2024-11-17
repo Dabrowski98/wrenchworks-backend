@@ -40,14 +40,21 @@ export class PersonCreateInput {
     telephoneNumber?: string;
 
     @Field(() => AddressCreateNestedOneWithoutPersonsInput, {nullable:true})
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
+    @Type(() => AddressCreateNestedOneWithoutPersonsInput)
     address?: AddressCreateNestedOneWithoutPersonsInput;
 
     @Field(() => ServiceRequestCreateManyPersonInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyPersonInputEnvelope)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
     serviceRequests?: ServiceRequestCreateManyPersonInputEnvelope;
 
     @Field(() => VehicleCreateManyPersonInputEnvelope, {nullable:true})
     @Type(() => VehicleCreateManyPersonInputEnvelope)
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
     vehicles?: VehicleCreateManyPersonInputEnvelope;
 
 }

@@ -11,25 +11,21 @@ import { UserUpdateOneWithoutPersonNestedInput } from '../../user/dto/user-updat
 import { VehicleUpdateManyWithoutPersonNestedInput } from '../../vehicle/dto/vehicle-update-many-without-person-nested.input';
 import { WorkshopUpdateManyWithoutPersonNestedInput } from '../../workshop/dto/workshop-update-many-without-person-nested.input';
 import { CREATE, UPDATE } from 'src/constants/validation-groups';
+import { AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
 
 
 @InputType()
 export class PersonUpdateInput {
 
-    @HideField()
-    personId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'First name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
     firstName?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Last name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Last name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
     lastName?: string;
 
@@ -40,33 +36,11 @@ export class PersonUpdateInput {
     @Validator.IsOptional()
     telephoneNumber?: string;
 
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => AddressUpdateOneWithoutPersonsNestedInput, {nullable:true})
-    address?: AddressUpdateOneWithoutPersonsNestedInput;
-
-    @Field(() => CustomerUpdateManyWithoutPersonNestedInput, {nullable:true})
-    @Type(() => CustomerUpdateManyWithoutPersonNestedInput)
-    customers?: CustomerUpdateManyWithoutPersonNestedInput;
-
-    @Field(() => EmployeeUpdateManyWithoutPersonNestedInput, {nullable:true})
-    @Type(() => EmployeeUpdateManyWithoutPersonNestedInput)
-    employees?: EmployeeUpdateManyWithoutPersonNestedInput;
-
-    @Field(() => ServiceRequestUpdateManyWithoutPersonNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateManyWithoutPersonNestedInput)
-    serviceRequests?: ServiceRequestUpdateManyWithoutPersonNestedInput;
-
-    @Field(() => UserUpdateOneWithoutPersonNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPersonNestedInput)
-    user?: UserUpdateOneWithoutPersonNestedInput;
-
-    @Field(() => VehicleUpdateManyWithoutPersonNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateManyWithoutPersonNestedInput)
-    vehicles?: VehicleUpdateManyWithoutPersonNestedInput;
-
-    @Field(() => WorkshopUpdateManyWithoutPersonNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateManyWithoutPersonNestedInput)
-    workshops?: WorkshopUpdateManyWithoutPersonNestedInput;
+    //TODO: If someone else is assigned to the address, create a new address instead of updating the existing one.
+    @Field(() => AddressUpdateWithoutWorkshopsInput, {nullable:true})
+    @Type(() => AddressUpdateWithoutWorkshopsInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    address?: AddressUpdateWithoutWorkshopsInput;
+    
 }

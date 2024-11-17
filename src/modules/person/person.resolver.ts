@@ -28,19 +28,12 @@ import { Workshop } from '../workshop';
 export class PersonResolver {
   constructor(private readonly personService: PersonService) {}
 
-  // @Mutation(() => Person)
-  // createPerson(
-  //   @Args('data', { type: () => PersonCreateInput }) data: PersonCreateInput,
-  // ): Promise<Person> {
-  //   return this.personService.createPerson({
-  //     data, 
-  //   });
-  // }
-
-  // @Mutation(() => Person)
-  // updatePerson(@Args() args: UpdateOnePersonArgs): Promise<Person> {
-  //   return this.personService.updatePerson(args);
-  // }
+  @Mutation(() => Person)
+  createPerson(@Args() args: CreateOnePersonArgs): Promise<Person> {
+    console.log('Resolver received args:' + args)
+    console.log('Resolver received args data:' + args.data)
+    return this.personService.createPerson(args);
+  }
 
   @Query(() => [Person])
   persons(): Promise<Person[]> {

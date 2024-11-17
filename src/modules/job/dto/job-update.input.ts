@@ -6,12 +6,10 @@ import { JobCategoryUpdateOneRequiredWithoutJobsNestedInput } from '../../job-ca
 import { ServiceRequestUpdateManyWithoutJobsNestedInput } from '../../service-request/dto/service-request-update-many-without-jobs-nested.input';
 import { Type } from 'class-transformer';
 import { WorkshopJobUpdateManyWithoutJobNestedInput } from '../../workshop-job/dto/workshop-job-update-many-without-job-nested.input';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType()
 export class JobUpdateInput {
-
-    @HideField()
-    jobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -26,17 +24,11 @@ export class JobUpdateInput {
     description?: string;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
     isPopular?: boolean;
-
-    @Field(() => JobCategoryUpdateOneRequiredWithoutJobsNestedInput, {nullable:true})
-    jobCategory?: JobCategoryUpdateOneRequiredWithoutJobsNestedInput;
-
-    @Field(() => ServiceRequestUpdateManyWithoutJobsNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateManyWithoutJobsNestedInput)
-    serviceRequests?: ServiceRequestUpdateManyWithoutJobsNestedInput;
-
-    @Field(() => WorkshopJobUpdateManyWithoutJobNestedInput, {nullable:true})
-    @Type(() => WorkshopJobUpdateManyWithoutJobNestedInput)
-    jobWorkshops?: WorkshopJobUpdateManyWithoutJobNestedInput;
+    
+    @Field(() => GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    categoryId?: bigint | number;
 }

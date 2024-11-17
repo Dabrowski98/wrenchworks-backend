@@ -14,37 +14,14 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 @InputType()
 export class ReviewResponseUpdateInput {
 
-    @HideField()
-    reviewResponseId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText?: string;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Response date must be a valid date' })
-    responseDate?: Date | string;
-
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
+    @Validator.IsOptional()
     status?: keyof typeof ReviewsResponsesStatus;
-
-    @Field(() => ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput, {nullable:true})
-    @Type(() => ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput)
-    reviewResponse?: ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput;
-
-    @Field(() => ReviewResponseUpdateManyWithoutReviewResponseNestedInput, {nullable:true})
-    @Type(() => ReviewResponseUpdateManyWithoutReviewResponseNestedInput)
-    otherReviewResponses?: ReviewResponseUpdateManyWithoutReviewResponseNestedInput;
-
-    @Field(() => ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput, {nullable:true})
-    @Type(() => ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput)
-    review?: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput;
-
-    @Field(() => UserUpdateOneRequiredWithoutReviewResponsesNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneRequiredWithoutReviewResponsesNestedInput)
-    user?: UserUpdateOneRequiredWithoutReviewResponsesNestedInput;
 }

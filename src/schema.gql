@@ -16,25 +16,9 @@ type Address {
   workshops: [Workshop!]
 }
 
-type AddressAvgAggregate {
-  addressId: Float
-}
-
 type AddressCount {
   persons: Int!
   workshops: Int!
-}
-
-type AddressCountAggregate {
-  _all: Int!
-  addressId: Int!
-  buildingNo: Int!
-  city: Int!
-  country: Int!
-  flatNo: Int!
-  postCode: Int!
-  region: Int!
-  street: Int!
 }
 
 input AddressCreateInput {
@@ -47,8 +31,52 @@ input AddressCreateInput {
   street: String
 }
 
-type AddressMaxAggregate {
-  addressId: BigInt
+input AddressCreateNestedOneWithoutPersonsInput {
+  connectOrCreate: AddressCreateOrConnectWithoutPersonsInput
+}
+
+input AddressCreateNestedOneWithoutWorkshopsInput {
+  connectOrCreate: AddressCreateOrConnectWithoutWorkshopsInput
+}
+
+input AddressCreateOrConnectWithoutPersonsInput {
+  create: AddressCreateWithoutPersonsInput!
+  where: AddressWhereUniqueInput!
+}
+
+input AddressCreateOrConnectWithoutWorkshopsInput {
+  create: AddressCreateWithoutWorkshopsInput!
+  where: AddressWhereUniqueInput!
+}
+
+input AddressCreateWithoutPersonsInput {
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  postCode: String!
+  region: String!
+  street: String
+  workshops: WorkshopCreateNestedManyWithoutAddressInput
+}
+
+input AddressCreateWithoutWorkshopsInput {
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  persons: PersonCreateNestedManyWithoutAddressInput
+  postCode: String!
+  region: String!
+  street: String
+}
+
+input AddressNullableRelationFilter {
+  is: AddressWhereInput
+  isNot: AddressWhereInput
+}
+
+input AddressUpdateInput {
   buildingNo: String
   city: String
   country: String
@@ -58,25 +86,64 @@ type AddressMaxAggregate {
   street: String
 }
 
-type AddressMinAggregate {
-  addressId: BigInt
-  buildingNo: String
-  city: String
-  country: String
-  flatNo: String
-  postCode: String
-  region: String
-  street: String
+input AddressWhereInput {
+  AND: [AddressWhereInput!]
+  NOT: [AddressWhereInput!]
+  OR: [AddressWhereInput!]
+  addressId: BigIntFilter
+  buildingNo: StringFilter
+  city: StringFilter
+  country: StringFilter
+  flatNo: StringNullableFilter
+  persons: PersonListRelationFilter
+  postCode: StringFilter
+  region: StringFilter
+  street: StringNullableFilter
+  workshops: WorkshopListRelationFilter
 }
 
-type AddressSumAggregate {
+input AddressWhereUniqueInput {
+  AND: [AddressWhereInput!]
+  NOT: [AddressWhereInput!]
+  OR: [AddressWhereInput!]
   addressId: BigInt
+  buildingNo: StringFilter
+  city: StringFilter
+  country: StringFilter
+  flatNo: StringNullableFilter
+  persons: PersonListRelationFilter
+  postCode: StringFilter
+  region: StringFilter
+  street: StringNullableFilter
+  workshops: WorkshopListRelationFilter
 }
 
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
+
+input BigIntFilter {
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedBigIntFilter
+  notIn: [String!]
+}
+
+input BigIntNullableFilter {
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedBigIntNullableFilter
+  notIn: [String!]
+}
 
 enum BodyColors {
   black
@@ -89,6 +156,16 @@ enum BodyColors {
   silver
   white
   yellow
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input BoolNullableFilter {
+  equals: Boolean
+  not: NestedBoolNullableFilter
 }
 
 type Customer {
@@ -126,6 +203,105 @@ type CustomerCountAggregate {
   workshopId: Int!
 }
 
+input CustomerCreateManyPersonInput {
+  NIP: String
+  companyName: String
+  description: String
+  totalDue: Decimal
+  workshopId: BigInt!
+}
+
+input CustomerCreateManyPersonInputEnvelope {
+  data: [CustomerCreateManyPersonInput!]!
+  skipDuplicates: Boolean
+}
+
+input CustomerCreateManyWorkshopInput {
+  NIP: String
+  companyName: String
+  customerId: BigInt!
+  description: String
+  totalDue: Decimal
+}
+
+input CustomerCreateManyWorkshopInputEnvelope {
+  data: [CustomerCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input CustomerCreateNestedManyWithoutPersonInput {
+  connect: [CustomerWhereUniqueInput!]
+  connectOrCreate: [CustomerCreateOrConnectWithoutPersonInput!]
+  create: [CustomerCreateWithoutPersonInput!]
+  createMany: CustomerCreateManyPersonInputEnvelope
+}
+
+input CustomerCreateNestedManyWithoutWorkshopInput {
+  connect: [CustomerWhereUniqueInput!]
+  connectOrCreate: [CustomerCreateOrConnectWithoutWorkshopInput!]
+  create: [CustomerCreateWithoutWorkshopInput!]
+  createMany: CustomerCreateManyWorkshopInputEnvelope
+}
+
+input CustomerCreateNestedOneWithoutServicesInput {
+  connect: CustomerWhereUniqueInput
+  connectOrCreate: CustomerCreateOrConnectWithoutServicesInput
+  create: CustomerCreateWithoutServicesInput
+}
+
+input CustomerCreateOrConnectWithoutPersonInput {
+  create: CustomerCreateWithoutPersonInput!
+  where: CustomerWhereUniqueInput!
+}
+
+input CustomerCreateOrConnectWithoutServicesInput {
+  create: CustomerCreateWithoutServicesInput!
+  where: CustomerWhereUniqueInput!
+}
+
+input CustomerCreateOrConnectWithoutWorkshopInput {
+  create: CustomerCreateWithoutWorkshopInput!
+  where: CustomerWhereUniqueInput!
+}
+
+input CustomerCreateWithoutPersonInput {
+  NIP: String
+  companyName: String
+  description: String
+  services: ServiceCreateNestedManyWithoutCustomerInput
+  totalDue: Decimal
+  workshop: WorkshopCreateNestedOneWithoutCustomersInput!
+}
+
+input CustomerCreateWithoutServicesInput {
+  NIP: String
+  companyName: String
+  description: String
+  person: PersonCreateNestedOneWithoutCustomersInput!
+  totalDue: Decimal
+  workshop: WorkshopCreateNestedOneWithoutCustomersInput!
+}
+
+input CustomerCreateWithoutWorkshopInput {
+  NIP: String
+  companyName: String
+  description: String
+  person: PersonCreateNestedOneWithoutCustomersInput!
+  services: ServiceCreateNestedManyWithoutCustomerInput
+  totalDue: Decimal
+}
+
+input CustomerCustomerIdWorkshopIdCompoundUniqueInput {
+  customerId: BigInt!
+  workshopId: BigInt!
+}
+
+input CustomerListRelationFilter {
+  every: CustomerWhereInput
+  none: CustomerWhereInput
+  some: CustomerWhereInput
+}
+
 type CustomerMaxAggregate {
   NIP: String
   companyName: String
@@ -146,10 +322,48 @@ type CustomerMinAggregate {
   workshopId: BigInt
 }
 
+input CustomerRelationFilter {
+  is: CustomerWhereInput
+  isNot: CustomerWhereInput
+}
+
 type CustomerSumAggregate {
   customerId: BigInt
   totalDue: Decimal
   workshopId: BigInt
+}
+
+input CustomerWhereInput {
+  AND: [CustomerWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  companyName: StringNullableFilter
+  customerId: BigIntFilter
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  person: PersonRelationFilter
+  services: ServiceListRelationFilter
+  totalDue: DecimalFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input CustomerWhereUniqueInput {
+  AND: [CustomerWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  companyName: StringNullableFilter
+  customerId: BigIntFilter
+  customerId_workshopId: CustomerCustomerIdWorkshopIdCompoundUniqueInput
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  person: PersonRelationFilter
+  services: ServiceListRelationFilter
+  totalDue: DecimalFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
 }
 
 """
@@ -157,8 +371,52 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeNullableFilter
+  notIn: [DateTime!]
+}
+
 """An arbitrary-precision Decimal type"""
 scalar Decimal
+
+input DecimalFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalFilter
+  notIn: [Decimal!]
+}
+
+input DecimalNullableFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalNullableFilter
+  notIn: [Decimal!]
+}
 
 type DeletePayload {
   success: Boolean!
@@ -198,6 +456,148 @@ type EmployeeCountAggregate {
   workshopId: Int!
 }
 
+input EmployeeCreateManyPermissionSetInput {
+  employeeId: BigInt!
+  joinedAt: DateTime
+  workshopId: BigInt!
+}
+
+input EmployeeCreateManyPermissionSetInputEnvelope {
+  data: [EmployeeCreateManyPermissionSetInput!]!
+  skipDuplicates: Boolean
+}
+
+input EmployeeCreateManyPersonInput {
+  joinedAt: DateTime
+  permissionSetId: Int
+  workshopId: BigInt!
+}
+
+input EmployeeCreateManyPersonInputEnvelope {
+  data: [EmployeeCreateManyPersonInput!]!
+  skipDuplicates: Boolean
+}
+
+input EmployeeCreateManyWorkshopInput {
+  employeeId: BigInt!
+  joinedAt: DateTime
+  permissionSetId: Int
+}
+
+input EmployeeCreateManyWorkshopInputEnvelope {
+  data: [EmployeeCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input EmployeeCreateNestedManyWithoutPermissionSetInput {
+  connect: [EmployeeWhereUniqueInput!]
+  connectOrCreate: [EmployeeCreateOrConnectWithoutPermissionSetInput!]
+  create: [EmployeeCreateWithoutPermissionSetInput!]
+  createMany: EmployeeCreateManyPermissionSetInputEnvelope
+}
+
+input EmployeeCreateNestedManyWithoutPersonInput {
+  connect: [EmployeeWhereUniqueInput!]
+  connectOrCreate: [EmployeeCreateOrConnectWithoutPersonInput!]
+  create: [EmployeeCreateWithoutPersonInput!]
+  createMany: EmployeeCreateManyPersonInputEnvelope
+}
+
+input EmployeeCreateNestedManyWithoutWorkshopInput {
+  connect: [EmployeeWhereUniqueInput!]
+  connectOrCreate: [EmployeeCreateOrConnectWithoutWorkshopInput!]
+  create: [EmployeeCreateWithoutWorkshopInput!]
+  createMany: EmployeeCreateManyWorkshopInputEnvelope
+}
+
+input EmployeeCreateNestedOneWithoutEmployeeTasksInput {
+  connect: EmployeeWhereUniqueInput
+  connectOrCreate: EmployeeCreateOrConnectWithoutEmployeeTasksInput
+  create: EmployeeCreateWithoutEmployeeTasksInput
+}
+
+input EmployeeCreateNestedOneWithoutServicesInput {
+  connect: EmployeeWhereUniqueInput
+  connectOrCreate: EmployeeCreateOrConnectWithoutServicesInput
+  create: EmployeeCreateWithoutServicesInput
+}
+
+input EmployeeCreateOrConnectWithoutEmployeeTasksInput {
+  create: EmployeeCreateWithoutEmployeeTasksInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateOrConnectWithoutPermissionSetInput {
+  create: EmployeeCreateWithoutPermissionSetInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateOrConnectWithoutPersonInput {
+  create: EmployeeCreateWithoutPersonInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateOrConnectWithoutServicesInput {
+  create: EmployeeCreateWithoutServicesInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateOrConnectWithoutWorkshopInput {
+  create: EmployeeCreateWithoutWorkshopInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateWithoutEmployeeTasksInput {
+  joinedAt: DateTime
+  permissionSet: PermissionSetCreateNestedOneWithoutEmployeesInput
+  person: PersonCreateNestedOneWithoutEmployeesInput!
+  services: ServiceCreateNestedManyWithoutEmployeeInput
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
+input EmployeeCreateWithoutPermissionSetInput {
+  employeeTasks: EmployeeTaskCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  person: PersonCreateNestedOneWithoutEmployeesInput!
+  services: ServiceCreateNestedManyWithoutEmployeeInput
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
+input EmployeeCreateWithoutPersonInput {
+  employeeTasks: EmployeeTaskCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  permissionSet: PermissionSetCreateNestedOneWithoutEmployeesInput
+  services: ServiceCreateNestedManyWithoutEmployeeInput
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
+input EmployeeCreateWithoutServicesInput {
+  employeeTasks: EmployeeTaskCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  permissionSet: PermissionSetCreateNestedOneWithoutEmployeesInput
+  person: PersonCreateNestedOneWithoutEmployeesInput!
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
+input EmployeeCreateWithoutWorkshopInput {
+  employeeTasks: EmployeeTaskCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  permissionSet: PermissionSetCreateNestedOneWithoutEmployeesInput
+  person: PersonCreateNestedOneWithoutEmployeesInput!
+  services: ServiceCreateNestedManyWithoutEmployeeInput
+}
+
+input EmployeeEmployeeIdWorkshopIdCompoundUniqueInput {
+  employeeId: BigInt!
+  workshopId: BigInt!
+}
+
+input EmployeeListRelationFilter {
+  every: EmployeeWhereInput
+  none: EmployeeWhereInput
+  some: EmployeeWhereInput
+}
+
 type EmployeeMaxAggregate {
   deletedAt: DateTime
   employeeId: BigInt
@@ -212,6 +612,11 @@ type EmployeeMinAggregate {
   joinedAt: DateTime
   permissionSetId: Int
   workshopId: BigInt
+}
+
+input EmployeeRelationFilter {
+  is: EmployeeWhereInput
+  isNot: EmployeeWhereInput
 }
 
 type EmployeeSumAggregate {
@@ -229,6 +634,219 @@ type EmployeeTask {
   workshopId: BigInt!
 }
 
+input EmployeeTaskCreateManyEmployeeInput {
+  createdAt: DateTime
+  taskId: BigInt!
+}
+
+input EmployeeTaskCreateManyEmployeeInputEnvelope {
+  data: [EmployeeTaskCreateManyEmployeeInput!]!
+  skipDuplicates: Boolean
+}
+
+input EmployeeTaskCreateManyTaskInput {
+  createdAt: DateTime
+  employeeId: BigInt!
+  workshopId: BigInt!
+}
+
+input EmployeeTaskCreateManyTaskInputEnvelope {
+  data: [EmployeeTaskCreateManyTaskInput!]!
+  skipDuplicates: Boolean
+}
+
+input EmployeeTaskCreateNestedManyWithoutEmployeeInput {
+  connect: [EmployeeTaskWhereUniqueInput!]
+  connectOrCreate: [EmployeeTaskCreateOrConnectWithoutEmployeeInput!]
+  create: [EmployeeTaskCreateWithoutEmployeeInput!]
+  createMany: EmployeeTaskCreateManyEmployeeInputEnvelope
+}
+
+input EmployeeTaskCreateNestedManyWithoutTaskInput {
+  connect: [EmployeeTaskWhereUniqueInput!]
+  connectOrCreate: [EmployeeTaskCreateOrConnectWithoutTaskInput!]
+  create: [EmployeeTaskCreateWithoutTaskInput!]
+  createMany: EmployeeTaskCreateManyTaskInputEnvelope
+}
+
+input EmployeeTaskCreateOrConnectWithoutEmployeeInput {
+  create: EmployeeTaskCreateWithoutEmployeeInput!
+  where: EmployeeTaskWhereUniqueInput!
+}
+
+input EmployeeTaskCreateOrConnectWithoutTaskInput {
+  create: EmployeeTaskCreateWithoutTaskInput!
+  where: EmployeeTaskWhereUniqueInput!
+}
+
+input EmployeeTaskCreateWithoutEmployeeInput {
+  Task: TaskCreateNestedOneWithoutTaskEmployeesInput!
+  createdAt: DateTime
+}
+
+input EmployeeTaskCreateWithoutTaskInput {
+  createdAt: DateTime
+  employee: EmployeeCreateNestedOneWithoutEmployeeTasksInput!
+}
+
+input EmployeeTaskEmployeeIdTaskIdWorkshopIdCompoundUniqueInput {
+  employeeId: BigInt!
+  taskId: BigInt!
+  workshopId: BigInt!
+}
+
+input EmployeeTaskListRelationFilter {
+  every: EmployeeTaskWhereInput
+  none: EmployeeTaskWhereInput
+  some: EmployeeTaskWhereInput
+}
+
+input EmployeeTaskWhereInput {
+  AND: [EmployeeTaskWhereInput!]
+  NOT: [EmployeeTaskWhereInput!]
+  OR: [EmployeeTaskWhereInput!]
+  Task: TaskRelationFilter
+  createdAt: DateTimeFilter
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  taskId: BigIntFilter
+  workshopId: BigIntFilter
+}
+
+input EmployeeTaskWhereUniqueInput {
+  AND: [EmployeeTaskWhereInput!]
+  NOT: [EmployeeTaskWhereInput!]
+  OR: [EmployeeTaskWhereInput!]
+  Task: TaskRelationFilter
+  createdAt: DateTimeFilter
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  employeeId_taskId_workshopId: EmployeeTaskEmployeeIdTaskIdWorkshopIdCompoundUniqueInput
+  taskId: BigIntFilter
+  workshopId: BigIntFilter
+}
+
+input EmployeeWhereInput {
+  AND: [EmployeeWhereInput!]
+  NOT: [EmployeeWhereInput!]
+  OR: [EmployeeWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  employeeId: BigIntFilter
+  employeeTasks: EmployeeTaskListRelationFilter
+  joinedAt: DateTimeFilter
+  permissionSet: PermissionSetNullableRelationFilter
+  permissionSetId: IntNullableFilter
+  person: PersonRelationFilter
+  services: ServiceListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input EmployeeWhereUniqueInput {
+  AND: [EmployeeWhereInput!]
+  NOT: [EmployeeWhereInput!]
+  OR: [EmployeeWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  employeeId: BigIntFilter
+  employeeId_workshopId: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput
+  employeeTasks: EmployeeTaskListRelationFilter
+  joinedAt: DateTimeFilter
+  permissionSet: PermissionSetNullableRelationFilter
+  permissionSetId: IntNullableFilter
+  person: PersonRelationFilter
+  services: ServiceListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input EnumBodyColorsNullableFilter {
+  equals: BodyColors
+  in: [BodyColors!]
+  not: NestedEnumBodyColorsNullableFilter
+  notIn: [BodyColors!]
+}
+
+input EnumFuelTypeNullableFilter {
+  equals: FuelType
+  in: [FuelType!]
+  not: NestedEnumFuelTypeNullableFilter
+  notIn: [FuelType!]
+}
+
+input EnumReviewsResponsesStatusFilter {
+  equals: ReviewsResponsesStatus
+  in: [ReviewsResponsesStatus!]
+  not: NestedEnumReviewsResponsesStatusFilter
+  notIn: [ReviewsResponsesStatus!]
+}
+
+input EnumReviewsStatusFilter {
+  equals: ReviewsStatus
+  in: [ReviewsStatus!]
+  not: NestedEnumReviewsStatusFilter
+  notIn: [ReviewsStatus!]
+}
+
+input EnumServiceRequestsStatusNullableFilter {
+  equals: ServiceRequestsStatus
+  in: [ServiceRequestsStatus!]
+  not: NestedEnumServiceRequestsStatusNullableFilter
+  notIn: [ServiceRequestsStatus!]
+}
+
+input EnumServicesStatusNullableFilter {
+  equals: ServicesStatus
+  in: [ServicesStatus!]
+  not: NestedEnumServicesStatusNullableFilter
+  notIn: [ServicesStatus!]
+}
+
+input EnumTasksStatusNullableFilter {
+  equals: TasksStatus
+  in: [TasksStatus!]
+  not: NestedEnumTasksStatusNullableFilter
+  notIn: [TasksStatus!]
+}
+
+input EnumUserReportsReportedTypeFilter {
+  equals: UserReportsReportedType
+  in: [UserReportsReportedType!]
+  not: NestedEnumUserReportsReportedTypeFilter
+  notIn: [UserReportsReportedType!]
+}
+
+input EnumUserReportsStatusFilter {
+  equals: UserReportsStatus
+  in: [UserReportsStatus!]
+  not: NestedEnumUserReportsStatusFilter
+  notIn: [UserReportsStatus!]
+}
+
+input EnumUsersStatusNullableFilter {
+  equals: UsersStatus
+  in: [UsersStatus!]
+  not: NestedEnumUsersStatusNullableFilter
+  notIn: [UsersStatus!]
+}
+
+input EnumWorkshopsDetailsStatusNullableFilter {
+  equals: WorkshopsDetailsStatus
+  in: [WorkshopsDetailsStatus!]
+  not: NestedEnumWorkshopsDetailsStatusNullableFilter
+  notIn: [WorkshopsDetailsStatus!]
+}
+
+input FloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
 enum FuelType {
   CNG
   LPG
@@ -238,6 +856,28 @@ enum FuelType {
   other
   petrol
   rocket
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input IntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
 }
 
 type Job {
@@ -271,15 +911,460 @@ type JobCategoryCount {
   jobs: Int!
 }
 
+input JobCategoryCreateManyChildInput {
+  description: String
+  isPopular: Boolean
+  name: String!
+}
+
+input JobCategoryCreateManyChildInputEnvelope {
+  data: [JobCategoryCreateManyChildInput!]!
+  skipDuplicates: Boolean
+}
+
+input JobCategoryCreateNestedManyWithoutChildInput {
+  connect: [JobCategoryWhereUniqueInput!]
+  connectOrCreate: [JobCategoryCreateOrConnectWithoutChildInput!]
+  create: [JobCategoryCreateWithoutChildInput!]
+  createMany: JobCategoryCreateManyChildInputEnvelope
+}
+
+input JobCategoryCreateNestedManyWithoutWorkshopsInput {
+  connect: [JobCategoryWhereUniqueInput!]
+  connectOrCreate: [JobCategoryCreateOrConnectWithoutWorkshopsInput!]
+  create: [JobCategoryCreateWithoutWorkshopsInput!]
+}
+
+input JobCategoryCreateNestedOneWithoutChildrenInput {
+  connect: JobCategoryWhereUniqueInput
+  connectOrCreate: JobCategoryCreateOrConnectWithoutChildrenInput
+  create: JobCategoryCreateWithoutChildrenInput
+}
+
+input JobCategoryCreateNestedOneWithoutJobsInput {
+  connectOrCreate: JobCategoryCreateOrConnectWithoutJobsInput
+}
+
+input JobCategoryCreateOrConnectWithoutChildInput {
+  create: JobCategoryCreateWithoutChildInput!
+  where: JobCategoryWhereUniqueInput!
+}
+
+input JobCategoryCreateOrConnectWithoutChildrenInput {
+  create: JobCategoryCreateWithoutChildrenInput!
+  where: JobCategoryWhereUniqueInput!
+}
+
+input JobCategoryCreateOrConnectWithoutJobsInput {
+  create: JobCategoryCreateWithoutJobsInput!
+  where: JobCategoryWhereUniqueInput!
+}
+
+input JobCategoryCreateOrConnectWithoutWorkshopsInput {
+  create: JobCategoryCreateWithoutWorkshopsInput!
+  where: JobCategoryWhereUniqueInput!
+}
+
+input JobCategoryCreateWithoutChildInput {
+  Workshops: WorkshopCreateNestedManyWithoutJobCategoriesInput
+  children: JobCategoryCreateNestedManyWithoutChildInput
+  description: String
+  isPopular: Boolean
+  jobs: JobCreateNestedManyWithoutJobCategoryInput
+  name: String!
+}
+
+input JobCategoryCreateWithoutChildrenInput {
+  Workshops: WorkshopCreateNestedManyWithoutJobCategoriesInput
+  child: JobCategoryCreateNestedOneWithoutChildrenInput
+  description: String
+  isPopular: Boolean
+  jobs: JobCreateNestedManyWithoutJobCategoryInput
+  name: String!
+}
+
+input JobCategoryCreateWithoutJobsInput {
+  Workshops: WorkshopCreateNestedManyWithoutJobCategoriesInput
+  child: JobCategoryCreateNestedOneWithoutChildrenInput
+  children: JobCategoryCreateNestedManyWithoutChildInput
+  description: String
+  isPopular: Boolean
+  name: String!
+}
+
+input JobCategoryCreateWithoutWorkshopsInput {
+  child: JobCategoryCreateNestedOneWithoutChildrenInput
+  children: JobCategoryCreateNestedManyWithoutChildInput
+  description: String
+  isPopular: Boolean
+  jobs: JobCreateNestedManyWithoutJobCategoryInput
+  name: String!
+}
+
+input JobCategoryListRelationFilter {
+  every: JobCategoryWhereInput
+  none: JobCategoryWhereInput
+  some: JobCategoryWhereInput
+}
+
+input JobCategoryNullableRelationFilter {
+  is: JobCategoryWhereInput
+  isNot: JobCategoryWhereInput
+}
+
+input JobCategoryRelationFilter {
+  is: JobCategoryWhereInput
+  isNot: JobCategoryWhereInput
+}
+
+input JobCategoryWhereInput {
+  AND: [JobCategoryWhereInput!]
+  NOT: [JobCategoryWhereInput!]
+  OR: [JobCategoryWhereInput!]
+  Workshops: WorkshopListRelationFilter
+  categoryId: BigIntFilter
+  child: JobCategoryNullableRelationFilter
+  children: JobCategoryListRelationFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobs: JobListRelationFilter
+  name: StringFilter
+  parentId: BigIntNullableFilter
+}
+
+input JobCategoryWhereUniqueInput {
+  AND: [JobCategoryWhereInput!]
+  NOT: [JobCategoryWhereInput!]
+  OR: [JobCategoryWhereInput!]
+  Workshops: WorkshopListRelationFilter
+  categoryId: BigInt
+  child: JobCategoryNullableRelationFilter
+  children: JobCategoryListRelationFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobs: JobListRelationFilter
+  name: StringFilter
+  parentId: BigIntNullableFilter
+}
+
 type JobCount {
   jobWorkshops: Int!
   serviceRequests: Int!
 }
 
+input JobCreateManyJobCategoryInput {
+  description: String
+  isPopular: Boolean
+  name: String
+}
+
+input JobCreateManyJobCategoryInputEnvelope {
+  data: [JobCreateManyJobCategoryInput!]!
+  skipDuplicates: Boolean
+}
+
+input JobCreateNestedManyWithoutJobCategoryInput {
+  connect: [JobWhereUniqueInput!]
+  connectOrCreate: [JobCreateOrConnectWithoutJobCategoryInput!]
+  create: [JobCreateWithoutJobCategoryInput!]
+  createMany: JobCreateManyJobCategoryInputEnvelope
+}
+
+input JobCreateNestedManyWithoutServiceRequestsInput {
+  connect: [JobWhereUniqueInput!]
+}
+
+input JobCreateNestedOneWithoutJobWorkshopsInput {
+  connect: JobWhereUniqueInput
+  connectOrCreate: JobCreateOrConnectWithoutJobWorkshopsInput
+  create: JobCreateWithoutJobWorkshopsInput
+}
+
+input JobCreateOrConnectWithoutJobCategoryInput {
+  create: JobCreateWithoutJobCategoryInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobCreateOrConnectWithoutJobWorkshopsInput {
+  create: JobCreateWithoutJobWorkshopsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobCreateWithoutJobCategoryInput {
+  description: String
+  isPopular: Boolean
+  jobWorkshops: WorkshopJobCreateNestedManyWithoutJobInput
+  name: String
+  serviceRequests: ServiceRequestCreateNestedManyWithoutJobsInput
+}
+
+input JobCreateWithoutJobWorkshopsInput {
+  description: String
+  isPopular: Boolean
+  jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
+  name: String
+  serviceRequests: ServiceRequestCreateNestedManyWithoutJobsInput
+}
+
+input JobListRelationFilter {
+  every: JobWhereInput
+  none: JobWhereInput
+  some: JobWhereInput
+}
+
+input JobRelationFilter {
+  is: JobWhereInput
+  isNot: JobWhereInput
+}
+
+input JobWhereInput {
+  AND: [JobWhereInput!]
+  NOT: [JobWhereInput!]
+  OR: [JobWhereInput!]
+  categoryId: BigIntFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobCategory: JobCategoryRelationFilter
+  jobId: BigIntFilter
+  jobWorkshops: WorkshopJobListRelationFilter
+  name: StringNullableFilter
+  serviceRequests: ServiceRequestListRelationFilter
+}
+
+input JobWhereUniqueInput {
+  AND: [JobWhereInput!]
+  NOT: [JobWhereInput!]
+  OR: [JobWhereInput!]
+  categoryId: BigIntFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobCategory: JobCategoryRelationFilter
+  jobId: BigInt
+  jobWorkshops: WorkshopJobListRelationFilter
+  name: StringNullableFilter
+  serviceRequests: ServiceRequestListRelationFilter
+}
+
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
+  createPerson(data: PersonCreateInput!): Person!
   deleteAddress(addressId: BigInt!): DeletePayload!
   deletePerson(personId: BigInt!): DeletePayload!
+  updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
+}
+
+input NestedBigIntFilter {
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedBigIntFilter
+  notIn: [String!]
+}
+
+input NestedBigIntNullableFilter {
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedBigIntNullableFilter
+  notIn: [String!]
+}
+
+input NestedBoolFilter {
+  equals: Boolean
+  not: NestedBoolFilter
+}
+
+input NestedBoolNullableFilter {
+  equals: Boolean
+  not: NestedBoolNullableFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input NestedDateTimeNullableFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeNullableFilter
+  notIn: [DateTime!]
+}
+
+input NestedDecimalFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalFilter
+  notIn: [Decimal!]
+}
+
+input NestedDecimalNullableFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalNullableFilter
+  notIn: [Decimal!]
+}
+
+input NestedEnumBodyColorsNullableFilter {
+  equals: BodyColors
+  in: [BodyColors!]
+  not: NestedEnumBodyColorsNullableFilter
+  notIn: [BodyColors!]
+}
+
+input NestedEnumFuelTypeNullableFilter {
+  equals: FuelType
+  in: [FuelType!]
+  not: NestedEnumFuelTypeNullableFilter
+  notIn: [FuelType!]
+}
+
+input NestedEnumReviewsResponsesStatusFilter {
+  equals: ReviewsResponsesStatus
+  in: [ReviewsResponsesStatus!]
+  not: NestedEnumReviewsResponsesStatusFilter
+  notIn: [ReviewsResponsesStatus!]
+}
+
+input NestedEnumReviewsStatusFilter {
+  equals: ReviewsStatus
+  in: [ReviewsStatus!]
+  not: NestedEnumReviewsStatusFilter
+  notIn: [ReviewsStatus!]
+}
+
+input NestedEnumServiceRequestsStatusNullableFilter {
+  equals: ServiceRequestsStatus
+  in: [ServiceRequestsStatus!]
+  not: NestedEnumServiceRequestsStatusNullableFilter
+  notIn: [ServiceRequestsStatus!]
+}
+
+input NestedEnumServicesStatusNullableFilter {
+  equals: ServicesStatus
+  in: [ServicesStatus!]
+  not: NestedEnumServicesStatusNullableFilter
+  notIn: [ServicesStatus!]
+}
+
+input NestedEnumTasksStatusNullableFilter {
+  equals: TasksStatus
+  in: [TasksStatus!]
+  not: NestedEnumTasksStatusNullableFilter
+  notIn: [TasksStatus!]
+}
+
+input NestedEnumUserReportsReportedTypeFilter {
+  equals: UserReportsReportedType
+  in: [UserReportsReportedType!]
+  not: NestedEnumUserReportsReportedTypeFilter
+  notIn: [UserReportsReportedType!]
+}
+
+input NestedEnumUserReportsStatusFilter {
+  equals: UserReportsStatus
+  in: [UserReportsStatus!]
+  not: NestedEnumUserReportsStatusFilter
+  notIn: [UserReportsStatus!]
+}
+
+input NestedEnumUsersStatusNullableFilter {
+  equals: UsersStatus
+  in: [UsersStatus!]
+  not: NestedEnumUsersStatusNullableFilter
+  notIn: [UsersStatus!]
+}
+
+input NestedEnumWorkshopsDetailsStatusNullableFilter {
+  equals: WorkshopsDetailsStatus
+  in: [WorkshopsDetailsStatus!]
+  not: NestedEnumWorkshopsDetailsStatusNullableFilter
+  notIn: [WorkshopsDetailsStatus!]
+}
+
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input NestedIntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
 }
 
 type PermissionSet {
@@ -311,6 +1396,169 @@ type PermissionSet {
 
 type PermissionSetCount {
   employees: Int!
+}
+
+input PermissionSetCreateManyWorkshopInput {
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
+  setName: String
+}
+
+input PermissionSetCreateManyWorkshopInputEnvelope {
+  data: [PermissionSetCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input PermissionSetCreateNestedManyWithoutWorkshopInput {
+  connect: [PermissionSetWhereUniqueInput!]
+  connectOrCreate: [PermissionSetCreateOrConnectWithoutWorkshopInput!]
+  create: [PermissionSetCreateWithoutWorkshopInput!]
+  createMany: PermissionSetCreateManyWorkshopInputEnvelope
+}
+
+input PermissionSetCreateNestedOneWithoutEmployeesInput {
+  connectOrCreate: PermissionSetCreateOrConnectWithoutEmployeesInput
+}
+
+input PermissionSetCreateOrConnectWithoutEmployeesInput {
+  create: PermissionSetCreateWithoutEmployeesInput!
+  where: PermissionSetWhereUniqueInput!
+}
+
+input PermissionSetCreateOrConnectWithoutWorkshopInput {
+  create: PermissionSetCreateWithoutWorkshopInput!
+  where: PermissionSetWhereUniqueInput!
+}
+
+input PermissionSetCreateWithoutEmployeesInput {
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
+  setName: String
+  workshop: WorkshopCreateNestedOneWithoutPermissionSetsInput
+}
+
+input PermissionSetCreateWithoutWorkshopInput {
+  canGenerateReports: Boolean
+  canModifyCustomers: Boolean
+  canModifyEmployees: Boolean
+  canModifyPermissions: Boolean
+  canModifyServices: Boolean
+  canModifyTasks: Boolean
+  canModifyWorkshopDetails: Boolean
+  canReadCustomers: Boolean
+  canReadEmployees: Boolean
+  canReadReports: Boolean
+  canReadServices: Boolean
+  canReadTasks: Boolean
+  canReadWorkshopDetails: Boolean
+  canUpdateCustomers: Boolean
+  canUpdateEmployees: Boolean
+  canUpdateServices: Boolean
+  canUpdateTasks: Boolean
+  canUpdateWorkshopDetails: Boolean
+  employees: EmployeeCreateNestedManyWithoutPermissionSetInput
+  setName: String
+}
+
+input PermissionSetListRelationFilter {
+  every: PermissionSetWhereInput
+  none: PermissionSetWhereInput
+  some: PermissionSetWhereInput
+}
+
+input PermissionSetNullableRelationFilter {
+  is: PermissionSetWhereInput
+  isNot: PermissionSetWhereInput
+}
+
+input PermissionSetWhereInput {
+  AND: [PermissionSetWhereInput!]
+  NOT: [PermissionSetWhereInput!]
+  OR: [PermissionSetWhereInput!]
+  canGenerateReports: BoolFilter
+  canModifyCustomers: BoolFilter
+  canModifyEmployees: BoolFilter
+  canModifyPermissions: BoolFilter
+  canModifyServices: BoolFilter
+  canModifyTasks: BoolFilter
+  canModifyWorkshopDetails: BoolFilter
+  canReadCustomers: BoolFilter
+  canReadEmployees: BoolFilter
+  canReadReports: BoolFilter
+  canReadServices: BoolFilter
+  canReadTasks: BoolFilter
+  canReadWorkshopDetails: BoolFilter
+  canUpdateCustomers: BoolFilter
+  canUpdateEmployees: BoolFilter
+  canUpdateServices: BoolFilter
+  canUpdateTasks: BoolFilter
+  canUpdateWorkshopDetails: BoolFilter
+  employees: EmployeeListRelationFilter
+  permissionSetId: IntFilter
+  setName: StringFilter
+  workshop: WorkshopNullableRelationFilter
+  workshopId: BigIntNullableFilter
+}
+
+input PermissionSetWhereUniqueInput {
+  AND: [PermissionSetWhereInput!]
+  NOT: [PermissionSetWhereInput!]
+  OR: [PermissionSetWhereInput!]
+  canGenerateReports: BoolFilter
+  canModifyCustomers: BoolFilter
+  canModifyEmployees: BoolFilter
+  canModifyPermissions: BoolFilter
+  canModifyServices: BoolFilter
+  canModifyTasks: BoolFilter
+  canModifyWorkshopDetails: BoolFilter
+  canReadCustomers: BoolFilter
+  canReadEmployees: BoolFilter
+  canReadReports: BoolFilter
+  canReadServices: BoolFilter
+  canReadTasks: BoolFilter
+  canReadWorkshopDetails: BoolFilter
+  canUpdateCustomers: BoolFilter
+  canUpdateEmployees: BoolFilter
+  canUpdateServices: BoolFilter
+  canUpdateTasks: BoolFilter
+  canUpdateWorkshopDetails: BoolFilter
+  employees: EmployeeListRelationFilter
+  permissionSetId: BigInt
+  setName: StringFilter
+  workshop: WorkshopNullableRelationFilter
+  workshopId: BigIntNullableFilter
 }
 
 type Person {
@@ -353,6 +1601,167 @@ type PersonCountAggregate {
   telephoneNumber: Int!
 }
 
+input PersonCreateInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateManyPersonInputEnvelope
+  telephoneNumber: String
+  vehicles: VehicleCreateManyPersonInputEnvelope
+}
+
+input PersonCreateManyAddressInput {
+  firstName: String!
+  lastName: String!
+  telephoneNumber: String
+}
+
+input PersonCreateManyAddressInputEnvelope {
+  data: [PersonCreateManyAddressInput!]!
+  skipDuplicates: Boolean
+}
+
+input PersonCreateNestedManyWithoutAddressInput {
+  connect: [PersonWhereUniqueInput!]
+  connectOrCreate: [PersonCreateOrConnectWithoutAddressInput!]
+  create: [PersonCreateWithoutAddressInput!]
+  createMany: PersonCreateManyAddressInputEnvelope
+}
+
+input PersonCreateNestedOneWithoutCustomersInput {
+  connectOrCreate: PersonCreateOrConnectWithoutCustomersInput
+}
+
+input PersonCreateNestedOneWithoutEmployeesInput {
+  connectOrCreate: PersonCreateOrConnectWithoutEmployeesInput
+}
+
+input PersonCreateNestedOneWithoutServiceRequestsInput {
+  connect: PersonWhereUniqueInput
+  connectOrCreate: PersonCreateOrConnectWithoutServiceRequestsInput
+  create: PersonCreateWithoutServiceRequestsInput
+}
+
+input PersonCreateNestedOneWithoutVehiclesInput {
+  connect: PersonWhereUniqueInput
+  connectOrCreate: PersonCreateOrConnectWithoutVehiclesInput
+  create: PersonCreateWithoutVehiclesInput
+}
+
+input PersonCreateNestedOneWithoutWorkshopsInput {
+  connect: PersonWhereUniqueInput
+  connectOrCreate: PersonCreateOrConnectWithoutWorkshopsInput
+  create: PersonCreateWithoutWorkshopsInput
+}
+
+input PersonCreateOrConnectWithoutAddressInput {
+  create: PersonCreateWithoutAddressInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateOrConnectWithoutCustomersInput {
+  create: PersonCreateWithoutCustomersInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateOrConnectWithoutEmployeesInput {
+  create: PersonCreateWithoutEmployeesInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateOrConnectWithoutServiceRequestsInput {
+  create: PersonCreateWithoutServiceRequestsInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateOrConnectWithoutVehiclesInput {
+  create: PersonCreateWithoutVehiclesInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateOrConnectWithoutWorkshopsInput {
+  create: PersonCreateWithoutWorkshopsInput!
+  where: PersonWhereUniqueInput!
+}
+
+input PersonCreateWithoutAddressInput {
+  customers: CustomerCreateNestedManyWithoutPersonInput
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutCustomersInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutEmployeesInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  customers: CustomerCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutServiceRequestsInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  customers: CustomerCreateNestedManyWithoutPersonInput
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutVehiclesInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  customers: CustomerCreateNestedManyWithoutPersonInput
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  workshops: WorkshopCreateNestedManyWithoutPersonInput
+}
+
+input PersonCreateWithoutWorkshopsInput {
+  address: AddressCreateNestedOneWithoutPersonsInput
+  customers: CustomerCreateNestedManyWithoutPersonInput
+  employees: EmployeeCreateNestedManyWithoutPersonInput
+  firstName: String!
+  lastName: String!
+  serviceRequests: ServiceRequestCreateNestedManyWithoutPersonInput
+  telephoneNumber: String
+  user: UserCreateNestedOneWithoutPersonInput
+  vehicles: VehicleCreateNestedManyWithoutPersonInput
+}
+
+input PersonListRelationFilter {
+  every: PersonWhereInput
+  none: PersonWhereInput
+  some: PersonWhereInput
+}
+
 type PersonMaxAggregate {
   addressId: BigInt
   deletedAt: DateTime
@@ -371,9 +1780,57 @@ type PersonMinAggregate {
   telephoneNumber: String
 }
 
+input PersonNullableRelationFilter {
+  is: PersonWhereInput
+  isNot: PersonWhereInput
+}
+
+input PersonRelationFilter {
+  is: PersonWhereInput
+  isNot: PersonWhereInput
+}
+
 type PersonSumAggregate {
   addressId: BigInt
   personId: BigInt
+}
+
+input PersonWhereInput {
+  AND: [PersonWhereInput!]
+  NOT: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
+  customers: CustomerListRelationFilter
+  deletedAt: DateTimeNullableFilter
+  employees: EmployeeListRelationFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  personId: BigIntFilter
+  serviceRequests: ServiceRequestListRelationFilter
+  telephoneNumber: StringNullableFilter
+  user: UserNullableRelationFilter
+  vehicles: VehicleListRelationFilter
+  workshops: WorkshopListRelationFilter
+}
+
+input PersonWhereUniqueInput {
+  AND: [PersonWhereInput!]
+  NOT: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
+  customers: CustomerListRelationFilter
+  deletedAt: DateTimeNullableFilter
+  employees: EmployeeListRelationFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  personId: BigInt
+  serviceRequests: ServiceRequestListRelationFilter
+  telephoneNumber: StringNullableFilter
+  user: UserNullableRelationFilter
+  vehicles: VehicleListRelationFilter
+  workshops: WorkshopListRelationFilter
 }
 
 type Query {
@@ -401,6 +1858,89 @@ type ReviewCount {
   reviewResponses: Int!
 }
 
+input ReviewCreateManyUserInput {
+  rating: Decimal
+  reviewDate: DateTime
+  reviewText: String!
+  status: ReviewsStatus
+  workshopId: BigInt!
+}
+
+input ReviewCreateManyUserInputEnvelope {
+  data: [ReviewCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input ReviewCreateManyWorkshopInput {
+  rating: Decimal
+  reviewDate: DateTime
+  reviewText: String!
+  status: ReviewsStatus
+  userId: BigInt!
+}
+
+input ReviewCreateManyWorkshopInputEnvelope {
+  data: [ReviewCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input ReviewCreateNestedManyWithoutUserInput {
+  connect: [ReviewWhereUniqueInput!]
+  connectOrCreate: [ReviewCreateOrConnectWithoutUserInput!]
+  create: [ReviewCreateWithoutUserInput!]
+  createMany: ReviewCreateManyUserInputEnvelope
+}
+
+input ReviewCreateNestedManyWithoutWorkshopInput {
+  connect: [ReviewWhereUniqueInput!]
+  connectOrCreate: [ReviewCreateOrConnectWithoutWorkshopInput!]
+  create: [ReviewCreateWithoutWorkshopInput!]
+  createMany: ReviewCreateManyWorkshopInputEnvelope
+}
+
+input ReviewCreateNestedOneWithoutReviewResponsesInput {
+  connect: ReviewWhereUniqueInput
+}
+
+input ReviewCreateOrConnectWithoutUserInput {
+  create: ReviewCreateWithoutUserInput!
+  where: ReviewWhereUniqueInput!
+}
+
+input ReviewCreateOrConnectWithoutWorkshopInput {
+  create: ReviewCreateWithoutWorkshopInput!
+  where: ReviewWhereUniqueInput!
+}
+
+input ReviewCreateWithoutUserInput {
+  rating: Decimal
+  reviewDate: DateTime
+  reviewResponses: ReviewResponseCreateNestedManyWithoutReviewInput
+  reviewText: String!
+  status: ReviewsStatus
+  workshop: WorkshopCreateNestedOneWithoutReviewsInput!
+}
+
+input ReviewCreateWithoutWorkshopInput {
+  rating: Decimal
+  reviewDate: DateTime
+  reviewResponses: ReviewResponseCreateNestedManyWithoutReviewInput
+  reviewText: String!
+  status: ReviewsStatus
+  user: UserCreateNestedOneWithoutReviewsInput!
+}
+
+input ReviewListRelationFilter {
+  every: ReviewWhereInput
+  none: ReviewWhereInput
+  some: ReviewWhereInput
+}
+
+input ReviewRelationFilter {
+  is: ReviewWhereInput
+  isNot: ReviewWhereInput
+}
+
 type ReviewResponse {
   _count: ReviewResponseCount!
   otherReviewResponses: [ReviewResponse!]
@@ -418,6 +1958,205 @@ type ReviewResponse {
 
 type ReviewResponseCount {
   otherReviewResponses: Int!
+}
+
+input ReviewResponseCreateManyReviewInput {
+  parentResponseId: BigInt
+  responseDate: DateTime
+  responseText: String!
+  status: ReviewsResponsesStatus
+  userId: BigInt!
+}
+
+input ReviewResponseCreateManyReviewInputEnvelope {
+  data: [ReviewResponseCreateManyReviewInput!]!
+  skipDuplicates: Boolean
+}
+
+input ReviewResponseCreateManyReviewResponseInput {
+  responseDate: DateTime
+  responseText: String!
+  reviewId: BigInt!
+  status: ReviewsResponsesStatus
+  userId: BigInt!
+}
+
+input ReviewResponseCreateManyReviewResponseInputEnvelope {
+  data: [ReviewResponseCreateManyReviewResponseInput!]!
+  skipDuplicates: Boolean
+}
+
+input ReviewResponseCreateManyUserInput {
+  parentResponseId: BigInt
+  responseDate: DateTime
+  responseText: String!
+  reviewId: BigInt!
+  status: ReviewsResponsesStatus
+}
+
+input ReviewResponseCreateManyUserInputEnvelope {
+  data: [ReviewResponseCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input ReviewResponseCreateNestedManyWithoutReviewInput {
+  connect: [ReviewResponseWhereUniqueInput!]
+  connectOrCreate: [ReviewResponseCreateOrConnectWithoutReviewInput!]
+  create: [ReviewResponseCreateWithoutReviewInput!]
+  createMany: ReviewResponseCreateManyReviewInputEnvelope
+}
+
+input ReviewResponseCreateNestedManyWithoutReviewResponseInput {
+  connect: [ReviewResponseWhereUniqueInput!]
+  connectOrCreate: [ReviewResponseCreateOrConnectWithoutReviewResponseInput!]
+  create: [ReviewResponseCreateWithoutReviewResponseInput!]
+  createMany: ReviewResponseCreateManyReviewResponseInputEnvelope
+}
+
+input ReviewResponseCreateNestedManyWithoutUserInput {
+  connect: [ReviewResponseWhereUniqueInput!]
+  connectOrCreate: [ReviewResponseCreateOrConnectWithoutUserInput!]
+  create: [ReviewResponseCreateWithoutUserInput!]
+  createMany: ReviewResponseCreateManyUserInputEnvelope
+}
+
+input ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput {
+  connect: ReviewResponseWhereUniqueInput
+  connectOrCreate: ReviewResponseCreateOrConnectWithoutOtherReviewResponsesInput
+  create: ReviewResponseCreateWithoutOtherReviewResponsesInput
+}
+
+input ReviewResponseCreateOrConnectWithoutOtherReviewResponsesInput {
+  create: ReviewResponseCreateWithoutOtherReviewResponsesInput!
+  where: ReviewResponseWhereUniqueInput!
+}
+
+input ReviewResponseCreateOrConnectWithoutReviewInput {
+  create: ReviewResponseCreateWithoutReviewInput!
+  where: ReviewResponseWhereUniqueInput!
+}
+
+input ReviewResponseCreateOrConnectWithoutReviewResponseInput {
+  create: ReviewResponseCreateWithoutReviewResponseInput!
+  where: ReviewResponseWhereUniqueInput!
+}
+
+input ReviewResponseCreateOrConnectWithoutUserInput {
+  create: ReviewResponseCreateWithoutUserInput!
+  where: ReviewResponseWhereUniqueInput!
+}
+
+input ReviewResponseCreateWithoutOtherReviewResponsesInput {
+  responseDate: DateTime
+  responseText: String!
+  review: ReviewCreateNestedOneWithoutReviewResponsesInput!
+  reviewResponse: ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput
+  status: ReviewsResponsesStatus
+  user: UserCreateNestedOneWithoutReviewResponsesInput!
+}
+
+input ReviewResponseCreateWithoutReviewInput {
+  otherReviewResponses: ReviewResponseCreateNestedManyWithoutReviewResponseInput
+  responseDate: DateTime
+  responseText: String!
+  reviewResponse: ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput
+  status: ReviewsResponsesStatus
+  user: UserCreateNestedOneWithoutReviewResponsesInput!
+}
+
+input ReviewResponseCreateWithoutReviewResponseInput {
+  otherReviewResponses: ReviewResponseCreateNestedManyWithoutReviewResponseInput
+  responseDate: DateTime
+  responseText: String!
+  review: ReviewCreateNestedOneWithoutReviewResponsesInput!
+  status: ReviewsResponsesStatus
+  user: UserCreateNestedOneWithoutReviewResponsesInput!
+}
+
+input ReviewResponseCreateWithoutUserInput {
+  otherReviewResponses: ReviewResponseCreateNestedManyWithoutReviewResponseInput
+  responseDate: DateTime
+  responseText: String!
+  review: ReviewCreateNestedOneWithoutReviewResponsesInput!
+  reviewResponse: ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput
+  status: ReviewsResponsesStatus
+}
+
+input ReviewResponseListRelationFilter {
+  every: ReviewResponseWhereInput
+  none: ReviewResponseWhereInput
+  some: ReviewResponseWhereInput
+}
+
+input ReviewResponseNullableRelationFilter {
+  is: ReviewResponseWhereInput
+  isNot: ReviewResponseWhereInput
+}
+
+input ReviewResponseWhereInput {
+  AND: [ReviewResponseWhereInput!]
+  NOT: [ReviewResponseWhereInput!]
+  OR: [ReviewResponseWhereInput!]
+  otherReviewResponses: ReviewResponseListRelationFilter
+  parentResponseId: BigIntNullableFilter
+  responseDate: DateTimeFilter
+  responseText: StringFilter
+  review: ReviewRelationFilter
+  reviewId: BigIntFilter
+  reviewResponse: ReviewResponseNullableRelationFilter
+  reviewResponseId: BigIntFilter
+  status: EnumReviewsResponsesStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+}
+
+input ReviewResponseWhereUniqueInput {
+  AND: [ReviewResponseWhereInput!]
+  NOT: [ReviewResponseWhereInput!]
+  OR: [ReviewResponseWhereInput!]
+  otherReviewResponses: ReviewResponseListRelationFilter
+  parentResponseId: BigIntNullableFilter
+  responseDate: DateTimeFilter
+  responseText: StringFilter
+  review: ReviewRelationFilter
+  reviewId: BigIntFilter
+  reviewResponse: ReviewResponseNullableRelationFilter
+  reviewResponseId: BigInt
+  status: EnumReviewsResponsesStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+}
+
+input ReviewWhereInput {
+  AND: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  rating: DecimalFilter
+  reviewDate: DateTimeFilter
+  reviewId: BigIntFilter
+  reviewResponses: ReviewResponseListRelationFilter
+  reviewText: StringFilter
+  status: EnumReviewsStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input ReviewWhereUniqueInput {
+  AND: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  rating: DecimalFilter
+  reviewDate: DateTimeFilter
+  reviewId: BigInt
+  reviewResponses: ReviewResponseListRelationFilter
+  reviewText: StringFilter
+  status: EnumReviewsStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
 }
 
 enum ReviewsResponsesStatus {
@@ -458,6 +2197,262 @@ type Service {
 
 type ServiceCount {
   tasks: Int!
+}
+
+input ServiceCreateManyCustomerInput {
+  description: String
+  employeeId: BigInt!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  vehicleId: BigInt!
+}
+
+input ServiceCreateManyCustomerInputEnvelope {
+  data: [ServiceCreateManyCustomerInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceCreateManyEmployeeInput {
+  customerId: BigInt!
+  description: String
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  vehicleId: BigInt!
+}
+
+input ServiceCreateManyEmployeeInputEnvelope {
+  data: [ServiceCreateManyEmployeeInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceCreateManyVehicleInput {
+  customerId: BigInt!
+  description: String
+  employeeId: BigInt!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  workshopId: BigInt!
+}
+
+input ServiceCreateManyVehicleInputEnvelope {
+  data: [ServiceCreateManyVehicleInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceCreateManyWorkshopInput {
+  customerId: BigInt!
+  description: String
+  employeeId: BigInt!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  vehicleId: BigInt!
+}
+
+input ServiceCreateManyWorkshopInputEnvelope {
+  data: [ServiceCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceCreateNestedManyWithoutCustomerInput {
+  connect: [ServiceWhereUniqueInput!]
+  connectOrCreate: [ServiceCreateOrConnectWithoutCustomerInput!]
+  create: [ServiceCreateWithoutCustomerInput!]
+  createMany: ServiceCreateManyCustomerInputEnvelope
+}
+
+input ServiceCreateNestedManyWithoutEmployeeInput {
+  connect: [ServiceWhereUniqueInput!]
+  connectOrCreate: [ServiceCreateOrConnectWithoutEmployeeInput!]
+  create: [ServiceCreateWithoutEmployeeInput!]
+  createMany: ServiceCreateManyEmployeeInputEnvelope
+}
+
+input ServiceCreateNestedManyWithoutVehicleInput {
+  connect: [ServiceWhereUniqueInput!]
+  connectOrCreate: [ServiceCreateOrConnectWithoutVehicleInput!]
+  create: [ServiceCreateWithoutVehicleInput!]
+  createMany: ServiceCreateManyVehicleInputEnvelope
+}
+
+input ServiceCreateNestedManyWithoutWorkshopInput {
+  connect: [ServiceWhereUniqueInput!]
+  connectOrCreate: [ServiceCreateOrConnectWithoutWorkshopInput!]
+  create: [ServiceCreateWithoutWorkshopInput!]
+  createMany: ServiceCreateManyWorkshopInputEnvelope
+}
+
+input ServiceCreateNestedOneWithoutServiceRequestInput {
+  connect: ServiceWhereUniqueInput
+  connectOrCreate: ServiceCreateOrConnectWithoutServiceRequestInput
+  create: ServiceCreateWithoutServiceRequestInput
+}
+
+input ServiceCreateNestedOneWithoutTasksInput {
+  connect: ServiceWhereUniqueInput
+  connectOrCreate: ServiceCreateOrConnectWithoutTasksInput
+  create: ServiceCreateWithoutTasksInput
+}
+
+input ServiceCreateOrConnectWithoutCustomerInput {
+  create: ServiceCreateWithoutCustomerInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateOrConnectWithoutEmployeeInput {
+  create: ServiceCreateWithoutEmployeeInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateOrConnectWithoutServiceRequestInput {
+  create: ServiceCreateWithoutServiceRequestInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateOrConnectWithoutTasksInput {
+  create: ServiceCreateWithoutTasksInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateOrConnectWithoutVehicleInput {
+  create: ServiceCreateWithoutVehicleInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateOrConnectWithoutWorkshopInput {
+  create: ServiceCreateWithoutWorkshopInput!
+  where: ServiceWhereUniqueInput!
+}
+
+input ServiceCreateWithoutCustomerInput {
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequest: ServiceRequestCreateNestedOneWithoutApprovedServiceInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  updatedAt: DateTime
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateWithoutEmployeeInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequest: ServiceRequestCreateNestedOneWithoutApprovedServiceInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  updatedAt: DateTime
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateWithoutServiceRequestInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  updatedAt: DateTime
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateWithoutTasksInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequest: ServiceRequestCreateNestedOneWithoutApprovedServiceInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  updatedAt: DateTime
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateWithoutVehicleInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequest: ServiceRequestCreateNestedOneWithoutApprovedServiceInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  updatedAt: DateTime
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateWithoutWorkshopInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceEndDate: DateTime
+  serviceRequest: ServiceRequestCreateNestedOneWithoutApprovedServiceInput
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServicesStatus
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  updatedAt: DateTime
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceListRelationFilter {
+  every: ServiceWhereInput
+  none: ServiceWhereInput
+  some: ServiceWhereInput
+}
+
+input ServiceNullableRelationFilter {
+  is: ServiceWhereInput
+  isNot: ServiceWhereInput
+}
+
+input ServiceRelationFilter {
+  is: ServiceWhereInput
+  isNot: ServiceWhereInput
 }
 
 type ServiceRequest {
@@ -503,6 +2498,162 @@ type ServiceRequestCountAggregate {
   workshopId: Int!
 }
 
+input ServiceRequestCreateManyPersonInput {
+  approvedServiceId: BigInt
+  description: String
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicleId: BigInt!
+  workshopId: BigInt!
+}
+
+input ServiceRequestCreateManyPersonInputEnvelope {
+  data: [ServiceRequestCreateManyPersonInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceRequestCreateManyVehicleInput {
+  approvedServiceId: BigInt
+  description: String
+  personId: BigInt!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  workshopId: BigInt!
+}
+
+input ServiceRequestCreateManyVehicleInputEnvelope {
+  data: [ServiceRequestCreateManyVehicleInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceRequestCreateManyWorkshopInput {
+  approvedServiceId: BigInt
+  description: String
+  personId: BigInt!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicleId: BigInt!
+}
+
+input ServiceRequestCreateManyWorkshopInputEnvelope {
+  data: [ServiceRequestCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input ServiceRequestCreateNestedManyWithoutJobsInput {
+  connect: [ServiceRequestWhereUniqueInput!]
+  connectOrCreate: [ServiceRequestCreateOrConnectWithoutJobsInput!]
+  create: [ServiceRequestCreateWithoutJobsInput!]
+}
+
+input ServiceRequestCreateNestedManyWithoutPersonInput {
+  connect: [ServiceRequestWhereUniqueInput!]
+  connectOrCreate: [ServiceRequestCreateOrConnectWithoutPersonInput!]
+  create: [ServiceRequestCreateWithoutPersonInput!]
+  createMany: ServiceRequestCreateManyPersonInputEnvelope
+}
+
+input ServiceRequestCreateNestedManyWithoutVehicleInput {
+  connect: [ServiceRequestWhereUniqueInput!]
+  connectOrCreate: [ServiceRequestCreateOrConnectWithoutVehicleInput!]
+  create: [ServiceRequestCreateWithoutVehicleInput!]
+  createMany: ServiceRequestCreateManyVehicleInputEnvelope
+}
+
+input ServiceRequestCreateNestedManyWithoutWorkshopInput {
+  connect: [ServiceRequestWhereUniqueInput!]
+  connectOrCreate: [ServiceRequestCreateOrConnectWithoutWorkshopInput!]
+  create: [ServiceRequestCreateWithoutWorkshopInput!]
+  createMany: ServiceRequestCreateManyWorkshopInputEnvelope
+}
+
+input ServiceRequestCreateNestedOneWithoutApprovedServiceInput {
+  connect: ServiceRequestWhereUniqueInput
+  connectOrCreate: ServiceRequestCreateOrConnectWithoutApprovedServiceInput
+  create: ServiceRequestCreateWithoutApprovedServiceInput
+}
+
+input ServiceRequestCreateOrConnectWithoutApprovedServiceInput {
+  create: ServiceRequestCreateWithoutApprovedServiceInput!
+  where: ServiceRequestWhereUniqueInput!
+}
+
+input ServiceRequestCreateOrConnectWithoutJobsInput {
+  create: ServiceRequestCreateWithoutJobsInput!
+  where: ServiceRequestWhereUniqueInput!
+}
+
+input ServiceRequestCreateOrConnectWithoutPersonInput {
+  create: ServiceRequestCreateWithoutPersonInput!
+  where: ServiceRequestWhereUniqueInput!
+}
+
+input ServiceRequestCreateOrConnectWithoutVehicleInput {
+  create: ServiceRequestCreateWithoutVehicleInput!
+  where: ServiceRequestWhereUniqueInput!
+}
+
+input ServiceRequestCreateOrConnectWithoutWorkshopInput {
+  create: ServiceRequestCreateWithoutWorkshopInput!
+  where: ServiceRequestWhereUniqueInput!
+}
+
+input ServiceRequestCreateWithoutApprovedServiceInput {
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  person: PersonCreateNestedOneWithoutServiceRequestsInput!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicle: VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
+input ServiceRequestCreateWithoutJobsInput {
+  approvedService: ServiceCreateNestedOneWithoutServiceRequestInput
+  description: String
+  person: PersonCreateNestedOneWithoutServiceRequestsInput!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicle: VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
+input ServiceRequestCreateWithoutPersonInput {
+  approvedService: ServiceCreateNestedOneWithoutServiceRequestInput
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicle: VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
+input ServiceRequestCreateWithoutVehicleInput {
+  approvedService: ServiceCreateNestedOneWithoutServiceRequestInput
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  person: PersonCreateNestedOneWithoutServiceRequestsInput!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
+input ServiceRequestCreateWithoutWorkshopInput {
+  approvedService: ServiceCreateNestedOneWithoutServiceRequestInput
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  person: PersonCreateNestedOneWithoutServiceRequestsInput!
+  requestedAt: DateTime
+  status: ServiceRequestsStatus
+  vehicle: VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput!
+}
+
+input ServiceRequestListRelationFilter {
+  every: ServiceRequestWhereInput
+  none: ServiceRequestWhereInput
+  some: ServiceRequestWhereInput
+}
+
 type ServiceRequestMaxAggregate {
   approvedServiceId: BigInt
   deletedAt: DateTime
@@ -527,6 +2678,11 @@ type ServiceRequestMinAggregate {
   workshopId: BigInt
 }
 
+input ServiceRequestNullableRelationFilter {
+  is: ServiceRequestWhereInput
+  isNot: ServiceRequestWhereInput
+}
+
 type ServiceRequestSumAggregate {
   approvedServiceId: BigInt
   personId: BigInt
@@ -535,16 +2691,136 @@ type ServiceRequestSumAggregate {
   workshopId: BigInt
 }
 
+input ServiceRequestWhereInput {
+  AND: [ServiceRequestWhereInput!]
+  NOT: [ServiceRequestWhereInput!]
+  OR: [ServiceRequestWhereInput!]
+  approvedService: ServiceNullableRelationFilter
+  approvedServiceId: BigIntNullableFilter
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  jobs: JobListRelationFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  requestedAt: DateTimeFilter
+  serviceRequestId: BigIntFilter
+  status: EnumServiceRequestsStatusNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input ServiceRequestWhereUniqueInput {
+  AND: [ServiceRequestWhereInput!]
+  NOT: [ServiceRequestWhereInput!]
+  OR: [ServiceRequestWhereInput!]
+  approvedService: ServiceNullableRelationFilter
+  approvedServiceId: BigInt
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  jobs: JobListRelationFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  requestedAt: DateTimeFilter
+  serviceRequestId: BigInt
+  status: EnumServiceRequestsStatusNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
 enum ServiceRequestsStatus {
   accepted
   pending
   rejected
 }
 
+input ServiceWhereInput {
+  AND: [ServiceWhereInput!]
+  NOT: [ServiceWhereInput!]
+  OR: [ServiceWhereInput!]
+  customer: CustomerRelationFilter
+  customerId: BigIntFilter
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  payedOff: BoolFilter
+  paymentAmount: DecimalFilter
+  serviceEndDate: DateTimeNullableFilter
+  serviceId: BigIntFilter
+  serviceRequest: ServiceRequestNullableRelationFilter
+  serviceRequestId: BigIntNullableFilter
+  serviceStartDate: DateTimeFilter
+  status: EnumServicesStatusNullableFilter
+  tasks: TaskListRelationFilter
+  updatedAt: DateTimeNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input ServiceWhereUniqueInput {
+  AND: [ServiceWhereInput!]
+  NOT: [ServiceWhereInput!]
+  OR: [ServiceWhereInput!]
+  customer: CustomerRelationFilter
+  customerId: BigIntFilter
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  payedOff: BoolFilter
+  paymentAmount: DecimalFilter
+  serviceEndDate: DateTimeNullableFilter
+  serviceId: BigInt
+  serviceRequest: ServiceRequestNullableRelationFilter
+  serviceRequestId: BigInt
+  serviceStartDate: DateTimeFilter
+  status: EnumServicesStatusNullableFilter
+  tasks: TaskListRelationFilter
+  updatedAt: DateTimeNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
 enum ServicesStatus {
   cancelled
   completed
   pending
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
 }
 
 type Task {
@@ -564,6 +2840,144 @@ type Task {
 
 type TaskCount {
   taskEmployees: Int!
+}
+
+input TaskCreateManyServiceInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  partsCost: Decimal
+  status: TasksStatus
+  workshopJobId: BigInt!
+}
+
+input TaskCreateManyServiceInputEnvelope {
+  data: [TaskCreateManyServiceInput!]!
+  skipDuplicates: Boolean
+}
+
+input TaskCreateManyWorkshopJobInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  partsCost: Decimal
+  serviceId: BigInt!
+  status: TasksStatus
+}
+
+input TaskCreateManyWorkshopJobInputEnvelope {
+  data: [TaskCreateManyWorkshopJobInput!]!
+  skipDuplicates: Boolean
+}
+
+input TaskCreateNestedManyWithoutServiceInput {
+  connect: [TaskWhereUniqueInput!]
+  connectOrCreate: [TaskCreateOrConnectWithoutServiceInput!]
+  create: [TaskCreateWithoutServiceInput!]
+  createMany: TaskCreateManyServiceInputEnvelope
+}
+
+input TaskCreateNestedManyWithoutWorkshopJobInput {
+  connect: [TaskWhereUniqueInput!]
+  connectOrCreate: [TaskCreateOrConnectWithoutWorkshopJobInput!]
+  create: [TaskCreateWithoutWorkshopJobInput!]
+  createMany: TaskCreateManyWorkshopJobInputEnvelope
+}
+
+input TaskCreateNestedOneWithoutTaskEmployeesInput {
+  connect: TaskWhereUniqueInput
+  connectOrCreate: TaskCreateOrConnectWithoutTaskEmployeesInput
+  create: TaskCreateWithoutTaskEmployeesInput
+}
+
+input TaskCreateOrConnectWithoutServiceInput {
+  create: TaskCreateWithoutServiceInput!
+  where: TaskWhereUniqueInput!
+}
+
+input TaskCreateOrConnectWithoutTaskEmployeesInput {
+  create: TaskCreateWithoutTaskEmployeesInput!
+  where: TaskWhereUniqueInput!
+}
+
+input TaskCreateOrConnectWithoutWorkshopJobInput {
+  create: TaskCreateWithoutWorkshopJobInput!
+  where: TaskWhereUniqueInput!
+}
+
+input TaskCreateWithoutServiceInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  partsCost: Decimal
+  status: TasksStatus
+  taskEmployees: EmployeeTaskCreateNestedManyWithoutTaskInput
+  workshopJob: WorkshopJobCreateNestedOneWithoutTasksInput!
+}
+
+input TaskCreateWithoutTaskEmployeesInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  partsCost: Decimal
+  service: ServiceCreateNestedOneWithoutTasksInput!
+  status: TasksStatus
+  workshopJob: WorkshopJobCreateNestedOneWithoutTasksInput!
+}
+
+input TaskCreateWithoutWorkshopJobInput {
+  customName: String
+  description: String!
+  executionTime: Float!
+  partsCost: Decimal
+  service: ServiceCreateNestedOneWithoutTasksInput!
+  status: TasksStatus
+  taskEmployees: EmployeeTaskCreateNestedManyWithoutTaskInput
+}
+
+input TaskListRelationFilter {
+  every: TaskWhereInput
+  none: TaskWhereInput
+  some: TaskWhereInput
+}
+
+input TaskRelationFilter {
+  is: TaskWhereInput
+  isNot: TaskWhereInput
+}
+
+input TaskWhereInput {
+  AND: [TaskWhereInput!]
+  NOT: [TaskWhereInput!]
+  OR: [TaskWhereInput!]
+  customName: StringNullableFilter
+  description: StringFilter
+  executionTime: FloatFilter
+  partsCost: DecimalFilter
+  service: ServiceRelationFilter
+  serviceId: BigIntFilter
+  status: EnumTasksStatusNullableFilter
+  taskEmployees: EmployeeTaskListRelationFilter
+  taskId: BigIntFilter
+  workshopJob: WorkshopJobRelationFilter
+  workshopJobId: BigIntFilter
+}
+
+input TaskWhereUniqueInput {
+  AND: [TaskWhereInput!]
+  NOT: [TaskWhereInput!]
+  OR: [TaskWhereInput!]
+  customName: StringNullableFilter
+  description: StringFilter
+  executionTime: FloatFilter
+  partsCost: DecimalFilter
+  service: ServiceRelationFilter
+  serviceId: BigIntFilter
+  status: EnumTasksStatusNullableFilter
+  taskEmployees: EmployeeTaskListRelationFilter
+  taskId: BigInt
+  workshopJob: WorkshopJobRelationFilter
+  workshopJobId: BigIntFilter
 }
 
 enum TasksStatus {
@@ -615,6 +3029,39 @@ type UserCountAggregate {
   username: Int!
 }
 
+input UserCreateNestedOneWithoutPersonInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPersonInput
+  create: UserCreateWithoutPersonInput
+}
+
+input UserCreateNestedOneWithoutReviewResponsesInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutReviewsInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOrConnectWithoutPersonInput {
+  create: UserCreateWithoutPersonInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateWithoutPersonInput {
+  avatarURL: String
+  createdAt: DateTime
+  email: String
+  isVerified: Boolean
+  password: String!
+  reviewResponses: ReviewResponseCreateNestedManyWithoutUserInput
+  reviews: ReviewCreateNestedManyWithoutUserInput
+  status: UsersStatus
+  updatedAt: DateTime
+  userReports: UserReportCreateNestedManyWithoutUserInput
+  username: String!
+}
+
 type UserMaxAggregate {
   avatarURL: String
   createdAt: DateTime
@@ -641,6 +3088,16 @@ type UserMinAggregate {
   username: String
 }
 
+input UserNullableRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
 type UserReport {
   createdAt: DateTime!
   reportId: BigInt!
@@ -651,6 +3108,77 @@ type UserReport {
   updatedAt: DateTime
   user: User!
   userId: BigInt!
+}
+
+input UserReportCreateManyUserInput {
+  createdAt: DateTime
+  reportText: String!
+  reportedId: BigInt!
+  reportedType: UserReportsReportedType!
+  status: UserReportsStatus
+  updatedAt: DateTime
+}
+
+input UserReportCreateManyUserInputEnvelope {
+  data: [UserReportCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input UserReportCreateNestedManyWithoutUserInput {
+  connect: [UserReportWhereUniqueInput!]
+  connectOrCreate: [UserReportCreateOrConnectWithoutUserInput!]
+  create: [UserReportCreateWithoutUserInput!]
+  createMany: UserReportCreateManyUserInputEnvelope
+}
+
+input UserReportCreateOrConnectWithoutUserInput {
+  create: UserReportCreateWithoutUserInput!
+  where: UserReportWhereUniqueInput!
+}
+
+input UserReportCreateWithoutUserInput {
+  createdAt: DateTime
+  reportText: String!
+  reportedId: BigInt!
+  reportedType: UserReportsReportedType!
+  status: UserReportsStatus
+  updatedAt: DateTime
+}
+
+input UserReportListRelationFilter {
+  every: UserReportWhereInput
+  none: UserReportWhereInput
+  some: UserReportWhereInput
+}
+
+input UserReportWhereInput {
+  AND: [UserReportWhereInput!]
+  NOT: [UserReportWhereInput!]
+  OR: [UserReportWhereInput!]
+  createdAt: DateTimeFilter
+  reportId: BigIntFilter
+  reportText: StringFilter
+  reportedId: BigIntFilter
+  reportedType: EnumUserReportsReportedTypeFilter
+  status: EnumUserReportsStatusFilter
+  updatedAt: DateTimeNullableFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+}
+
+input UserReportWhereUniqueInput {
+  AND: [UserReportWhereInput!]
+  NOT: [UserReportWhereInput!]
+  OR: [UserReportWhereInput!]
+  createdAt: DateTimeFilter
+  reportId: BigInt
+  reportText: StringFilter
+  reportedId: BigIntFilter
+  reportedType: EnumUserReportsReportedTypeFilter
+  status: EnumUserReportsStatusFilter
+  updatedAt: DateTimeNullableFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
 }
 
 enum UserReportsReportedType {
@@ -669,6 +3197,48 @@ enum UserReportsStatus {
 type UserSumAggregate {
   personId: BigInt
   userId: BigInt
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  avatarURL: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  deletedAt: DateTimeNullableFilter
+  email: StringNullableFilter
+  isVerified: BoolNullableFilter
+  password: StringFilter
+  person: PersonNullableRelationFilter
+  personId: BigIntNullableFilter
+  reviewResponses: ReviewResponseListRelationFilter
+  reviews: ReviewListRelationFilter
+  status: EnumUsersStatusNullableFilter
+  updatedAt: DateTimeNullableFilter
+  userId: BigIntFilter
+  userReports: UserReportListRelationFilter
+  username: StringFilter
+}
+
+input UserWhereUniqueInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  avatarURL: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  deletedAt: DateTimeNullableFilter
+  email: StringNullableFilter
+  isVerified: BoolNullableFilter
+  password: StringFilter
+  person: PersonNullableRelationFilter
+  personId: BigInt
+  reviewResponses: ReviewResponseListRelationFilter
+  reviews: ReviewListRelationFilter
+  status: EnumUsersStatusNullableFilter
+  updatedAt: DateTimeNullableFilter
+  userId: BigInt
+  userReports: UserReportListRelationFilter
+  username: String
 }
 
 enum UsersStatus {
@@ -707,6 +3277,46 @@ type VehicleBrandCount {
   vehicleModels: Int!
 }
 
+input VehicleBrandCreateNestedOneWithoutVehicleModelsInput {
+  connectOrCreate: VehicleBrandCreateOrConnectWithoutVehicleModelsInput
+}
+
+input VehicleBrandCreateOrConnectWithoutVehicleModelsInput {
+  create: VehicleBrandCreateWithoutVehicleModelsInput!
+  where: VehicleBrandWhereUniqueInput!
+}
+
+input VehicleBrandCreateWithoutVehicleModelsInput {
+  brandName: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input VehicleBrandRelationFilter {
+  is: VehicleBrandWhereInput
+  isNot: VehicleBrandWhereInput
+}
+
+input VehicleBrandWhereInput {
+  AND: [VehicleBrandWhereInput!]
+  NOT: [VehicleBrandWhereInput!]
+  OR: [VehicleBrandWhereInput!]
+  brandName: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+  vehicleModels: VehicleModelListRelationFilter
+}
+
+input VehicleBrandWhereUniqueInput {
+  AND: [VehicleBrandWhereInput!]
+  NOT: [VehicleBrandWhereInput!]
+  OR: [VehicleBrandWhereInput!]
+  brandName: String
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+  vehicleModels: VehicleModelListRelationFilter
+}
+
 type VehicleCount {
   services: Int!
   vehicleAssociatedServiceRequests: Int!
@@ -718,6 +3328,70 @@ type VehicleCountAggregate {
   modelId: Int!
   personId: Int!
   vehicleId: Int!
+}
+
+input VehicleCreateManyPersonInput {
+  modelId: BigInt!
+}
+
+input VehicleCreateManyPersonInputEnvelope {
+  data: [VehicleCreateManyPersonInput!]!
+  skipDuplicates: Boolean
+}
+
+input VehicleCreateNestedManyWithoutPersonInput {
+  connect: [VehicleWhereUniqueInput!]
+  connectOrCreate: [VehicleCreateOrConnectWithoutPersonInput!]
+  create: [VehicleCreateWithoutPersonInput!]
+  createMany: VehicleCreateManyPersonInputEnvelope
+}
+
+input VehicleCreateNestedOneWithoutServicesInput {
+  connect: VehicleWhereUniqueInput
+  connectOrCreate: VehicleCreateOrConnectWithoutServicesInput
+  create: VehicleCreateWithoutServicesInput
+}
+
+input VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput {
+  connect: VehicleWhereUniqueInput
+  connectOrCreate: VehicleCreateOrConnectWithoutVehicleAssociatedServiceRequestsInput
+  create: VehicleCreateWithoutVehicleAssociatedServiceRequestsInput
+}
+
+input VehicleCreateOrConnectWithoutPersonInput {
+  create: VehicleCreateWithoutPersonInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateOrConnectWithoutServicesInput {
+  create: VehicleCreateWithoutServicesInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateOrConnectWithoutVehicleAssociatedServiceRequestsInput {
+  create: VehicleCreateWithoutVehicleAssociatedServiceRequestsInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateWithoutPersonInput {
+  services: ServiceCreateNestedManyWithoutVehicleInput
+  vehicleAssociatedServiceRequests: ServiceRequestCreateNestedManyWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+  vehiclesDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+}
+
+input VehicleCreateWithoutServicesInput {
+  person: PersonCreateNestedOneWithoutVehiclesInput!
+  vehicleAssociatedServiceRequests: ServiceRequestCreateNestedManyWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+  vehiclesDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+}
+
+input VehicleCreateWithoutVehicleAssociatedServiceRequestsInput {
+  person: PersonCreateNestedOneWithoutVehiclesInput!
+  services: ServiceCreateNestedManyWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+  vehiclesDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
 }
 
 type VehicleDetails {
@@ -756,6 +3430,29 @@ type VehicleDetailsCountAggregate {
   yearOfProduction: Int!
 }
 
+input VehicleDetailsCreateNestedOneWithoutVehicleInput {
+  connect: VehicleDetailsWhereUniqueInput
+  connectOrCreate: VehicleDetailsCreateOrConnectWithoutVehicleInput
+  create: VehicleDetailsCreateWithoutVehicleInput
+}
+
+input VehicleDetailsCreateOrConnectWithoutVehicleInput {
+  create: VehicleDetailsCreateWithoutVehicleInput!
+  where: VehicleDetailsWhereUniqueInput!
+}
+
+input VehicleDetailsCreateWithoutVehicleInput {
+  VIN: String
+  bodyColor: BodyColors
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
 type VehicleDetailsMaxAggregate {
   VIN: String
   bodyColor: BodyColors
@@ -784,10 +3481,57 @@ type VehicleDetailsMinAggregate {
   yearOfProduction: Int
 }
 
+input VehicleDetailsNullableRelationFilter {
+  is: VehicleDetailsWhereInput
+  isNot: VehicleDetailsWhereInput
+}
+
 type VehicleDetailsSumAggregate {
   vehicleDetailsId: BigInt
   vehicleId: BigInt
   yearOfProduction: Int
+}
+
+input VehicleDetailsWhereInput {
+  AND: [VehicleDetailsWhereInput!]
+  NOT: [VehicleDetailsWhereInput!]
+  OR: [VehicleDetailsWhereInput!]
+  VIN: StringNullableFilter
+  bodyColor: EnumBodyColorsNullableFilter
+  countryOfRegistration: StringNullableFilter
+  deletedAt: DateTimeNullableFilter
+  engineCapacity: StringNullableFilter
+  engineNo: StringNullableFilter
+  fuelType: EnumFuelTypeNullableFilter
+  licensePlate: StringNullableFilter
+  vehicle: VehicleNullableRelationFilter
+  vehicleDetailsId: BigIntFilter
+  vehicleId: BigIntNullableFilter
+  yearOfProduction: IntNullableFilter
+}
+
+input VehicleDetailsWhereUniqueInput {
+  AND: [VehicleDetailsWhereInput!]
+  NOT: [VehicleDetailsWhereInput!]
+  OR: [VehicleDetailsWhereInput!]
+  VIN: StringNullableFilter
+  bodyColor: EnumBodyColorsNullableFilter
+  countryOfRegistration: StringNullableFilter
+  deletedAt: DateTimeNullableFilter
+  engineCapacity: StringNullableFilter
+  engineNo: StringNullableFilter
+  fuelType: EnumFuelTypeNullableFilter
+  licensePlate: StringNullableFilter
+  vehicle: VehicleNullableRelationFilter
+  vehicleDetailsId: BigInt
+  vehicleId: BigInt
+  yearOfProduction: IntNullableFilter
+}
+
+input VehicleListRelationFilter {
+  every: VehicleWhereInput
+  none: VehicleWhereInput
+  some: VehicleWhereInput
 }
 
 type VehicleMaxAggregate {
@@ -819,10 +3563,111 @@ type VehicleModelCount {
   vehicles: Int!
 }
 
+input VehicleModelCreateNestedOneWithoutVehiclesInput {
+  connect: VehicleModelWhereUniqueInput
+  connectOrCreate: VehicleModelCreateOrConnectWithoutVehiclesInput
+  create: VehicleModelCreateWithoutVehiclesInput
+}
+
+input VehicleModelCreateOrConnectWithoutVehiclesInput {
+  create: VehicleModelCreateWithoutVehiclesInput!
+  where: VehicleModelWhereUniqueInput!
+}
+
+input VehicleModelCreateWithoutVehiclesInput {
+  createdAt: DateTime
+  modelName: String!
+  updatedAt: DateTime
+  vehiclesBrand: VehicleBrandCreateNestedOneWithoutVehicleModelsInput!
+}
+
+input VehicleModelListRelationFilter {
+  every: VehicleModelWhereInput
+  none: VehicleModelWhereInput
+  some: VehicleModelWhereInput
+}
+
+input VehicleModelModelNameBrandNameCompoundUniqueInput {
+  brandName: String!
+  modelName: String!
+}
+
+input VehicleModelRelationFilter {
+  is: VehicleModelWhereInput
+  isNot: VehicleModelWhereInput
+}
+
+input VehicleModelWhereInput {
+  AND: [VehicleModelWhereInput!]
+  NOT: [VehicleModelWhereInput!]
+  OR: [VehicleModelWhereInput!]
+  brandName: StringFilter
+  createdAt: DateTimeNullableFilter
+  modelId: BigIntFilter
+  modelName: StringFilter
+  updatedAt: DateTimeNullableFilter
+  vehicles: VehicleListRelationFilter
+  vehiclesBrand: VehicleBrandRelationFilter
+}
+
+input VehicleModelWhereUniqueInput {
+  AND: [VehicleModelWhereInput!]
+  NOT: [VehicleModelWhereInput!]
+  OR: [VehicleModelWhereInput!]
+  brandName: StringFilter
+  createdAt: DateTimeNullableFilter
+  modelId: BigInt
+  modelName: StringFilter
+  modelName_brandName: VehicleModelModelNameBrandNameCompoundUniqueInput
+  updatedAt: DateTimeNullableFilter
+  vehicles: VehicleListRelationFilter
+  vehiclesBrand: VehicleBrandRelationFilter
+}
+
+input VehicleNullableRelationFilter {
+  is: VehicleWhereInput
+  isNot: VehicleWhereInput
+}
+
+input VehicleRelationFilter {
+  is: VehicleWhereInput
+  isNot: VehicleWhereInput
+}
+
 type VehicleSumAggregate {
   modelId: BigInt
   personId: BigInt
   vehicleId: BigInt
+}
+
+input VehicleWhereInput {
+  AND: [VehicleWhereInput!]
+  NOT: [VehicleWhereInput!]
+  OR: [VehicleWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  modelId: BigIntFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  services: ServiceListRelationFilter
+  vehicleAssociatedServiceRequests: ServiceRequestListRelationFilter
+  vehicleId: BigIntFilter
+  vehicleModel: VehicleModelRelationFilter
+  vehiclesDetails: VehicleDetailsNullableRelationFilter
+}
+
+input VehicleWhereUniqueInput {
+  AND: [VehicleWhereInput!]
+  NOT: [VehicleWhereInput!]
+  OR: [VehicleWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  modelId: BigIntFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  services: ServiceListRelationFilter
+  vehicleAssociatedServiceRequests: ServiceRequestListRelationFilter
+  vehicleId: BigInt
+  vehicleModel: VehicleModelRelationFilter
+  vehiclesDetails: VehicleDetailsNullableRelationFilter
 }
 
 type Workshop {
@@ -879,6 +3724,301 @@ type WorkshopCountAggregate {
   workshopId: Int!
 }
 
+input WorkshopCreateManyAddressInput {
+  createdAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  personId: BigInt!
+  updatedAt: DateTime
+}
+
+input WorkshopCreateManyAddressInputEnvelope {
+  data: [WorkshopCreateManyAddressInput!]!
+  skipDuplicates: Boolean
+}
+
+input WorkshopCreateManyPersonInput {
+  addressId: BigInt
+  createdAt: DateTime
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  updatedAt: DateTime
+}
+
+input WorkshopCreateManyPersonInputEnvelope {
+  data: [WorkshopCreateManyPersonInput!]!
+  skipDuplicates: Boolean
+}
+
+input WorkshopCreateNestedManyWithoutAddressInput {
+  connect: [WorkshopWhereUniqueInput!]
+  connectOrCreate: [WorkshopCreateOrConnectWithoutAddressInput!]
+  create: [WorkshopCreateWithoutAddressInput!]
+  createMany: WorkshopCreateManyAddressInputEnvelope
+}
+
+input WorkshopCreateNestedManyWithoutJobCategoriesInput {
+  connect: [WorkshopWhereUniqueInput!]
+  connectOrCreate: [WorkshopCreateOrConnectWithoutJobCategoriesInput!]
+  create: [WorkshopCreateWithoutJobCategoriesInput!]
+}
+
+input WorkshopCreateNestedManyWithoutPersonInput {
+  connect: [WorkshopWhereUniqueInput!]
+  connectOrCreate: [WorkshopCreateOrConnectWithoutPersonInput!]
+  create: [WorkshopCreateWithoutPersonInput!]
+  createMany: WorkshopCreateManyPersonInputEnvelope
+}
+
+input WorkshopCreateNestedOneWithoutCustomersInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutCustomersInput
+  create: WorkshopCreateWithoutCustomersInput
+}
+
+input WorkshopCreateNestedOneWithoutEmployeesInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutEmployeesInput
+  create: WorkshopCreateWithoutEmployeesInput
+}
+
+input WorkshopCreateNestedOneWithoutPermissionSetsInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutPermissionSetsInput
+  create: WorkshopCreateWithoutPermissionSetsInput
+}
+
+input WorkshopCreateNestedOneWithoutReviewsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutServiceRequestsInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutServiceRequestsInput
+  create: WorkshopCreateWithoutServiceRequestsInput
+}
+
+input WorkshopCreateNestedOneWithoutServicesInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutServicesInput
+  create: WorkshopCreateWithoutServicesInput
+}
+
+input WorkshopCreateNestedOneWithoutWorkshopJobsInput {
+  connect: WorkshopWhereUniqueInput
+  connectOrCreate: WorkshopCreateOrConnectWithoutWorkshopJobsInput
+  create: WorkshopCreateWithoutWorkshopJobsInput
+}
+
+input WorkshopCreateOrConnectWithoutAddressInput {
+  create: WorkshopCreateWithoutAddressInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutCustomersInput {
+  create: WorkshopCreateWithoutCustomersInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutEmployeesInput {
+  create: WorkshopCreateWithoutEmployeesInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutJobCategoriesInput {
+  create: WorkshopCreateWithoutJobCategoriesInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutPermissionSetsInput {
+  create: WorkshopCreateWithoutPermissionSetsInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutPersonInput {
+  create: WorkshopCreateWithoutPersonInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutServiceRequestsInput {
+  create: WorkshopCreateWithoutServiceRequestsInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutServicesInput {
+  create: WorkshopCreateWithoutServicesInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateOrConnectWithoutWorkshopJobsInput {
+  create: WorkshopCreateWithoutWorkshopJobsInput!
+  where: WorkshopWhereUniqueInput!
+}
+
+input WorkshopCreateWithoutAddressInput {
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutCustomersInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutEmployeesInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutJobCategoriesInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutPermissionSetsInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutPersonInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutServiceRequestsInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutServicesInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateWithoutWorkshopJobsInput {
+  address: AddressCreateNestedOneWithoutWorkshopsInput
+  createdAt: DateTime
+  customers: CustomerCreateNestedManyWithoutWorkshopInput
+  email: String
+  employees: EmployeeCreateNestedManyWithoutWorkshopInput
+  isManagingWork: Boolean
+  isVerified: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  permissionSets: PermissionSetCreateNestedManyWithoutWorkshopInput
+  person: PersonCreateNestedOneWithoutWorkshopsInput!
+  reviews: ReviewCreateNestedManyWithoutWorkshopInput
+  serviceRequests: ServiceRequestCreateNestedManyWithoutWorkshopInput
+  services: ServiceCreateNestedManyWithoutWorkshopInput
+  updatedAt: DateTime
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+}
+
 type WorkshopDetails {
   NIP: String
   deletedAt: DateTime
@@ -910,6 +4050,27 @@ type WorkshopDetailsCountAggregate {
   workshopName: Int!
 }
 
+input WorkshopDetailsCreateNestedOneWithoutWorkshopInput {
+  connect: WorkshopDetailsWhereUniqueInput
+  connectOrCreate: WorkshopDetailsCreateOrConnectWithoutWorkshopInput
+  create: WorkshopDetailsCreateWithoutWorkshopInput
+}
+
+input WorkshopDetailsCreateOrConnectWithoutWorkshopInput {
+  create: WorkshopDetailsCreateWithoutWorkshopInput!
+  where: WorkshopDetailsWhereUniqueInput!
+}
+
+input WorkshopDetailsCreateWithoutWorkshopInput {
+  NIP: String
+  description: String
+  logoURL: String
+  rating: Decimal
+  status: WorkshopsDetailsStatus
+  telephoneNumber: String
+  workshopName: String!
+}
+
 type WorkshopDetailsMaxAggregate {
   NIP: String
   deletedAt: DateTime
@@ -934,9 +4095,46 @@ type WorkshopDetailsMinAggregate {
   workshopName: String
 }
 
+input WorkshopDetailsNullableRelationFilter {
+  is: WorkshopDetailsWhereInput
+  isNot: WorkshopDetailsWhereInput
+}
+
 type WorkshopDetailsSumAggregate {
   rating: Decimal
   workshopId: BigInt
+}
+
+input WorkshopDetailsWhereInput {
+  AND: [WorkshopDetailsWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [WorkshopDetailsWhereInput!]
+  OR: [WorkshopDetailsWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  logoURL: StringNullableFilter
+  rating: DecimalNullableFilter
+  status: EnumWorkshopsDetailsStatusNullableFilter
+  telephoneNumber: StringNullableFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+  workshopName: StringFilter
+}
+
+input WorkshopDetailsWhereUniqueInput {
+  AND: [WorkshopDetailsWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [WorkshopDetailsWhereInput!]
+  OR: [WorkshopDetailsWhereInput!]
+  deletedAt: DateTimeNullableFilter
+  description: StringNullableFilter
+  logoURL: StringNullableFilter
+  rating: DecimalNullableFilter
+  status: EnumWorkshopsDetailsStatusNullableFilter
+  telephoneNumber: StringNullableFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigInt
+  workshopName: StringFilter
 }
 
 type WorkshopJob {
@@ -976,6 +4174,94 @@ type WorkshopJobCountAggregate {
   workshopJobId: Int!
 }
 
+input WorkshopJobCreateManyJobInput {
+  availability: Boolean
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopId: BigInt!
+  workshopJobDescription: String
+}
+
+input WorkshopJobCreateManyJobInputEnvelope {
+  data: [WorkshopJobCreateManyJobInput!]!
+  skipDuplicates: Boolean
+}
+
+input WorkshopJobCreateManyWorkshopInput {
+  availability: Boolean
+  jobId: BigInt!
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
+}
+
+input WorkshopJobCreateManyWorkshopInputEnvelope {
+  data: [WorkshopJobCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input WorkshopJobCreateNestedManyWithoutJobInput {
+  connect: [WorkshopJobWhereUniqueInput!]
+  connectOrCreate: [WorkshopJobCreateOrConnectWithoutJobInput!]
+  create: [WorkshopJobCreateWithoutJobInput!]
+  createMany: WorkshopJobCreateManyJobInputEnvelope
+}
+
+input WorkshopJobCreateNestedManyWithoutWorkshopInput {
+  connect: [WorkshopJobWhereUniqueInput!]
+  connectOrCreate: [WorkshopJobCreateOrConnectWithoutWorkshopInput!]
+  create: [WorkshopJobCreateWithoutWorkshopInput!]
+  createMany: WorkshopJobCreateManyWorkshopInputEnvelope
+}
+
+input WorkshopJobCreateNestedOneWithoutTasksInput {
+  create: WorkshopJobCreateWithoutTasksInput
+  workshopJobId: BigInt!
+}
+
+input WorkshopJobCreateOrConnectWithoutJobInput {
+  create: WorkshopJobCreateWithoutJobInput!
+  where: WorkshopJobWhereUniqueInput!
+}
+
+input WorkshopJobCreateOrConnectWithoutWorkshopInput {
+  create: WorkshopJobCreateWithoutWorkshopInput!
+  where: WorkshopJobWhereUniqueInput!
+}
+
+input WorkshopJobCreateWithoutJobInput {
+  availability: Boolean
+  maxPrice: Decimal
+  minPrice: Decimal
+  tasks: TaskCreateNestedManyWithoutWorkshopJobInput
+  workshop: WorkshopCreateNestedOneWithoutWorkshopJobsInput!
+  workshopJobDescription: String
+}
+
+input WorkshopJobCreateWithoutTasksInput {
+  availability: Boolean
+  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshop: WorkshopCreateNestedOneWithoutWorkshopJobsInput!
+  workshopJobDescription: String
+}
+
+input WorkshopJobCreateWithoutWorkshopInput {
+  availability: Boolean
+  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  maxPrice: Decimal
+  minPrice: Decimal
+  tasks: TaskCreateNestedManyWithoutWorkshopJobInput
+  workshopJobDescription: String
+}
+
+input WorkshopJobListRelationFilter {
+  every: WorkshopJobWhereInput
+  none: WorkshopJobWhereInput
+  some: WorkshopJobWhereInput
+}
+
 type WorkshopJobMaxAggregate {
   availability: Boolean
   jobId: BigInt
@@ -996,12 +4282,61 @@ type WorkshopJobMinAggregate {
   workshopJobId: BigInt
 }
 
+input WorkshopJobRelationFilter {
+  is: WorkshopJobWhereInput
+  isNot: WorkshopJobWhereInput
+}
+
 type WorkshopJobSumAggregate {
   jobId: BigInt
   maxPrice: Decimal
   minPrice: Decimal
   workshopId: BigInt
   workshopJobId: BigInt
+}
+
+input WorkshopJobWhereInput {
+  AND: [WorkshopJobWhereInput!]
+  NOT: [WorkshopJobWhereInput!]
+  OR: [WorkshopJobWhereInput!]
+  availability: BoolFilter
+  job: JobRelationFilter
+  jobId: BigIntFilter
+  maxPrice: DecimalNullableFilter
+  minPrice: DecimalNullableFilter
+  tasks: TaskListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+  workshopJobDescription: StringNullableFilter
+  workshopJobId: BigIntFilter
+}
+
+input WorkshopJobWhereUniqueInput {
+  AND: [WorkshopJobWhereInput!]
+  NOT: [WorkshopJobWhereInput!]
+  OR: [WorkshopJobWhereInput!]
+  availability: BoolFilter
+  job: JobRelationFilter
+  jobId: BigIntFilter
+  maxPrice: DecimalNullableFilter
+  minPrice: DecimalNullableFilter
+  tasks: TaskListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+  workshopId_jobId: WorkshopJobWorkshopIdJobIdCompoundUniqueInput
+  workshopJobDescription: StringNullableFilter
+  workshopJobId: BigInt
+}
+
+input WorkshopJobWorkshopIdJobIdCompoundUniqueInput {
+  jobId: BigInt!
+  workshopId: BigInt!
+}
+
+input WorkshopListRelationFilter {
+  every: WorkshopWhereInput
+  none: WorkshopWhereInput
+  some: WorkshopWhereInput
 }
 
 type WorkshopMaxAggregate {
@@ -1028,10 +4363,72 @@ type WorkshopMinAggregate {
   workshopId: BigInt
 }
 
+input WorkshopNullableRelationFilter {
+  is: WorkshopWhereInput
+  isNot: WorkshopWhereInput
+}
+
+input WorkshopRelationFilter {
+  is: WorkshopWhereInput
+  isNot: WorkshopWhereInput
+}
+
 type WorkshopSumAggregate {
   addressId: BigInt
   personId: BigInt
   workshopId: BigInt
+}
+
+input WorkshopWhereInput {
+  AND: [WorkshopWhereInput!]
+  NOT: [WorkshopWhereInput!]
+  OR: [WorkshopWhereInput!]
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
+  createdAt: DateTimeNullableFilter
+  customers: CustomerListRelationFilter
+  deletedAt: DateTimeNullableFilter
+  email: StringNullableFilter
+  employees: EmployeeListRelationFilter
+  isManagingWork: BoolNullableFilter
+  isVerified: BoolNullableFilter
+  jobCategories: JobCategoryListRelationFilter
+  permissionSets: PermissionSetListRelationFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  reviews: ReviewListRelationFilter
+  serviceRequests: ServiceRequestListRelationFilter
+  services: ServiceListRelationFilter
+  updatedAt: DateTimeNullableFilter
+  workshopDetails: WorkshopDetailsNullableRelationFilter
+  workshopId: BigIntFilter
+  workshopJobs: WorkshopJobListRelationFilter
+}
+
+input WorkshopWhereUniqueInput {
+  AND: [WorkshopWhereInput!]
+  NOT: [WorkshopWhereInput!]
+  OR: [WorkshopWhereInput!]
+  address: AddressNullableRelationFilter
+  addressId: BigIntNullableFilter
+  createdAt: DateTimeNullableFilter
+  customers: CustomerListRelationFilter
+  deletedAt: DateTimeNullableFilter
+  email: StringNullableFilter
+  employees: EmployeeListRelationFilter
+  isManagingWork: BoolNullableFilter
+  isVerified: BoolNullableFilter
+  jobCategories: JobCategoryListRelationFilter
+  permissionSets: PermissionSetListRelationFilter
+  person: PersonRelationFilter
+  personId: BigIntFilter
+  reviews: ReviewListRelationFilter
+  serviceRequests: ServiceRequestListRelationFilter
+  services: ServiceListRelationFilter
+  updatedAt: DateTimeNullableFilter
+  workshopDetails: WorkshopDetailsNullableRelationFilter
+  workshopId: BigInt
+  workshopJobs: WorkshopJobListRelationFilter
 }
 
 enum WorkshopsDetailsStatus {

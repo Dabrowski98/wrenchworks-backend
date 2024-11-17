@@ -13,13 +13,9 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 @InputType()
 export class JobCategoryUpdateInput {
 
-    @HideField()
-    categoryId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsOptional()
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
     name?: string;
 
@@ -30,20 +26,8 @@ export class JobCategoryUpdateInput {
     description?: string;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
     isPopular?: boolean;
 
-    @Field(() => JobCategoryUpdateOneWithoutChildrenNestedInput, {nullable:true})
-    child?: JobCategoryUpdateOneWithoutChildrenNestedInput;
-
-    @Field(() => JobCategoryUpdateManyWithoutChildNestedInput, {nullable:true})
-    children?: JobCategoryUpdateManyWithoutChildNestedInput;
-
-    @Field(() => JobUpdateManyWithoutJobCategoryNestedInput, {nullable:true})
-    @Type(() => JobUpdateManyWithoutJobCategoryNestedInput)
-    jobs?: JobUpdateManyWithoutJobCategoryNestedInput;
-
-    @Field(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput)
-    Workshops?: WorkshopUpdateManyWithoutJobCategoriesNestedInput;
 }

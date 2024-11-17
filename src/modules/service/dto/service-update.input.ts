@@ -15,15 +15,15 @@ import { CustomerUpdateOneRequiredWithoutServicesNestedInput } from '../../custo
 import { EmployeeUpdateOneRequiredWithoutServicesNestedInput } from '../../employee/dto/employee-update-one-required-without-services-nested.input';
 import { VehicleUpdateOneRequiredWithoutServicesNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-services-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-services-nested.input';
+import { CustomerCustomerIdWorkshopIdCompoundUniqueInput } from 'src/modules/customer';
+import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
 
 @InputType()
 export class ServiceUpdateInput {
 
-    @HideField()
-    serviceId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    serviceRequestId?: bigint | number;
+    @Field(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput, {nullable:false})
+    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
+    employeeId_workshopId!: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -32,10 +32,12 @@ export class ServiceUpdateInput {
     description?: string;
 
     @Field(() => ServicesStatus, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
     status?: keyof typeof ServicesStatus;
 
     @Field(() => Boolean, {nullable:true})
+    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
     payedOff?: boolean;
 
@@ -45,44 +47,16 @@ export class ServiceUpdateInput {
     @Validator.IsNumber({}, { message: 'Payment amount must be a number' })
     @Validator.Min(0, { message: 'Payment amount cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Payment amount cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     paymentAmount?: Decimal;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service start date must be a valid date' })
+    @Validator.IsOptional()
     serviceStartDate?: Date | string;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service end date must be a valid date' })
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    deletedAt?: Date | string;
-
-    @Field(() => ServiceRequestUpdateOneWithoutApprovedServiceNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateOneWithoutApprovedServiceNestedInput)
-    serviceRequest?: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput;
-
-    @Field(() => TaskUpdateManyWithoutServiceNestedInput, {nullable:true})
-    @Type(() => TaskUpdateManyWithoutServiceNestedInput)
-    tasks?: TaskUpdateManyWithoutServiceNestedInput;
-
-    @Field(() => CustomerUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => CustomerUpdateOneRequiredWithoutServicesNestedInput)
-    customer?: CustomerUpdateOneRequiredWithoutServicesNestedInput;
-
-    @Field(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)
-    employee?: EmployeeUpdateOneRequiredWithoutServicesNestedInput;
-
-    @Field(() => VehicleUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
-    vehicle?: VehicleUpdateOneRequiredWithoutServicesNestedInput;
-
-    @Field(() => WorkshopUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutServicesNestedInput)
-    workshop?: WorkshopUpdateOneRequiredWithoutServicesNestedInput;
 }
