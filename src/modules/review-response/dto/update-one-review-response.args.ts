@@ -4,15 +4,18 @@ import { ReviewResponseUpdateInput } from './review-response-update.input';
 import { Type } from 'class-transformer';
 import { Prisma } from '@prisma/client';
 import { ReviewResponseWhereUniqueInput } from './review-response-where-unique.input';
+import * as Validator from 'class-validator';
 
 @ArgsType()
 export class UpdateOneReviewResponseArgs {
 
     @Field(() => ReviewResponseUpdateInput, {nullable:false})
     @Type(() => ReviewResponseUpdateInput)
+    @Validator.ValidateNested()
     data!: ReviewResponseUpdateInput;
 
     @Field(() => ReviewResponseWhereUniqueInput, {nullable:false})
     @Type(() => ReviewResponseWhereUniqueInput)
+    @Validator.Allow()
     where!: Prisma.AtLeast<ReviewResponseWhereUniqueInput, 'reviewResponseId'>;
 }

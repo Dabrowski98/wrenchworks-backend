@@ -4,15 +4,19 @@ import { JobCategoryUpdateInput } from './job-category-update.input';
 import { Type } from 'class-transformer';
 import { Prisma } from '@prisma/client';
 import { JobCategoryWhereUniqueInput } from './job-category-where-unique.input';
+import * as Validator from 'class-validator';
+
 
 @ArgsType()
 export class UpdateOneJobCategoryArgs {
 
     @Field(() => JobCategoryUpdateInput, {nullable:false})
     @Type(() => JobCategoryUpdateInput)
+    @Validator.ValidateNested()
     data!: JobCategoryUpdateInput;
 
     @Field(() => JobCategoryWhereUniqueInput, {nullable:false})
     @Type(() => JobCategoryWhereUniqueInput)
+    @Validator.Allow()
     where!: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
 }

@@ -17,11 +17,7 @@ async function bootstrap() {
       transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
-      // transformOptions: {
-      //   exposeUnsetFields: false,
-      // },
       enableDebugMessages: true,
-      groups: [UPDATE, CREATE],
       exceptionFactory: (errors) => {
         console.log(JSON.stringify(errors, null, 2));
         return new BadRequestException(errors);
