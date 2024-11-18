@@ -5,17 +5,17 @@ import { Type } from 'class-transformer';
 import { Prisma } from '@prisma/client';
 import { PersonWhereUniqueInput } from './person-where-unique.input';
 import * as Validator from 'class-validator';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @ArgsType()
 export class UpdateOnePersonArgs {
+  @Field(() => PersonUpdateInput, { nullable: false })
+  @Type(() => PersonUpdateInput)
+  @Validator.ValidateNested()
+  data!: PersonUpdateInput;
 
-    @Field(() => PersonUpdateInput, {nullable:false})
-    @Type(() => PersonUpdateInput)
-    @Validator.ValidateNested()
-    data!: PersonUpdateInput;
-
-    @Field(() => PersonWhereUniqueInput, {nullable:false})
-    @Type(() => PersonWhereUniqueInput)
-    @Validator.Allow()
-    where!: Prisma.AtLeast<PersonWhereUniqueInput, 'personId'>;
+  @Field(() => GraphQLBigInt, { nullable: false })
+  @Validator.IsNotEmpty()
+  personId!: bigint | number;
+  
 }

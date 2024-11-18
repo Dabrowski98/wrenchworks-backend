@@ -35,12 +35,5 @@ export class PersonUpdateInput {
     @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
     @Validator.IsOptional()
     telephoneNumber?: string;
-
-    //TODO: If someone else is assigned to the address, create a new address instead of updating the existing one.
-    @Field(() => AddressUpdateWithoutWorkshopsInput, {nullable:true})
-    @Type(() => AddressUpdateWithoutWorkshopsInput)
-    @Validator.IsOptional()
-    @Validator.ValidateNested()
-    address?: AddressUpdateWithoutWorkshopsInput;
     
 }

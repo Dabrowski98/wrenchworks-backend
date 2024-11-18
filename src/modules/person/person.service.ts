@@ -2,12 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { Prisma } from '@prisma/client';
 import {
   CreateOnePersonArgs,
   Person,
   PersonCount,
-  PersonUpdateInput,
   UpdateOnePersonArgs,
 } from './dto';
 import { Address } from '../address/dto';
@@ -18,48 +16,61 @@ import { User } from '../user';
 import { Vehicle } from '../vehicle';
 import { Workshop } from '../workshop';
 
+
 @Injectable()
 export class PersonService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+  ) {}
 
   async createPerson(args: CreateOnePersonArgs): Promise<Person> {
-    if (!args?.data) {
-      throw new Error('Person data is required');
-    }
+    let existingAddress: Address | undefined;
 
-    const { firstName, lastName, telephoneNumber, ...rest } = args.data;
+    existingAddress = args.data.address
+      ? await this.prisma.address.findFirst({
+          where: {
+            city: args.data.address.createOrConnect.city,
+            country: args.data.address.createOrConnect.country,
+            region: args.data.address.createOrConnect.region,
+            buildingNo: args.data.address.createOrConnect.buildingNo,
+            postCode: args.data.address.createOrConnect.postCode,
+            street: args.data.address.createOrConnect.street || null,
+            flatNo: args.data.address.createOrConnect.flatNo || null,
+          },
+        })
+      : null;
 
     return this.prisma.person.create({
       data: {
-        firstName,
-        lastName,
-        telephoneNumber,
-        ...rest,
-        serviceRequests: args.data.serviceRequests ? {
-          createMany: args.data.serviceRequests
-        } : undefined,
-        vehicles: args.data.vehicles ? {
-          createMany: args.data.vehicles
-        } : undefined
-      }
+        ...args.data,
+        address: existingAddress
+          ? { connect: { addressId: existingAddress.addressId } }
+          : { create: args.data.address.createOrConnect },
+        serviceRequests: args.data.serviceRequests
+          ? {
+              createMany: args.data.serviceRequests,
+            }
+          : undefined,
+        vehicles: args.data.vehicles
+          ? {
+              createMany: args.data.vehicles,
+            }
+          : undefined,
+      },
     });
   }
 
-  async updatePerson(
-    where: Prisma.PersonWhereUniqueInput,
-    args: PersonUpdateInput
-  ): Promise<Person> {
-    const prismaUpdateArgs: Prisma.PersonUpdateArgs = {
-      where,
-      data: {
-        ...args,
-        address: args.address && {
-          update: args.address
-        }
-      }
-    };
+  async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
+    await this.prisma.person.existsOrThrow({
+      where: { personId: args.personId },
+    });
 
-    return this.prisma.person.update(prismaUpdateArgs);
+    return this.prisma.person.update({
+      where: { personId: args.personId },
+      data: {
+        ...args.data,
+      },
+    });
   }
 
   async findAllPersons(): Promise<Person[]> {

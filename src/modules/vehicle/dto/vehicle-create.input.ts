@@ -10,16 +10,16 @@ import { CREATE, UPDATE } from 'src/constants/validation-groups';
 export class VehicleCreateInput {
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Model ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Model ID is required' })
     modelId!: bigint;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Person ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Person ID is required' })
     personId!: bigint;
   
     @Field(() => VehicleDetailsCreateWithoutVehicleInput, {nullable:true})
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
     vehiclesDetails?: VehicleDetailsCreateWithoutVehicleInput;
 }
 

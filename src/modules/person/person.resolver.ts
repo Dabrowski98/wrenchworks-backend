@@ -5,6 +5,7 @@ import {
   Args,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 import { PersonService } from './person.service';
 import {
@@ -30,9 +31,12 @@ export class PersonResolver {
 
   @Mutation(() => Person)
   createPerson(@Args() args: CreateOnePersonArgs): Promise<Person> {
-    console.log('Resolver received args:' + args)
-    console.log('Resolver received args data:' + args.data)
     return this.personService.createPerson(args);
+  }
+
+  @Mutation(() => Person)
+  updatePerson(@Args() args: UpdateOnePersonArgs): Promise<Person> {
+    return this.personService.updatePerson(args);
   }
 
   @Query(() => [Person])

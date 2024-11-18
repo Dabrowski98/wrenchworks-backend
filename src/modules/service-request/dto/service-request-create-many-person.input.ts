@@ -4,26 +4,10 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
+import { CREATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class ServiceRequestCreateManyPersonInput {
-
-    @HideField()
-    serviceRequestId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    workshopId!: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    vehicleId!: bigint | number;
-
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
-
-    @Field(() => ServiceRequestsStatus, {nullable:true})
-    @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -31,9 +15,18 @@ export class ServiceRequestCreateManyPersonInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    approvedServiceId?: bigint | number;
+    @Field(() => [Scalars.GraphQLBigInt], {nullable:true})
+    @Validator.IsOptional()
+    @Validator.IsArray({ message: 'Jobs IDs must be an array' })
+    @Validator.ArrayNotEmpty({ message: 'Jobs IDs must not be empty' })
+    jobsIds?: bigint[];
 
-    @HideField()
-    deletedAt?: Date | string;
+    @Field(() => Scalars.GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ message: 'Vehicle ID is required' })
+    vehicleId!: bigint;
+
+    @Field(() => Scalars.GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty({ message: 'Workshop ID is required' })
+    workshopId!: bigint;
+
 }
