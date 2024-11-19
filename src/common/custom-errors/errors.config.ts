@@ -34,3 +34,12 @@ export class RecordNotSoftDeletedError extends CustomError {
     this.status = 'BAD_REQUEST';
   }
 }
+
+export class NoDataProvidedForUpdate extends CustomError {
+  constructor(model: { name: string }) {
+    super(`No data provided for update of ${model.name}`);
+    this.name = 'NoDataProvidedForUpdate';
+    this.code = 400;
+    this.status = 'BAD_REQUEST';
+  }
+}

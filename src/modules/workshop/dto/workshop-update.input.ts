@@ -15,7 +15,7 @@ import { WorkshopDetailsUpdateOneWithoutWorkshopNestedInput } from '../../worksh
 import { WorkshopJobUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-update-many-without-workshop-nested.input';
 import { JobCategoryUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-update-many-without-workshops-nested.input';
 import { WorkshopDetailsUpdateToOneWithWhereWithoutWorkshopInput, WorkshopDetailsUpdateWithoutWorkshopInput } from 'src/modules/workshop-details';
-import { AddressUpdateToOneWithWhereWithoutWorkshopsInput, AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
+import { AddressCreateInput, AddressUpdateInput, AddressUpdateToOneWithWhereWithoutWorkshopsInput, AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
 import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType()
@@ -38,14 +38,13 @@ export class WorkshopUpdateInput {
 
     @Field(() => GraphQLBigInt, { nullable: true })
     @Validator.IsOptional()
-    personId?: bigint | number;
+    personId?: bigint;
 
-    //TODO: If someone else is assigned to the address, create a new address instead of updating the existing one.
-    @Field(() => AddressUpdateWithoutWorkshopsInput, {nullable:true})
-    @Type(() => AddressUpdateWithoutWorkshopsInput)
+    @Field(() => AddressUpdateInput, {nullable:true})
+    @Type(() => AddressUpdateInput)
     @Validator.IsOptional()
     @Validator.ValidateNested()
-    address?: AddressUpdateWithoutWorkshopsInput;
+    address?: AddressUpdateInput;
 
     @Field(() => WorkshopDetailsUpdateWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsUpdateWithoutWorkshopInput)

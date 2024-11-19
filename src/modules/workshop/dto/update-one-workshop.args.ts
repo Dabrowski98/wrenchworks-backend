@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { Prisma } from '@prisma/client';
 import { WorkshopWhereUniqueInput } from './workshop-where-unique.input';
 import * as Validator from 'class-validator';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @ArgsType()
 export class UpdateOneWorkshopArgs {
@@ -14,8 +15,7 @@ export class UpdateOneWorkshopArgs {
     @Validator.ValidateNested()
     data!: WorkshopUpdateInput;
 
-    @Field(() => WorkshopWhereUniqueInput, {nullable:false})
-    @Type(() => WorkshopWhereUniqueInput)
-    @Validator.Allow()
-    where!: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId'>;
+    @Field(() => GraphQLBigInt, { nullable: false })
+    @Validator.IsNotEmpty()
+    workshopId!: bigint | number;
 }

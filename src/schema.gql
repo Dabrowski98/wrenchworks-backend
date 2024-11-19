@@ -32,7 +32,7 @@ input AddressCreateInput {
 }
 
 input AddressCreateNestedOneWithoutPersonsInput {
-  createOrConnect: AddressCreateInput
+  connectOrCreate: AddressCreateInput
 }
 
 input AddressNullableRelationFilter {

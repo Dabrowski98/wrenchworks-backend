@@ -13,5 +13,5 @@ export class AddressCreateNestedOneWithoutPersonsInput {
   @Field(() => AddressCreateInput, { nullable: true })
   @Type(() => AddressCreateInput)
   @Validator.ValidateNested()
-  connectOrCreate?: AddressCreateInput;
+  create?: AddressCreateInput;
 }

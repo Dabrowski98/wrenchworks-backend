@@ -8,35 +8,16 @@ import { AddressWhereInput } from './address-where.input';
 import { Prisma } from '@prisma/client';
 import { AddressWhereUniqueInput } from './address-where-unique.input';
 import { AddressUpdateToOneWithWhereWithoutPersonsInput } from './address-update-to-one-with-where-without-persons.input';
+import { AddressCreateInput } from './address-create.input';
+import * as Validator from 'class-validator';
 
 @InputType()
 export class AddressUpdateOneWithoutPersonsNestedInput {
 
-    @Field(() => AddressCreateWithoutPersonsInput, {nullable:true})
-    @Type(() => AddressCreateWithoutPersonsInput)
-    create?: AddressCreateWithoutPersonsInput;
+    @Field(() => AddressCreateInput, {nullable:true})
+    @Type(() => AddressCreateInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    create?: AddressCreateInput;
 
-    @Field(() => AddressCreateOrConnectWithoutPersonsInput, {nullable:true})
-    @Type(() => AddressCreateOrConnectWithoutPersonsInput)
-    connectOrCreate?: AddressCreateOrConnectWithoutPersonsInput;
-
-    @Field(() => AddressUpsertWithoutPersonsInput, {nullable:true})
-    @Type(() => AddressUpsertWithoutPersonsInput)
-    upsert?: AddressUpsertWithoutPersonsInput;
-
-    @Field(() => AddressWhereInput, {nullable:true})
-    @Type(() => AddressWhereInput)
-    disconnect?: AddressWhereInput;
-
-    @Field(() => AddressWhereInput, {nullable:true})
-    @Type(() => AddressWhereInput)
-    delete?: AddressWhereInput;
-
-    @Field(() => AddressWhereUniqueInput, {nullable:true})
-    @Type(() => AddressWhereUniqueInput)
-    connect?: Prisma.AtLeast<AddressWhereUniqueInput, 'addressId'>;
-
-    @Field(() => AddressUpdateToOneWithWhereWithoutPersonsInput, {nullable:true})
-    @Type(() => AddressUpdateToOneWithWhereWithoutPersonsInput)
-    update?: AddressUpdateToOneWithWhereWithoutPersonsInput;
 }

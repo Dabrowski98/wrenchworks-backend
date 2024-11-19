@@ -24,30 +24,38 @@ export class WorkshopCreateInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
+    @Validator.IsOptional()
     email?: string;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
+    @Validator.IsOptional()
     isVerified?: boolean;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
+    @Validator.IsOptional()
     isManagingWork?: boolean;
 
     @Field(() => AddressCreateNestedOneWithoutWorkshopsInput, {nullable:true})
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
     address?: AddressCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Person ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Person ID is required' })
     personId!: bigint;
 
     @Field(() => WorkshopDetailsCreateWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsCreateWithoutWorkshopInput)
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
     workshopDetails?: WorkshopDetailsCreateWithoutWorkshopInput;
 
     @Field(() => WorkshopJobCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => WorkshopJobCreateManyWorkshopInputEnvelope)
+    @Validator.ValidateNested()
+    @Validator.IsOptional()
     workshopJobs?: WorkshopJobCreateManyWorkshopInputEnvelope;
 
     @Field(() => [GraphQLBigInt], { nullable: true })

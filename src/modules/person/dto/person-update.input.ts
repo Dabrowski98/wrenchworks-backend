@@ -11,7 +11,7 @@ import { UserUpdateOneWithoutPersonNestedInput } from '../../user/dto/user-updat
 import { VehicleUpdateManyWithoutPersonNestedInput } from '../../vehicle/dto/vehicle-update-many-without-person-nested.input';
 import { WorkshopUpdateManyWithoutPersonNestedInput } from '../../workshop/dto/workshop-update-many-without-person-nested.input';
 import { CREATE, UPDATE } from 'src/constants/validation-groups';
-import { AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
+import { AddressCreateInput, AddressUpdateInput, AddressUpdateWithoutWorkshopsInput } from 'src/modules/address/dto';
 
 
 @InputType()
@@ -36,4 +36,10 @@ export class PersonUpdateInput {
     @Validator.IsOptional()
     telephoneNumber?: string;
     
+    @Field(() => AddressUpdateInput, {nullable:true})
+    @Type(() => AddressUpdateInput)
+    @Validator.IsOptional()
+    @Validator.ValidateNested()
+    address?: AddressUpdateInput;
+
 }

@@ -16,59 +16,36 @@ import { User } from '../user';
 import { Vehicle } from '../vehicle';
 import { Workshop } from '../workshop';
 
-
 @Injectable()
 export class PersonService {
-  constructor(
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async createPerson(args: CreateOnePersonArgs): Promise<Person> {
-    let existingAddress: Address | undefined;
-
-    existingAddress = args.data.address
-      ? await this.prisma.address.findFirst({
-          where: {
-            city: args.data.address.createOrConnect.city,
-            country: args.data.address.createOrConnect.country,
-            region: args.data.address.createOrConnect.region,
-            buildingNo: args.data.address.createOrConnect.buildingNo,
-            postCode: args.data.address.createOrConnect.postCode,
-            street: args.data.address.createOrConnect.street || null,
-            flatNo: args.data.address.createOrConnect.flatNo || null,
-          },
-        })
-      : null;
+    const { address, vehicles, serviceRequests, ...restData } = args.data;
 
     return this.prisma.person.create({
       data: {
-        ...args.data,
-        address: existingAddress
-          ? { connect: { addressId: existingAddress.addressId } }
-          : { create: args.data.address.createOrConnect },
-        serviceRequests: args.data.serviceRequests
-          ? {
-              createMany: args.data.serviceRequests,
-            }
-          : undefined,
-        vehicles: args.data.vehicles
-          ? {
-              createMany: args.data.vehicles,
-            }
-          : undefined,
+        ...restData,
+        ...(address && { address: { create: address.create } }),
+        ...(serviceRequests && {
+          serviceRequests: { createMany: serviceRequests },
+        }),
+        ...(vehicles && {
+          vehicles: { createMany: vehicles },
+        }),
       },
     });
   }
 
   async updatePerson(args: UpdateOnePersonArgs): Promise<Person> {
-    await this.prisma.person.existsOrThrow({
-      where: { personId: args.personId },
-    });
+    const { data, personId } = args;
+    const { address, ...restData } = data;
 
     return this.prisma.person.update({
-      where: { personId: args.personId },
+      where: { personId },
       data: {
-        ...args.data,
+        ...restData,
+        ...(address && { address: { update: address } }),
       },
     });
   }

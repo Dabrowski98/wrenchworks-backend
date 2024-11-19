@@ -24,6 +24,7 @@ import { ServiceRequest } from '../service-request';
 import { User } from '../user';
 import { Vehicle } from '../vehicle';
 import { Workshop } from '../workshop';
+import { NoDataProvidedForUpdate } from 'src/common/custom-errors/errors.config';
 
 @Resolver(() => Person)
 export class PersonResolver {
@@ -36,6 +37,10 @@ export class PersonResolver {
 
   @Mutation(() => Person)
   updatePerson(@Args() args: UpdateOnePersonArgs): Promise<Person> {
+    if (Object.keys(args.data).length === 0) {
+      throw new NoDataProvidedForUpdate(Person);
+    }
+
     return this.personService.updatePerson(args);
   }
 
