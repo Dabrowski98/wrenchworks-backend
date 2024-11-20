@@ -4,7 +4,6 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { VehicleCreateNestedManyWithoutVehicleModelInput } from '../../vehicle/dto/vehicle-create-nested-many-without-vehicle-model.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -15,8 +14,7 @@ export class VehicleModelCreateWithoutVehiclesBrandInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Model name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Model name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Model name is required' })
     @Validator.Length(2, 50, { message: 'Model name must be between 2 and 50 characters' })
     modelName!: string;
 

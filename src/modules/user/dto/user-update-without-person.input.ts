@@ -7,7 +7,6 @@ import { ReviewUpdateManyWithoutUserNestedInput } from '../../review/dto/review-
 import { Type } from 'class-transformer';
 import { ReviewResponseUpdateManyWithoutUserNestedInput } from '../../review-response/dto/review-response-update-many-without-user-nested.input';
 import { UserReportUpdateManyWithoutUserNestedInput } from '../../user-report/dto/user-report-update-many-without-user-nested.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -18,18 +17,16 @@ export class UserUpdateWithoutPersonInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Username is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Username is required' })
     @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
     username?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Password must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Password is required' })
     @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8, }$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/, { message: 'Password must contain at least one letter, one number and one special character' })
     password?: string;
 
     @Field(() => String, {nullable:true})

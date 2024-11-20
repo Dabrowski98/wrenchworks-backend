@@ -8,7 +8,6 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -30,8 +29,7 @@ export class ReviewUncheckedUpdateManyWithoutWorkshopInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Review text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Review text is required' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     reviewText?: string;
 

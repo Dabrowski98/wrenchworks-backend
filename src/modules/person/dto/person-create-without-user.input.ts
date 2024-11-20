@@ -9,7 +9,6 @@ import { EmployeeCreateNestedManyWithoutPersonInput } from '../../employee/dto/e
 import { ServiceRequestCreateNestedManyWithoutPersonInput } from '../../service-request/dto/service-request-create-nested-many-without-person.input';
 import { VehicleCreateNestedManyWithoutPersonInput } from '../../vehicle/dto/vehicle-create-nested-many-without-person.input';
 import { WorkshopCreateNestedManyWithoutPersonInput } from '../../workshop/dto/workshop-create-nested-many-without-person.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -20,15 +19,13 @@ export class PersonCreateWithoutUserInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'First name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'First name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'First name is required' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
     firstName!: string;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Last name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Last name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Last name is required' })
     @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
     lastName!: string;
 

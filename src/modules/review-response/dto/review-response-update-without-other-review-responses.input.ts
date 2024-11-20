@@ -7,7 +7,6 @@ import { ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput } from '.
 import { Type } from 'class-transformer';
 import { ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../review/dto/review-update-one-required-without-review-responses-nested.input';
 import { UserUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../user/dto/user-update-one-required-without-review-responses-nested.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -18,8 +17,7 @@ export class ReviewResponseUpdateWithoutOtherReviewResponsesInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText?: string;
 

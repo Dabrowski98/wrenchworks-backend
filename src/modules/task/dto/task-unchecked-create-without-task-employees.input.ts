@@ -9,7 +9,6 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -32,8 +31,7 @@ export class TaskUncheckedCreateWithoutTaskEmployeesInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Description is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Description is required' })
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
     description!: string;
 

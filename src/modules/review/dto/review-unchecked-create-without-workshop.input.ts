@@ -9,7 +9,6 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { ReviewResponseUncheckedCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-unchecked-create-nested-many-without-review.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -31,8 +30,7 @@ export class ReviewUncheckedCreateWithoutWorkshopInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Review text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Review text is required' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     reviewText!: string;
 

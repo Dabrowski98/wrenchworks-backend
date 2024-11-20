@@ -8,7 +8,6 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -27,8 +26,7 @@ export class WorkshopDetailsUncheckedUpdateInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Workshop name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Workshop name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Workshop name is required' })
     @Validator.Length(2, 100, { message: 'Workshop name must be between 2 and 100 characters' })
     @Validator.Matches(/^[a-zA-Z0-9\s, \-&$]+$/, { message: 'Workshop name can only contain letters, numbers, spaces and signs like, - & $' })
     workshopName?: string;

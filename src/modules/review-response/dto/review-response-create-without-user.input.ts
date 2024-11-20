@@ -7,7 +7,6 @@ import { ReviewResponseCreateNestedOneWithoutOtherReviewResponsesInput } from '.
 import { Type } from 'class-transformer';
 import { ReviewResponseCreateNestedManyWithoutReviewResponseInput } from './review-response-create-nested-many-without-review-response.input';
 import { ReviewCreateNestedOneWithoutReviewResponsesInput } from '../../review/dto/review-create-nested-one-without-review-responses.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -18,8 +17,7 @@ export class ReviewResponseCreateWithoutUserInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText!: string;
 

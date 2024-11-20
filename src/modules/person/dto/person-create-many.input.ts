@@ -3,7 +3,6 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import * as Scalars from 'graphql-scalars';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -14,15 +13,13 @@ export class PersonCreateManyInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'First name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'First name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'First name is required' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
     firstName!: string;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Last name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Last name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Last name is required' })
     @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
     lastName!: string;
 

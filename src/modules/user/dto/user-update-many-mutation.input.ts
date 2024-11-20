@@ -3,7 +3,6 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -14,18 +13,16 @@ export class UserUpdateManyMutationInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Username is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Username is required' })
     @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
     username?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Password must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Password is required' })
     @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8, }$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$/, { message: 'Password must contain at least one letter, one number and one special character' })
     password?: string;
 
     @Field(() => String, {nullable:true})

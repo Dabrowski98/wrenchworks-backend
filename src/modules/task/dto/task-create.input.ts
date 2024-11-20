@@ -11,7 +11,6 @@ import { Type } from 'class-transformer';
 import { WorkshopJobCreateNestedOneWithoutTasksInput } from '../../workshop-job/dto/workshop-job-create-nested-one-without-tasks.input';
 import { ServiceCreateNestedOneWithoutTasksInput } from '../../service/dto/service-create-nested-one-without-tasks.input';
 import { EmployeeTaskCreateNestedManyWithoutTaskInput } from '../../employee-task/dto/employee-task-create-nested-many-without-task.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
@@ -27,8 +26,7 @@ export class TaskCreateInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Description is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Description is required' })
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
     description!: string;
 
@@ -65,5 +63,5 @@ export class TaskCreateInput {
     @Validator.ArrayNotEmpty({ message: 'Employee assignments cannot be empty' })
     @Validator.ValidateNested({ each: true })
     employeeId_WorkshopIds?: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput[];
-    
+
 }

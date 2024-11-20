@@ -4,7 +4,6 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { VehicleDetailsCreateWithoutVehicleInput } from 'src/modules/vehicle-details';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 @InputType()
 export class VehicleCreateInput {
@@ -16,7 +15,7 @@ export class VehicleCreateInput {
     @Field(() => GraphQLBigInt, { nullable: false })
     @Validator.IsNotEmpty({ message: 'Person ID is required' })
     personId!: bigint;
-  
+
     @Field(() => VehicleDetailsCreateWithoutVehicleInput, {nullable:true})
     @Validator.ValidateNested()
     @Validator.IsOptional()

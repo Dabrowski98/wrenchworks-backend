@@ -13,7 +13,6 @@ import { Type } from 'class-transformer';
 import { ReviewResponseListRelationFilter } from '../../review-response/dto/review-response-list-relation-filter.input';
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { PersonNullableRelationFilter } from '../../person/dto/person-nullable-relation-filter.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -27,8 +26,7 @@ export class UserWhereUniqueInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Username is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Username is required' })
     @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
     username?: string;

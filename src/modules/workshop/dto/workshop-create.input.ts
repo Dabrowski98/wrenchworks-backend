@@ -15,7 +15,6 @@ import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../worksh
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 import { WorkshopDetailsCreateWithoutWorkshopInput } from 'src/modules/workshop-details';
 import { WorkshopJobCreateManyWorkshopInputEnvelope } from 'src/modules/workshop-job';
 
@@ -63,5 +62,5 @@ export class WorkshopCreateInput {
     @Validator.IsArray({ message: 'Category IDs must be an array' })
     @Validator.ArrayNotEmpty({ message: 'Category IDs array cannot be empty' })
     categoryIds?: bigint[];
- 
+
 }

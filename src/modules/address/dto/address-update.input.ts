@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { PersonUpdateManyWithoutAddressNestedInput } from '../../person/dto/person-update-many-without-address-nested.input';
 import { Type } from 'class-transformer';
 import { WorkshopUpdateManyWithoutAddressNestedInput } from '../../workshop/dto/workshop-update-many-without-address-nested.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()

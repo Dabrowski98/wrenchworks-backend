@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { JobCategoryUncheckedCreateNestedManyWithoutChildInput } from './job-category-unchecked-create-nested-many-without-child.input';
 import { JobUncheckedCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-unchecked-create-nested-many-without-job-category.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -16,8 +15,7 @@ export class JobCategoryUncheckedCreateWithoutWorkshopsInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
     name!: string;
 

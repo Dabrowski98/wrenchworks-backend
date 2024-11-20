@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { ReviewResponseUncheckedCreateNestedManyWithoutReviewResponseInput } from './review-response-unchecked-create-nested-many-without-review-response.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -22,8 +21,7 @@ export class ReviewResponseUncheckedCreateWithoutReviewResponseInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText!: string;
 

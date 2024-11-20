@@ -11,7 +11,6 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { ServiceCreateNestedOneWithoutTasksInput } from '../../service/dto/service-create-nested-one-without-tasks.input';
 import { EmployeeTaskCreateNestedManyWithoutTaskInput } from '../../employee-task/dto/employee-task-create-nested-many-without-task.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -28,8 +27,7 @@ export class TaskCreateWithoutWorkshopJobInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Description is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Description is required' })
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
     description!: string;
 

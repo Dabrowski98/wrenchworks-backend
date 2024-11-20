@@ -4,7 +4,6 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { VehicleUncheckedUpdateManyWithoutVehicleModelNestedInput } from '../../vehicle/dto/vehicle-unchecked-update-many-without-vehicle-model-nested.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -15,8 +14,7 @@ export class VehicleModelUncheckedUpdateWithoutVehiclesBrandInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Model name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Model name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Model name is required' })
     @Validator.Length(2, 50, { message: 'Model name must be between 2 and 50 characters' })
     modelName?: string;
 

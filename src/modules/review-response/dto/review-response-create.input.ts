@@ -8,7 +8,6 @@ import { Type } from 'class-transformer';
 import { ReviewResponseCreateNestedManyWithoutReviewResponseInput } from './review-response-create-nested-many-without-review-response.input';
 import { ReviewCreateNestedOneWithoutReviewResponsesInput } from '../../review/dto/review-create-nested-one-without-review-responses.input';
 import { UserCreateNestedOneWithoutReviewResponsesInput } from '../../user/dto/user-create-nested-one-without-review-responses.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 import { GraphQLBigInt } from 'graphql-scalars';
 
 
@@ -17,8 +16,7 @@ export class ReviewResponseCreateInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Response text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
     responseText!: string;
 
@@ -27,15 +25,13 @@ export class ReviewResponseCreateInput {
     status?: keyof typeof ReviewsResponsesStatus;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({  message: 'Review ID is required' })
     reviewId!: bigint;
-  
+
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'User ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({  message: 'User ID is required' })
     userId!: bigint;
-  
+
     @Field(() => GraphQLBigInt, { nullable: true })
     parentResponseId?: bigint;
 }

@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { UserReportsReportedType } from '../../prisma/dto/user-reports-reported-type.enum';
 import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -16,8 +15,7 @@ export class UserReportUpdateWithoutUserInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Report text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Report text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Report text is required' })
     @Validator.Length(0, 2500, { message: 'Report text cannot exceed 2500 characters' })
     reportText?: string;
 

@@ -7,12 +7,11 @@ import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserUpdateOneRequiredWithoutUserReportsNestedInput } from '../../user/dto/user-update-one-required-without-user-reports-nested.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
 export class UserReportUpdateInput {
-    
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Report text must be a string' })
     @Validator.IsOptional()

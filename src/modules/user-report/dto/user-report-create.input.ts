@@ -7,7 +7,6 @@ import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-create-nested-one-without-user-reports.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -15,8 +14,7 @@ export class UserReportCreateInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Report text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Report text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Report text is required' })
     @Validator.Length(0, 2500, { message: 'Report text cannot exceed 2500 characters' })
     reportText!: string;
 
@@ -25,8 +23,7 @@ export class UserReportCreateInput {
     reportedType!: keyof typeof UserReportsReportedType;
 
     @Field(() => Scalars.GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Reported ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({  message: 'Reported ID is required' })
     reportedId!: bigint;
 
     @Field(() => UserReportsStatus, {nullable:true})

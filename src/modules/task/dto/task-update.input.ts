@@ -12,7 +12,6 @@ import { Type } from 'class-transformer';
 import { WorkshopJobUpdateOneRequiredWithoutTasksNestedInput } from '../../workshop-job/dto/workshop-job-update-one-required-without-tasks-nested.input';
 import { ServiceUpdateOneRequiredWithoutTasksNestedInput } from '../../service/dto/service-update-one-required-without-tasks-nested.input';
 import { EmployeeTaskUpdateManyWithoutTaskNestedInput } from '../../employee-task/dto/employee-task-update-many-without-task-nested.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
 
 

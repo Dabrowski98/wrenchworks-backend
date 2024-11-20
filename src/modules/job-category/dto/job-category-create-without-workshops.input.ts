@@ -6,7 +6,6 @@ import { JobCategoryCreateNestedOneWithoutChildrenInput } from './job-category-c
 import { JobCategoryCreateNestedManyWithoutChildInput } from './job-category-create-nested-many-without-child.input';
 import { JobCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-create-nested-many-without-job-category.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 
 
 @InputType()
@@ -17,8 +16,7 @@ export class JobCategoryCreateWithoutWorkshopsInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Name is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
     name!: string;
 

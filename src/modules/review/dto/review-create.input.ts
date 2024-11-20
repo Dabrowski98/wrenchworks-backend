@@ -11,7 +11,6 @@ import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserCreateNestedOneWithoutReviewsInput } from '../../user/dto/user-create-nested-one-without-reviews.input';
 import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
-import { CREATE, UPDATE } from 'src/constants/validation-groups';
 import { GraphQLBigInt } from 'graphql-scalars';
 
 
@@ -28,8 +27,7 @@ export class ReviewCreateInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Review text is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({ message: 'Review text is required' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     reviewText!: string;
 
@@ -38,12 +36,10 @@ export class ReviewCreateInput {
     status?: keyof typeof ReviewsStatus;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'User ID is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({  message: 'User ID is required' })
     userId!: bigint;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'WorkshopId is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
+    @Validator.IsNotEmpty({  message: 'WorkshopId is required' })
     workshopId!: bigint;
 }
