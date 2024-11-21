@@ -83,12 +83,12 @@ const targetDirectory = path.join(__dirname, '../src/modules');
 
 // Define the strings you want to remove
 const stringsToRemove = [
-    "import { CREATE, UPDATE } from 'src/constants/validation-groups';",
-    "@Validator.IsOptional({groups: [UPDATE]})",
-    "groups: [UPDATE],",
-    "groups: [CREATE],",
-    "{groups: [UPDATE]}",
-    "{groups: [CREATE]}",
+    // "import { CREATE, UPDATE } from 'src/constants/validation-groups';",
+    // "@Validator.IsOptional({groups: [UPDATE]})",
+    // "groups: [UPDATE],",
+    // "groups: [CREATE],",
+    // "{groups: [UPDATE]}",
+    // "{groups: [CREATE]}",
 ];
 
 // Ensure the target directory exists
