@@ -13,11 +13,13 @@ generator nestgraphql {
     outputFilePattern = "{model}/dto/{name}.{type}.ts"
     noAtomicOperations = true
 
+
+    useInputType_WhereInput_ALL  = "WhereUniqueInput"
+
     fields_Scalars_from = "graphql-scalars"
     fields_Scalars_input = true
     fields_Scalars_output = true
 
-    useInputType_WhereInput_ALL  = "WhereUniqueInput"
 
     decorate_1_type = "*Input"
     decorate_1_field = [deletedAt,createdAt,updatedAt]
@@ -32,7 +34,7 @@ generator nestgraphql {
     decorate_2_arguments = "[]"
 
     decorate_3_type = "*Input"
-    decorate_3_field = [create,connectOrCreate, upsert, connect, disconnect, delete, set, update, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany]
+    decorate_3_field = [create ,createMany ,connectOrCreate, upsert, connect, disconnect, delete, set, update, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany]
     decorate_3_name = ValidateNested
     decorate_3_from = "class-validator"
     decorate_3_arguments = "[]"
@@ -102,6 +104,7 @@ model Address{
   workshop         Workshop?
 }
 
+///Note: CREATE PERSON AND OR USER ONLY IF PHONE NUMBER IS CONFIRMED.
 model Person {
   /// @HideField({ match: '@(Person)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -120,6 +123,7 @@ model Person {
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
+  /// Note: check if only one person has number, if yes, after confirmation, set old record to null and create new Person.
   telephoneNumber  String?          @db.VarChar(12)
   /// @Validator.IsOptional()
   addressId        BigInt?          @db.UnsignedBigInt @unique
@@ -144,9 +148,20 @@ model Person {
 
 model Customer {
   /// @FieldType('Scalars.GraphQLBigInt')
-  customerId   BigInt     @db.UnsignedBigInt
+  customerId   BigInt     @id @unique(map: "customer_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId   BigInt     @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  personId     BigInt?    @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Telephone number must be a string' })
+  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsOptional()
+  telephoneNumber           String                      @db.VarChar(12)
+  /// @Validator.IsBoolean({ message: 'Telephone number confirmed must be a boolean' })
+  /// @Validator.IsOptional()
+  /// @HideField({match: '@(Customer)@(Create)*Input'})
+  telephoneNumberConfirmed  Boolean                     @default(false)
   /// @Validator.IsNumber({}, { message: 'Total due must be a number' })
   /// @Validator.Min(0, { message: 'Total due cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Total due cannot exceed 9999999.99' })
@@ -168,21 +183,38 @@ model Customer {
   /// @Validator.IsOptional()
   companyName  String?    @db.VarChar(30)
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
-  person       Person     @relation(fields: [customerId], references: [personId], onDelete: NoAction, map: "fk_customerIsPerson")
+  person       Person?     @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_customerCanBePerson")
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   workshop     Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
+  vehicles     Vehicle[]
 
-  @@id([customerId, workshopId])
   @@index([workshopId])
 }
 
 model Employee {
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
-  employeeId        BigInt            @db.UnsignedBigInt
+  employeeId        BigInt            @id @unique(map: "employee_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  personId          BigInt?           @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'login must be a string' })
+  /// @Validator.Length(3, 30, { message: 'login must be between 3 and 30 characters' })
+  /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'login can only contain letters, numbers, underscores and hyphens' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'login is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  login             String              @db.VarChar(30) @map("login")
+  /// @HideField(output: true)
+  /// @Validator.IsString({ message: 'Password must be a string' })
+  /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
+  /// Note: Password will be hashed before storage
+  password          String              @db.VarChar(255)
   /// @Validator.IsDate({ message: 'Joined at must be a valid date' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to now()
@@ -196,14 +228,13 @@ model Employee {
   permissionSet     PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
   /// @HideField({ match: '@(Employee)@(Update)*Input' })
   workshop          Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
-  /// @HideField({ match: '@(Employee)@(Update)*Input' })
-  person            Person            @relation(fields: [employeeId], references: [personId], onDelete: NoAction, map: "fk_personIsEmployee")
+  person            Person?           @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_personCanBeEmployee")
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
   services          Service[]
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  employeeTasks     EmployeeTask[]
+  tasks             Task[]
 
-  @@id([employeeId, workshopId])
+  @@unique([login, workshopId])
   @@index([permissionSetId])
   @@index([workshopId])
 }
@@ -504,7 +535,7 @@ model Task {
   workshopJob          WorkshopJob           @relation(fields: [workshopJobId], references: [workshopJobId], onDelete: NoAction)
   /// @HideField({ match: '@(Task)@(Update)*Input' })
   service              Service              @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
-  taskEmployees        EmployeeTask[]
+  employees            Employee[]
 
   @@index([serviceId])
 	@@map("Task")
@@ -556,11 +587,11 @@ model Service {
   updatedAt           DateTime?         @default(now()) @db.Timestamp(0)
   deletedAt           DateTime?         @db.Timestamp(0)
   /// @Validator.IsOptional()
-  serviceRequest      ServiceRequest? @relation("service_requests_approved_service_idToservices")
+  serviceRequest      ServiceRequest?  @relation("service_requests_approved_service_idToservices")
   tasks               Task[]
   /// @HideField({ match: '@(Service)@(Update)*Input' })
-  customer            Customer         @relation(fields: [customerId, workshopId], references: [customerId, workshopId], onDelete: NoAction, map: "fk_customerOrdersService")
-  employee            Employee         @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_employeeResponsibleForService")
+  customer            Customer         @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_customerOrdersService")
+  employee            Employee         @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeResponsibleForService")
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   vehicle             Vehicle          @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_serviceAssignedToVehicle")
   /// @HideField({ match: '@(Service)@(Update)*Input' })
@@ -570,21 +601,6 @@ model Service {
   @@index([employeeId])
   @@index([vehicleId])
   @@index([workshopId])
-}
-
-model EmployeeTask {
-  /// @FieldType('Scalars.GraphQLBigInt')
-  taskId        BigInt        @db.UnsignedBigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  employeeId    BigInt        @db.UnsignedBigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  workshopId    BigInt        @db.UnsignedBigInt
-  createdAt     DateTime      @default(now()) @db.DateTime(0)
-  employee      Employee      @relation(fields: [employeeId, workshopId], references: [employeeId, workshopId], onDelete: NoAction, map: "fk_tasks_employees_employeeCanBeAssignedToManyTasks")
-  task          Task          @relation(fields: [taskId], references: [taskId], onDelete: NoAction, map: "fk_tasks_employees_taskCanBeAssignedToManyEmployees")
-
-  @@id([employeeId, taskId, workshopId])
-  @@index([taskId])
 }
 
 model UserReport {
@@ -615,14 +631,14 @@ model UserReport {
 
   @@index([userId])
 }
-
+///Note: CREATE PERSON AND OR USER ONLY IF PHONE NUMBER IS CONFIRMED.
 model User {
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
-  personId          BigInt?             @unique(map: "person_id") @db.UnsignedBigInt
+  personId          BigInt              @unique(map: "person_id") @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Username must be a string' })
   /// @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
@@ -663,7 +679,7 @@ model User {
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   userReports       UserReport[]
   /// @Validator.IsOptional()
-  person            Person?            @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_userCanBePerson")
+  person            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_userHasToBePerson")
 
   @@unique([username], map: "uniqueUsername")
 }
@@ -684,6 +700,7 @@ model Vehicle {
   vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   person                            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_vehicleHasOwner")
+  customers                         Customer[]
   /// @Validator.IsOptional()
   vehiclesDetails                   VehicleDetails?
 
@@ -786,7 +803,12 @@ model Workshop {
   addressId                 BigInt?                      @db.UnsignedBigInt @unique
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
-  email                     String?                     @db.VarChar(50)
+  email                     String                      @db.VarChar(50)
+  /// @Validator.IsString({ message: 'Telephone number must be a string' })
+  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsOptional()
+  telephoneNumber           String                      @db.VarChar(12)
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -794,6 +816,9 @@ model Workshop {
   /// @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
   /// @Validator.IsOptional()
   isManagingWork            Boolean?                    @default(false)
+  /// @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
+  /// @Validator.IsOptional()
+  isOfferingService         Boolean?                    @default(false)
   createdAt                 DateTime?                   @default(now()) @db.Timestamp(0)
   updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
   deletedAt                 DateTime?                   @db.Timestamp(0)
@@ -840,11 +865,6 @@ model WorkshopDetails {
   /// @Validator.Length(0, 10000, { message: 'Description cannot exceed 10000 characters' })
   /// @Validator.IsOptional()
   description      String?                   @db.VarChar(10000)
-  /// @Validator.IsString({ message: 'Telephone number must be a string' })
-  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
-  /// @Validator.IsOptional()
-  telephoneNumber  String?                   @db.VarChar(12)
   /// @Validator.IsString({ message: 'Logo URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Logo URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()

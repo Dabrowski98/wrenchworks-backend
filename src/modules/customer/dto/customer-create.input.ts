@@ -49,7 +49,7 @@ export class CustomerCreateInput {
     person!: PersonCreateNestedOneWithoutCustomersInput;
 
     @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Workshop ID is required' })
+    @Validator.IsNotEmpty()
     workshopId!: bigint;
 
     @Field(() => ServiceCreateNestedManyWithoutCustomerInput, {nullable:true})
