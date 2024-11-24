@@ -51,6 +51,28 @@ generator nestgraphql {
     decorate_5_from = "class-transformer"
     decorate_5_arguments = "['() => {propertyType.0}']"
     decorate_5_name = Type
+
+    //what to allow where https://docs.google.com/spreadsheets/d/1WHhCGJFKA0y567dnyL-4qyfEKDiHxrUjK4j1JVdaLeU/edit?usp=sharing
+
+    decorate_CI-create-field-only_type = ["AddressCreateNested*Without*", "WorkshopDetailsCreateNested*Without*",  "JobCategoryCreateNested*WithoutParentInput"]
+    decorate_CI-create-field-only_field = "!(create|createMany)"
+    decorate_CI-create-field-only_name = "HideField"
+    decorate_CI-create-field-only_from = "@nestjs/graphql"
+    decorate_CI-create-field-only_arguments = "[]"
+
+    decorate_CI-connect-field-only_type = ["CustomerCreateNested*Without*", "EmployeeCreateNested*Without*", "JobCreateNested*Without*", "ReviewCreateNested*Without*", "ReviewResponseCreateNested*Without*", "UserCreateNested*Without*", "VehicleModelCreateNested*Without*", "WorkshopCreateNested*Without*", "JobCategoryCreateNested*WithoutChildrenInput", "JobCategoryCreateNestedManyWithoutWorkshopsInput", "PersonCreateNestedOneWithoutEmployeesInput"]
+    decorate_CI-connect-field-only_field = "!(connect)"
+    decorate_CI-connect-field-only_name = "HideField"
+    decorate_CI-connect-field-only_from = "@nestjs/graphql"
+    decorate_CI-connect-field-only_arguments = "[]"
+
+    decorate_CI-connectOrCreate-field-only_type = ["PermissionSetCreateNested*Without*"]
+    decorate_CI-connectOrCreate-field-only_field = "!(connectOrCreate)"
+    decorate_CI-connectOrCreate-field-only_name = "HideField"
+    decorate_CI-connectOrCreate-field-only_from = "@nestjs/graphql"
+    decorate_CI-connectOrCreate-field-only_arguments = "[]"
+
+
 }
 
 datasource db {
