@@ -28,7 +28,7 @@ generator nestgraphql {
     decorate_1_arguments = "[]"
 
     decorate_2_type = "*Input"
-    decorate_2_field = [task, person, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
+    decorate_2_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
     decorate_2_name = ValidateNested
     decorate_2_from = "class-validator"
     decorate_2_arguments = "[]"
@@ -47,7 +47,7 @@ generator nestgraphql {
 
     //TODO: Type decorator duplicates in many models.
     decorate_5_type = "*"
-    decorate_5_field = [task, person, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
+    decorate_5_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
     decorate_5_from = "class-transformer"
     decorate_5_arguments = "['() => {propertyType.0}']"
     decorate_5_name = Type
@@ -60,7 +60,7 @@ generator nestgraphql {
     decorate_CI-create-field-only_from = "@nestjs/graphql"
     decorate_CI-create-field-only_arguments = "[]"
 
-    decorate_CI-connect-field-only_type = ["CustomerCreateNested*Without*", "EmployeeCreateNested*Without*", "JobCreateNested*Without*", "ReviewCreateNested*Without*", "ReviewResponseCreateNested*Without*", "UserCreateNested*Without*", "VehicleModelCreateNested*Without*", "WorkshopCreateNested*Without*", "JobCategoryCreateNested*WithoutChildrenInput", "JobCategoryCreateNestedManyWithoutWorkshopsInput", "PersonCreateNestedOneWithoutEmployeesInput"]
+    decorate_CI-connect-field-only_type = ["CustomerCreateNested*Without*", "EmployeeCreateNested*Without*", "JobCreateNested*Without*", "ReviewCreateNested*Without*", "ReviewResponseCreateNested*Without*", "UserCreateNested*Without*", "VehicleModelCreateNested*Without*", "WorkshopCreateNested*Without*", "JobCategoryCreateNested*WithoutChildrenInput", "JobCategoryCreateNestedManyWithoutWorkshopsInput"]
     decorate_CI-connect-field-only_field = "!(connect)"
     decorate_CI-connect-field-only_name = "HideField"
     decorate_CI-connect-field-only_from = "@nestjs/graphql"
@@ -120,17 +120,47 @@ model Address{
   postCode         String           @db.VarChar(10)
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @Validator.IsOptional()
-  person           Person?
+  user           User?
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @Validator.IsOptional()
   workshop         Workshop?
 }
 
-///Note: CREATE PERSON AND OR USER ONLY IF PHONE NUMBER IS CONFIRMED.
-model Person {
-  /// @HideField({ match: '@(Person)@(Create|Update)*Input' })
+///Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED.
+model User {
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId         BigInt           @id @unique(map: "person_id") @default(autoincrement()) @db.UnsignedBigInt
+  userId         BigInt           @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Username must be a string' })
+  /// @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
+  /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Username is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  username          String              @db.VarChar(30)
+  /// @HideField(output: true)
+  /// @Validator.IsString({ message: 'Password must be a string' })
+  /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
+  /// Note: Password will be hashed before storage
+  password          String              @db.VarChar(255)
+  /// @FieldType({name: 'Scalars.GraphQLEmailAddress', from: 'graphql-scalars'})
+  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
+  /// @Validator.IsOptional()
+  email             String?             @db.VarChar(320)
+  /// @Validator.IsString({ message: 'Avatar URL must be a string' })
+  /// @Validator.Length(0, 255, { message: 'Avatar URL cannot exceed 255 characters' })
+  /// @Validator.IsOptional()
+  avatarURL         String?             @db.VarChar(255)
+  /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
+  /// @HideField({ match: '@(User)@(Create)*Input' })
+  /// @Validator.IsOptional()
+  isVerified        Boolean?            @default(false) 
+  /// @Validator.IsEnum(UsersStatus, { message: 'Invalid user status' })
+  /// @HideField({ match: '@(User)@(Create)*Input' })
+  /// @Validator.IsOptional()
+  status            UsersStatus?        @default(ACTIVE)
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
@@ -145,45 +175,61 @@ model Person {
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
-  /// Note: check if only one person has number, if yes, after confirmation, set old record to null and create new Person.
   telephoneNumber  String?          @db.VarChar(12)
   /// @Validator.IsOptional()
   addressId        BigInt?          @db.UnsignedBigInt @unique
+  createdAt         DateTime?           @default(now()) @db.Timestamp(0)
+  updatedAt         DateTime?           @default(now()) @db.Timestamp(0)
   /// @Validator.IsOptional()
   deletedAt        DateTime?        @db.Timestamp(0)
   /// @Validator.IsOptional()
   address          Address?         @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
-  /// @HideField({match: '@(Person)@(Update)*Input'})
+  /// @HideField({match: '@(User)@(Update)*Input'})
   vehicles         Vehicle[]
-  /// @HideField({match: '@(Person)@(Update)*Input'})
+  /// @HideField({match: '@(User)@(Update)*Input'})
   serviceRequests  ServiceRequest[]
-  /// @HideField({match: '@(Person)@(Create|Update)*Input'})
+  /// @HideField({match: '@(User)@(Create|Update)*Input'})
   customers        Customer[]
-  /// @HideField({match: '@(Person)@(Create|Update)*Input'})
+  /// @HideField({match: '@(User)@(Create|Update)*Input'})
   employees        Employee[]
-  /// @HideField({match: '@(Person)@(Create|Update)*Input'})
-  /// @Validator.IsOptional()
-  user             User?
-  /// @HideField({match: '@(Person)@(Create|Update)*Input'})
+  /// @HideField({match: '@(User)@(Create|Update)*Input'})
   workshops        Workshop[]
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
+  reviews           Review[]
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
+  reviewResponses   ReviewResponse[]
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
+  userReports       UserReport[]
+  /// @HideField({ match: '@(User)@(Create)*Input' })
+  joinWorkshopRequests JoinWorkshopRequest[]
 }
 
 model Customer {
   /// @FieldType('Scalars.GraphQLBigInt')
-  customerId   BigInt     @id @unique(map: "customer_id") @default(autoincrement()) @db.UnsignedBigInt
+  customerId                BigInt     @id @unique(map: "customer_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  workshopId   BigInt     @db.UnsignedBigInt
+  workshopId                BigInt     @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId     BigInt?    @db.UnsignedBigInt
+  userId                    BigInt?    @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  guestId                   BigInt?    @db.UnsignedBigInt @unique
+  /// @Validator.IsOptional()
+  /// @HideField({match: '@(Customer)@(Create|Update)*Input'})
+  // TODO: decide whats the default value.
+  /// Note: Fill this field in Service layer.
+  creationSource            CustomerCreationSource 
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
-  telephoneNumber           String                      @db.VarChar(12)
-  /// @Validator.IsBoolean({ message: 'Telephone number confirmed must be a boolean' })
+  telephoneNumber           String?                     @db.VarChar(12)
+  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
+  /// @Validator.IsOptional()
+  email                         String?
+  /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @Validator.IsOptional()
   /// @HideField({match: '@(Customer)@(Create)*Input'})
-  telephoneNumberConfirmed  Boolean                     @default(false)
+  isVerified  Boolean                     @default(false)
   /// @Validator.IsNumber({}, { message: 'Total due must be a number' })
   /// @Validator.Min(0, { message: 'Total due cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Total due cannot exceed 9999999.99' })
@@ -205,14 +251,55 @@ model Customer {
   /// @Validator.IsOptional()
   companyName  String?    @db.VarChar(30)
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
-  person       Person?     @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_customerCanBePerson")
+  user         User?      @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_customerCanBeUser")
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   workshop     Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
   vehicles     Vehicle[]
+  /// @HideField({ match: '@(Customer)@(Create | Update)*Input' })
+  guest        Guest?           @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestCanBecomeCustomer")
 
   @@index([workshopId])
+}
+
+// TODO: PHONE NUMBER OR EMAIL IS REQUIRED.
+/// Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.
+model Guest {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  guestId                       BigInt              @id @unique(map: "guest_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  vehicleId                     BigInt?             @db.UnsignedBigInt @map("vehicleId")
+  /// @FieldType('Scalars.GraphQLBigInt')
+  serviceRequestId              BigInt?             @unique(map: "service_request_id") @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'First name must be a string' })
+  /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
+  /// @HideField({match: '@(Guest)@(Update)*Input'})
+  firstName                     String              @db.VarChar(30)
+  /// @Validator.IsString({ message: 'Telephone number must be a string' })
+  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsOptional()
+  /// @HideField({match: '@(Guest)@(Update)*Input'})
+  telephoneNumber               String?             @db.VarChar(12)
+  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
+  /// @Validator.IsOptional()
+  email                         String?
+  /// @Validator.IsString({ message: 'NIP must be a string' })
+  /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
+  /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
+  /// @Validator.IsOptional()
+  NIP          String?    @db.VarChar(10)
+  /// @Validator.IsString({ message: 'Company name must be a string' })
+  /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
+  /// @Validator.IsOptional()
+  companyName  String?    @db.VarChar(30)
+  /// @HideField({match: '@(Guest)@(Update)*Input'})
+  vehicle                       Vehicle?            @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_GuestProvidesVehicle")
+  serviceRequest                ServiceRequest?     @relation(fields: [serviceRequestId], references: [serviceRequestId], onDelete: NoAction, map: "fk_GuestProvidesServiceRequest")
+  /// @HideField({match: '@(Guest)@(Create)*Input'})
+  customer                      Customer?           
 }
 
 model Employee {
@@ -222,13 +309,18 @@ model Employee {
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt            @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId          BigInt?           @db.UnsignedBigInt
+  userId          BigInt?           @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Nickname must be a string' })
+  /// @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
+  /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
+  /// @Validator.IsOptional()
+  nickname          String?           @db.VarChar(30)
   /// @Validator.IsString({ message: 'login must be a string' })
   /// @Validator.Length(3, 30, { message: 'login must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'login can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'login is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  login             String              @db.VarChar(30) @map("login")
+  login             String              @db.VarChar(30)
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
@@ -250,7 +342,7 @@ model Employee {
   permissionSet     PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
   /// @HideField({ match: '@(Employee)@(Update)*Input' })
   workshop          Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
-  person            Person?           @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_personCanBeEmployee")
+  user              User?           @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
   services          Service[]
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
@@ -259,6 +351,30 @@ model Employee {
   @@unique([login, workshopId])
   @@index([permissionSetId])
   @@index([workshopId])
+}
+
+/// Note: Do not allow receiver to update this model apart from status.
+model JoinWorkshopRequest {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  joinWorkshopRequestId BigInt @id @unique(map: "join_workshop_request_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  receiverId              BigInt @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  workshopId          BigInt @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Message must be a string' })
+  /// @Validator.Length(0, 1000, { message: 'Message cannot exceed 1000 characters' })
+  /// @Validator.IsOptional()
+  message             String? @db.VarChar(1000)
+  /// @HideField({ match: '@(JoinWorkshopRequest)@(Create)*Input' })
+  /// @Validator.IsEnum(JoinWorkshopRequestStatus, { message: 'Invalid status' })
+  /// @Validator.IsOptional()
+  /// Note: Optional because field defaults to PENDING
+  status              JoinWorkshopRequestStatus  @default(PENDING)
+  createdAt           DateTime?                  @default(now()) @db.DateTime(0)
+  updatedAt           DateTime?                  @db.Timestamp(0)
+  user                User                       @relation(fields: [receiverId], references: [userId], onDelete: NoAction, map: "fk_userCanRequestToJoinWorkshop")
+  /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
+  workshop            Workshop                   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanHaveJoinRequests")
 }
 
 model JobCategory {
@@ -424,8 +540,8 @@ model Review {
   reviewDate        DateTime            @default(now()) @db.DateTime(0)
   /// @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
   /// @Validator.IsOptional()
-  /// Note: Optional because field defaults to pending
-  status            ReviewsStatus       @default(pending)
+  /// Note: Optional because field defaults to PENDING
+  status            ReviewsStatus       @default(PENDING)
   /// @HideField({ match: '@(Review)@(Update)*Input' })
   user              User                @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviews")
   /// @HideField({ match: '@(Review)@(Update)*Input' })
@@ -462,7 +578,7 @@ model ReviewResponse {
   /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
-  status                 ReviewsResponsesStatus   @default(pending)
+  status                 ReviewsResponsesStatus   @default(PENDING)
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   parentResponse         ReviewResponse?          @relation("reviews_responsesToreviews_responses", fields: [parentResponseId], references: [reviewResponseId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseToResponse")
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
@@ -486,7 +602,8 @@ model ServiceRequest {
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId             BigInt                    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId              BigInt                    @db.UnsignedBigInt
+  /// @Validator.IsOptional()
+  userId                BigInt?                    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
@@ -499,7 +616,7 @@ model ServiceRequest {
   /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
-  status                ServiceRequestsStatus?    @default(pending)
+  status                ServiceRequestsStatus?    @default(PENDING)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
@@ -512,12 +629,12 @@ model ServiceRequest {
   vehicle                                                 Vehicle                 @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_requestAssignedToVehicle")
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
   workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
+  user                                                    User?                   @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_requestFromUser")
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
-  person                                                  Person                  @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_requestFromPerson")
-
+  guest                                                   Guest?
   @@index([vehicleId])
   @@index([workshopId])
-  @@index([personId])
+  @@index([userId])
 }
 
 model Task {
@@ -540,7 +657,7 @@ model Task {
   /// @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
-  status               TasksStatus?          @default(pending)
+  status               TasksStatus?          @default(PENDING)
   /// @Validator.IsNumber({}, { message: 'Execution time must be a number' })
   /// @Validator.Min(0, { message: 'Execution time cannot be negative' })
   /// @Validator.Max(9999.99, { message: 'Whoa Cowboy! Execution time cannot exceed 9999.99!' })
@@ -585,7 +702,7 @@ model Service {
   /// @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
-  status              ServicesStatus?   @default(pending)
+  status              ServicesStatus?   @default(PENDING)
   /// @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -645,73 +762,22 @@ model UserReport {
   /// @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
-  status             UserReportsStatus          @default(pending)
-  createdAt          DateTime                   @default(now()) @db.DateTime(0)
+  status             UserReportsStatus          @default(PENDING)
+  createdAt          DateTime?                  @default(now()) @db.DateTime(0)
   updatedAt          DateTime?                  @db.Timestamp(0)
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
   @@index([userId])
 }
-///Note: CREATE PERSON AND OR USER ONLY IF PHONE NUMBER IS CONFIRMED.
-model User {
-  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
-  /// @FieldType('Scalars.GraphQLBigInt')
-  userId            BigInt              @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  /// @Validator.IsOptional()
-  personId          BigInt              @unique(map: "person_id") @db.UnsignedBigInt
-  /// @Validator.IsString({ message: 'Username must be a string' })
-  /// @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
-  /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
-  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Username is required' })
-  /// @Validator.IsOptional({ groups: [UPDATE]})
-  username          String              @db.VarChar(30)
-  /// @HideField(output: true)
-  /// @Validator.IsString({ message: 'Password must be a string' })
-  /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
-  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
-  /// @Validator.IsOptional({groups: [UPDATE]})
-  /// Note: Password will be hashed before storage
-  password          String              @db.VarChar(255)
-  /// @FieldType({name: 'Scalars.GraphQLEmailAddress', from: 'graphql-scalars'})
-  /// @Validator.IsEmail({}, { message: 'Invalid email format' })
-  /// @Validator.IsOptional()
-  email             String?             @db.VarChar(320)
-  /// @Validator.IsString({ message: 'Avatar URL must be a string' })
-  /// @Validator.Length(0, 255, { message: 'Avatar URL cannot exceed 255 characters' })
-  /// @Validator.IsOptional()
-  avatarURL         String?             @db.VarChar(255)
-  /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
-  /// @HideField({ match: '@(User)@(Create)*Input' })
-  /// @Validator.IsOptional()
-  isVerified        Boolean?            @default(false) 
-  /// @Validator.IsEnum(UsersStatus, { message: 'Invalid user status' })
-  /// @HideField({ match: '@(User)@(Create)*Input' })
-  /// @Validator.IsOptional()
-  status            UsersStatus?        @default(active)
-  createdAt         DateTime?           @default(now()) @db.Timestamp(0)
-  updatedAt         DateTime?           @default(now()) @db.Timestamp(0)
-  deletedAt         DateTime?           @db.Timestamp(0)
-  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
-  reviews           Review[]
-  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
-  reviewResponses   ReviewResponse[]
-  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
-  userReports       UserReport[]
-  /// @Validator.IsOptional()
-  person            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_userHasToBePerson")
 
-  @@unique([username], map: "uniqueUsername")
-}
 
 model Vehicle {
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId                         BigInt             @id @unique(map: "vehicle_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId                          BigInt             @db.UnsignedBigInt
+  userId                            BigInt?            @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   modelId                           BigInt             @db.UnsignedBigInt
   deletedAt                         DateTime?          @db.Timestamp(0)
@@ -721,13 +787,14 @@ model Vehicle {
   services                          Service[]
   vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
-  person                            Person             @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_vehicleHasOwner")
+  user                              User?              @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_vehicleCanBeOwnedByUser")
   customers                         Customer[]
   /// @Validator.IsOptional()
   vehiclesDetails                   VehicleDetails?
+  guests                            Guest[]
 
   @@index([modelId])
-  @@index([personId])
+  @@index([userId])
 }
 
 model VehicleBrand {
@@ -819,7 +886,7 @@ model Workshop {
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  personId                  BigInt                      @db.UnsignedBigInt
+  ownerId                   BigInt                      @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   addressId                 BigInt?                      @db.UnsignedBigInt @unique
@@ -858,14 +925,16 @@ model Workshop {
   serviceRequests           ServiceRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
-  person                    Person                      @relation(fields: [personId], references: [personId], onDelete: NoAction, map: "fk_workshopHasOwner")
+  user                      User                      @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
   workshopDetails           WorkshopDetails?
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   workshopJobs              WorkshopJob[]
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   jobCategories             JobCategory[]
+  /// @HideField({ match: '@(Workshop)@(Create)*Input' })
+  joinWorkshopRequests      JoinWorkshopRequest[]
 
-  @@index([personId])
+  @@index([ownerId])
 }
 
 model WorkshopDetails {
@@ -894,7 +963,7 @@ model WorkshopDetails {
   /// @Validator.IsEnum(WorkshopsDetailsStatus, { message: 'Invalid workshop status' })
   /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   /// @Validator.IsOptional()
-  status           WorkshopsDetailsStatus?   @default(active)
+  status           WorkshopsDetailsStatus?   @default(ACTIVE)
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
@@ -942,78 +1011,90 @@ model WorkshopJob {
 }
 
 enum UserReportsReportedType {
-  user
-  workshop
-  review
-  review_response
+  USER
+  WORKSHOP
+  REVIEW
+  REVIEW_RESPONSE
 }
 
 enum ServiceRequestsStatus {
-  pending
-  accepted
-  rejected
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 enum TasksStatus {
-  pending
-  completed
-  cancelled
+  PENDING
+  COMPLETED
+  CANCELLED
 }
 
 enum UserReportsStatus {
-  pending
-  considered
-  closed
+  PENDING
+  CONSIDERED
+  CLOSED
 }
 
 enum ReviewsStatus {
-  pending
-  accepted
-  denied
+  PENDING
+  ACCEPTED
+  DENIED
 }
 
 enum ReviewsResponsesStatus {
-  pending
-  accepted
-  denied
+  PENDING
+  ACCEPTED
+  DENIED
 }
 
 enum UsersStatus {
-  active
-  suspended
+  ACTIVE
+  SUSPENDED
 }
 
 enum WorkshopsDetailsStatus {
-  active
-  suspended
+  ACTIVE
+  SUSPENDED
 }
 
 enum ServicesStatus {
-  pending
-  completed
-  cancelled
+  PENDING
+  COMPLETED
+  CANCELLED
 }
 
 enum FuelType {
-  petrol
-  diesel
-  electric
-  hybrid
-  rocket
+  PETROL
+  DIESEL
+  ELECTRIC
+  HYBRID
+  ROCKET
   LPG
   CNG
-  other
+  OTHER
 }
 
 enum BodyColors {
-  black
-  white
-  red
-  blue
-  silver
-  gray
-  green
-  yellow
-  brown
-  other
+  BLACK
+  WHITE
+  RED
+  BLUE
+  SILVER
+  GRAY
+  GREEN
+  YELLOW
+  BROWN
+  OTHER
+}
+
+enum CustomerCreationSource {
+  GUEST
+  WORKSHOP
+  USER
+}
+
+enum JoinWorkshopRequestStatus {
+  PENDING
+  ACCEPTED
+  DENIED
 }
