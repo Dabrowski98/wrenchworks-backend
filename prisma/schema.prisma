@@ -268,10 +268,6 @@ model Customer {
 model Guest {
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                       BigInt              @id @unique(map: "guest_id") @default(autoincrement()) @db.UnsignedBigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  vehicleId                     BigInt?             @db.UnsignedBigInt @map("vehicleId")
-  /// @FieldType('Scalars.GraphQLBigInt')
-  serviceRequestId              BigInt?             @unique(map: "service_request_id") @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
@@ -296,8 +292,9 @@ model Guest {
   /// @Validator.IsOptional()
   companyName  String?    @db.VarChar(30)
   /// @HideField({match: '@(Guest)@(Update)*Input'})
-  vehicle                       Vehicle?            @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_GuestProvidesVehicle")
-  serviceRequest                ServiceRequest?     @relation(fields: [serviceRequestId], references: [serviceRequestId], onDelete: NoAction, map: "fk_GuestProvidesServiceRequest")
+  vehicle                       Vehicle?            
+  /// @HideField({match: '@(Guest)@(Update)*Input'})
+  serviceRequest                ServiceRequest?
   /// @HideField({match: '@(Guest)@(Create)*Input'})
   customer                      Customer?           
 }
@@ -606,6 +603,9 @@ model ServiceRequest {
   userId                BigInt?                    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
+  guestId               BigInt?                    @db.UnsignedBigInt @unique
+  /// @FieldType('Scalars.GraphQLBigInt')
+  /// @Validator.IsOptional()
   approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
   /// @Validator.IsDate({ message: 'Request date must be a valid date' })
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
@@ -631,7 +631,7 @@ model ServiceRequest {
   workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
   user                                                    User?                   @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_requestFromUser")
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
-  guest                                                   Guest?
+  guest                                                   Guest?                  @relation(fields: [guestId], references: [guestId], onDelete: SetNull , map: "fk_GuestProvidesServiceRequest")
   @@index([vehicleId])
   @@index([workshopId])
   @@index([userId])
@@ -779,6 +779,8 @@ model Vehicle {
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                            BigInt?            @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
+  guestId                           BigInt?            @db.UnsignedBigInt @unique
+  /// @FieldType('Scalars.GraphQLBigInt')
   modelId                           BigInt             @db.UnsignedBigInt
   deletedAt                         DateTime?          @db.Timestamp(0)
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
@@ -791,7 +793,7 @@ model Vehicle {
   customers                         Customer[]
   /// @Validator.IsOptional()
   vehiclesDetails                   VehicleDetails?
-  guests                            Guest[]
+  guest                             Guest?              @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestProvidesVehicle")
 
   @@index([modelId])
   @@index([userId])
