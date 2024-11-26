@@ -22,9 +22,9 @@ generator nestgraphql {
     fields_Scalars_input = true
     fields_Scalars_output = true
 
-
+    //Hide implicitly managed fields.
     decorate_1_type = "*Input"
-    decorate_1_field = [deletedAt,createdAt,updatedAt]
+    decorate_1_field = [deletedAt, createdAt, createdBy, updatedAt, updatedBy, resolvedAt, resolvedBy]
     decorate_1_name = "HideField"
     decorate_1_from = "nestjs-graphql"
     decorate_1_arguments = "[]"
@@ -121,10 +121,8 @@ model Address{
   /// @Validator.IsOptional({ groups: [UPDATE]})
   postCode         String           @db.VarChar(10)
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
-  /// @Validator.IsOptional()
-  user           User?
+  user             User?
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
-  /// @Validator.IsOptional()
   workshop         Workshop?
 }
 
@@ -151,40 +149,45 @@ model Customer {
   telephoneNumber           String?                     @db.VarChar(12)
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
-  email                         String?             @db.VarChar(320)
+  email                     String?             @db.VarChar(320)
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @Validator.IsOptional()
   /// @HideField({match: '@(Customer)@(Create)*Input'})
-  isVerified  Boolean                     @default(false)
+  isVerified  Boolean       @default(false)
   /// @Validator.IsNumber({}, { message: 'Total due must be a number' })
   /// @Validator.Min(0, { message: 'Total due cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Total due cannot exceed 9999999.99' })
   /// Note: Optional because it defaults to 0.00
   /// @Validator.IsOptional()
-  totalDue     Decimal    @default(0.00) @db.Decimal(10, 2)
+  totalDue     Decimal      @default(0.00) @db.Decimal(10, 2)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
-  description  String?    @db.VarChar(5000)
-  deletedAt    DateTime?  @db.Timestamp(0)
+  description  String?      @db.Text
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
-  NIP          String?    @db.VarChar(10)
+  NIP          String?      @db.VarChar(10)
   /// @Validator.IsString({ message: 'Company name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
-  companyName  String?    @db.VarChar(30)
-  /// @HideField({ match: '@(Customer)@(Update)*Input' })
-  guest        Guest?           @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestCanBecomeCustomer")
+  companyName  String?      @db.VarChar(30)
+  deletedAt    DateTime?    @db.Timestamp(0)
+  createdAt    DateTime?    @default(now()) @db.Timestamp(0)
+  createdBy    BigInt?      @db.UnsignedBigInt
+  updatedAt    DateTime?    @db.Timestamp(0)
+  updatedBy    BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
-  user         User?      @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_customerCanBeUser")
+  guest        Guest?       @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestCanBecomeCustomer")
+  /// @HideField({ match: '@(Customer)@(Update)*Input' })
+  user         User?        @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_customerCanBeUser")
+  /// @HideField({ match: '@(Customer)@(Update)*Input' })
   vehicles     Vehicle[]
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
-  workshop     Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
+  workshop     Workshop       @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
 
   @@index([workshopId])
 }
@@ -192,22 +195,22 @@ model Customer {
 model Employee {
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
-  employeeId        BigInt            @id @unique(map: "employee_id") @default(autoincrement()) @db.UnsignedBigInt
+  employeeId            BigInt            @id @unique(map: "employee_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  workshopId        BigInt            @db.UnsignedBigInt
+  workshopId            BigInt            @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  userId          BigInt?           @db.UnsignedBigInt
+  userId                BigInt?           @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Nickname must be a string' })
   /// @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsOptional()
-  nickname          String?           @db.VarChar(30)
+  nickname              String?           @db.VarChar(30)
   /// @Validator.IsString({ message: 'login must be a string' })
   /// @Validator.Length(3, 30, { message: 'login must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'login can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'login is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  login             String              @db.VarChar(30)
+  login                 String              @db.VarChar(30)
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
@@ -215,27 +218,30 @@ model Employee {
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
-  password          String              @db.VarChar(255)
+  password              String              @db.VarChar(256)
+  /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
+  /// @Validator.IsOptional()
+  permissionSetId       Int?              @db.UnsignedInt
   /// @Validator.IsDate({ message: 'Joined at must be a valid date' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to now()
-  joinedAt          DateTime          @default(now()) @db.DateTime(0)
-  deletedAt         DateTime?         @db.Timestamp(0)
-  /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
-  /// @Validator.IsOptional()
-  permissionSetId   Int?              @db.UnsignedInt
-  joinWorkshopRequests JoinWorkshopRequest[]
-  /// @Validator.IsOptional()
-  permissionSet     PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
-  /// @HideField({ match: '@(Employee)@(Update)*Input' })
-  workshop          Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
+  joinedAt              DateTime          @default(now()) @db.DateTime(0)
+  deletedAt             DateTime?         @db.Timestamp(0)
+  createdAt             DateTime?         @default(now()) @db.Timestamp(0)
+  createdBy             BigInt?           @db.UnsignedBigInt
+  updatedAt             DateTime?         @db.Timestamp(0)
+  updatedBy             BigInt?           @db.UnsignedBigInt
+  permissionSet         PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
+  services              Service[]
+  joinWorkshopRequests  JoinWorkshopRequest[]
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
+  tasks                 Task[]
   /// Note: Depends solely on join workshop request status.
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  user              User?           @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
-  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
-  services          Service[]
-  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  tasks             Task[]
+  user                  User?           @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
+  /// @HideField({ match: '@(Employee)@(Update)*Input' })
+  workshop              Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
 
   @@unique([login, workshopId])
   @@index([permissionSetId])
@@ -265,16 +271,16 @@ model Guest {
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
-  NIP          String?             @db.VarChar(10)
+  NIP                           String?             @db.VarChar(10)
   /// @Validator.IsString({ message: 'Company name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
-  companyName  String?    @db.VarChar(30)
+  companyName                   String?             @db.VarChar(30)
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   vehicle                       Vehicle?            
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   serviceRequest                ServiceRequest?
-  /// @HideField({match: '@(Guest)@(Create)*Input'})
+  /// @HideField({match: '@(Guest)@(Create|Update)*Input'})
   customer                      Customer?           
 }
 
@@ -291,11 +297,12 @@ model Job {
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
-  description          String?                @db.VarChar(500)
+  description          String?                @db.Text
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to false
   isPopular            Boolean                @default(false)
+  /// @HideField({ match: '@(Job)@(Update)*Input' })
   jobCategory          JobCategory   @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade, map: "fk_jobFallsUnderCategory")
   /// @HideField({ match: '@(Job)@(Create|Update)*Input' })
   serviceRequests      ServiceRequest[]
@@ -319,12 +326,11 @@ model JobCategory {
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
-  description                String?                     @db.VarChar(500)
+  description                String?                     @db.Text
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to false
   isPopular                  Boolean                     @default(false)
-  /// @Validator.IsOptional()
   parent                     JobCategory?                @relation("jobs_categories_dictTojobs_categories_dict", fields: [parentId], references: [categoryId], onDelete: Cascade, map: "fk_subcategory")
   /// @HideField({ match: '@(JobCategory)@(Update)*Input' })
   children                   JobCategory[]               @relation("jobs_categories_dictTojobs_categories_dict")
@@ -349,17 +355,22 @@ model JoinWorkshopRequest {
   /// @Validator.IsString({ message: 'Message must be a string' })
   /// @Validator.Length(0, 1000, { message: 'Message cannot exceed 1000 characters' })
   /// @Validator.IsOptional()
-  message             String? @db.VarChar(1000)
+  message             String? @db.Text
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Create)*Input' })
   /// @Validator.IsEnum(JoinWorkshopRequestStatus, { message: 'Invalid status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
   status              JoinWorkshopRequestStatus  @default(PENDING)
   createdAt           DateTime?                  @default(now()) @db.DateTime(0)
+  createdBy           BigInt?                    @db.UnsignedBigInt
   updatedAt           DateTime?                  @db.Timestamp(0)
+  updatedBy           BigInt?                    @db.UnsignedBigInt
+  resolvedAt          DateTime?                  @db.DateTime(0)
+  /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   user                User                       @relation(fields: [receiverId], references: [userId], onDelete: NoAction, map: "fk_userCanRequestToJoinWorkshop")
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   workshop            Workshop                   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanHaveJoinRequests")
+  /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   employee            Employee                   @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeCanRespondToJoinRequest")
 }
 
@@ -430,10 +441,11 @@ model PermissionSet {
   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
   /// @Validator.IsOptional()
   canModifyPermissions       Boolean      @default(false)
+  updatedAt                  DateTime?    @db.Timestamp(0)
+  updatedBy                  BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
   employees                   Employee[]
   /// @HideField({ match: '@(PermissionSet)@(Update)*Input' })
-  /// @Validator.IsOptional()
   workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
 
   @@index([workshopId])
@@ -453,16 +465,19 @@ model Review {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   rating            Decimal             @default(0.00) @db.Decimal(3, 2)
+  /// @Validator.IsOptional()
+  /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
+  originalRating    Decimal?            @db.Decimal(3, 2)
   /// @Validator.IsString({ message: 'Review text must be a string' })
   /// @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  reviewText        String              @db.VarChar(10000)
-  /// @Validator.IsDate({ message: 'Review date must be a valid date' })
-  /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
+  reviewText        String              @db.Text()
   /// @Validator.IsOptional()
-  /// Note: Optional because field defaults to now()
-  reviewDate        DateTime            @default(now()) @db.DateTime(0)
+  /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
+  originalReviewText  String?           @db.Text
+  createdAt           DateTime?         @default(now()) @db.DateTime(0)
+  updatedAt           DateTime?         @db.Timestamp(0)
   /// @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
@@ -493,12 +508,12 @@ model ReviewResponse {
   /// @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})  
-  responseText           String                   @db.VarChar(5000)
-  /// @Validator.IsDate({ message: 'Response date must be a valid date' })
+  responseText           String                   @db.Text
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
-  /// Note: Optional because field defaults to now()
-  responseDate           DateTime                 @default(now()) @db.DateTime(0)
+  originalResponseText   String?                  @db.Text
+  createdAt              DateTime?                @default(now()) @db.DateTime(0)
+  updatedAt              DateTime?                @db.Timestamp(0)
   /// @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
   /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -510,7 +525,7 @@ model ReviewResponse {
   childrenResponses      ReviewResponse[]         @relation("reviews_responsesToreviews_responses")
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   review                 Review                   @relation(fields: [reviewId], references: [reviewId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseUnderReview")
-  /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
+  /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   user                   User                     @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userResponses")
 
   @@index([parentResponseId])
@@ -536,7 +551,7 @@ model Service {
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
-  description         String?           @db.VarChar(5000)
+  description         String?           @db.Text
   /// @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -561,10 +576,16 @@ model Service {
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   serviceEndDate      DateTime?         @db.DateTime(0)
-  updatedAt           DateTime?         @default(now()) @db.Timestamp(0)
+  addedAt             DateTime?         @default(now()) @db.DateTime(0)
+  addedBy             BigInt?           @db.UnsignedBigInt
+  resolvedAt          DateTime?         @db.DateTime(0)
+  resolvedBy          BigInt?           @db.UnsignedBigInt
+  updatedAt           DateTime?         @db.Timestamp(0)
+  updatedBy           BigInt?           @db.UnsignedBigInt
   deletedAt           DateTime?         @db.Timestamp(0)
-  /// @Validator.IsOptional()
+  /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
   serviceRequest      ServiceRequest?  @relation("service_requests_approved_service_idToservices")
+  /// @HideField({ match: '@(Service)@(Update)*Input' })
   tasks               Task[]
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   customer            Customer         @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_customerOrdersService")
@@ -596,11 +617,6 @@ model ServiceRequest {
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
-  /// @Validator.IsDate({ message: 'Request date must be a valid date' })
-  /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
-  /// @Validator.IsOptional()
-  /// Note: Optional because field defaults to now()
-  requestedAt           DateTime                  @default(now()) @db.DateTime(0)
   /// @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
   /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -609,20 +625,20 @@ model ServiceRequest {
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
-  description           String?                   @db.VarChar(5000)
-  deletedAt             DateTime?                @db.Timestamp(0)
+  description           String?                   @db.Text
+  createdAt             DateTime?                 @default(now()) @db.DateTime(0)
+  resolvedAt            DateTime?                 @db.DateTime(0)
+  resolvedBy            BigInt?                   @db.UnsignedBigInt
+  deletedAt             DateTime?                 @db.Timestamp(0)
   jobs                                                    Job[]
-  /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
-  /// @Validator.IsOptional()
+  /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
   approvedService                                         Service?                @relation("service_requests_approved_service_idToservices", fields: [approvedServiceId], references: [serviceId], onDelete: NoAction, map: "fk_requestApprovedService")
   vehicle                                                 Vehicle                 @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_requestAssignedToVehicle")
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
   workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
-  /// @Validator.IsOptional()
   user                                                    User?                   @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_requestFromUser")
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
-  /// @Validator.IsOptional()
   /// Note: Cannot fill guest while creating service request, because sr with guest can only be created by guest creation.
   guest                                                   Guest?                  @relation(fields: [guestId], references: [guestId], onDelete: SetNull , map: "fk_GuestProvidesServiceRequest")
   @@index([vehicleId])
@@ -646,7 +662,7 @@ model Task {
   /// @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Description is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  description          String                @db.VarChar(2500)
+  description          String                @db.Text
   /// @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
@@ -663,7 +679,12 @@ model Task {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
-  /// @HideField({ match: '@(Task)@(Update)*Input' })
+  createdAt            DateTime?             @default(now()) @db.DateTime(0)
+  createdBy            BigInt?               @db.UnsignedBigInt
+  updatedAt            DateTime?             @db.Timestamp(0)
+  updatedBy            BigInt?               @db.UnsignedBigInt
+  resolvedAt           DateTime?             @db.DateTime(0)
+  resolvedBy           BigInt?               @db.UnsignedBigInt
   workshopJob          WorkshopJob           @relation(fields: [workshopJobId], references: [workshopJobId], onDelete: NoAction)
   /// @HideField({ match: '@(Task)@(Update)*Input' })
   service              Service               @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
@@ -705,7 +726,7 @@ model User {
   /// @Validator.IsEnum(UsersStatus, { message: 'Invalid user status' })
   /// @HideField({ match: '@(User)@(Create)*Input' })
   /// @Validator.IsOptional()
-  status            UsersStatus?        @default(ACTIVE)
+  status            UsersStatus?        @default(INACTIVE)
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
@@ -723,11 +744,9 @@ model User {
   telephoneNumber  String?          @db.VarChar(12)
   /// @Validator.IsOptional()
   addressId        BigInt?          @db.UnsignedBigInt @unique
-  createdAt         DateTime?           @default(now()) @db.Timestamp(0)
-  updatedAt         DateTime?           @default(now()) @db.Timestamp(0)
-  /// @Validator.IsOptional()
+  createdAt        DateTime?        @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime?        @db.Timestamp(0)
   deletedAt        DateTime?        @db.Timestamp(0)
-  /// @Validator.IsOptional()
   address          Address?         @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
   /// @HideField({match: '@(User)@(Update)*Input'})
   vehicles         Vehicle[]
@@ -745,7 +764,7 @@ model User {
   reviewResponses   ReviewResponse[]
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   userReports       UserReport[]
-  /// @HideField({ match: '@(User)@(Create)*Input' })
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   joinWorkshopRequests JoinWorkshopRequest[]
 }
 
@@ -759,11 +778,11 @@ model UserReport {
   /// @Validator.Length(50, 2500, { message: 'Report text must be between 50 and 2500 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Report text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  reportText         String                     @db.VarChar(2500)
+  reportText         String                     @db.Text
   reportType         UserReportType
   /// @Validator.IsEnum(UserReportsReportedEntity, { message: 'Invalid reported entity type' })
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
-  reportedEntity     UserReportsReportedEntity
+  reportedEntityType UserReportsReportedEntityType
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(UserReport)@(Update)*Input'})
   reportedId         BigInt                     @db.UnsignedBigInt
@@ -795,13 +814,14 @@ model Vehicle {
   serviceRequests                   ServiceRequest[]
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   services                          Service[]
+  /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   user                              User?              @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_vehicleCanBeOwnedByUser")
+  /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   customers                         Customer[]
-  /// @HideField({ match: '@(Vehicle)@(Create)*Input' })
+  /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   guest                             Guest?             @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestProvidesVehicle")
-  /// @Validator.IsOptional()
   vehicleDetails                    VehicleDetails?
 
   @@index([modelId])
@@ -884,6 +904,7 @@ model VehicleModel {
   updatedAt      DateTime?       @default(now()) @db.Timestamp(0)
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   vehicles       Vehicle[]
+  /// @HideField({ match: '@(VehicleModel)@(Update)*Input' })
   vehiclesBrand  VehicleBrand @relation(fields: [brand], references: [brandName], onDelete: NoAction, onUpdate: Cascade, map: "fk_modelMadeByBrand")
 
   @@unique([modelName, brand], map: "model_name")
@@ -918,15 +939,15 @@ model Workshop {
   /// @Validator.IsOptional()
   isOfferingService         Boolean?                    @default(false)
   createdAt                 DateTime?                   @default(now()) @db.Timestamp(0)
-  updatedAt                 DateTime?                   @default(now()) @db.Timestamp(0)
+  updatedAt                 DateTime?                   @db.Timestamp(0)
+  updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
-  /// @Validator.IsOptional()
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   customers                 Customer[]
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   employees                 Employee[]
-  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   permissionSets            PermissionSet[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   reviews                   Review[]
@@ -934,13 +955,14 @@ model Workshop {
   serviceRequests           ServiceRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
+  /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   user                      User                      @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
   workshopDetails           WorkshopDetails?
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   workshopJobs              WorkshopJob[]
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   jobCategories             JobCategory[]
-  /// @HideField({ match: '@(Workshop)@(Create)*Input' })
+  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   joinWorkshopRequests      JoinWorkshopRequest[]
 
   @@index([ownerId])
@@ -964,11 +986,11 @@ model WorkshopDetails {
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 10000, { message: 'Description cannot exceed 10000 characters' })
   /// @Validator.IsOptional()
-  description      String?                   @db.VarChar(10000)
+  description      String?                   @db.Text
   /// @Validator.IsString({ message: 'Logo URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Logo URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()
-  logoURL          String?                   @db.VarChar(255)
+  logoURL          String?                   @db.VarChar(256)
   /// @Validator.IsEnum(WorkshopsDetailsStatus, { message: 'Invalid workshop status' })
   /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -977,7 +999,9 @@ model WorkshopDetails {
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
-  NIP              String?                   @db.VarChar(10)
+  NIP              String?                   @db.Char(10)
+  updatedAt        DateTime?                 @db.Timestamp(0)
+  updatedBy        BigInt?                   @db.UnsignedBigInt
   deletedAt        DateTime?                 @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })
   workshop         Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDetails")
@@ -986,40 +1010,44 @@ model WorkshopDetails {
 model WorkshopJob {
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
-  workshopJobId        BigInt    @id @unique(map: "workshop_job_id") @default(autoincrement()) @db.UnsignedBigInt
+  workshopJobId           BigInt    @id @unique(map: "workshop_job_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  workshopId           BigInt    @db.UnsignedBigInt
+  workshopId              BigInt    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  jobId                BigInt    @db.UnsignedBigInt
+  jobId                   BigInt    @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Workshop description must be a string' })
-  /// @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 5000 characters' })
+  /// @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
-  workshopJobDescription  String?   @db.VarChar(500)
+  workshopJobDescription  String?   @db.Text
   /// @Validator.IsNumber({}, { message: 'Minimum price must be a number' })
   /// @Validator.Min(0, { message: 'Minimum price cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Minimum price cannot exceed 9999999.99' })
   /// @Validator.IsOptional()
-  minPrice             Decimal?  @db.Decimal(10, 2)
+  minPrice                Decimal?  @db.Decimal(10, 2)
   /// @Validator.IsNumber({}, { message: 'Maximum price must be a number' })
   /// @Validator.Min(0, { message: 'Maximum price cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Maximum price cannot exceed 9999999.99' })
   /// @Validator.IsOptional()
-  maxPrice             Decimal?  @db.Decimal(10, 2)
+  maxPrice                Decimal?  @db.Decimal(10, 2)
   /// @Validator.IsBoolean({ message: 'Availability must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to true
-  availability         Boolean   @default(true)
+  availability            Boolean   @default(true)
+  createdAt               DateTime?                 @default(now()) @db.Timestamp(0)
+  createdBy               BigInt?                   @db.UnsignedBigInt
+  updatedAt               DateTime?                 @db.Timestamp(0)
+  updatedBy               BigInt?                   @db.UnsignedBigInt
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
-  tasks                Task[]    
-  job                  Job        @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
+  tasks                   Task[]    
+  job                     Job        @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
   /// @HideField({ match: '@(WorkshopJob)@(Update)*Input' })
-  workshop             Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
+  workshop                Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
 
   @@unique([workshopId, jobId], map: "workshop_id")
   @@index([jobId])
 }
 
-enum UserReportsReportedEntity {
+enum UserReportsReportedEntityType {
   USER
   WORKSHOP
   REVIEW
@@ -1045,6 +1073,7 @@ enum ServiceRequestStatus {
   PENDING
   ACCEPTED
   REJECTED
+  CANCELLED
 }
 
 enum TasksStatus {
@@ -1055,8 +1084,9 @@ enum TasksStatus {
 
 enum UserReportsStatus {
   PENDING
-  CONSIDERED
-  CLOSED
+  ACTIVE
+  CLOSED_CONFIRMED
+  CLOSED_DENIED
 }
 
 enum ReviewsStatus {
@@ -1073,11 +1103,13 @@ enum ReviewsResponsesStatus {
 
 enum UsersStatus {
   ACTIVE
+  INACTIVE
   SUSPENDED
 }
 
 enum WorkshopsDetailsStatus {
   ACTIVE
+  INACTIVE
   SUSPENDED
 }
 
