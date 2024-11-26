@@ -13,7 +13,12 @@ export enum ServiceScalarFieldEnum {
     paymentAmount = "paymentAmount",
     serviceStartDate = "serviceStartDate",
     serviceEndDate = "serviceEndDate",
+    addedAt = "addedAt",
+    addedBy = "addedBy",
+    resolvedAt = "resolvedAt",
+    resolvedBy = "resolvedBy",
     updatedAt = "updatedAt",
+    updatedBy = "updatedBy",
     deletedAt = "deletedAt"
 }
 

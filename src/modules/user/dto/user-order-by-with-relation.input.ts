@@ -2,20 +2,25 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { ReviewOrderByRelationAggregateInput } from '../../review/dto/review-order-by-relation-aggregate.input';
+import { HideField } from 'nestjs-graphql';
+import { AddressOrderByWithRelationInput } from '../../address/dto/address-order-by-with-relation.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { VehicleOrderByRelationAggregateInput } from '../../vehicle/dto/vehicle-order-by-relation-aggregate.input';
+import { ServiceRequestOrderByRelationAggregateInput } from '../../service-request/dto/service-request-order-by-relation-aggregate.input';
+import { CustomerOrderByRelationAggregateInput } from '../../customer/dto/customer-order-by-relation-aggregate.input';
+import { EmployeeOrderByRelationAggregateInput } from '../../employee/dto/employee-order-by-relation-aggregate.input';
+import { WorkshopOrderByRelationAggregateInput } from '../../workshop/dto/workshop-order-by-relation-aggregate.input';
+import { ReviewOrderByRelationAggregateInput } from '../../review/dto/review-order-by-relation-aggregate.input';
 import { ReviewResponseOrderByRelationAggregateInput } from '../../review-response/dto/review-response-order-by-relation-aggregate.input';
 import { UserReportOrderByRelationAggregateInput } from '../../user-report/dto/user-report-order-by-relation-aggregate.input';
-import { PersonOrderByWithRelationInput } from '../../person/dto/person-order-by-with-relation.input';
+import { JoinWorkshopRequestOrderByRelationAggregateInput } from '../../join-workshop-request/dto/join-workshop-request-order-by-relation-aggregate.input';
 
 @InputType()
 export class UserOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     userId?: keyof typeof SortOrder;
-
-    @Field(() => SortOrderInput, {nullable:true})
-    personId?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     username?: keyof typeof SortOrder;
@@ -35,27 +40,82 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
 
+    @Field(() => SortOrder, {nullable:true})
+    firstName?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    lastName?: keyof typeof SortOrder;
+
     @Field(() => SortOrderInput, {nullable:true})
+    telephoneNumber?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    addressId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     createdAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     updatedAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
+    @Field(() => AddressOrderByWithRelationInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => AddressOrderByWithRelationInput)
+    address?: AddressOrderByWithRelationInput;
+
+    @Field(() => VehicleOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => VehicleOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => VehicleOrderByRelationAggregateInput)
+    vehicles?: VehicleOrderByRelationAggregateInput;
+
+    @Field(() => ServiceRequestOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => ServiceRequestOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => ServiceRequestOrderByRelationAggregateInput)
+    serviceRequests?: ServiceRequestOrderByRelationAggregateInput;
+
+    @Field(() => CustomerOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => CustomerOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => CustomerOrderByRelationAggregateInput)
+    customers?: CustomerOrderByRelationAggregateInput;
+
+    @Field(() => EmployeeOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => EmployeeOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => EmployeeOrderByRelationAggregateInput)
+    employees?: EmployeeOrderByRelationAggregateInput;
+
+    @Field(() => WorkshopOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => WorkshopOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => WorkshopOrderByRelationAggregateInput)
+    workshops?: WorkshopOrderByRelationAggregateInput;
+
     @Field(() => ReviewOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => ReviewOrderByRelationAggregateInput)
+    @ValidateNested()
     @Type(() => ReviewOrderByRelationAggregateInput)
     reviews?: ReviewOrderByRelationAggregateInput;
 
     @Field(() => ReviewResponseOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ReviewResponseOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => ReviewResponseOrderByRelationAggregateInput)
     reviewResponses?: ReviewResponseOrderByRelationAggregateInput;
 
     @Field(() => UserReportOrderByRelationAggregateInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => UserReportOrderByRelationAggregateInput)
     userReports?: UserReportOrderByRelationAggregateInput;
 
-    @Field(() => PersonOrderByWithRelationInput, {nullable:true})
-    @Type(() => PersonOrderByWithRelationInput)
-    person?: PersonOrderByWithRelationInput;
+    @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
+    joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
 }

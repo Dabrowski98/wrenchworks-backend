@@ -4,9 +4,10 @@ import * as Scalars from 'graphql-scalars';
 import { AddressWhereInput } from './address-where.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
-import { PersonListRelationFilter } from '../../person/dto/person-list-relation-filter.input';
+import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
-import { WorkshopListRelationFilter } from '../../workshop/dto/workshop-list-relation-filter.input';
+import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class AddressWhereUniqueInput {
@@ -44,11 +45,13 @@ export class AddressWhereUniqueInput {
     @Field(() => StringFilter, {nullable:true})
     postCode?: StringFilter;
 
-    @Field(() => PersonListRelationFilter, {nullable:true})
-    @Type(() => PersonListRelationFilter)
-    persons?: PersonListRelationFilter;
+    @Field(() => UserNullableRelationFilter, {nullable:true})
+    @Type(() => UserNullableRelationFilter)
+    user?: UserNullableRelationFilter;
 
-    @Field(() => WorkshopListRelationFilter, {nullable:true})
-    @Type(() => WorkshopListRelationFilter)
-    workshops?: WorkshopListRelationFilter;
+    @Field(() => WorkshopNullableRelationFilter, {nullable:true})
+    @Type(() => WorkshopNullableRelationFilter)
+    @ValidateNested()
+    @Type(() => WorkshopNullableRelationFilter)
+    workshop?: WorkshopNullableRelationFilter;
 }

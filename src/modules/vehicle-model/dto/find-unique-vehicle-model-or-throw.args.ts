@@ -9,5 +9,5 @@ export class FindUniqueVehicleModelOrThrowArgs {
 
     @Field(() => VehicleModelWhereUniqueInput, {nullable:false})
     @Type(() => VehicleModelWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>;
+    where!: Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>;
 }

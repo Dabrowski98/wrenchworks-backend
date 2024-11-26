@@ -10,7 +10,9 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { WorkshopJobCreateNestedOneWithoutTasksInput } from '../../workshop-job/dto/workshop-job-create-nested-one-without-tasks.input';
-import { EmployeeTaskCreateNestedManyWithoutTaskInput } from '../../employee-task/dto/employee-task-create-nested-many-without-task.input';
+import { ValidateNested } from 'class-validator';
+import { EmployeeCreateNestedManyWithoutTasksInput } from '../../employee/dto/employee-create-nested-many-without-tasks.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -27,19 +29,22 @@ export class TaskCreateWithoutServiceInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({ message: 'Description is required' })
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Description is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     description!: string;
 
     @Field(() => TasksStatus, {nullable:true})
     @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
+    @Validator.IsOptional()
     status?: keyof typeof TasksStatus;
 
-    @Field(() => Float, {nullable:false})
+    @Field(() => Float, {nullable:true})
     @Validator.IsNumber({}, { message: 'Execution time must be a number' })
     @Validator.Min(0, { message: 'Execution time cannot be negative' })
     @Validator.Max(9999.99, { message: 'Whoa Cowboy! Execution time cannot exceed 9999.99!' })
-    executionTime!: number;
+    @Validator.IsOptional()
+    executionTime?: number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -47,13 +52,42 @@ export class TaskCreateWithoutServiceInput {
     @Validator.IsNumber({}, { message: 'Parts cost must be a number' })
     @Validator.Min(0, { message: 'Parts cost cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     partsCost?: Decimal;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    createdBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
 
     @Field(() => WorkshopJobCreateNestedOneWithoutTasksInput, {nullable:false})
     @Type(() => WorkshopJobCreateNestedOneWithoutTasksInput)
+    @ValidateNested()
+    @Type(() => WorkshopJobCreateNestedOneWithoutTasksInput)
     workshopJob!: WorkshopJobCreateNestedOneWithoutTasksInput;
 
-    @Field(() => EmployeeTaskCreateNestedManyWithoutTaskInput, {nullable:true})
-    @Type(() => EmployeeTaskCreateNestedManyWithoutTaskInput)
-    taskEmployees?: EmployeeTaskCreateNestedManyWithoutTaskInput;
+    @Field(() => EmployeeCreateNestedManyWithoutTasksInput, {nullable:true})
+    @Type(() => EmployeeCreateNestedManyWithoutTasksInput)
+    @ValidateNested()
+    @Type(() => EmployeeCreateNestedManyWithoutTasksInput)
+    employees?: EmployeeCreateNestedManyWithoutTasksInput;
 }

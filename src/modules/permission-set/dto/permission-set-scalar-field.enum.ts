@@ -21,7 +21,9 @@ export enum PermissionSetScalarFieldEnum {
     canModifyTasks = "canModifyTasks",
     canReadReports = "canReadReports",
     canGenerateReports = "canGenerateReports",
-    canModifyPermissions = "canModifyPermissions"
+    canModifyPermissions = "canModifyPermissions",
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy"
 }
 
 

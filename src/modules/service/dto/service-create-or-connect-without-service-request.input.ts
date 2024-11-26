@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ServiceWhereUniqueInput } from './service-where-unique.input';
 import { Type } from 'class-transformer';
 import { ServiceCreateWithoutServiceRequestInput } from './service-create-without-service-request.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class ServiceCreateOrConnectWithoutServiceRequestInput {
@@ -14,5 +15,6 @@ export class ServiceCreateOrConnectWithoutServiceRequestInput {
 
     @Field(() => ServiceCreateWithoutServiceRequestInput, {nullable:false})
     @Type(() => ServiceCreateWithoutServiceRequestInput)
+    @ValidateNested()
     create!: ServiceCreateWithoutServiceRequestInput;
 }

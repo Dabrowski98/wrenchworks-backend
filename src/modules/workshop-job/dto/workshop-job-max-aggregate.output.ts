@@ -27,4 +27,16 @@ export class WorkshopJobMaxAggregate {
 
     @Field(() => Boolean, {nullable:true})
     availability?: boolean;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

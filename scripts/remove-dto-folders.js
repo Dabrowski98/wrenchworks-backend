@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Set the path to the src/modules directory
-const modulesDir = path.join(__dirname, 'src', 'modules');
+const modulesDir = path.join(__dirname,'..', 'src', 'modules');
 
 // Function to delete 'dto' folders recursively
 function removeDtoFolders(directory) {

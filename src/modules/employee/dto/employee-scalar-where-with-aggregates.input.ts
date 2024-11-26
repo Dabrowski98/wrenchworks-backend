@@ -1,9 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
+import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
+import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
+import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
+import { IntNullableWithAggregatesFilter } from '../../prisma/dto/int-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { IntNullableWithAggregatesFilter } from '../../prisma/dto/int-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class EmployeeScalarWhereWithAggregatesInput {
@@ -23,12 +27,41 @@ export class EmployeeScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     workshopId?: BigIntWithAggregatesFilter;
 
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    userId?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    nickname?: StringNullableWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    login?: StringWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    password?: StringWithAggregatesFilter;
+
+    @Field(() => IntNullableWithAggregatesFilter, {nullable:true})
+    permissionSetId?: IntNullableWithAggregatesFilter;
+
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     joinedAt?: DateTimeWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => IntNullableWithAggregatesFilter, {nullable:true})
-    permissionSetId?: IntNullableWithAggregatesFilter;
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdBy?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
 }

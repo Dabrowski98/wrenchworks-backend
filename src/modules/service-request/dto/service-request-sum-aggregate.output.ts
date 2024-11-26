@@ -15,8 +15,14 @@ export class ServiceRequestSumAggregate {
     vehicleId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
+    userId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     approvedServiceId?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy?: bigint | number;
 }

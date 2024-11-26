@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { ReviewCreateWithoutUserInput } from './review-create-without-user.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ReviewCreateOrConnectWithoutUserInput } from './review-create-or-connect-without-user.input';
 import { ReviewCreateManyUserInputEnvelope } from './review-create-many-user-input-envelope.input';
 import { Prisma } from '@prisma/client';
@@ -12,17 +13,21 @@ export class ReviewUncheckedCreateNestedManyWithoutUserInput {
 
     @Field(() => [ReviewCreateWithoutUserInput], {nullable:true})
     @Type(() => ReviewCreateWithoutUserInput)
+    @ValidateNested()
     create?: Array<ReviewCreateWithoutUserInput>;
 
     @Field(() => [ReviewCreateOrConnectWithoutUserInput], {nullable:true})
     @Type(() => ReviewCreateOrConnectWithoutUserInput)
+    @ValidateNested()
     connectOrCreate?: Array<ReviewCreateOrConnectWithoutUserInput>;
 
     @Field(() => ReviewCreateManyUserInputEnvelope, {nullable:true})
     @Type(() => ReviewCreateManyUserInputEnvelope)
+    @ValidateNested()
     createMany?: ReviewCreateManyUserInputEnvelope;
 
     @Field(() => [ReviewWhereUniqueInput], {nullable:true})
     @Type(() => ReviewWhereUniqueInput)
+    @ValidateNested()
     connect?: Array<Prisma.AtLeast<ReviewWhereUniqueInput, 'reviewId'>>;
 }

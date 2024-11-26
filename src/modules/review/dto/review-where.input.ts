@@ -3,11 +3,15 @@ import { InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
+import { DecimalNullableFilter } from '../../prisma/dto/decimal-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { EnumReviewsStatusFilter } from '../../prisma/dto/enum-reviews-status-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
+import { ValidateNested } from 'class-validator';
 import { ReviewResponseListRelationFilter } from '../../review-response/dto/review-response-list-relation-filter.input';
 
 @InputType()
@@ -38,11 +42,23 @@ export class ReviewWhereInput {
     @Type(() => DecimalFilter)
     rating?: DecimalFilter;
 
+    @Field(() => DecimalNullableFilter, {nullable:true})
+    @Type(() => DecimalNullableFilter)
+    originalRating?: DecimalNullableFilter;
+
     @Field(() => StringFilter, {nullable:true})
     reviewText?: StringFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    reviewDate?: DateTimeFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    originalReviewText?: StringNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
 
     @Field(() => EnumReviewsStatusFilter, {nullable:true})
     status?: EnumReviewsStatusFilter;
@@ -53,9 +69,13 @@ export class ReviewWhereInput {
 
     @Field(() => WorkshopRelationFilter, {nullable:true})
     @Type(() => WorkshopRelationFilter)
+    @ValidateNested()
+    @Type(() => WorkshopRelationFilter)
     workshop?: WorkshopRelationFilter;
 
     @Field(() => ReviewResponseListRelationFilter, {nullable:true})
+    @Type(() => ReviewResponseListRelationFilter)
+    @ValidateNested()
     @Type(() => ReviewResponseListRelationFilter)
     reviewResponses?: ReviewResponseListRelationFilter;
 }

@@ -1,8 +1,10 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { PermissionSetCreateWithoutWorkshopInput } from './permission-set-create-without-workshop.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { PermissionSetCreateOrConnectWithoutWorkshopInput } from './permission-set-create-or-connect-without-workshop.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { PermissionSetCreateManyWorkshopInputEnvelope } from './permission-set-create-many-workshop-input-envelope.input';
 import { Prisma } from '@prisma/client';
 import { PermissionSetWhereUniqueInput } from './permission-set-where-unique.input';
@@ -10,19 +12,17 @@ import { PermissionSetWhereUniqueInput } from './permission-set-where-unique.inp
 @InputType()
 export class PermissionSetCreateNestedManyWithoutWorkshopInput {
 
-    @Field(() => [PermissionSetCreateWithoutWorkshopInput], {nullable:true})
-    @Type(() => PermissionSetCreateWithoutWorkshopInput)
+    @HideField()
     create?: Array<PermissionSetCreateWithoutWorkshopInput>;
 
     @Field(() => [PermissionSetCreateOrConnectWithoutWorkshopInput], {nullable:true})
     @Type(() => PermissionSetCreateOrConnectWithoutWorkshopInput)
+    @ValidateNested()
     connectOrCreate?: Array<PermissionSetCreateOrConnectWithoutWorkshopInput>;
 
-    @Field(() => PermissionSetCreateManyWorkshopInputEnvelope, {nullable:true})
-    @Type(() => PermissionSetCreateManyWorkshopInputEnvelope)
+    @HideField()
     createMany?: PermissionSetCreateManyWorkshopInputEnvelope;
 
-    @Field(() => [PermissionSetWhereUniqueInput], {nullable:true})
-    @Type(() => PermissionSetWhereUniqueInput)
+    @HideField()
     connect?: Array<Prisma.AtLeast<PermissionSetWhereUniqueInput, 'permissionSetId'>>;
 }

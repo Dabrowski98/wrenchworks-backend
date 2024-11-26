@@ -2,10 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
-import { EnumUserReportsReportedTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-reported-type-with-aggregates-filter.input';
+import { EnumUserReportTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-report-type-with-aggregates-filter.input';
+import { EnumUserReportsReportedEntityTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-with-aggregates-filter.input';
 import { EnumUserReportsStatusWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-status-with-aggregates-filter.input';
-import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class UserReportScalarWhereWithAggregatesInput {
@@ -28,8 +29,11 @@ export class UserReportScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     reportText?: StringWithAggregatesFilter;
 
-    @Field(() => EnumUserReportsReportedTypeWithAggregatesFilter, {nullable:true})
-    reportedType?: EnumUserReportsReportedTypeWithAggregatesFilter;
+    @Field(() => EnumUserReportTypeWithAggregatesFilter, {nullable:true})
+    reportType?: EnumUserReportTypeWithAggregatesFilter;
+
+    @Field(() => EnumUserReportsReportedEntityTypeWithAggregatesFilter, {nullable:true})
+    reportedEntityType?: EnumUserReportsReportedEntityTypeWithAggregatesFilter;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     reportedId?: BigIntWithAggregatesFilter;
@@ -37,9 +41,11 @@ export class UserReportScalarWhereWithAggregatesInput {
     @Field(() => EnumUserReportsStatusWithAggregatesFilter, {nullable:true})
     status?: EnumUserReportsStatusWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    createdAt?: DateTimeWithAggregatesFilter;
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 }

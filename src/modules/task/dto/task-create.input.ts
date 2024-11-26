@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import * as Validator from 'class-validator';
 import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
 import { Float } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -9,14 +10,17 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { WorkshopJobCreateNestedOneWithoutTasksInput } from '../../workshop-job/dto/workshop-job-create-nested-one-without-tasks.input';
+import { ValidateNested } from 'class-validator';
 import { ServiceCreateNestedOneWithoutTasksInput } from '../../service/dto/service-create-nested-one-without-tasks.input';
-import { EmployeeTaskCreateNestedManyWithoutTaskInput } from '../../employee-task/dto/employee-task-create-nested-many-without-task.input';
-import * as Scalars from 'graphql-scalars';
-import * as Validator from 'class-validator';
-import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
+import { EmployeeCreateNestedManyWithoutTasksInput } from '../../employee/dto/employee-create-nested-many-without-tasks.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class TaskCreateInput {
+
+    @HideField()
+    taskId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -26,19 +30,22 @@ export class TaskCreateInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Description must be a string' })
-    @Validator.IsNotEmpty({ message: 'Description is required' })
     @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Description is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     description!: string;
 
     @Field(() => TasksStatus, {nullable:true})
     @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
+    @Validator.IsOptional()
     status?: keyof typeof TasksStatus;
 
-    @Field(() => Float, {nullable:false})
+    @Field(() => Float, {nullable:true})
     @Validator.IsNumber({}, { message: 'Execution time must be a number' })
     @Validator.Min(0, { message: 'Execution time cannot be negative' })
     @Validator.Max(9999.99, { message: 'Whoa Cowboy! Execution time cannot exceed 9999.99!' })
-    executionTime!: number;
+    @Validator.IsOptional()
+    executionTime?: number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -46,22 +53,48 @@ export class TaskCreateInput {
     @Validator.IsNumber({}, { message: 'Parts cost must be a number' })
     @Validator.Min(0, { message: 'Parts cost cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    @Validator.IsNotEmpty({ message: 'Workshop Job ID is required' })
-    workshopJobId!: bigint | number;
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    @Validator.IsNotEmpty({ message: 'Service ID is required' })
-    serviceId!: bigint | number;
+    @Field(() => String, {nullable:true})
+    @HideField()
+    createdBy?: bigint | number;
 
-    @Field(() => [EmployeeEmployeeIdWorkshopIdCompoundUniqueInput], { nullable: true })
-    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
-    @Validator.IsOptional()
-    @Validator.IsArray({ message: 'Employee assignments must be an array' })
-    @Validator.ArrayNotEmpty({ message: 'Employee assignments cannot be empty' })
-    @Validator.ValidateNested({ each: true })
-    employeeId_WorkshopIds?: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput[];
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
 
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => WorkshopJobCreateNestedOneWithoutTasksInput, {nullable:false})
+    @Type(() => WorkshopJobCreateNestedOneWithoutTasksInput)
+    @ValidateNested()
+    @Type(() => WorkshopJobCreateNestedOneWithoutTasksInput)
+    workshopJob!: WorkshopJobCreateNestedOneWithoutTasksInput;
+
+    @Field(() => ServiceCreateNestedOneWithoutTasksInput, {nullable:false})
+    @Type(() => ServiceCreateNestedOneWithoutTasksInput)
+    @ValidateNested()
+    @Type(() => ServiceCreateNestedOneWithoutTasksInput)
+    service!: ServiceCreateNestedOneWithoutTasksInput;
+
+    @Field(() => EmployeeCreateNestedManyWithoutTasksInput, {nullable:true})
+    @Type(() => EmployeeCreateNestedManyWithoutTasksInput)
+    @ValidateNested()
+    @Type(() => EmployeeCreateNestedManyWithoutTasksInput)
+    employees?: EmployeeCreateNestedManyWithoutTasksInput;
 }

@@ -9,7 +9,7 @@ export class WorkshopCountAggregate {
     workshopId!: number;
 
     @Field(() => Int, {nullable:false})
-    personId!: number;
+    ownerId!: number;
 
     @Field(() => Int, {nullable:false})
     addressId!: number;
@@ -18,16 +18,25 @@ export class WorkshopCountAggregate {
     email!: number;
 
     @Field(() => Int, {nullable:false})
+    telephoneNumber!: number;
+
+    @Field(() => Int, {nullable:false})
     isVerified!: number;
 
     @Field(() => Int, {nullable:false})
     isManagingWork!: number;
 
     @Field(() => Int, {nullable:false})
+    isOfferingService!: number;
+
+    @Field(() => Int, {nullable:false})
     createdAt!: number;
 
     @Field(() => Int, {nullable:false})
     updatedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedBy!: number;
 
     @Field(() => Int, {nullable:false})
     deletedAt!: number;

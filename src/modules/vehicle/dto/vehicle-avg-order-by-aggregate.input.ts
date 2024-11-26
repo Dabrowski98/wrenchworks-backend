@@ -9,7 +9,10 @@ export class VehicleAvgOrderByAggregateInput {
     vehicleId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    personId?: keyof typeof SortOrder;
+    userId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    guestId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;

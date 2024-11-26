@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { VehicleDetailsWhereUniqueInput } from './vehicle-details-where-unique.input';
 import { Type } from 'class-transformer';
 import { VehicleDetailsCreateWithoutVehicleInput } from './vehicle-details-create-without-vehicle.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class VehicleDetailsCreateOrConnectWithoutVehicleInput {
@@ -14,5 +15,6 @@ export class VehicleDetailsCreateOrConnectWithoutVehicleInput {
 
     @Field(() => VehicleDetailsCreateWithoutVehicleInput, {nullable:false})
     @Type(() => VehicleDetailsCreateWithoutVehicleInput)
+    @ValidateNested()
     create!: VehicleDetailsCreateWithoutVehicleInput;
 }

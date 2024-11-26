@@ -5,6 +5,7 @@ import { ServicesStatus } from '../../prisma/dto/services-status.enum';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
 import { ServiceRequest } from '../../service-request/dto/service-request.model';
+import { Type } from 'class-transformer';
 import { Task } from '../../task/dto/task.model';
 import { Customer } from '../../customer/dto/customer.model';
 import { Employee } from '../../employee/dto/employee.model';
@@ -36,43 +37,73 @@ export class Service {
     @Field(() => String, {nullable:true})
     description!: string | null;
 
-    @Field(() => ServicesStatus, {nullable:true,defaultValue:'pending'})
+    @Field(() => ServicesStatus, {nullable:true,defaultValue:'PENDING'})
     status!: keyof typeof ServicesStatus | null;
 
-    @Field(() => Boolean, {nullable:false,defaultValue:false})
+    /**
+     * Note: Optional because field defaults to false
+     */
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional because field defaults to false'})
     payedOff!: boolean;
 
-    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0})
+    /**
+     * Note: Optional because field defaults to 0.00
+     */
+    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0,description:'Note: Optional because field defaults to 0.00'})
     paymentAmount!: Decimal;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Note: Optional because field defaults to now()
+     */
+    @Field(() => Date, {nullable:false,description:'Note: Optional because field defaults to now()'})
     serviceStartDate!: Date;
 
     @Field(() => Date, {nullable:true})
     serviceEndDate!: Date | null;
 
     @Field(() => Date, {nullable:true})
+    addedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    addedBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
+    resolvedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
     @Field(() => ServiceRequest, {nullable:true})
+    @Type(() => ServiceRequest)
     serviceRequest?: ServiceRequest | null;
 
     @Field(() => [Task], {nullable:true})
+    @Type(() => Task)
     tasks?: Array<Task>;
 
     @Field(() => Customer, {nullable:false})
+    @Type(() => Customer)
     customer?: Customer;
 
     @Field(() => Employee, {nullable:false})
+    @Type(() => Employee)
     employee?: Employee;
 
     @Field(() => Vehicle, {nullable:false})
+    @Type(() => Vehicle)
     vehicle?: Vehicle;
 
     @Field(() => Workshop, {nullable:false})
+    @Type(() => Workshop)
     workshop?: Workshop;
 
     @Field(() => ServiceCount, {nullable:false})

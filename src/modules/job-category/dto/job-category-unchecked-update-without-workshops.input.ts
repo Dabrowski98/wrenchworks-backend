@@ -2,9 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { JobCategoryUncheckedUpdateManyWithoutChildNestedInput } from './job-category-unchecked-update-many-without-child-nested.input';
-import { JobUncheckedUpdateManyWithoutJobCategoryNestedInput } from '../../job/dto/job-unchecked-update-many-without-job-category-nested.input';
+import { JobCategoryUncheckedUpdateManyWithoutParentNestedInput } from './job-category-unchecked-update-many-without-parent-nested.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { JobUncheckedUpdateManyWithoutJobCategoryNestedInput } from '../../job/dto/job-unchecked-update-many-without-job-category-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -15,8 +17,9 @@ export class JobCategoryUncheckedUpdateWithoutWorkshopsInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     name?: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
@@ -30,12 +33,17 @@ export class JobCategoryUncheckedUpdateWithoutWorkshopsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
-    @Field(() => JobCategoryUncheckedUpdateManyWithoutChildNestedInput, {nullable:true})
-    children?: JobCategoryUncheckedUpdateManyWithoutChildNestedInput;
+    @Field(() => JobCategoryUncheckedUpdateManyWithoutParentNestedInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => JobCategoryUncheckedUpdateManyWithoutParentNestedInput)
+    children?: JobCategoryUncheckedUpdateManyWithoutParentNestedInput;
 
     @Field(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput, {nullable:true})
+    @Type(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput)
+    @ValidateNested()
     @Type(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput)
     jobs?: JobUncheckedUpdateManyWithoutJobCategoryNestedInput;
 }

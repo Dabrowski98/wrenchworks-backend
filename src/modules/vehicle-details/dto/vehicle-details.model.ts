@@ -5,6 +5,7 @@ import { Int } from '@nestjs/graphql';
 import { FuelType } from '../../prisma/dto/fuel-type.enum';
 import { BodyColors } from '../../prisma/dto/body-colors.enum';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class VehicleDetails {
@@ -12,8 +13,8 @@ export class VehicleDetails {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     vehicleDetailsId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    vehicleId!: bigint | null;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    vehicleId!: bigint;
 
     @Field(() => Int, {nullable:true})
     yearOfProduction!: number | null;
@@ -42,6 +43,7 @@ export class VehicleDetails {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => Vehicle, {nullable:true})
-    vehicle?: Vehicle | null;
+    @Field(() => Vehicle, {nullable:false})
+    @Type(() => Vehicle)
+    vehicle?: Vehicle;
 }

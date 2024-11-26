@@ -1,12 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
-import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable-with-aggregates-filter.input';
 import { EnumUsersStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-users-status-nullable-with-aggregates-filter.input';
+import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class UserScalarWhereWithAggregatesInput {
@@ -22,9 +23,6 @@ export class UserScalarWhereWithAggregatesInput {
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     userId?: BigIntWithAggregatesFilter;
-
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
-    personId?: BigIntNullableWithAggregatesFilter;
 
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     username?: StringWithAggregatesFilter;
@@ -44,12 +42,27 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => EnumUsersStatusNullableWithAggregatesFilter, {nullable:true})
     status?: EnumUsersStatusNullableWithAggregatesFilter;
 
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    firstName?: StringWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    lastName?: StringWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    telephoneNumber?: StringNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    addressId?: BigIntNullableWithAggregatesFilter;
+
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

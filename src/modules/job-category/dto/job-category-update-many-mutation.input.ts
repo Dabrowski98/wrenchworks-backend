@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -12,8 +13,9 @@ export class JobCategoryUpdateManyMutationInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     name?: string;
 
     @Field(() => String, {nullable:true})
@@ -24,5 +26,6 @@ export class JobCategoryUpdateManyMutationInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 }

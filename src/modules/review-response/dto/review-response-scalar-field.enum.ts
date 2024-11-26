@@ -6,7 +6,9 @@ export enum ReviewResponseScalarFieldEnum {
     userId = "userId",
     parentResponseId = "parentResponseId",
     responseText = "responseText",
-    responseDate = "responseDate",
+    originalResponseText = "originalResponseText",
+    createdAt = "createdAt",
+    updatedAt = "updatedAt",
     status = "status"
 }
 

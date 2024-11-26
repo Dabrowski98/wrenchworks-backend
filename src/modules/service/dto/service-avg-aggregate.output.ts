@@ -27,4 +27,13 @@ export class ServiceAvgAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     paymentAmount?: Decimal;
+
+    @Field(() => Float, {nullable:true})
+    addedBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    resolvedBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

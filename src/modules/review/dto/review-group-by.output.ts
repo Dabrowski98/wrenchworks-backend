@@ -25,11 +25,20 @@ export class ReviewGroupBy {
     @Field(() => GraphQLDecimal, {nullable:false})
     rating!: Decimal;
 
+    @Field(() => GraphQLDecimal, {nullable:true})
+    originalRating?: Decimal;
+
     @Field(() => String, {nullable:false})
     reviewText!: string;
 
-    @Field(() => Date, {nullable:false})
-    reviewDate!: Date | string;
+    @Field(() => String, {nullable:true})
+    originalReviewText?: string;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:false})
     status!: keyof typeof ReviewsStatus;

@@ -13,6 +13,7 @@ import { ServiceRequestUpdateOneWithoutApprovedServiceNestedInput } from '../../
 import { TaskUpdateManyWithoutServiceNestedInput } from '../../task/dto/task-update-many-without-service-nested.input';
 import { CustomerUpdateOneRequiredWithoutServicesNestedInput } from '../../customer/dto/customer-update-one-required-without-services-nested.input';
 import { VehicleUpdateOneRequiredWithoutServicesNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-services-nested.input';
+import { ValidateNested } from 'class-validator';
 import { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-services-nested.input';
 
 @InputType()
@@ -22,6 +23,7 @@ export class ServiceUpdateWithoutEmployeeInput {
     serviceId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
     serviceRequestId?: bigint | number;
 
     @Field(() => String, {nullable:true})
@@ -32,10 +34,12 @@ export class ServiceUpdateWithoutEmployeeInput {
 
     @Field(() => ServicesStatus, {nullable:true})
     @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
+    @Validator.IsOptional()
     status?: keyof typeof ServicesStatus;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
+    @Validator.IsOptional()
     payedOff?: boolean;
 
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -44,10 +48,12 @@ export class ServiceUpdateWithoutEmployeeInput {
     @Validator.IsNumber({}, { message: 'Payment amount must be a number' })
     @Validator.Min(0, { message: 'Payment amount cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Payment amount cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     paymentAmount?: Decimal;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service start date must be a valid date' })
+    @Validator.IsOptional()
     serviceStartDate?: Date | string;
 
     @Field(() => Date, {nullable:true})
@@ -56,28 +62,46 @@ export class ServiceUpdateWithoutEmployeeInput {
     serviceEndDate?: Date | string;
 
     @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    addedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    addedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => ServiceRequestUpdateOneWithoutApprovedServiceNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateOneWithoutApprovedServiceNestedInput)
+    @HideField()
     serviceRequest?: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput;
 
-    @Field(() => TaskUpdateManyWithoutServiceNestedInput, {nullable:true})
-    @Type(() => TaskUpdateManyWithoutServiceNestedInput)
+    @HideField()
     tasks?: TaskUpdateManyWithoutServiceNestedInput;
 
-    @Field(() => CustomerUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => CustomerUpdateOneRequiredWithoutServicesNestedInput)
+    @HideField()
     customer?: CustomerUpdateOneRequiredWithoutServicesNestedInput;
 
     @Field(() => VehicleUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
     @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
+    @ValidateNested()
+    @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
     vehicle?: VehicleUpdateOneRequiredWithoutServicesNestedInput;
 
-    @Field(() => WorkshopUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutServicesNestedInput)
+    @HideField()
     workshop?: WorkshopUpdateOneRequiredWithoutServicesNestedInput;
 }

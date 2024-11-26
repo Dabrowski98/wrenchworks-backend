@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { Type } from 'class-transformer';
 import { Job } from '../../job/dto/job.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { JobCategoryCount } from './job-category-count.output';
@@ -20,20 +21,27 @@ export class JobCategory {
     @Field(() => String, {nullable:true})
     description!: string | null;
 
-    @Field(() => Boolean, {nullable:false,defaultValue:false})
+    /**
+     * Note: Optional because field defaults to false
+     */
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional because field defaults to false'})
     isPopular!: boolean;
 
     @Field(() => JobCategory, {nullable:true})
-    child?: JobCategory | null;
+    @Type(() => JobCategory)
+    parent?: JobCategory | null;
 
     @Field(() => [JobCategory], {nullable:true})
+    @Type(() => JobCategory)
     children?: Array<JobCategory>;
 
     @Field(() => [Job], {nullable:true})
+    @Type(() => Job)
     jobs?: Array<Job>;
 
     @Field(() => [Workshop], {nullable:true})
-    Workshops?: Array<Workshop>;
+    @Type(() => Workshop)
+    workshops?: Array<Workshop>;
 
     @Field(() => JobCategoryCount, {nullable:false})
     _count?: JobCategoryCount;

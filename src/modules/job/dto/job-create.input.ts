@@ -3,12 +3,16 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { JobCategoryCreateNestedOneWithoutJobsInput } from '../../job-category/dto/job-category-create-nested-one-without-jobs.input';
-import { ServiceRequestCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-create-nested-many-without-jobs.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ServiceRequestCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-create-nested-many-without-jobs.input';
 import { WorkshopJobCreateNestedManyWithoutJobInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-job.input';
 
 @InputType()
 export class JobCreateInput {
+
+    @HideField()
+    jobId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -24,8 +28,17 @@ export class JobCreateInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => JobCategoryCreateNestedOneWithoutJobsInput, {nullable:false})
+    @ValidateNested()
+    @Type(() => JobCategoryCreateNestedOneWithoutJobsInput)
     jobCategory!: JobCategoryCreateNestedOneWithoutJobsInput;
+
+    @HideField()
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutJobsInput;
+
+    @HideField()
+    jobWorkshops?: WorkshopJobCreateNestedManyWithoutJobInput;
 }

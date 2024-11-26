@@ -42,7 +42,22 @@ export class ServiceCountAggregate {
     serviceEndDate!: number;
 
     @Field(() => Int, {nullable:false})
+    addedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    addedBy!: number;
+
+    @Field(() => Int, {nullable:false})
+    resolvedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    resolvedBy!: number;
+
+    @Field(() => Int, {nullable:false})
     updatedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedBy!: number;
 
     @Field(() => Int, {nullable:false})
     deletedAt!: number;

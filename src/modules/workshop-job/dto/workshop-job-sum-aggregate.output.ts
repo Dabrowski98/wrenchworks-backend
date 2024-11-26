@@ -21,4 +21,10 @@ export class WorkshopJobSumAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     maxPrice?: Decimal;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

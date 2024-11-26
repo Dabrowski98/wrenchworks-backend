@@ -9,5 +9,5 @@ export class FindUniqueServiceRequestArgs {
 
     @Field(() => ServiceRequestWhereUniqueInput, {nullable:false})
     @Type(() => ServiceRequestWhereUniqueInput)
-    where!: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>;
+    where!: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>;
 }

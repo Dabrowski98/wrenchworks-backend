@@ -9,7 +9,6 @@ import {
 import { AddressService } from './address.service';
 import {
   Address,
-  AddressCount,
   AddressCreateInput,
   AddressUpdateInput,
   AddressWhereUniqueInput,
@@ -18,8 +17,8 @@ import {
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
-import { Person } from '../person/dto';
-import { Workshop } from '../workshop';
+import { User } from '../user';
+import { Workshop } from '../workshop/dto';
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -56,18 +55,13 @@ export class AddressResolver {
 
   //RESOLVE FIELDS
 
-  @ResolveField(() => [Person])
-  persons(@Parent() address: Address): Promise<Person[]> {
-    return this.addressService.persons(address.addressId);
+  @ResolveField(() => User)
+  user(@Parent() address: Address): Promise<User> {
+    return this.addressService.user(address.addressId);
   }
 
-  @ResolveField(() => [Workshop])
-  workshops(@Parent() address: Address): Promise<Workshop[]> {
-    return this.addressService.workshops(address.addressId);
-  }
-
-  @ResolveField(() => AddressCount)
-  async _count(@Parent() address: Address): Promise<AddressCount> {
-    return this.addressService.resolveCount(address);
+  @ResolveField(() => Workshop)
+  workshop(@Parent() address: Address): Promise<Workshop> {
+    return this.addressService.workshop(address.addressId);
   }
 }

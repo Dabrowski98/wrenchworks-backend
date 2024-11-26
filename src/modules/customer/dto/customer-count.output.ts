@@ -7,4 +7,7 @@ export class CustomerCount {
 
     @Field(() => Int, {nullable:false})
     services?: number;
+
+    @Field(() => Int, {nullable:false})
+    vehicles?: number;
 }

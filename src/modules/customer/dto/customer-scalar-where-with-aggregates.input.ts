@@ -2,9 +2,13 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
-import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
+import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
+import { EnumCustomerCreationSourceWithAggregatesFilter } from '../../prisma/dto/enum-customer-creation-source-with-aggregates-filter.input';
+import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-filter.input';
+import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class CustomerScalarWhereWithAggregatesInput {
@@ -27,6 +31,27 @@ export class CustomerScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     workshopId?: BigIntWithAggregatesFilter;
 
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    userId?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    guestId?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    firstName?: StringNullableWithAggregatesFilter;
+
+    @Field(() => EnumCustomerCreationSourceWithAggregatesFilter, {nullable:true})
+    creationSource?: EnumCustomerCreationSourceWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    telephoneNumber?: StringNullableWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    email?: StringNullableWithAggregatesFilter;
+
+    @Field(() => BoolWithAggregatesFilter, {nullable:true})
+    isVerified?: BoolWithAggregatesFilter;
+
     @Field(() => DecimalWithAggregatesFilter, {nullable:true})
     @Type(() => DecimalWithAggregatesFilter)
     totalDue?: DecimalWithAggregatesFilter;
@@ -34,12 +59,29 @@ export class CustomerScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     description?: StringNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     NIP?: StringNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     companyName?: StringNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    deletedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdBy?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
 }

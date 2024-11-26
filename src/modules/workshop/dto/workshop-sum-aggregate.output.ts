@@ -9,8 +9,11 @@ export class WorkshopSumAggregate {
     workshopId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
+    ownerId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     addressId?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

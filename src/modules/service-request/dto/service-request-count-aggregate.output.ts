@@ -15,10 +15,13 @@ export class ServiceRequestCountAggregate {
     vehicleId!: number;
 
     @Field(() => Int, {nullable:false})
-    personId!: number;
+    userId!: number;
 
     @Field(() => Int, {nullable:false})
-    requestedAt!: number;
+    guestId!: number;
+
+    @Field(() => Int, {nullable:false})
+    approvedServiceId!: number;
 
     @Field(() => Int, {nullable:false})
     status!: number;
@@ -27,7 +30,13 @@ export class ServiceRequestCountAggregate {
     description!: number;
 
     @Field(() => Int, {nullable:false})
-    approvedServiceId!: number;
+    createdAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    resolvedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    resolvedBy!: number;
 
     @Field(() => Int, {nullable:false})
     deletedAt!: number;

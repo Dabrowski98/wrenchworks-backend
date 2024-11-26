@@ -15,4 +15,7 @@ export class ReviewSumAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     rating?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    originalRating?: true;
 }

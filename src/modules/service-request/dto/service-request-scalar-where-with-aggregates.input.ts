@@ -1,11 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
-import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
-import { EnumServiceRequestsStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-service-requests-status-nullable-with-aggregates-filter.input';
-import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
+import { EnumServiceRequestStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-service-request-status-nullable-with-aggregates-filter.input';
+import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class ServiceRequestScalarWhereWithAggregatesInput {
@@ -28,21 +28,34 @@ export class ServiceRequestScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     vehicleId?: BigIntWithAggregatesFilter;
 
-    @Field(() => BigIntWithAggregatesFilter, {nullable:true})
-    personId?: BigIntWithAggregatesFilter;
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    userId?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    requestedAt?: DateTimeWithAggregatesFilter;
-
-    @Field(() => EnumServiceRequestsStatusNullableWithAggregatesFilter, {nullable:true})
-    status?: EnumServiceRequestsStatusNullableWithAggregatesFilter;
-
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    description?: StringNullableWithAggregatesFilter;
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    guestId?: BigIntNullableWithAggregatesFilter;
 
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     approvedServiceId?: BigIntNullableWithAggregatesFilter;
 
+    @Field(() => EnumServiceRequestStatusNullableWithAggregatesFilter, {nullable:true})
+    status?: EnumServiceRequestStatusNullableWithAggregatesFilter;
+
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    description?: StringNullableWithAggregatesFilter;
+
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    resolvedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    resolvedBy?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

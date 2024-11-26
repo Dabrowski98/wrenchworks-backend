@@ -13,8 +13,11 @@ export class VehicleGroupBy {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     vehicleId!: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    personId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    userId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;

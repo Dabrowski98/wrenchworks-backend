@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { WorkshopCountOrderByAggregateInput } from './workshop-count-order-by-aggregate.input';
 import { WorkshopAvgOrderByAggregateInput } from './workshop-avg-order-by-aggregate.input';
 import { WorkshopMaxOrderByAggregateInput } from './workshop-max-order-by-aggregate.input';
@@ -15,13 +16,16 @@ export class WorkshopOrderByWithAggregationInput {
     workshopId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    personId?: keyof typeof SortOrder;
+    ownerId?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    email?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    email?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    telephoneNumber?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     isVerified?: SortOrderInput;
@@ -30,12 +34,22 @@ export class WorkshopOrderByWithAggregationInput {
     isManagingWork?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    isOfferingService?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     createdAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     updatedAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => WorkshopCountOrderByAggregateInput, {nullable:true})

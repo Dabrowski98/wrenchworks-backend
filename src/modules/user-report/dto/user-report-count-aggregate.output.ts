@@ -15,7 +15,10 @@ export class UserReportCountAggregate {
     reportText!: number;
 
     @Field(() => Int, {nullable:false})
-    reportedType!: number;
+    reportType!: number;
+
+    @Field(() => Int, {nullable:false})
+    reportedEntityType!: number;
 
     @Field(() => Int, {nullable:false})
     reportedId!: number;

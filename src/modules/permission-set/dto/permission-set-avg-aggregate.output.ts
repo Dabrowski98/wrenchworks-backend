@@ -10,4 +10,7 @@ export class PermissionSetAvgAggregate {
 
     @Field(() => Float, {nullable:true})
     workshopId?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

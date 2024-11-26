@@ -17,7 +17,7 @@ export class VehicleModelGroupBy {
     modelName!: string;
 
     @Field(() => String, {nullable:false})
-    brandName!: string;
+    brand!: string;
 
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;

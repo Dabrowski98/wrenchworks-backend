@@ -1,23 +1,24 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { WorkshopCreateWithoutCustomersInput } from './workshop-create-without-customers.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateOrConnectWithoutCustomersInput } from './workshop-create-or-connect-without-customers.input';
 import { Prisma } from '@prisma/client';
 import { WorkshopWhereUniqueInput } from './workshop-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class WorkshopCreateNestedOneWithoutCustomersInput {
 
-    @Field(() => WorkshopCreateWithoutCustomersInput, {nullable:true})
-    @Type(() => WorkshopCreateWithoutCustomersInput)
+    @HideField()
     create?: WorkshopCreateWithoutCustomersInput;
 
-    @Field(() => WorkshopCreateOrConnectWithoutCustomersInput, {nullable:true})
-    @Type(() => WorkshopCreateOrConnectWithoutCustomersInput)
+    @HideField()
     connectOrCreate?: WorkshopCreateOrConnectWithoutCustomersInput;
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
-    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId'>;
+    @ValidateNested()
+    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
 }

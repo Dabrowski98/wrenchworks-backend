@@ -3,14 +3,14 @@ import * as path from 'path';
 
 const searchPattern1 = /@Validator\.IsNotEmpty\(\s*{\s*groups:\s*\[\s*CREATE/;
 const searchPattern2 = /@Validator\.IsOptional\(\s*{\s*groups:\s*\[\s*UPDATE/;
-const importStatement = "import { CREATE, UPDATE } from 'src/constants/validation-groups';\n";
+const importStatement = "import { CREATE, UPDATE } from 'src/common/constants/validation-groups';\n";
 
 function processFile(filePath) {
     try {
         const content = fs.readFileSync(filePath, 'utf8');
         
         if (searchPattern1.test(content) || searchPattern2.test(content)) {
-            if (!content.includes("import { CREATE, UPDATE } from 'src/constants/validation-groups'")) {
+            if (!content.includes("import { CREATE, UPDATE } from 'src/common/constants/validation-groups'")) {
                 const lines = content.split('\n');
                 let lastImportIndex = -1;
                 

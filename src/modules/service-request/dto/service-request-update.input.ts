@@ -1,23 +1,27 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
 import * as Validator from 'class-validator';
-import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
 import { JobUpdateManyWithoutServiceRequestsNestedInput } from '../../job/dto/job-update-many-without-service-requests-nested.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceUpdateOneWithoutServiceRequestNestedInput } from '../../service/dto/service-update-one-without-service-request-nested.input';
-import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
+import { VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-service-requests-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-service-requests-nested.input';
-import { PersonUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../person/dto/person-update-one-required-without-service-requests-nested.input';
-import { GraphQLBigInt } from 'graphql-scalars';
+import { UserUpdateOneWithoutServiceRequestsNestedInput } from '../../user/dto/user-update-one-without-service-requests-nested.input';
+import { GuestUpdateOneWithoutServiceRequestNestedInput } from '../../guest/dto/guest-update-one-without-service-request-nested.input';
 
 @InputType()
 export class ServiceRequestUpdateInput {
 
-    @Field(() => ServiceRequestsStatus, {nullable:true})
-    @Validator.IsOptional()
+    @HideField()
+    serviceRequestId?: bigint | number;
+
+    @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
+    @Validator.IsOptional()
+    status?: keyof typeof ServiceRequestStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -25,13 +29,43 @@ export class ServiceRequestUpdateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => [GraphQLBigInt], {nullable:true})
-    @Validator.IsOptional()
-    @Validator.IsArray({ message: 'Jobs ids must be an array' })
-    @Validator.ArrayNotEmpty({ message: 'Jobs ids must not be empty' })
-    jobsIds?: bigint[];
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
 
-    @Field(() => GraphQLBigInt, {nullable:true})
-    @Validator.IsOptional()
-    vehicleId?: bigint | number;
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    deletedAt?: Date | string;
+
+    @Field(() => JobUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
+    @ValidateNested()
+    @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
+    jobs?: JobUpdateManyWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    approvedService?: ServiceUpdateOneWithoutServiceRequestNestedInput;
+
+    @Field(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
+    @ValidateNested()
+    @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
+    vehicle?: VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutServiceRequestNestedInput;
 }

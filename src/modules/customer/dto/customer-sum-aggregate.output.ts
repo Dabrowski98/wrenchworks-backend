@@ -13,6 +13,18 @@ export class CustomerSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId?: bigint | number;
 
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    userId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
+
     @Field(() => GraphQLDecimal, {nullable:true})
     totalDue?: Decimal;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

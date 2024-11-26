@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
+import { HideField } from '@nestjs/graphql';
 
 @ObjectType()
 export class EmployeeCountAggregate {
@@ -12,13 +13,37 @@ export class EmployeeCountAggregate {
     workshopId!: number;
 
     @Field(() => Int, {nullable:false})
+    userId!: number;
+
+    @Field(() => Int, {nullable:false})
+    nickname!: number;
+
+    @Field(() => Int, {nullable:false})
+    login!: number;
+
+    @HideField()
+    password!: number;
+
+    @Field(() => Int, {nullable:false})
+    permissionSetId!: number;
+
+    @Field(() => Int, {nullable:false})
     joinedAt!: number;
 
     @Field(() => Int, {nullable:false})
     deletedAt!: number;
 
     @Field(() => Int, {nullable:false})
-    permissionSetId!: number;
+    createdAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    createdBy!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedBy!: number;
 
     @Field(() => Int, {nullable:false})
     _all!: number;

@@ -1,14 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class UserMinAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     userId?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    personId?: true;
 
     @Field(() => Boolean, {nullable:true})
     username?: true;
@@ -29,11 +27,26 @@ export class UserMinAggregateInput {
     status?: true;
 
     @Field(() => Boolean, {nullable:true})
+    firstName?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    lastName?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    telephoneNumber?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    addressId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
     createdAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     updatedAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     deletedAt?: true;
 }

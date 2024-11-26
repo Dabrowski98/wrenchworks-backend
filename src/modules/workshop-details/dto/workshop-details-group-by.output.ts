@@ -26,9 +26,6 @@ export class WorkshopDetailsGroupBy {
     description?: string;
 
     @Field(() => String, {nullable:true})
-    telephoneNumber?: string;
-
-    @Field(() => String, {nullable:true})
     logoURL?: string;
 
     @Field(() => WorkshopsDetailsStatus, {nullable:true})
@@ -36,6 +33,12 @@ export class WorkshopDetailsGroupBy {
 
     @Field(() => String, {nullable:true})
     NIP?: string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

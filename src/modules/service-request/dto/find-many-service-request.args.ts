@@ -19,7 +19,7 @@ export class FindManyServiceRequestArgs {
     orderBy?: Array<ServiceRequestOrderByWithRelationInput>;
 
     @Field(() => ServiceRequestWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>;
+    cursor?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

@@ -1,13 +1,15 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
 import * as Validator from 'class-validator';
-import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
 import { JobCreateNestedManyWithoutServiceRequestsInput } from '../../job/dto/job-create-nested-many-without-service-requests.input';
 import { Type } from 'class-transformer';
-import { VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput } from '../../vehicle/dto/vehicle-create-nested-one-without-vehicle-associated-service-requests.input';
+import { ValidateNested } from 'class-validator';
+import { VehicleCreateNestedOneWithoutServiceRequestsInput } from '../../vehicle/dto/vehicle-create-nested-one-without-service-requests.input';
 import { WorkshopCreateNestedOneWithoutServiceRequestsInput } from '../../workshop/dto/workshop-create-nested-one-without-service-requests.input';
-import { PersonCreateNestedOneWithoutServiceRequestsInput } from '../../person/dto/person-create-nested-one-without-service-requests.input';
+import { UserCreateNestedOneWithoutServiceRequestsInput } from '../../user/dto/user-create-nested-one-without-service-requests.input';
+import { GuestCreateNestedOneWithoutServiceRequestInput } from '../../guest/dto/guest-create-nested-one-without-service-request.input';
 
 @InputType()
 export class ServiceRequestCreateWithoutApprovedServiceInput {
@@ -15,13 +17,8 @@ export class ServiceRequestCreateWithoutApprovedServiceInput {
     @HideField()
     serviceRequestId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
-
-    @Field(() => ServiceRequestsStatus, {nullable:true})
-    @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
+    @HideField()
+    status?: keyof typeof ServiceRequestStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -29,22 +26,44 @@ export class ServiceRequestCreateWithoutApprovedServiceInput {
     @Validator.IsOptional()
     description?: string;
 
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 
     @Field(() => JobCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
     @Type(() => JobCreateNestedManyWithoutServiceRequestsInput)
+    @ValidateNested()
+    @Type(() => JobCreateNestedManyWithoutServiceRequestsInput)
     jobs?: JobCreateNestedManyWithoutServiceRequestsInput;
 
-    @Field(() => VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput, {nullable:false})
-    @Type(() => VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput)
-    vehicle!: VehicleCreateNestedOneWithoutVehicleAssociatedServiceRequestsInput;
+    @Field(() => VehicleCreateNestedOneWithoutServiceRequestsInput, {nullable:false})
+    @Type(() => VehicleCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
+    @Type(() => VehicleCreateNestedOneWithoutServiceRequestsInput)
+    vehicle!: VehicleCreateNestedOneWithoutServiceRequestsInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutServiceRequestsInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
+    @Type(() => WorkshopCreateNestedOneWithoutServiceRequestsInput)
     workshop!: WorkshopCreateNestedOneWithoutServiceRequestsInput;
 
-    @Field(() => PersonCreateNestedOneWithoutServiceRequestsInput, {nullable:false})
-    @Type(() => PersonCreateNestedOneWithoutServiceRequestsInput)
-    person!: PersonCreateNestedOneWithoutServiceRequestsInput;
+    @Field(() => UserCreateNestedOneWithoutServiceRequestsInput, {nullable:true})
+    @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
+    user?: UserCreateNestedOneWithoutServiceRequestsInput;
+
+    @HideField()
+    guest?: GuestCreateNestedOneWithoutServiceRequestInput;
 }

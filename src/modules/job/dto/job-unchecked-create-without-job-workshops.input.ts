@@ -4,6 +4,7 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ServiceRequestUncheckedCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-unchecked-create-nested-many-without-jobs.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class JobUncheckedCreateWithoutJobWorkshopsInput {
@@ -28,9 +29,12 @@ export class JobUncheckedCreateWithoutJobWorkshopsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput, {nullable:true})
+    @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput)
+    @ValidateNested()
     @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput)
     serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutJobsInput;
 }

@@ -9,7 +9,10 @@ export class VehicleMinAggregate {
     vehicleId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
+    userId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;

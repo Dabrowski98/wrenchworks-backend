@@ -12,7 +12,7 @@ export class VehicleModelMaxAggregate {
     modelName?: string;
 
     @Field(() => String, {nullable:true})
-    brandName?: string;
+    brand?: string;
 
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;

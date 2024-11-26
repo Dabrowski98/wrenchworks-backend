@@ -2,10 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { EnumUserReportsReportedTypeFilter } from '../../prisma/dto/enum-user-reports-reported-type-filter.input';
+import { EnumUserReportTypeFilter } from '../../prisma/dto/enum-user-report-type-filter.input';
+import { EnumUserReportsReportedEntityTypeFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-filter.input';
 import { EnumUserReportsStatusFilter } from '../../prisma/dto/enum-user-reports-status-filter.input';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class UserReportScalarWhereInput {
@@ -28,8 +29,11 @@ export class UserReportScalarWhereInput {
     @Field(() => StringFilter, {nullable:true})
     reportText?: StringFilter;
 
-    @Field(() => EnumUserReportsReportedTypeFilter, {nullable:true})
-    reportedType?: EnumUserReportsReportedTypeFilter;
+    @Field(() => EnumUserReportTypeFilter, {nullable:true})
+    reportType?: EnumUserReportTypeFilter;
+
+    @Field(() => EnumUserReportsReportedEntityTypeFilter, {nullable:true})
+    reportedEntityType?: EnumUserReportsReportedEntityTypeFilter;
 
     @Field(() => BigIntFilter, {nullable:true})
     reportedId?: BigIntFilter;
@@ -37,9 +41,11 @@ export class UserReportScalarWhereInput {
     @Field(() => EnumUserReportsStatusFilter, {nullable:true})
     status?: EnumUserReportsStatusFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    createdAt?: DateTimeFilter;
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeNullableFilter;
 }

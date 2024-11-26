@@ -3,8 +3,11 @@ import { InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
+import { DecimalNullableFilter } from '../../prisma/dto/decimal-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { EnumReviewsStatusFilter } from '../../prisma/dto/enum-reviews-status-filter.input';
 
 @InputType()
@@ -35,11 +38,23 @@ export class ReviewScalarWhereInput {
     @Type(() => DecimalFilter)
     rating?: DecimalFilter;
 
+    @Field(() => DecimalNullableFilter, {nullable:true})
+    @Type(() => DecimalNullableFilter)
+    originalRating?: DecimalNullableFilter;
+
     @Field(() => StringFilter, {nullable:true})
     reviewText?: StringFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    reviewDate?: DateTimeFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    originalReviewText?: StringNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
 
     @Field(() => EnumReviewsStatusFilter, {nullable:true})
     status?: EnumReviewsStatusFilter;

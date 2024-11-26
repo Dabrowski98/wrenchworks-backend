@@ -26,5 +26,6 @@ export class JobUncheckedUpdateManyWithoutServiceRequestsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 }

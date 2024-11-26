@@ -13,17 +13,19 @@ import { ServiceRequestUpdateOneWithoutApprovedServiceNestedInput } from '../../
 import { TaskUpdateManyWithoutServiceNestedInput } from '../../task/dto/task-update-many-without-service-nested.input';
 import { CustomerUpdateOneRequiredWithoutServicesNestedInput } from '../../customer/dto/customer-update-one-required-without-services-nested.input';
 import { EmployeeUpdateOneRequiredWithoutServicesNestedInput } from '../../employee/dto/employee-update-one-required-without-services-nested.input';
+import { ValidateNested } from 'class-validator';
 import { VehicleUpdateOneRequiredWithoutServicesNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-services-nested.input';
 import { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-services-nested.input';
-import { CustomerCustomerIdWorkshopIdCompoundUniqueInput } from 'src/modules/customer';
-import { EmployeeEmployeeIdWorkshopIdCompoundUniqueInput } from 'src/modules/employee';
 
 @InputType()
 export class ServiceUpdateInput {
 
-    @Field(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput, {nullable:false})
-    @Type(() => EmployeeEmployeeIdWorkshopIdCompoundUniqueInput)
-    employeeId_workshopId!: EmployeeEmployeeIdWorkshopIdCompoundUniqueInput;
+    @HideField()
+    serviceId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    serviceRequestId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -32,13 +34,13 @@ export class ServiceUpdateInput {
     description?: string;
 
     @Field(() => ServicesStatus, {nullable:true})
-    @Validator.IsOptional()
     @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
+    @Validator.IsOptional()
     status?: keyof typeof ServicesStatus;
 
     @Field(() => Boolean, {nullable:true})
-    @Validator.IsOptional()
     @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
+    @Validator.IsOptional()
     payedOff?: boolean;
 
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -59,4 +61,54 @@ export class ServiceUpdateInput {
     @Validator.IsDate({ message: 'Service end date must be a valid date' })
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    addedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    addedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    serviceRequest?: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput;
+
+    @HideField()
+    tasks?: TaskUpdateManyWithoutServiceNestedInput;
+
+    @HideField()
+    customer?: CustomerUpdateOneRequiredWithoutServicesNestedInput;
+
+    @Field(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
+    @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)
+    @ValidateNested()
+    @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)
+    employee?: EmployeeUpdateOneRequiredWithoutServicesNestedInput;
+
+    @Field(() => VehicleUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
+    @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
+    @ValidateNested()
+    @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
+    vehicle?: VehicleUpdateOneRequiredWithoutServicesNestedInput;
+
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutServicesNestedInput;
 }

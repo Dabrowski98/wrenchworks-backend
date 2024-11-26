@@ -22,4 +22,13 @@ export class TaskSumAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     partsCost?: Decimal;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy?: bigint | number;
 }

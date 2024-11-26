@@ -1,16 +1,16 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum BodyColors {
-    black = "black",
-    white = "white",
-    red = "red",
-    blue = "blue",
-    silver = "silver",
-    gray = "gray",
-    green = "green",
-    yellow = "yellow",
-    brown = "brown",
-    other = "other"
+    BLACK = "BLACK",
+    WHITE = "WHITE",
+    RED = "RED",
+    BLUE = "BLUE",
+    SILVER = "SILVER",
+    GRAY = "GRAY",
+    GREEN = "GREEN",
+    YELLOW = "YELLOW",
+    BROWN = "BROWN",
+    OTHER = "OTHER"
 }
 
 

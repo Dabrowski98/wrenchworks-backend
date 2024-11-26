@@ -10,6 +10,7 @@ import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserCreateNestedOneWithoutReviewsInput } from '../../user/dto/user-create-nested-one-without-reviews.input';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -24,27 +25,39 @@ export class ReviewCreateWithoutWorkshopInput {
     @Validator.IsNumber({}, { message: 'Rating must be a number' })
     @Validator.Min(0, { message: 'Rating cannot be negative' })
     @Validator.Max(5, { message: 'Rating cannot exceed 5' })
+    @Validator.IsOptional()
     rating?: Decimal;
+
+    @HideField()
+    originalRating?: Decimal;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({ message: 'Review text is required' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     reviewText!: string;
 
+    @HideField()
+    originalReviewText?: string;
+
     @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Review date must be a valid date' })
-    reviewDate?: Date | string;
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:true})
     @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
+    @Validator.IsOptional()
     status?: keyof typeof ReviewsStatus;
 
     @Field(() => UserCreateNestedOneWithoutReviewsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutReviewsInput)
     user!: UserCreateNestedOneWithoutReviewsInput;
 
-    @Field(() => ReviewResponseCreateNestedManyWithoutReviewInput, {nullable:true})
-    @Type(() => ReviewResponseCreateNestedManyWithoutReviewInput)
+    @HideField()
     reviewResponses?: ReviewResponseCreateNestedManyWithoutReviewInput;
 }

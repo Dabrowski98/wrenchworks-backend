@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { PermissionSetCountOrderByAggregateInput } from './permission-set-count-order-by-aggregate.input';
 import { PermissionSetAvgOrderByAggregateInput } from './permission-set-avg-order-by-aggregate.input';
 import { PermissionSetMaxOrderByAggregateInput } from './permission-set-max-order-by-aggregate.input';
@@ -73,6 +74,14 @@ export class PermissionSetOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
     canModifyPermissions?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
 
     @Field(() => PermissionSetCountOrderByAggregateInput, {nullable:true})
     _count?: PermissionSetCountOrderByAggregateInput;

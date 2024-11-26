@@ -8,6 +8,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { JobUpdateOneRequiredWithoutJobWorkshopsNestedInput } from '../../job/dto/job-update-one-required-without-job-workshops-nested.input';
+import { ValidateNested } from 'class-validator';
 import { WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-jobs-nested.input';
 
 @InputType()
@@ -18,7 +19,8 @@ export class WorkshopJobUpdateWithoutTasksInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Workshop description must be a string' })
-    @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 5000 characters' })
+    @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 500 characters' })
+    @Validator.IsOptional()
     workshopJobDescription?: string;
 
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -27,6 +29,7 @@ export class WorkshopJobUpdateWithoutTasksInput {
     @Validator.IsNumber({}, { message: 'Minimum price must be a number' })
     @Validator.Min(0, { message: 'Minimum price cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Minimum price cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     minPrice?: Decimal;
 
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -35,17 +38,36 @@ export class WorkshopJobUpdateWithoutTasksInput {
     @Validator.IsNumber({}, { message: 'Maximum price must be a number' })
     @Validator.Min(0, { message: 'Maximum price cannot be negative' })
     @Validator.Max(9999999.99, { message: 'Maximum price cannot exceed 9999999.99' })
+    @Validator.IsOptional()
     maxPrice?: Decimal;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Availability must be a boolean' })
+    @Validator.IsOptional()
     availability?: boolean;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    createdBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
 
     @Field(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput, {nullable:true})
     @Type(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput)
+    @ValidateNested()
+    @Type(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput)
     job?: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput;
 
-    @Field(() => WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput)
+    @HideField()
     workshop?: WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput;
 }

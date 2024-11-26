@@ -3,8 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { JobCategoryCreateNestedOneWithoutJobsInput } from '../../job-category/dto/job-category-create-nested-one-without-jobs.input';
-import { ServiceRequestCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-create-nested-many-without-jobs.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ServiceRequestCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-create-nested-many-without-jobs.input';
 
 @InputType()
 export class JobCreateWithoutJobWorkshopsInput {
@@ -26,12 +27,14 @@ export class JobCreateWithoutJobWorkshopsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => JobCategoryCreateNestedOneWithoutJobsInput, {nullable:false})
+    @ValidateNested()
+    @Type(() => JobCategoryCreateNestedOneWithoutJobsInput)
     jobCategory!: JobCategoryCreateNestedOneWithoutJobsInput;
 
-    @Field(() => ServiceRequestCreateNestedManyWithoutJobsInput, {nullable:true})
-    @Type(() => ServiceRequestCreateNestedManyWithoutJobsInput)
+    @HideField()
     serviceRequests?: ServiceRequestCreateNestedManyWithoutJobsInput;
 }

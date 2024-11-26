@@ -4,6 +4,7 @@ import * as Scalars from 'graphql-scalars';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
 import { Task } from '../../task/dto/task.model';
+import { Type } from 'class-transformer';
 import { Job } from '../../job/dto/job.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { WorkshopJobCount } from './workshop-job-count.output';
@@ -29,16 +30,34 @@ export class WorkshopJob {
     @Field(() => GraphQLDecimal, {nullable:true})
     maxPrice!: Decimal | null;
 
-    @Field(() => Boolean, {nullable:false,defaultValue:true})
+    /**
+     * Note: Optional because field defaults to true
+     */
+    @Field(() => Boolean, {nullable:false,defaultValue:true,description:'Note: Optional because field defaults to true'})
     availability!: boolean;
 
+    @Field(() => Date, {nullable:true})
+    createdAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    createdBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
     @Field(() => [Task], {nullable:true})
+    @Type(() => Task)
     tasks?: Array<Task>;
 
     @Field(() => Job, {nullable:false})
+    @Type(() => Job)
     job?: Job;
 
     @Field(() => Workshop, {nullable:false})
+    @Type(() => Workshop)
     workshop?: Workshop;
 
     @Field(() => WorkshopJobCount, {nullable:false})

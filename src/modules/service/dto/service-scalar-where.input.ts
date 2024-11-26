@@ -9,6 +9,7 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class ServiceScalarWhereInput {
@@ -63,8 +64,28 @@ export class ServiceScalarWhereInput {
     serviceEndDate?: DateTimeNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
-    updatedAt?: DateTimeNullableFilter;
+    addedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    addedBy?: BigIntNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    resolvedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    resolvedBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableFilter;
 }

@@ -5,8 +5,11 @@ import { PermissionSetWhereInput } from './permission-set-where.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
 
 @InputType()
@@ -84,11 +87,23 @@ export class PermissionSetWhereUniqueInput {
     @Field(() => BoolFilter, {nullable:true})
     canModifyPermissions?: BoolFilter;
 
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
     @Field(() => EmployeeListRelationFilter, {nullable:true})
+    @Type(() => EmployeeListRelationFilter)
+    @ValidateNested()
     @Type(() => EmployeeListRelationFilter)
     employees?: EmployeeListRelationFilter;
 
     @Field(() => WorkshopNullableRelationFilter, {nullable:true})
+    @Type(() => WorkshopNullableRelationFilter)
+    @ValidateNested()
     @Type(() => WorkshopNullableRelationFilter)
     workshop?: WorkshopNullableRelationFilter;
 }

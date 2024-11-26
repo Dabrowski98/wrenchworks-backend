@@ -13,6 +13,18 @@ export class CustomerAvgAggregate {
     @Field(() => Float, {nullable:true})
     workshopId?: number;
 
+    @Field(() => Float, {nullable:true})
+    userId?: number;
+
+    @Field(() => Float, {nullable:true})
+    guestId?: number;
+
     @Field(() => GraphQLDecimal, {nullable:true})
     totalDue?: Decimal;
+
+    @Field(() => Float, {nullable:true})
+    createdBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

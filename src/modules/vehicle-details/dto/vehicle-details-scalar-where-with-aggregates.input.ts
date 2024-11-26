@@ -1,12 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
-import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { IntNullableWithAggregatesFilter } from '../../prisma/dto/int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { EnumFuelTypeNullableWithAggregatesFilter } from '../../prisma/dto/enum-fuel-type-nullable-with-aggregates-filter.input';
 import { EnumBodyColorsNullableWithAggregatesFilter } from '../../prisma/dto/enum-body-colors-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class VehicleDetailsScalarWhereWithAggregatesInput {
@@ -23,8 +23,8 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     vehicleDetailsId?: BigIntWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
-    vehicleId?: BigIntNullableWithAggregatesFilter;
+    @Field(() => BigIntWithAggregatesFilter, {nullable:true})
+    vehicleId?: BigIntWithAggregatesFilter;
 
     @Field(() => IntNullableWithAggregatesFilter, {nullable:true})
     yearOfProduction?: IntNullableWithAggregatesFilter;
@@ -51,5 +51,6 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     bodyColor?: EnumBodyColorsNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

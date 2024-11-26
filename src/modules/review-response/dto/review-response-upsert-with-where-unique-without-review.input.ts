@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ReviewResponseWhereUniqueInput } from './review-response-where-unique.input';
 import { Type } from 'class-transformer';
 import { ReviewResponseUpdateWithoutReviewInput } from './review-response-update-without-review.input';
+import { ValidateNested } from 'class-validator';
 import { ReviewResponseCreateWithoutReviewInput } from './review-response-create-without-review.input';
 
 @InputType()
@@ -15,9 +16,11 @@ export class ReviewResponseUpsertWithWhereUniqueWithoutReviewInput {
 
     @Field(() => ReviewResponseUpdateWithoutReviewInput, {nullable:false})
     @Type(() => ReviewResponseUpdateWithoutReviewInput)
+    @ValidateNested()
     update!: ReviewResponseUpdateWithoutReviewInput;
 
     @Field(() => ReviewResponseCreateWithoutReviewInput, {nullable:false})
     @Type(() => ReviewResponseCreateWithoutReviewInput)
+    @ValidateNested()
     create!: ReviewResponseCreateWithoutReviewInput;
 }

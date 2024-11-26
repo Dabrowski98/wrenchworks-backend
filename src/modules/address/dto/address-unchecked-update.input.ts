@@ -2,9 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { PersonUncheckedUpdateManyWithoutAddressNestedInput } from '../../person/dto/person-unchecked-update-many-without-address-nested.input';
+import { UserUncheckedUpdateOneWithoutAddressNestedInput } from '../../user/dto/user-unchecked-update-one-without-address-nested.input';
 import { Type } from 'class-transformer';
-import { WorkshopUncheckedUpdateManyWithoutAddressNestedInput } from '../../workshop/dto/workshop-unchecked-update-many-without-address-nested.input';
+import { WorkshopUncheckedUpdateOneWithoutAddressNestedInput } from '../../workshop/dto/workshop-unchecked-update-one-without-address-nested.input';
+import { ValidateNested } from 'class-validator';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -16,19 +18,22 @@ export class AddressUncheckedUpdateInput {
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Country must be a string' })
     @Validator.Length(2, 30, { message: 'Country must be between 2 and 30 characters' })
-    @Validator.IsNotEmpty({ message: 'Country is required' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Country is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     country?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Region must be a string' })
     @Validator.Length(2, 30, { message: 'Region must be between 2 and 30 characters' })
-    @Validator.IsNotEmpty({ message: 'Region is required' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Region is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     region?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'City must be a string' })
     @Validator.Length(2, 30, { message: 'City must be between 2 and 30 characters' })
-    @Validator.IsNotEmpty({ message: 'City is required' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'City is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     city?: string;
 
     @Field(() => String, {nullable:true})
@@ -39,8 +44,9 @@ export class AddressUncheckedUpdateInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Building number must be a string' })
-    @Validator.IsNotEmpty({ message: 'Building number is required' })
     @Validator.Length(1, 6, { message: 'Building number must be between 1 and 6 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Building number is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     buildingNo?: string;
 
     @Field(() => String, {nullable:true})
@@ -51,15 +57,18 @@ export class AddressUncheckedUpdateInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Post code must be a string' })
-    @Validator.IsNotEmpty({ message: 'Post code is required' })
     @Validator.Length(4, 10, { message: 'Post code must be between 4 and 10 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Post code is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     postCode?: string;
 
-    @Field(() => PersonUncheckedUpdateManyWithoutAddressNestedInput, {nullable:true})
-    @Type(() => PersonUncheckedUpdateManyWithoutAddressNestedInput)
-    persons?: PersonUncheckedUpdateManyWithoutAddressNestedInput;
+    @Field(() => UserUncheckedUpdateOneWithoutAddressNestedInput, {nullable:true})
+    @Type(() => UserUncheckedUpdateOneWithoutAddressNestedInput)
+    user?: UserUncheckedUpdateOneWithoutAddressNestedInput;
 
-    @Field(() => WorkshopUncheckedUpdateManyWithoutAddressNestedInput, {nullable:true})
-    @Type(() => WorkshopUncheckedUpdateManyWithoutAddressNestedInput)
-    workshops?: WorkshopUncheckedUpdateManyWithoutAddressNestedInput;
+    @Field(() => WorkshopUncheckedUpdateOneWithoutAddressNestedInput, {nullable:true})
+    @Type(() => WorkshopUncheckedUpdateOneWithoutAddressNestedInput)
+    @ValidateNested()
+    @Type(() => WorkshopUncheckedUpdateOneWithoutAddressNestedInput)
+    workshop?: WorkshopUncheckedUpdateOneWithoutAddressNestedInput;
 }

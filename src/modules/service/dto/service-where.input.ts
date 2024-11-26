@@ -9,7 +9,9 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { ServiceRequestNullableRelationFilter } from '../../service-request/dto/service-request-nullable-relation-filter.input';
+import { ValidateNested } from 'class-validator';
 import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
 import { CustomerRelationFilter } from '../../customer/dto/customer-relation-filter.input';
 import { EmployeeRelationFilter } from '../../employee/dto/employee-relation-filter.input';
@@ -69,32 +71,64 @@ export class ServiceWhereInput {
     serviceEndDate?: DateTimeNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
-    updatedAt?: DateTimeNullableFilter;
+    addedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    addedBy?: BigIntNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    resolvedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    resolvedBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableFilter;
 
     @Field(() => ServiceRequestNullableRelationFilter, {nullable:true})
+    @Type(() => ServiceRequestNullableRelationFilter)
+    @ValidateNested()
     @Type(() => ServiceRequestNullableRelationFilter)
     serviceRequest?: ServiceRequestNullableRelationFilter;
 
     @Field(() => TaskListRelationFilter, {nullable:true})
     @Type(() => TaskListRelationFilter)
+    @ValidateNested()
+    @Type(() => TaskListRelationFilter)
     tasks?: TaskListRelationFilter;
 
     @Field(() => CustomerRelationFilter, {nullable:true})
+    @Type(() => CustomerRelationFilter)
+    @ValidateNested()
     @Type(() => CustomerRelationFilter)
     customer?: CustomerRelationFilter;
 
     @Field(() => EmployeeRelationFilter, {nullable:true})
     @Type(() => EmployeeRelationFilter)
+    @ValidateNested()
+    @Type(() => EmployeeRelationFilter)
     employee?: EmployeeRelationFilter;
 
     @Field(() => VehicleRelationFilter, {nullable:true})
     @Type(() => VehicleRelationFilter)
+    @ValidateNested()
+    @Type(() => VehicleRelationFilter)
     vehicle?: VehicleRelationFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})
+    @Type(() => WorkshopRelationFilter)
+    @ValidateNested()
     @Type(() => WorkshopRelationFilter)
     workshop?: WorkshopRelationFilter;
 }

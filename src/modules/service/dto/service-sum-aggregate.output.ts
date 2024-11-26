@@ -27,4 +27,13 @@ export class ServiceSumAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     paymentAmount?: Decimal;
+
+    @Field(() => String, {nullable:true})
+    addedBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

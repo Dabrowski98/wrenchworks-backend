@@ -28,4 +28,7 @@ export class WorkshopCount {
 
     @Field(() => Int, {nullable:false})
     jobCategories?: number;
+
+    @Field(() => Int, {nullable:false})
+    joinWorkshopRequests?: number;
 }

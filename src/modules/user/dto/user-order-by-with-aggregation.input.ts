@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { UserCountOrderByAggregateInput } from './user-count-order-by-aggregate.input';
 import { UserAvgOrderByAggregateInput } from './user-avg-order-by-aggregate.input';
 import { UserMaxOrderByAggregateInput } from './user-max-order-by-aggregate.input';
@@ -13,9 +14,6 @@ export class UserOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
     userId?: keyof typeof SortOrder;
-
-    @Field(() => SortOrderInput, {nullable:true})
-    personId?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     username?: keyof typeof SortOrder;
@@ -35,13 +33,28 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
 
+    @Field(() => SortOrder, {nullable:true})
+    firstName?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    lastName?: keyof typeof SortOrder;
+
     @Field(() => SortOrderInput, {nullable:true})
+    telephoneNumber?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    addressId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     createdAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     updatedAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})

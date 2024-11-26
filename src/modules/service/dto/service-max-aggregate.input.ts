@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class ServiceMaxAggregateInput {
@@ -41,8 +42,28 @@ export class ServiceMaxAggregateInput {
     serviceEndDate?: true;
 
     @Field(() => Boolean, {nullable:true})
+    addedAt?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    addedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
+    resolvedAt?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
+    resolvedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
     updatedAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
+    updatedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
     deletedAt?: true;
 }

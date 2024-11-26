@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class ServiceRequestAvgAggregateInput {
@@ -14,8 +15,15 @@ export class ServiceRequestAvgAggregateInput {
     vehicleId?: true;
 
     @Field(() => Boolean, {nullable:true})
-    personId?: true;
+    userId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    guestId?: true;
 
     @Field(() => Boolean, {nullable:true})
     approvedServiceId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
+    resolvedBy?: true;
 }

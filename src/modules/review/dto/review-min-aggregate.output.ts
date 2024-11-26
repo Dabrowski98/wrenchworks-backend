@@ -20,11 +20,20 @@ export class ReviewMinAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     rating?: Decimal;
 
+    @Field(() => GraphQLDecimal, {nullable:true})
+    originalRating?: Decimal;
+
     @Field(() => String, {nullable:true})
     reviewText?: string;
 
+    @Field(() => String, {nullable:true})
+    originalReviewText?: string;
+
     @Field(() => Date, {nullable:true})
-    reviewDate?: Date | string;
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:true})
     status?: keyof typeof ReviewsStatus;

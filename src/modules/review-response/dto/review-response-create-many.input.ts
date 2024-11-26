@@ -4,6 +4,7 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -19,19 +20,27 @@ export class ReviewResponseCreateManyInput {
     userId!: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
     parentResponseId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     responseText!: string;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Response date must be a valid date' })
-    responseDate?: Date | string;
+    @HideField()
+    originalResponseText?: string;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:true})
-    @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
     status?: keyof typeof ReviewsResponsesStatus;
 }

@@ -21,4 +21,10 @@ export class WorkshopJobAvgAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     maxPrice?: Decimal;
+
+    @Field(() => Float, {nullable:true})
+    createdBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

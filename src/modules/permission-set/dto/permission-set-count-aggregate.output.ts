@@ -70,5 +70,11 @@ export class PermissionSetCountAggregate {
     canModifyPermissions!: number;
 
     @Field(() => Int, {nullable:false})
+    updatedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedBy!: number;
+
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }

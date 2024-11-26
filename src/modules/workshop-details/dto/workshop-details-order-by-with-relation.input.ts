@@ -3,7 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { Type } from 'class-transformer';
+import { HideField } from 'nestjs-graphql';
 import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class WorkshopDetailsOrderByWithRelationInput {
@@ -22,9 +24,6 @@ export class WorkshopDetailsOrderByWithRelationInput {
     description?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
-    telephoneNumber?: SortOrderInput;
-
-    @Field(() => SortOrderInput, {nullable:true})
     logoURL?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
@@ -34,9 +33,20 @@ export class WorkshopDetailsOrderByWithRelationInput {
     NIP?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
+    @Type(() => WorkshopOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => WorkshopOrderByWithRelationInput)
     workshop?: WorkshopOrderByWithRelationInput;
 }

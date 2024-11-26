@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { ServiceRequestCreateWithoutApprovedServiceInput } from './service-request-create-without-approved-service.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateOrConnectWithoutApprovedServiceInput } from './service-request-create-or-connect-without-approved-service.input';
 import { ServiceRequestUpsertWithoutApprovedServiceInput } from './service-request-upsert-without-approved-service.input';
 import { ServiceRequestWhereInput } from './service-request-where.input';
@@ -14,29 +15,36 @@ export class ServiceRequestUpdateOneWithoutApprovedServiceNestedInput {
 
     @Field(() => ServiceRequestCreateWithoutApprovedServiceInput, {nullable:true})
     @Type(() => ServiceRequestCreateWithoutApprovedServiceInput)
+    @ValidateNested()
     create?: ServiceRequestCreateWithoutApprovedServiceInput;
 
     @Field(() => ServiceRequestCreateOrConnectWithoutApprovedServiceInput, {nullable:true})
     @Type(() => ServiceRequestCreateOrConnectWithoutApprovedServiceInput)
+    @ValidateNested()
     connectOrCreate?: ServiceRequestCreateOrConnectWithoutApprovedServiceInput;
 
     @Field(() => ServiceRequestUpsertWithoutApprovedServiceInput, {nullable:true})
     @Type(() => ServiceRequestUpsertWithoutApprovedServiceInput)
+    @ValidateNested()
     upsert?: ServiceRequestUpsertWithoutApprovedServiceInput;
 
     @Field(() => ServiceRequestWhereInput, {nullable:true})
     @Type(() => ServiceRequestWhereInput)
+    @ValidateNested()
     disconnect?: ServiceRequestWhereInput;
 
     @Field(() => ServiceRequestWhereInput, {nullable:true})
     @Type(() => ServiceRequestWhereInput)
+    @ValidateNested()
     delete?: ServiceRequestWhereInput;
 
     @Field(() => ServiceRequestWhereUniqueInput, {nullable:true})
     @Type(() => ServiceRequestWhereUniqueInput)
-    connect?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>;
+    @ValidateNested()
+    connect?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>;
 
     @Field(() => ServiceRequestUpdateToOneWithWhereWithoutApprovedServiceInput, {nullable:true})
     @Type(() => ServiceRequestUpdateToOneWithWhereWithoutApprovedServiceInput)
+    @ValidateNested()
     update?: ServiceRequestUpdateToOneWithWhereWithoutApprovedServiceInput;
 }

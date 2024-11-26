@@ -11,7 +11,7 @@ export class UpsertOneVehicleArgs {
 
     @Field(() => VehicleWhereUniqueInput, {nullable:false})
     @Type(() => VehicleWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleWhereUniqueInput, 'vehicleId'>;
+    where!: Prisma.AtLeast<VehicleWhereUniqueInput, 'vehicleId' | 'guestId'>;
 
     @Field(() => VehicleCreateInput, {nullable:false})
     @Type(() => VehicleCreateInput)

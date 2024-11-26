@@ -2,17 +2,19 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { AddressCreateNestedOneWithoutWorkshopsInput } from '../../address/dto/address-create-nested-one-without-workshops.input';
-import { CustomerCreateNestedManyWithoutWorkshopInput } from '../../customer/dto/customer-create-nested-many-without-workshop.input';
+import { AddressCreateNestedOneWithoutWorkshopInput } from '../../address/dto/address-create-nested-one-without-workshop.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CustomerCreateNestedManyWithoutWorkshopInput } from '../../customer/dto/customer-create-nested-many-without-workshop.input';
 import { EmployeeCreateNestedManyWithoutWorkshopInput } from '../../employee/dto/employee-create-nested-many-without-workshop.input';
 import { PermissionSetCreateNestedManyWithoutWorkshopInput } from '../../permission-set/dto/permission-set-create-nested-many-without-workshop.input';
 import { ReviewCreateNestedManyWithoutWorkshopInput } from '../../review/dto/review-create-nested-many-without-workshop.input';
 import { ServiceRequestCreateNestedManyWithoutWorkshopInput } from '../../service-request/dto/service-request-create-nested-many-without-workshop.input';
 import { ServiceCreateNestedManyWithoutWorkshopInput } from '../../service/dto/service-create-nested-many-without-workshop.input';
-import { PersonCreateNestedOneWithoutWorkshopsInput } from '../../person/dto/person-create-nested-one-without-workshops.input';
+import { UserCreateNestedOneWithoutWorkshopsInput } from '../../user/dto/user-create-nested-one-without-workshops.input';
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
+import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
 
 @InputType()
 export class WorkshopCreateWithoutWorkshopDetailsInput {
@@ -20,61 +22,88 @@ export class WorkshopCreateWithoutWorkshopDetailsInput {
     @HideField()
     workshopId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => String, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
-    email?: string;
+    @Validator.IsOptional()
+    email!: string;
 
-    @Field(() => Boolean, {nullable:true})
-    @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
+    @Field(() => String, {nullable:false})
+    @Validator.IsString({ message: 'Telephone number must be a string' })
+    @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
+    @Validator.IsOptional()
+    telephoneNumber!: string;
+
+    @HideField()
     isVerified?: boolean;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
+    @Validator.IsOptional()
     isManagingWork?: boolean;
 
+    @Field(() => Boolean, {nullable:true})
+    @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
+    @Validator.IsOptional()
+    isOfferingService?: boolean;
+
     @Field(() => Date, {nullable:true})
+    @HideField()
     createdAt?: Date | string;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
     updatedAt?: Date | string;
 
+    @Field(() => String, {nullable:true})
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => AddressCreateNestedOneWithoutWorkshopsInput, {nullable:true})
-    address?: AddressCreateNestedOneWithoutWorkshopsInput;
+    @Field(() => AddressCreateNestedOneWithoutWorkshopInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => AddressCreateNestedOneWithoutWorkshopInput)
+    address?: AddressCreateNestedOneWithoutWorkshopInput;
 
-    @Field(() => CustomerCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => CustomerCreateNestedManyWithoutWorkshopInput)
+    @HideField()
     customers?: CustomerCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => EmployeeCreateNestedManyWithoutWorkshopInput, {nullable:true})
     @Type(() => EmployeeCreateNestedManyWithoutWorkshopInput)
+    @ValidateNested()
+    @Type(() => EmployeeCreateNestedManyWithoutWorkshopInput)
     employees?: EmployeeCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => PermissionSetCreateNestedManyWithoutWorkshopInput, {nullable:true})
+    @HideField()
     permissionSets?: PermissionSetCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => ReviewCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ReviewCreateNestedManyWithoutWorkshopInput)
+    @HideField()
     reviews?: ReviewCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => ServiceRequestCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ServiceRequestCreateNestedManyWithoutWorkshopInput)
+    @HideField()
     serviceRequests?: ServiceRequestCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => ServiceCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => ServiceCreateNestedManyWithoutWorkshopInput)
+    @HideField()
     services?: ServiceCreateNestedManyWithoutWorkshopInput;
 
-    @Field(() => PersonCreateNestedOneWithoutWorkshopsInput, {nullable:false})
-    @Type(() => PersonCreateNestedOneWithoutWorkshopsInput)
-    person!: PersonCreateNestedOneWithoutWorkshopsInput;
+    @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopJobCreateNestedManyWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopJobCreateNestedManyWithoutWorkshopInput)
+    @ValidateNested()
     @Type(() => WorkshopJobCreateNestedManyWithoutWorkshopInput)
     workshopJobs?: WorkshopJobCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => JobCategoryCreateNestedManyWithoutWorkshopsInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => JobCategoryCreateNestedManyWithoutWorkshopsInput)
     jobCategories?: JobCategoryCreateNestedManyWithoutWorkshopsInput;
+
+    @HideField()
+    joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput;
 }

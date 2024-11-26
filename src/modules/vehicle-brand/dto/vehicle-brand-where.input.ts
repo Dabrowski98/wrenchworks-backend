@@ -2,7 +2,10 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { VehicleModelListRelationFilter } from '../../vehicle-model/dto/vehicle-model-list-relation-filter.input';
+import { ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class VehicleBrandWhereInput {
@@ -20,11 +23,15 @@ export class VehicleBrandWhereInput {
     brandName?: StringFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeNullableFilter;
 
     @Field(() => VehicleModelListRelationFilter, {nullable:true})
+    @ValidateNested()
+    @Type(() => VehicleModelListRelationFilter)
     vehicleModels?: VehicleModelListRelationFilter;
 }

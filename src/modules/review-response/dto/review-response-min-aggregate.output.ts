@@ -21,8 +21,14 @@ export class ReviewResponseMinAggregate {
     @Field(() => String, {nullable:true})
     responseText?: string;
 
+    @Field(() => String, {nullable:true})
+    originalResponseText?: string;
+
     @Field(() => Date, {nullable:true})
-    responseDate?: Date | string;
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     status?: keyof typeof ReviewsResponsesStatus;

@@ -5,8 +5,11 @@ export enum ReviewScalarFieldEnum {
     userId = "userId",
     workshopId = "workshopId",
     rating = "rating",
+    originalRating = "originalRating",
     reviewText = "reviewText",
-    reviewDate = "reviewDate",
+    originalReviewText = "originalReviewText",
+    createdAt = "createdAt",
+    updatedAt = "updatedAt",
     status = "status"
 }
 

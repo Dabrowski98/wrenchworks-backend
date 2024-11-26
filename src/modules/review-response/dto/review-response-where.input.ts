@@ -3,12 +3,15 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { EnumReviewsResponsesStatusFilter } from '../../prisma/dto/enum-reviews-responses-status-filter.input';
 import { ReviewResponseNullableRelationFilter } from './review-response-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ReviewResponseListRelationFilter } from './review-response-list-relation-filter.input';
 import { ReviewRelationFilter } from '../../review/dto/review-relation-filter.input';
+import { ValidateNested } from 'class-validator';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 
 @InputType()
@@ -38,21 +41,31 @@ export class ReviewResponseWhereInput {
     @Field(() => StringFilter, {nullable:true})
     responseText?: StringFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    responseDate?: DateTimeFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    originalResponseText?: StringNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
 
     @Field(() => EnumReviewsResponsesStatusFilter, {nullable:true})
     status?: EnumReviewsResponsesStatusFilter;
 
     @Field(() => ReviewResponseNullableRelationFilter, {nullable:true})
     @Type(() => ReviewResponseNullableRelationFilter)
-    reviewResponse?: ReviewResponseNullableRelationFilter;
+    parentResponse?: ReviewResponseNullableRelationFilter;
 
     @Field(() => ReviewResponseListRelationFilter, {nullable:true})
     @Type(() => ReviewResponseListRelationFilter)
-    otherReviewResponses?: ReviewResponseListRelationFilter;
+    childrenResponses?: ReviewResponseListRelationFilter;
 
     @Field(() => ReviewRelationFilter, {nullable:true})
+    @Type(() => ReviewRelationFilter)
+    @ValidateNested()
     @Type(() => ReviewRelationFilter)
     review?: ReviewRelationFilter;
 

@@ -9,5 +9,6 @@ export class VehicleUpdateManyMutationInput {
     vehicleId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

@@ -8,7 +8,13 @@ export enum TaskScalarFieldEnum {
     description = "description",
     status = "status",
     executionTime = "executionTime",
-    partsCost = "partsCost"
+    partsCost = "partsCost",
+    createdAt = "createdAt",
+    createdBy = "createdBy",
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy",
+    resolvedAt = "resolvedAt",
+    resolvedBy = "resolvedBy"
 }
 
 

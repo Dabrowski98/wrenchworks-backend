@@ -3,8 +3,11 @@ import { InputType } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
+import { DecimalNullableWithAggregatesFilter } from '../../prisma/dto/decimal-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
-import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
+import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { EnumReviewsStatusWithAggregatesFilter } from '../../prisma/dto/enum-reviews-status-with-aggregates-filter.input';
 
 @InputType()
@@ -35,11 +38,23 @@ export class ReviewScalarWhereWithAggregatesInput {
     @Type(() => DecimalWithAggregatesFilter)
     rating?: DecimalWithAggregatesFilter;
 
+    @Field(() => DecimalNullableWithAggregatesFilter, {nullable:true})
+    @Type(() => DecimalNullableWithAggregatesFilter)
+    originalRating?: DecimalNullableWithAggregatesFilter;
+
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     reviewText?: StringWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    reviewDate?: DateTimeWithAggregatesFilter;
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    originalReviewText?: StringNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => EnumReviewsStatusWithAggregatesFilter, {nullable:true})
     status?: EnumReviewsStatusWithAggregatesFilter;

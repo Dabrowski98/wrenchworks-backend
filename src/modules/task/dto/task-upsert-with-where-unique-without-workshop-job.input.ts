@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { TaskWhereUniqueInput } from './task-where-unique.input';
 import { Type } from 'class-transformer';
 import { TaskUpdateWithoutWorkshopJobInput } from './task-update-without-workshop-job.input';
+import { ValidateNested } from 'class-validator';
 import { TaskCreateWithoutWorkshopJobInput } from './task-create-without-workshop-job.input';
 
 @InputType()
@@ -15,9 +16,11 @@ export class TaskUpsertWithWhereUniqueWithoutWorkshopJobInput {
 
     @Field(() => TaskUpdateWithoutWorkshopJobInput, {nullable:false})
     @Type(() => TaskUpdateWithoutWorkshopJobInput)
+    @ValidateNested()
     update!: TaskUpdateWithoutWorkshopJobInput;
 
     @Field(() => TaskCreateWithoutWorkshopJobInput, {nullable:false})
     @Type(() => TaskCreateWithoutWorkshopJobInput)
+    @ValidateNested()
     create!: TaskCreateWithoutWorkshopJobInput;
 }

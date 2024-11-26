@@ -5,6 +5,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
 import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
 import { Workshop } from '../../workshop/dto/workshop.model';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class WorkshopDetails {
@@ -12,7 +13,10 @@ export class WorkshopDetails {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint;
 
-    @Field(() => GraphQLDecimal, {nullable:true,defaultValue:0})
+    /**
+     * Note: Optional because it is set to 0.00 by default
+     */
+    @Field(() => GraphQLDecimal, {nullable:true,defaultValue:0,description:'Note: Optional because it is set to 0.00 by default'})
     rating!: Decimal | null;
 
     @Field(() => String, {nullable:false})
@@ -22,20 +26,24 @@ export class WorkshopDetails {
     description!: string | null;
 
     @Field(() => String, {nullable:true})
-    telephoneNumber!: string | null;
-
-    @Field(() => String, {nullable:true})
     logoURL!: string | null;
 
-    @Field(() => WorkshopsDetailsStatus, {nullable:true,defaultValue:'active'})
+    @Field(() => WorkshopsDetailsStatus, {nullable:true,defaultValue:'ACTIVE'})
     status!: keyof typeof WorkshopsDetailsStatus | null;
 
     @Field(() => String, {nullable:true})
     NIP!: string | null;
 
     @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
     @Field(() => Workshop, {nullable:false})
+    @Type(() => Workshop)
     workshop?: Workshop;
 }

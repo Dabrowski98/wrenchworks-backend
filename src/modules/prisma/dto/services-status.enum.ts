@@ -1,9 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum ServicesStatus {
-    pending = "pending",
-    completed = "completed",
-    cancelled = "cancelled"
+    PENDING = "PENDING",
+    COMPLETED = "COMPLETED",
+    CANCELLED = "CANCELLED"
 }
 
 

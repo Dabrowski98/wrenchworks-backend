@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
+import { Type } from 'class-transformer';
 import { VehicleBrand } from '../../vehicle-brand/dto/vehicle-brand.model';
 import { VehicleModelCount } from './vehicle-model-count.output';
 
@@ -15,7 +16,7 @@ export class VehicleModel {
     modelName!: string;
 
     @Field(() => String, {nullable:false})
-    brandName!: string;
+    brand!: string;
 
     @Field(() => Date, {nullable:true})
     createdAt!: Date | null;
@@ -24,9 +25,11 @@ export class VehicleModel {
     updatedAt!: Date | null;
 
     @Field(() => [Vehicle], {nullable:true})
+    @Type(() => Vehicle)
     vehicles?: Array<Vehicle>;
 
     @Field(() => VehicleBrand, {nullable:false})
+    @Type(() => VehicleBrand)
     vehiclesBrand?: VehicleBrand;
 
     @Field(() => VehicleModelCount, {nullable:false})

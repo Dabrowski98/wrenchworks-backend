@@ -1,28 +1,28 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { EmployeeCreateWithoutPermissionSetInput } from './employee-create-without-permission-set.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { EmployeeCreateOrConnectWithoutPermissionSetInput } from './employee-create-or-connect-without-permission-set.input';
 import { EmployeeCreateManyPermissionSetInputEnvelope } from './employee-create-many-permission-set-input-envelope.input';
 import { Prisma } from '@prisma/client';
 import { EmployeeWhereUniqueInput } from './employee-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class EmployeeCreateNestedManyWithoutPermissionSetInput {
 
-    @Field(() => [EmployeeCreateWithoutPermissionSetInput], {nullable:true})
-    @Type(() => EmployeeCreateWithoutPermissionSetInput)
+    @HideField()
     create?: Array<EmployeeCreateWithoutPermissionSetInput>;
 
-    @Field(() => [EmployeeCreateOrConnectWithoutPermissionSetInput], {nullable:true})
-    @Type(() => EmployeeCreateOrConnectWithoutPermissionSetInput)
+    @HideField()
     connectOrCreate?: Array<EmployeeCreateOrConnectWithoutPermissionSetInput>;
 
-    @Field(() => EmployeeCreateManyPermissionSetInputEnvelope, {nullable:true})
-    @Type(() => EmployeeCreateManyPermissionSetInputEnvelope)
+    @HideField()
     createMany?: EmployeeCreateManyPermissionSetInputEnvelope;
 
     @Field(() => [EmployeeWhereUniqueInput], {nullable:true})
     @Type(() => EmployeeWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId_workshopId'>>;
+    @ValidateNested()
+    connect?: Array<Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId' | 'login_workshopId'>>;
 }

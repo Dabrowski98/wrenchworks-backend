@@ -18,4 +18,7 @@ export class ReviewAvgAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     rating?: Decimal;
+
+    @Field(() => GraphQLDecimal, {nullable:true})
+    originalRating?: Decimal;
 }

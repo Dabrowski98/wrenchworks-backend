@@ -6,8 +6,9 @@ import { Float } from '@nestjs/graphql';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
 import { WorkshopJob } from '../../workshop-job/dto/workshop-job.model';
+import { Type } from 'class-transformer';
 import { Service } from '../../service/dto/service.model';
-import { EmployeeTask } from '../../employee-task/dto/employee-task.model';
+import { Employee } from '../../employee/dto/employee.model';
 import { TaskCount } from './task-count.output';
 
 @ObjectType()
@@ -28,23 +29,53 @@ export class Task {
     @Field(() => String, {nullable:false})
     description!: string;
 
-    @Field(() => TasksStatus, {nullable:true,defaultValue:'pending'})
+    /**
+     * Note: Optional because field defaults to pending
+     */
+    @Field(() => TasksStatus, {nullable:true,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
     status!: keyof typeof TasksStatus | null;
 
-    @Field(() => Float, {nullable:false})
+    /**
+     * Note: Optional because field defaults to 0.00
+     */
+    @Field(() => Float, {nullable:false,defaultValue:0,description:'Note: Optional because field defaults to 0.00'})
     executionTime!: number;
 
-    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0})
+    /**
+     * Note: Optional because field defaults to 0.00
+     */
+    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0,description:'Note: Optional because field defaults to 0.00'})
     partsCost!: Decimal;
 
+    @Field(() => Date, {nullable:true})
+    createdAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    createdBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
+    @Field(() => Date, {nullable:true})
+    resolvedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy!: bigint | null;
+
     @Field(() => WorkshopJob, {nullable:false})
+    @Type(() => WorkshopJob)
     workshopJob?: WorkshopJob;
 
     @Field(() => Service, {nullable:false})
+    @Type(() => Service)
     service?: Service;
 
-    @Field(() => [EmployeeTask], {nullable:true})
-    taskEmployees?: Array<EmployeeTask>;
+    @Field(() => [Employee], {nullable:true})
+    @Type(() => Employee)
+    employees?: Array<Employee>;
 
     @Field(() => TaskCount, {nullable:false})
     _count?: TaskCount;

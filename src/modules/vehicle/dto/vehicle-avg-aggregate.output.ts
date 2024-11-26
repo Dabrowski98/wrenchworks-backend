@@ -9,7 +9,10 @@ export class VehicleAvgAggregate {
     vehicleId?: number;
 
     @Field(() => Float, {nullable:true})
-    personId?: number;
+    userId?: number;
+
+    @Field(() => Float, {nullable:true})
+    guestId?: number;
 
     @Field(() => Float, {nullable:true})
     modelId?: number;

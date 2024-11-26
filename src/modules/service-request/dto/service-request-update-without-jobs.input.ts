@@ -1,13 +1,15 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
 import * as Validator from 'class-validator';
-import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
 import { ServiceUpdateOneWithoutServiceRequestNestedInput } from '../../service/dto/service-update-one-without-service-request-nested.input';
+import { VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-service-requests-nested.input';
 import { Type } from 'class-transformer';
-import { VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-vehicle-associated-service-requests-nested.input';
+import { ValidateNested } from 'class-validator';
 import { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-service-requests-nested.input';
-import { PersonUpdateOneRequiredWithoutServiceRequestsNestedInput } from '../../person/dto/person-update-one-required-without-service-requests-nested.input';
+import { UserUpdateOneWithoutServiceRequestsNestedInput } from '../../user/dto/user-update-one-without-service-requests-nested.input';
+import { GuestUpdateOneWithoutServiceRequestNestedInput } from '../../guest/dto/guest-update-one-without-service-request-nested.input';
 
 @InputType()
 export class ServiceRequestUpdateWithoutJobsInput {
@@ -15,13 +17,10 @@ export class ServiceRequestUpdateWithoutJobsInput {
     @HideField()
     serviceRequestId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
-
-    @Field(() => ServiceRequestsStatus, {nullable:true})
+    @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
+    @Validator.IsOptional()
+    status?: keyof typeof ServiceRequestStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -30,21 +29,36 @@ export class ServiceRequestUpdateWithoutJobsInput {
     description?: string;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => ServiceUpdateOneWithoutServiceRequestNestedInput, {nullable:true})
-    @Type(() => ServiceUpdateOneWithoutServiceRequestNestedInput)
+    @HideField()
     approvedService?: ServiceUpdateOneWithoutServiceRequestNestedInput;
 
-    @Field(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput, {nullable:true})
-    @Type(() => VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput)
-    vehicle?: VehicleUpdateOneRequiredWithoutVehicleAssociatedServiceRequestsNestedInput;
+    @Field(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
+    @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
+    @ValidateNested()
+    @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
+    vehicle?: VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput;
 
-    @Field(() => WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput)
+    @HideField()
     workshop?: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput;
 
-    @Field(() => PersonUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
-    @Type(() => PersonUpdateOneRequiredWithoutServiceRequestsNestedInput)
-    person?: PersonUpdateOneRequiredWithoutServiceRequestsNestedInput;
+    @HideField()
+    user?: UserUpdateOneWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutServiceRequestNestedInput;
 }

@@ -1,9 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum UserReportsStatus {
-    pending = "pending",
-    considered = "considered",
-    closed = "closed"
+    PENDING = "PENDING",
+    ACTIVE = "ACTIVE",
+    CLOSED_CONFIRMED = "CLOSED_CONFIRMED",
+    CLOSED_DENIED = "CLOSED_DENIED"
 }
 
 

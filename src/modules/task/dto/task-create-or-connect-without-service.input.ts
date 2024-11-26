@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { TaskWhereUniqueInput } from './task-where-unique.input';
 import { Type } from 'class-transformer';
 import { TaskCreateWithoutServiceInput } from './task-create-without-service.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class TaskCreateOrConnectWithoutServiceInput {
@@ -14,5 +15,6 @@ export class TaskCreateOrConnectWithoutServiceInput {
 
     @Field(() => TaskCreateWithoutServiceInput, {nullable:false})
     @Type(() => TaskCreateWithoutServiceInput)
+    @ValidateNested()
     create!: TaskCreateWithoutServiceInput;
 }

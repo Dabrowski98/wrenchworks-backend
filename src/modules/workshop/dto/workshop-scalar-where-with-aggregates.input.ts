@@ -2,9 +2,10 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
-import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
+import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class WorkshopScalarWhereWithAggregatesInput {
@@ -22,13 +23,16 @@ export class WorkshopScalarWhereWithAggregatesInput {
     workshopId?: BigIntWithAggregatesFilter;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
-    personId?: BigIntWithAggregatesFilter;
+    ownerId?: BigIntWithAggregatesFilter;
 
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addressId?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    email?: StringNullableWithAggregatesFilter;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    email?: StringWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    telephoneNumber?: StringWithAggregatesFilter;
 
     @Field(() => BoolNullableWithAggregatesFilter, {nullable:true})
     isVerified?: BoolNullableWithAggregatesFilter;
@@ -36,12 +40,22 @@ export class WorkshopScalarWhereWithAggregatesInput {
     @Field(() => BoolNullableWithAggregatesFilter, {nullable:true})
     isManagingWork?: BoolNullableWithAggregatesFilter;
 
+    @Field(() => BoolNullableWithAggregatesFilter, {nullable:true})
+    isOfferingService?: BoolNullableWithAggregatesFilter;
+
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

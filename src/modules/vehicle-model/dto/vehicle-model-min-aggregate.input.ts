@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class VehicleModelMinAggregateInput {
@@ -11,11 +12,13 @@ export class VehicleModelMinAggregateInput {
     modelName?: true;
 
     @Field(() => Boolean, {nullable:true})
-    brandName?: true;
+    brand?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     createdAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     updatedAt?: true;
 }

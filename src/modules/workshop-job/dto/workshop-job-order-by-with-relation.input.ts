@@ -3,7 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { Type } from 'class-transformer';
+import { HideField } from 'nestjs-graphql';
 import { TaskOrderByRelationAggregateInput } from '../../task/dto/task-order-by-relation-aggregate.input';
+import { ValidateNested } from 'class-validator';
 import { JobOrderByWithRelationInput } from '../../job/dto/job-order-by-with-relation.input';
 import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 
@@ -33,15 +35,37 @@ export class WorkshopJobOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     availability?: keyof typeof SortOrder;
 
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
+
     @Field(() => TaskOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => TaskOrderByRelationAggregateInput)
+    @ValidateNested()
     @Type(() => TaskOrderByRelationAggregateInput)
     tasks?: TaskOrderByRelationAggregateInput;
 
     @Field(() => JobOrderByWithRelationInput, {nullable:true})
     @Type(() => JobOrderByWithRelationInput)
+    @ValidateNested()
+    @Type(() => JobOrderByWithRelationInput)
     job?: JobOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
+    @Type(() => WorkshopOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => WorkshopOrderByWithRelationInput)
     workshop?: WorkshopOrderByWithRelationInput;
 }

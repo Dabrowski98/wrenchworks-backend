@@ -10,16 +10,13 @@ export class UserMaxAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     username?: string;
 
     @HideField()
     password?: string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
     email?: string;
 
     @Field(() => String, {nullable:true})
@@ -30,6 +27,18 @@ export class UserMaxAggregate {
 
     @Field(() => UsersStatus, {nullable:true})
     status?: keyof typeof UsersStatus;
+
+    @Field(() => String, {nullable:true})
+    firstName?: string;
+
+    @Field(() => String, {nullable:true})
+    lastName?: string;
+
+    @Field(() => String, {nullable:true})
+    telephoneNumber?: string;
+
+    @Field(() => String, {nullable:true})
+    addressId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;

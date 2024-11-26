@@ -5,10 +5,11 @@ export enum WorkshopDetailsScalarFieldEnum {
     rating = "rating",
     workshopName = "workshopName",
     description = "description",
-    telephoneNumber = "telephoneNumber",
     logoURL = "logoURL",
     status = "status",
     NIP = "NIP",
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy",
     deletedAt = "deletedAt"
 }
 

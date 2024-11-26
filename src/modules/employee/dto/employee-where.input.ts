@@ -1,15 +1,21 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
+import { StringFilter } from '../../prisma/dto/string-filter.input';
+import { IntNullableFilter } from '../../prisma/dto/int-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { IntNullableFilter } from '../../prisma/dto/int-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { PermissionSetNullableRelationFilter } from '../../permission-set/dto/permission-set-nullable-relation-filter.input';
-import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PersonRelationFilter } from '../../person/dto/person-relation-filter.input';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
-import { EmployeeTaskListRelationFilter } from '../../employee-task/dto/employee-task-list-relation-filter.input';
+import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
+import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
+import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
+import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 
 @InputType()
 export class EmployeeWhereInput {
@@ -29,31 +35,71 @@ export class EmployeeWhereInput {
     @Field(() => BigIntFilter, {nullable:true})
     workshopId?: BigIntFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    joinedAt?: DateTimeFilter;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    userId?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
-    deletedAt?: DateTimeNullableFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    nickname?: StringNullableFilter;
+
+    @Field(() => StringFilter, {nullable:true})
+    login?: StringFilter;
+
+    @Field(() => StringFilter, {nullable:true})
+    password?: StringFilter;
 
     @Field(() => IntNullableFilter, {nullable:true})
     permissionSetId?: IntNullableFilter;
 
+    @Field(() => DateTimeFilter, {nullable:true})
+    joinedAt?: DateTimeFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
     @Field(() => PermissionSetNullableRelationFilter, {nullable:true})
+    @ValidateNested()
+    @Type(() => PermissionSetNullableRelationFilter)
     permissionSet?: PermissionSetNullableRelationFilter;
-
-    @Field(() => WorkshopRelationFilter, {nullable:true})
-    @Type(() => WorkshopRelationFilter)
-    workshop?: WorkshopRelationFilter;
-
-    @Field(() => PersonRelationFilter, {nullable:true})
-    @Type(() => PersonRelationFilter)
-    person?: PersonRelationFilter;
 
     @Field(() => ServiceListRelationFilter, {nullable:true})
     @Type(() => ServiceListRelationFilter)
+    @ValidateNested()
+    @Type(() => ServiceListRelationFilter)
     services?: ServiceListRelationFilter;
 
-    @Field(() => EmployeeTaskListRelationFilter, {nullable:true})
-    @Type(() => EmployeeTaskListRelationFilter)
-    employeeTasks?: EmployeeTaskListRelationFilter;
+    @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
+    joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
+
+    @Field(() => TaskListRelationFilter, {nullable:true})
+    @Type(() => TaskListRelationFilter)
+    @ValidateNested()
+    @Type(() => TaskListRelationFilter)
+    tasks?: TaskListRelationFilter;
+
+    @Field(() => UserNullableRelationFilter, {nullable:true})
+    @Type(() => UserNullableRelationFilter)
+    user?: UserNullableRelationFilter;
+
+    @Field(() => WorkshopRelationFilter, {nullable:true})
+    @Type(() => WorkshopRelationFilter)
+    @ValidateNested()
+    @Type(() => WorkshopRelationFilter)
+    workshop?: WorkshopRelationFilter;
 }

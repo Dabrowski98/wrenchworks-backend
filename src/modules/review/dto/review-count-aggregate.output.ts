@@ -18,10 +18,19 @@ export class ReviewCountAggregate {
     rating!: number;
 
     @Field(() => Int, {nullable:false})
+    originalRating!: number;
+
+    @Field(() => Int, {nullable:false})
     reviewText!: number;
 
     @Field(() => Int, {nullable:false})
-    reviewDate!: number;
+    originalReviewText!: number;
+
+    @Field(() => Int, {nullable:false})
+    createdAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedAt!: number;
 
     @Field(() => Int, {nullable:false})
     status!: number;

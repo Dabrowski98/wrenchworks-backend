@@ -4,11 +4,14 @@ export enum ServiceRequestScalarFieldEnum {
     serviceRequestId = "serviceRequestId",
     workshopId = "workshopId",
     vehicleId = "vehicleId",
-    personId = "personId",
-    requestedAt = "requestedAt",
+    userId = "userId",
+    guestId = "guestId",
+    approvedServiceId = "approvedServiceId",
     status = "status",
     description = "description",
-    approvedServiceId = "approvedServiceId",
+    createdAt = "createdAt",
+    resolvedAt = "resolvedAt",
+    resolvedBy = "resolvedBy",
     deletedAt = "deletedAt"
 }
 

@@ -4,7 +4,9 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { JobUncheckedUpdateManyWithoutJobCategoryNestedInput } from '../../job/dto/job-unchecked-update-many-without-job-category-nested.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput } from '../../workshop/dto/workshop-unchecked-update-many-without-job-categories-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -15,8 +17,9 @@ export class JobCategoryUncheckedUpdateWithoutChildrenInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     name?: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
@@ -30,13 +33,18 @@ export class JobCategoryUncheckedUpdateWithoutChildrenInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput, {nullable:true})
+    @Type(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput)
+    @ValidateNested()
     @Type(() => JobUncheckedUpdateManyWithoutJobCategoryNestedInput)
     jobs?: JobUncheckedUpdateManyWithoutJobCategoryNestedInput;
 
     @Field(() => WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput, {nullable:true})
     @Type(() => WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput)
-    Workshops?: WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput;
+    @ValidateNested()
+    @Type(() => WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput)
+    workshops?: WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput;
 }

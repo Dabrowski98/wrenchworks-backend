@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class VehicleDetailsMaxAggregateInput {
@@ -35,5 +36,6 @@ export class VehicleDetailsMaxAggregateInput {
     bodyColor?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     deletedAt?: true;
 }

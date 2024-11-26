@@ -7,7 +7,11 @@ export enum WorkshopJobScalarFieldEnum {
     workshopJobDescription = "workshopJobDescription",
     minPrice = "minPrice",
     maxPrice = "maxPrice",
-    availability = "availability"
+    availability = "availability",
+    createdAt = "createdAt",
+    createdBy = "createdBy",
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy"
 }
 
 

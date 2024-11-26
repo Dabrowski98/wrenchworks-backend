@@ -1,9 +1,9 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { Person } from '../../person/dto/person.model';
+import { User } from '../../user/dto/user.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
-import { AddressCount } from './address-count.output';
+import { Type } from 'class-transformer';
 
 @ObjectType()
 export class Address {
@@ -32,12 +32,10 @@ export class Address {
     @Field(() => String, {nullable:false})
     postCode!: string;
 
-    @Field(() => [Person], {nullable:true})
-    persons?: Array<Person>;
+    @Field(() => User, {nullable:true})
+    user?: User | null;
 
-    @Field(() => [Workshop], {nullable:true})
-    workshops?: Array<Workshop>;
-
-    @Field(() => AddressCount, {nullable:false})
-    _count?: AddressCount;
+    @Field(() => Workshop, {nullable:true})
+    @Type(() => Workshop)
+    workshop?: Workshop | null;
 }

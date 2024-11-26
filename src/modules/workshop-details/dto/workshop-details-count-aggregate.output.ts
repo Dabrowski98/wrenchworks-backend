@@ -18,9 +18,6 @@ export class WorkshopDetailsCountAggregate {
     description!: number;
 
     @Field(() => Int, {nullable:false})
-    telephoneNumber!: number;
-
-    @Field(() => Int, {nullable:false})
     logoURL!: number;
 
     @Field(() => Int, {nullable:false})
@@ -28,6 +25,12 @@ export class WorkshopDetailsCountAggregate {
 
     @Field(() => Int, {nullable:false})
     NIP!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedBy!: number;
 
     @Field(() => Int, {nullable:false})
     deletedAt!: number;

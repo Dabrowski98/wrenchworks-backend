@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class VehicleMaxAggregateInput {
@@ -8,11 +9,15 @@ export class VehicleMaxAggregateInput {
     vehicleId?: true;
 
     @Field(() => Boolean, {nullable:true})
-    personId?: true;
+    userId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    guestId?: true;
 
     @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     deletedAt?: true;
 }

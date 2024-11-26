@@ -3,10 +3,10 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
-import { ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput } from './review-response-update-one-without-other-review-responses-nested.input';
-import { Type } from 'class-transformer';
-import { ReviewResponseUpdateManyWithoutReviewResponseNestedInput } from './review-response-update-many-without-review-response-nested.input';
+import { ReviewResponseUpdateOneWithoutChildrenResponsesNestedInput } from './review-response-update-one-without-children-responses-nested.input';
+import { ReviewResponseUpdateManyWithoutParentResponseNestedInput } from './review-response-update-many-without-parent-response-nested.input';
 import { ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../review/dto/review-update-one-required-without-review-responses-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -17,27 +17,33 @@ export class ReviewResponseUpdateWithoutUserInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
-    @Validator.IsNotEmpty({ message: 'Response text is required' })
     @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
 
+    @HideField()
+    originalResponseText?: string;
+
     @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Response date must be a valid date' })
-    responseDate?: Date | string;
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
+    @Validator.IsOptional()
     status?: keyof typeof ReviewsResponsesStatus;
 
-    @Field(() => ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput, {nullable:true})
-    @Type(() => ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput)
-    reviewResponse?: ReviewResponseUpdateOneWithoutOtherReviewResponsesNestedInput;
+    @HideField()
+    parentResponse?: ReviewResponseUpdateOneWithoutChildrenResponsesNestedInput;
 
-    @Field(() => ReviewResponseUpdateManyWithoutReviewResponseNestedInput, {nullable:true})
-    @Type(() => ReviewResponseUpdateManyWithoutReviewResponseNestedInput)
-    otherReviewResponses?: ReviewResponseUpdateManyWithoutReviewResponseNestedInput;
+    @HideField()
+    childrenResponses?: ReviewResponseUpdateManyWithoutParentResponseNestedInput;
 
-    @Field(() => ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput, {nullable:true})
-    @Type(() => ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput)
+    @HideField()
     review?: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput;
 }

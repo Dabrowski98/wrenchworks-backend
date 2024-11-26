@@ -19,7 +19,7 @@ export class FindFirstEmployeeArgs {
     orderBy?: Array<EmployeeOrderByWithRelationInput>;
 
     @Field(() => EmployeeWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId_workshopId'>;
+    cursor?: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId' | 'login_workshopId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

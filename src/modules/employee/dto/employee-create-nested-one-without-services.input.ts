@@ -1,23 +1,24 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { EmployeeCreateWithoutServicesInput } from './employee-create-without-services.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { EmployeeCreateOrConnectWithoutServicesInput } from './employee-create-or-connect-without-services.input';
 import { Prisma } from '@prisma/client';
 import { EmployeeWhereUniqueInput } from './employee-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class EmployeeCreateNestedOneWithoutServicesInput {
 
-    @Field(() => EmployeeCreateWithoutServicesInput, {nullable:true})
-    @Type(() => EmployeeCreateWithoutServicesInput)
+    @HideField()
     create?: EmployeeCreateWithoutServicesInput;
 
-    @Field(() => EmployeeCreateOrConnectWithoutServicesInput, {nullable:true})
-    @Type(() => EmployeeCreateOrConnectWithoutServicesInput)
+    @HideField()
     connectOrCreate?: EmployeeCreateOrConnectWithoutServicesInput;
 
     @Field(() => EmployeeWhereUniqueInput, {nullable:true})
     @Type(() => EmployeeWhereUniqueInput)
-    connect?: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId_workshopId'>;
+    @ValidateNested()
+    connect?: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId' | 'login_workshopId'>;
 }

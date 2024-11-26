@@ -1,23 +1,24 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { WorkshopCreateWithoutServicesInput } from './workshop-create-without-services.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateOrConnectWithoutServicesInput } from './workshop-create-or-connect-without-services.input';
 import { Prisma } from '@prisma/client';
 import { WorkshopWhereUniqueInput } from './workshop-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class WorkshopCreateNestedOneWithoutServicesInput {
 
-    @Field(() => WorkshopCreateWithoutServicesInput, {nullable:true})
-    @Type(() => WorkshopCreateWithoutServicesInput)
+    @HideField()
     create?: WorkshopCreateWithoutServicesInput;
 
-    @Field(() => WorkshopCreateOrConnectWithoutServicesInput, {nullable:true})
-    @Type(() => WorkshopCreateOrConnectWithoutServicesInput)
+    @HideField()
     connectOrCreate?: WorkshopCreateOrConnectWithoutServicesInput;
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
-    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId'>;
+    @ValidateNested()
+    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
 }

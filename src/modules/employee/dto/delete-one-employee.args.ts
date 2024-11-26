@@ -9,5 +9,5 @@ export class DeleteOneEmployeeArgs {
 
     @Field(() => EmployeeWhereUniqueInput, {nullable:false})
     @Type(() => EmployeeWhereUniqueInput)
-    where!: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId_workshopId'>;
+    where!: Prisma.AtLeast<EmployeeWhereUniqueInput, 'employeeId' | 'login_workshopId'>;
 }

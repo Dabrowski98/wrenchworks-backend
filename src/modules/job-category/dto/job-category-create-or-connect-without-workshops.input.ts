@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { JobCategoryWhereUniqueInput } from './job-category-where-unique.input';
 import { Type } from 'class-transformer';
 import { JobCategoryCreateWithoutWorkshopsInput } from './job-category-create-without-workshops.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class JobCategoryCreateOrConnectWithoutWorkshopsInput {
@@ -14,5 +15,6 @@ export class JobCategoryCreateOrConnectWithoutWorkshopsInput {
 
     @Field(() => JobCategoryCreateWithoutWorkshopsInput, {nullable:false})
     @Type(() => JobCategoryCreateWithoutWorkshopsInput)
+    @ValidateNested()
     create!: JobCategoryCreateWithoutWorkshopsInput;
 }

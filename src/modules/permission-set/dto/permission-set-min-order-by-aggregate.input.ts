@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class PermissionSetMinOrderByAggregateInput {
@@ -67,4 +68,12 @@ export class PermissionSetMinOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     canModifyPermissions?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
 }

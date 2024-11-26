@@ -2,9 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
+import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
+import { HideField } from 'nestjs-graphql';
 import { JobUncheckedCreateNestedManyWithoutServiceRequestsInput } from '../../job/dto/job-unchecked-create-nested-many-without-service-requests.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class ServiceRequestUncheckedCreateWithoutApprovedServiceInput {
@@ -18,16 +20,18 @@ export class ServiceRequestUncheckedCreateWithoutApprovedServiceInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     vehicleId!: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    personId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    userId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    guestId?: bigint | number;
 
-    @Field(() => ServiceRequestsStatus, {nullable:true})
+    @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
+    @Validator.IsOptional()
+    status?: keyof typeof ServiceRequestStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -36,9 +40,24 @@ export class ServiceRequestUncheckedCreateWithoutApprovedServiceInput {
     description?: string;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 
     @Field(() => JobUncheckedCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
+    @Type(() => JobUncheckedCreateNestedManyWithoutServiceRequestsInput)
+    @ValidateNested()
     @Type(() => JobUncheckedCreateNestedManyWithoutServiceRequestsInput)
     jobs?: JobUncheckedCreateNestedManyWithoutServiceRequestsInput;
 }

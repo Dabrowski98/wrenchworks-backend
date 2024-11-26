@@ -7,8 +7,10 @@ import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.in
 import { EnumFuelTypeNullableFilter } from '../../prisma/dto/enum-fuel-type-nullable-filter.input';
 import { EnumBodyColorsNullableFilter } from '../../prisma/dto/enum-body-colors-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { VehicleNullableRelationFilter } from '../../vehicle/dto/vehicle-nullable-relation-filter.input';
+import { HideField } from 'nestjs-graphql';
+import { VehicleRelationFilter } from '../../vehicle/dto/vehicle-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class VehicleDetailsWhereUniqueInput {
@@ -53,9 +55,12 @@ export class VehicleDetailsWhereUniqueInput {
     bodyColor?: EnumBodyColorsNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => VehicleNullableRelationFilter, {nullable:true})
-    @Type(() => VehicleNullableRelationFilter)
-    vehicle?: VehicleNullableRelationFilter;
+    @Field(() => VehicleRelationFilter, {nullable:true})
+    @Type(() => VehicleRelationFilter)
+    @ValidateNested()
+    @Type(() => VehicleRelationFilter)
+    vehicle?: VehicleRelationFilter;
 }

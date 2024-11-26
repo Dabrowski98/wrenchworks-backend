@@ -32,4 +32,22 @@ export class TaskMaxAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     partsCost?: Decimal;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy?: bigint | number;
 }

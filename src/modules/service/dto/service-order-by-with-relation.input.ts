@@ -2,8 +2,10 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { ServiceRequestOrderByWithRelationInput } from '../../service-request/dto/service-request-order-by-with-relation.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { TaskOrderByRelationAggregateInput } from '../../task/dto/task-order-by-relation-aggregate.input';
 import { CustomerOrderByWithRelationInput } from '../../customer/dto/customer-order-by-with-relation.input';
 import { EmployeeOrderByWithRelationInput } from '../../employee/dto/employee-order-by-with-relation.input';
@@ -50,32 +52,64 @@ export class ServiceOrderByWithRelationInput {
     serviceEndDate?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    addedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    addedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     updatedAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => ServiceRequestOrderByWithRelationInput, {nullable:true})
+    @Type(() => ServiceRequestOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => ServiceRequestOrderByWithRelationInput)
     serviceRequest?: ServiceRequestOrderByWithRelationInput;
 
     @Field(() => TaskOrderByRelationAggregateInput, {nullable:true})
     @Type(() => TaskOrderByRelationAggregateInput)
+    @ValidateNested()
+    @Type(() => TaskOrderByRelationAggregateInput)
     tasks?: TaskOrderByRelationAggregateInput;
 
     @Field(() => CustomerOrderByWithRelationInput, {nullable:true})
+    @Type(() => CustomerOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => CustomerOrderByWithRelationInput)
     customer?: CustomerOrderByWithRelationInput;
 
     @Field(() => EmployeeOrderByWithRelationInput, {nullable:true})
     @Type(() => EmployeeOrderByWithRelationInput)
+    @ValidateNested()
+    @Type(() => EmployeeOrderByWithRelationInput)
     employee?: EmployeeOrderByWithRelationInput;
 
     @Field(() => VehicleOrderByWithRelationInput, {nullable:true})
     @Type(() => VehicleOrderByWithRelationInput)
+    @ValidateNested()
+    @Type(() => VehicleOrderByWithRelationInput)
     vehicle?: VehicleOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
+    @Type(() => WorkshopOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => WorkshopOrderByWithRelationInput)
     workshop?: WorkshopOrderByWithRelationInput;
 }

@@ -4,6 +4,8 @@ import { IntFilter } from '../../prisma/dto/int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class PermissionSetScalarWhereInput {
@@ -79,4 +81,12 @@ export class PermissionSetScalarWhereInput {
 
     @Field(() => BoolFilter, {nullable:true})
     canModifyPermissions?: BoolFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
 }

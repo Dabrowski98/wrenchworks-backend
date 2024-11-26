@@ -38,7 +38,7 @@ export { VehicleModelMaxOrderByAggregateInput } from './vehicle-model-max-order-
 export { VehicleModelMinAggregateInput } from './vehicle-model-min-aggregate.input';
 export { VehicleModelMinAggregate } from './vehicle-model-min-aggregate.output';
 export { VehicleModelMinOrderByAggregateInput } from './vehicle-model-min-order-by-aggregate.input';
-export { VehicleModelModelNameBrandNameCompoundUniqueInput } from './vehicle-model-model-name-brand-name-compound-unique.input';
+export { VehicleModelModelNameBrandCompoundUniqueInput } from './vehicle-model-model-name-brand-compound-unique.input';
 export { VehicleModelOrderByRelationAggregateInput } from './vehicle-model-order-by-relation-aggregate.input';
 export { VehicleModelOrderByWithAggregationInput } from './vehicle-model-order-by-with-aggregation.input';
 export { VehicleModelOrderByWithRelationInput } from './vehicle-model-order-by-with-relation.input';

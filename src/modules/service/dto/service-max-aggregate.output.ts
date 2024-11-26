@@ -45,7 +45,22 @@ export class ServiceMaxAggregate {
     serviceEndDate?: Date | string;
 
     @Field(() => Date, {nullable:true})
+    addedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    addedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

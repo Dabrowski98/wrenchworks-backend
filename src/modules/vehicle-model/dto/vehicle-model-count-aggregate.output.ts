@@ -12,7 +12,7 @@ export class VehicleModelCountAggregate {
     modelName!: number;
 
     @Field(() => Int, {nullable:false})
-    brandName!: number;
+    brand!: number;
 
     @Field(() => Int, {nullable:false})
     createdAt!: number;

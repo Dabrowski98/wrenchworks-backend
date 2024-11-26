@@ -3,9 +3,11 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { JobCategoryUpdateOneWithoutChildrenNestedInput } from './job-category-update-one-without-children-nested.input';
-import { JobCategoryUpdateManyWithoutChildNestedInput } from './job-category-update-many-without-child-nested.input';
-import { WorkshopUpdateManyWithoutJobCategoriesNestedInput } from '../../workshop/dto/workshop-update-many-without-job-categories-nested.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { JobCategoryUpdateManyWithoutParentNestedInput } from './job-category-update-many-without-parent-nested.input';
+import { WorkshopUpdateManyWithoutJobCategoriesNestedInput } from '../../workshop/dto/workshop-update-many-without-job-categories-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -16,8 +18,9 @@ export class JobCategoryUpdateWithoutJobsInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     name?: string;
 
     @Field(() => String, {nullable:true})
@@ -28,15 +31,17 @@ export class JobCategoryUpdateWithoutJobsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => JobCategoryUpdateOneWithoutChildrenNestedInput, {nullable:true})
-    child?: JobCategoryUpdateOneWithoutChildrenNestedInput;
+    @ValidateNested()
+    @Type(() => JobCategoryUpdateOneWithoutChildrenNestedInput)
+    parent?: JobCategoryUpdateOneWithoutChildrenNestedInput;
 
-    @Field(() => JobCategoryUpdateManyWithoutChildNestedInput, {nullable:true})
-    children?: JobCategoryUpdateManyWithoutChildNestedInput;
+    @HideField()
+    children?: JobCategoryUpdateManyWithoutParentNestedInput;
 
-    @Field(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput, {nullable:true})
-    @Type(() => WorkshopUpdateManyWithoutJobCategoriesNestedInput)
-    Workshops?: WorkshopUpdateManyWithoutJobCategoriesNestedInput;
+    @HideField()
+    workshops?: WorkshopUpdateManyWithoutJobCategoriesNestedInput;
 }

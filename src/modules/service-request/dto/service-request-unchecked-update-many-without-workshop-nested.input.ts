@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { ServiceRequestCreateWithoutWorkshopInput } from './service-request-create-without-workshop.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateOrConnectWithoutWorkshopInput } from './service-request-create-or-connect-without-workshop.input';
 import { ServiceRequestUpsertWithWhereUniqueWithoutWorkshopInput } from './service-request-upsert-with-where-unique-without-workshop.input';
 import { ServiceRequestCreateManyWorkshopInputEnvelope } from './service-request-create-many-workshop-input-envelope.input';
@@ -16,45 +17,56 @@ export class ServiceRequestUncheckedUpdateManyWithoutWorkshopNestedInput {
 
     @Field(() => [ServiceRequestCreateWithoutWorkshopInput], {nullable:true})
     @Type(() => ServiceRequestCreateWithoutWorkshopInput)
+    @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutWorkshopInput>;
 
     @Field(() => [ServiceRequestCreateOrConnectWithoutWorkshopInput], {nullable:true})
     @Type(() => ServiceRequestCreateOrConnectWithoutWorkshopInput)
+    @ValidateNested()
     connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutWorkshopInput>;
 
     @Field(() => [ServiceRequestUpsertWithWhereUniqueWithoutWorkshopInput], {nullable:true})
     @Type(() => ServiceRequestUpsertWithWhereUniqueWithoutWorkshopInput)
+    @ValidateNested()
     upsert?: Array<ServiceRequestUpsertWithWhereUniqueWithoutWorkshopInput>;
 
     @Field(() => ServiceRequestCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyWorkshopInputEnvelope)
+    @ValidateNested()
     createMany?: ServiceRequestCreateManyWorkshopInputEnvelope;
 
     @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
     @Type(() => ServiceRequestWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>>;
+    @ValidateNested()
+    set?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
 
     @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
     @Type(() => ServiceRequestWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>>;
+    @ValidateNested()
+    disconnect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
 
     @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
     @Type(() => ServiceRequestWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>>;
+    @ValidateNested()
+    delete?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
 
     @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
     @Type(() => ServiceRequestWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'approvedServiceId'>>;
+    @ValidateNested()
+    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
 
     @Field(() => [ServiceRequestUpdateWithWhereUniqueWithoutWorkshopInput], {nullable:true})
     @Type(() => ServiceRequestUpdateWithWhereUniqueWithoutWorkshopInput)
+    @ValidateNested()
     update?: Array<ServiceRequestUpdateWithWhereUniqueWithoutWorkshopInput>;
 
     @Field(() => [ServiceRequestUpdateManyWithWhereWithoutWorkshopInput], {nullable:true})
     @Type(() => ServiceRequestUpdateManyWithWhereWithoutWorkshopInput)
+    @ValidateNested()
     updateMany?: Array<ServiceRequestUpdateManyWithWhereWithoutWorkshopInput>;
 
     @Field(() => [ServiceRequestScalarWhereInput], {nullable:true})
     @Type(() => ServiceRequestScalarWhereInput)
+    @ValidateNested()
     deleteMany?: Array<ServiceRequestScalarWhereInput>;
 }

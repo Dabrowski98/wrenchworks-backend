@@ -4,15 +4,15 @@ import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import {
   Address,
-  AddressCount,
   AddressUpdateInput,
   AddressWhereUniqueInput,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
-import { Person } from '../person/dto';
-import { Workshop } from '../workshop';
+import { User } from '../user';
+import { Workshop } from '../workshop/dto';
+
 
 @Injectable()
 export class AddressService {
@@ -52,28 +52,21 @@ export class AddressService {
 
   //RESOLVE METHODS
 
-  async persons(addressId: bigint): Promise<Person[]> {
+  async user(addressId: bigint): Promise<User> {
     return (
       await this.prisma.address.findUnique({
         where: { addressId },
-        include: { persons: true },
+        include: { user: true },
       })
-    ).persons;
+    ).user;
   }
 
-  async workshops(addressId: bigint): Promise<Workshop[]> {
+  async workshop(addressId: bigint): Promise<Workshop> {
     return (
       await this.prisma.address.findUnique({
         where: { addressId },
-        include: { workshops: true },
+        include: { workshop: true },
       })
-    ).workshops;
-  }
-
-  async resolveCount(address: Address): Promise<AddressCount> {
-    return {
-      persons: (await this.persons(address.addressId)).length,
-      workshops: (await this.workshops(address.addressId)).length,
-    };
+    ).workshop;
   }
 }

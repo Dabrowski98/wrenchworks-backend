@@ -9,5 +9,5 @@ export class FindUniqueCustomerArgs {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:false})
     @Type(() => CustomerWhereUniqueInput)
-    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId_workshopId'>;
+    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
 }

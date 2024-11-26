@@ -8,6 +8,6 @@ export class UserSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
+    @Field(() => String, {nullable:true})
+    addressId?: bigint | number;
 }

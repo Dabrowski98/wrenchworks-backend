@@ -10,12 +10,16 @@ import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserCreateNestedOneWithoutReviewsInput } from '../../user/dto/user-create-nested-one-without-reviews.input';
 import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
+import { ValidateNested } from 'class-validator';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
-import { GraphQLBigInt } from 'graphql-scalars';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
 export class ReviewCreateInput {
+
+    @HideField()
+    reviewId?: bigint | number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -23,23 +27,45 @@ export class ReviewCreateInput {
     @Validator.IsNumber({}, { message: 'Rating must be a number' })
     @Validator.Min(0, { message: 'Rating cannot be negative' })
     @Validator.Max(5, { message: 'Rating cannot exceed 5' })
+    @Validator.IsOptional()
     rating?: Decimal;
+
+    @HideField()
+    originalRating?: Decimal;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
-    @Validator.IsNotEmpty({ message: 'Review text is required' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     reviewText!: string;
+
+    @HideField()
+    originalReviewText?: string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:true})
     @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
+    @Validator.IsOptional()
     status?: keyof typeof ReviewsStatus;
 
-    @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({  message: 'User ID is required' })
-    userId!: bigint;
+    @Field(() => UserCreateNestedOneWithoutReviewsInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutReviewsInput)
+    user!: UserCreateNestedOneWithoutReviewsInput;
 
-    @Field(() => GraphQLBigInt, { nullable: false })
-    @Validator.IsNotEmpty({  message: 'WorkshopId is required' })
-    workshopId!: bigint;
+    @Field(() => WorkshopCreateNestedOneWithoutReviewsInput, {nullable:false})
+    @Type(() => WorkshopCreateNestedOneWithoutReviewsInput)
+    @ValidateNested()
+    @Type(() => WorkshopCreateNestedOneWithoutReviewsInput)
+    workshop!: WorkshopCreateNestedOneWithoutReviewsInput;
+
+    @HideField()
+    reviewResponses?: ReviewResponseCreateNestedManyWithoutReviewInput;
 }

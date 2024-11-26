@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { VehicleModelCreateWithoutVehiclesBrandInput } from './vehicle-model-create-without-vehicles-brand.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { VehicleModelCreateOrConnectWithoutVehiclesBrandInput } from './vehicle-model-create-or-connect-without-vehicles-brand.input';
 import { VehicleModelUpsertWithWhereUniqueWithoutVehiclesBrandInput } from './vehicle-model-upsert-with-where-unique-without-vehicles-brand.input';
 import { VehicleModelCreateManyVehiclesBrandInputEnvelope } from './vehicle-model-create-many-vehicles-brand-input-envelope.input';
@@ -16,45 +17,56 @@ export class VehicleModelUncheckedUpdateManyWithoutVehiclesBrandNestedInput {
 
     @Field(() => [VehicleModelCreateWithoutVehiclesBrandInput], {nullable:true})
     @Type(() => VehicleModelCreateWithoutVehiclesBrandInput)
+    @ValidateNested()
     create?: Array<VehicleModelCreateWithoutVehiclesBrandInput>;
 
     @Field(() => [VehicleModelCreateOrConnectWithoutVehiclesBrandInput], {nullable:true})
     @Type(() => VehicleModelCreateOrConnectWithoutVehiclesBrandInput)
+    @ValidateNested()
     connectOrCreate?: Array<VehicleModelCreateOrConnectWithoutVehiclesBrandInput>;
 
     @Field(() => [VehicleModelUpsertWithWhereUniqueWithoutVehiclesBrandInput], {nullable:true})
     @Type(() => VehicleModelUpsertWithWhereUniqueWithoutVehiclesBrandInput)
+    @ValidateNested()
     upsert?: Array<VehicleModelUpsertWithWhereUniqueWithoutVehiclesBrandInput>;
 
     @Field(() => VehicleModelCreateManyVehiclesBrandInputEnvelope, {nullable:true})
     @Type(() => VehicleModelCreateManyVehiclesBrandInputEnvelope)
+    @ValidateNested()
     createMany?: VehicleModelCreateManyVehiclesBrandInputEnvelope;
 
     @Field(() => [VehicleModelWhereUniqueInput], {nullable:true})
     @Type(() => VehicleModelWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>>;
+    @ValidateNested()
+    set?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>>;
 
     @Field(() => [VehicleModelWhereUniqueInput], {nullable:true})
     @Type(() => VehicleModelWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>>;
+    @ValidateNested()
+    disconnect?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>>;
 
     @Field(() => [VehicleModelWhereUniqueInput], {nullable:true})
     @Type(() => VehicleModelWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>>;
+    @ValidateNested()
+    delete?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>>;
 
     @Field(() => [VehicleModelWhereUniqueInput], {nullable:true})
     @Type(() => VehicleModelWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>>;
+    @ValidateNested()
+    connect?: Array<Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>>;
 
     @Field(() => [VehicleModelUpdateWithWhereUniqueWithoutVehiclesBrandInput], {nullable:true})
     @Type(() => VehicleModelUpdateWithWhereUniqueWithoutVehiclesBrandInput)
+    @ValidateNested()
     update?: Array<VehicleModelUpdateWithWhereUniqueWithoutVehiclesBrandInput>;
 
     @Field(() => [VehicleModelUpdateManyWithWhereWithoutVehiclesBrandInput], {nullable:true})
     @Type(() => VehicleModelUpdateManyWithWhereWithoutVehiclesBrandInput)
+    @ValidateNested()
     updateMany?: Array<VehicleModelUpdateManyWithWhereWithoutVehiclesBrandInput>;
 
     @Field(() => [VehicleModelScalarWhereInput], {nullable:true})
     @Type(() => VehicleModelScalarWhereInput)
+    @ValidateNested()
     deleteMany?: Array<VehicleModelScalarWhereInput>;
 }

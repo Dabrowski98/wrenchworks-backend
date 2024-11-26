@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class ServiceSumAggregateInput {
@@ -24,4 +25,15 @@ export class ServiceSumAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     paymentAmount?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    addedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
+    resolvedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    @HideField()
+    updatedBy?: true;
 }

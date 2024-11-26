@@ -10,7 +10,7 @@ export class VehicleUpdateWithWhereUniqueWithoutVehicleModelInput {
 
     @Field(() => VehicleWhereUniqueInput, {nullable:false})
     @Type(() => VehicleWhereUniqueInput)
-    where!: Prisma.AtLeast<VehicleWhereUniqueInput, 'vehicleId'>;
+    where!: Prisma.AtLeast<VehicleWhereUniqueInput, 'vehicleId' | 'guestId'>;
 
     @Field(() => VehicleUpdateWithoutVehicleModelInput, {nullable:false})
     @Type(() => VehicleUpdateWithoutVehicleModelInput)

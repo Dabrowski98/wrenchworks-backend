@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { TaskCountOrderByAggregateInput } from './task-count-order-by-aggregate.input';
 import { Type } from 'class-transformer';
 import { TaskAvgOrderByAggregateInput } from './task-avg-order-by-aggregate.input';
@@ -35,6 +36,30 @@ export class TaskOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
     partsCost?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedBy?: SortOrderInput;
 
     @Field(() => TaskCountOrderByAggregateInput, {nullable:true})
     @Type(() => TaskCountOrderByAggregateInput)

@@ -14,13 +14,16 @@ export class WorkshopGroupBy {
     workshopId!: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    personId!: bigint | number;
+    ownerId!: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     addressId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
-    email?: string;
+    @Field(() => String, {nullable:false})
+    email!: string;
+
+    @Field(() => String, {nullable:false})
+    telephoneNumber!: string;
 
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
@@ -28,11 +31,17 @@ export class WorkshopGroupBy {
     @Field(() => Boolean, {nullable:true})
     isManagingWork?: boolean;
 
+    @Field(() => Boolean, {nullable:true})
+    isOfferingService?: boolean;
+
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

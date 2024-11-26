@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class WorkshopAvgOrderByAggregateInput {
@@ -9,8 +10,12 @@ export class WorkshopAvgOrderByAggregateInput {
     workshopId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    personId?: keyof typeof SortOrder;
+    ownerId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     addressId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
 }

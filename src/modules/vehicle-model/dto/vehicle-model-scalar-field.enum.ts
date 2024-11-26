@@ -3,7 +3,7 @@ import { registerEnumType } from '@nestjs/graphql';
 export enum VehicleModelScalarFieldEnum {
     modelId = "modelId",
     modelName = "modelName",
-    brandName = "brandName",
+    brand = "brand",
     createdAt = "createdAt",
     updatedAt = "updatedAt"
 }

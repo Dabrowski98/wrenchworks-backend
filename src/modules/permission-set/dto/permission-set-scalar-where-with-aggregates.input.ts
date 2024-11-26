@@ -4,6 +4,8 @@ import { IntWithAggregatesFilter } from '../../prisma/dto/int-with-aggregates-fi
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-filter.input';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class PermissionSetScalarWhereWithAggregatesInput {
@@ -79,4 +81,12 @@ export class PermissionSetScalarWhereWithAggregatesInput {
 
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     canModifyPermissions?: BoolWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
 }

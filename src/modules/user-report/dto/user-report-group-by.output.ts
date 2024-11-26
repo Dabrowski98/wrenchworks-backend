@@ -1,7 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { UserReportsReportedType } from '../../prisma/dto/user-reports-reported-type.enum';
+import { UserReportType } from '../../prisma/dto/user-report-type.enum';
+import { UserReportsReportedEntityType } from '../../prisma/dto/user-reports-reported-entity-type.enum';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserReportCountAggregate } from './user-report-count-aggregate.output';
 import { UserReportAvgAggregate } from './user-report-avg-aggregate.output';
@@ -21,8 +22,11 @@ export class UserReportGroupBy {
     @Field(() => String, {nullable:false})
     reportText!: string;
 
-    @Field(() => UserReportsReportedType, {nullable:false})
-    reportedType!: keyof typeof UserReportsReportedType;
+    @Field(() => UserReportType, {nullable:false})
+    reportType!: keyof typeof UserReportType;
+
+    @Field(() => UserReportsReportedEntityType, {nullable:false})
+    reportedEntityType!: keyof typeof UserReportsReportedEntityType;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     reportedId!: bigint | number;
@@ -30,8 +34,8 @@ export class UserReportGroupBy {
     @Field(() => UserReportsStatus, {nullable:false})
     status!: keyof typeof UserReportsStatus;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;

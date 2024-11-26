@@ -21,4 +21,13 @@ export class TaskAvgAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     partsCost?: Decimal;
+
+    @Field(() => Float, {nullable:true})
+    createdBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    resolvedBy?: number;
 }

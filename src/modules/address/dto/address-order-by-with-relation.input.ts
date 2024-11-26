@@ -2,9 +2,10 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { PersonOrderByRelationAggregateInput } from '../../person/dto/person-order-by-relation-aggregate.input';
+import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
 import { Type } from 'class-transformer';
-import { WorkshopOrderByRelationAggregateInput } from '../../workshop/dto/workshop-order-by-relation-aggregate.input';
+import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class AddressOrderByWithRelationInput {
@@ -33,11 +34,13 @@ export class AddressOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     postCode?: keyof typeof SortOrder;
 
-    @Field(() => PersonOrderByRelationAggregateInput, {nullable:true})
-    @Type(() => PersonOrderByRelationAggregateInput)
-    persons?: PersonOrderByRelationAggregateInput;
+    @Field(() => UserOrderByWithRelationInput, {nullable:true})
+    @Type(() => UserOrderByWithRelationInput)
+    user?: UserOrderByWithRelationInput;
 
-    @Field(() => WorkshopOrderByRelationAggregateInput, {nullable:true})
-    @Type(() => WorkshopOrderByRelationAggregateInput)
-    workshops?: WorkshopOrderByRelationAggregateInput;
+    @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
+    @Type(() => WorkshopOrderByWithRelationInput)
+    @ValidateNested()
+    @Type(() => WorkshopOrderByWithRelationInput)
+    workshop?: WorkshopOrderByWithRelationInput;
 }

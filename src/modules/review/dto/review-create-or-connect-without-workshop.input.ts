@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ReviewWhereUniqueInput } from './review-where-unique.input';
 import { Type } from 'class-transformer';
 import { ReviewCreateWithoutWorkshopInput } from './review-create-without-workshop.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class ReviewCreateOrConnectWithoutWorkshopInput {
@@ -14,5 +15,6 @@ export class ReviewCreateOrConnectWithoutWorkshopInput {
 
     @Field(() => ReviewCreateWithoutWorkshopInput, {nullable:false})
     @Type(() => ReviewCreateWithoutWorkshopInput)
+    @ValidateNested()
     create!: ReviewCreateWithoutWorkshopInput;
 }

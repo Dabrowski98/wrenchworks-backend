@@ -11,7 +11,7 @@ export class UpsertOneCustomerArgs {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:false})
     @Type(() => CustomerWhereUniqueInput)
-    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId_workshopId'>;
+    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
 
     @Field(() => CustomerCreateInput, {nullable:false})
     @Type(() => CustomerCreateInput)

@@ -3,9 +3,11 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { JobCategoryCreateNestedOneWithoutChildrenInput } from './job-category-create-nested-one-without-children.input';
-import { JobCategoryCreateNestedManyWithoutChildInput } from './job-category-create-nested-many-without-child.input';
-import { JobCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-create-nested-many-without-job-category.input';
+import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { JobCategoryCreateNestedManyWithoutParentInput } from './job-category-create-nested-many-without-parent.input';
+import { JobCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-create-nested-many-without-job-category.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
@@ -16,8 +18,9 @@ export class JobCategoryCreateWithoutWorkshopsInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })
-    @Validator.IsNotEmpty({ message: 'Name is required' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     name!: string;
 
     @Field(() => String, {nullable:true})
@@ -28,15 +31,19 @@ export class JobCategoryCreateWithoutWorkshopsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
     @Field(() => JobCategoryCreateNestedOneWithoutChildrenInput, {nullable:true})
-    child?: JobCategoryCreateNestedOneWithoutChildrenInput;
+    @ValidateNested()
+    @Type(() => JobCategoryCreateNestedOneWithoutChildrenInput)
+    parent?: JobCategoryCreateNestedOneWithoutChildrenInput;
 
-    @Field(() => JobCategoryCreateNestedManyWithoutChildInput, {nullable:true})
-    children?: JobCategoryCreateNestedManyWithoutChildInput;
+    @Field(() => JobCategoryCreateNestedManyWithoutParentInput, {nullable:true})
+    @ValidateNested()
+    @Type(() => JobCategoryCreateNestedManyWithoutParentInput)
+    children?: JobCategoryCreateNestedManyWithoutParentInput;
 
-    @Field(() => JobCreateNestedManyWithoutJobCategoryInput, {nullable:true})
-    @Type(() => JobCreateNestedManyWithoutJobCategoryInput)
+    @HideField()
     jobs?: JobCreateNestedManyWithoutJobCategoryInput;
 }

@@ -6,8 +6,8 @@ generator client {
 //TODO: ADD REVIEW UPVOTES AND DOWNVOTES
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
-    //output = "../src/modules"
-    output = "../../generated/modules"
+    output = "../src/modules"
+    //output = "../../generated/modules"
     reExport = Directories
     fields_Validator_from = "class-validator"
     fields_Validator_input = true

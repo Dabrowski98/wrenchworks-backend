@@ -5,6 +5,9 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DecimalNullableFilter } from '../../prisma/dto/decimal-nullable-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 
 @InputType()
 export class WorkshopJobScalarWhereInput {
@@ -43,4 +46,20 @@ export class WorkshopJobScalarWhereInput {
 
     @Field(() => BoolFilter, {nullable:true})
     availability?: BoolFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
 }

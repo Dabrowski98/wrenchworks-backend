@@ -21,7 +21,13 @@ export class ReviewResponseCountAggregate {
     responseText!: number;
 
     @Field(() => Int, {nullable:false})
-    responseDate!: number;
+    originalResponseText!: number;
+
+    @Field(() => Int, {nullable:false})
+    createdAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    updatedAt!: number;
 
     @Field(() => Int, {nullable:false})
     status!: number;

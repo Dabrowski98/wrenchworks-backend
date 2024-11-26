@@ -1,8 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
 import * as Validator from 'class-validator';
-import { ServiceRequestsStatus } from '../../prisma/dto/service-requests-status.enum';
 
 @InputType()
 export class ServiceRequestUpdateManyMutationInput {
@@ -10,13 +10,10 @@ export class ServiceRequestUpdateManyMutationInput {
     @HideField()
     serviceRequestId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    @Validator.IsDate({ message: 'Request date must be a valid date' })
-    requestedAt?: Date | string;
-
-    @Field(() => ServiceRequestsStatus, {nullable:true})
+    @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
-    status?: keyof typeof ServiceRequestsStatus;
+    @Validator.IsOptional()
+    status?: keyof typeof ServiceRequestStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
@@ -25,5 +22,18 @@ export class ServiceRequestUpdateManyMutationInput {
     description?: string;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

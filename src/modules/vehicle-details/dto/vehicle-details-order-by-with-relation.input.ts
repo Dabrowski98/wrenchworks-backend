@@ -2,8 +2,10 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { VehicleOrderByWithRelationInput } from '../../vehicle/dto/vehicle-order-by-with-relation.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class VehicleDetailsOrderByWithRelationInput {
@@ -11,8 +13,8 @@ export class VehicleDetailsOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     vehicleDetailsId?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    vehicleId?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    vehicleId?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     yearOfProduction?: SortOrderInput;
@@ -39,9 +41,12 @@ export class VehicleDetailsOrderByWithRelationInput {
     bodyColor?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => VehicleOrderByWithRelationInput, {nullable:true})
+    @Type(() => VehicleOrderByWithRelationInput)
+    @ValidateNested()
     @Type(() => VehicleOrderByWithRelationInput)
     vehicle?: VehicleOrderByWithRelationInput;
 }

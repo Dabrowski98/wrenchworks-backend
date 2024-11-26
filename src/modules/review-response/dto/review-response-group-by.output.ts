@@ -26,8 +26,14 @@ export class ReviewResponseGroupBy {
     @Field(() => String, {nullable:false})
     responseText!: string;
 
-    @Field(() => Date, {nullable:false})
-    responseDate!: Date | string;
+    @Field(() => String, {nullable:true})
+    originalResponseText?: string;
+
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:false})
     status!: keyof typeof ReviewsResponsesStatus;

@@ -9,9 +9,13 @@ export class VehicleCreateManyVehicleModelInput {
     @HideField()
     vehicleId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    personId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    userId?: bigint | number;
 
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

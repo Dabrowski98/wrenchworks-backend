@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { CustomerCountOrderByAggregateInput } from './customer-count-order-by-aggregate.input';
 import { Type } from 'class-transformer';
 import { CustomerAvgOrderByAggregateInput } from './customer-avg-order-by-aggregate.input';
@@ -18,6 +19,27 @@ export class CustomerOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     workshopId?: keyof typeof SortOrder;
 
+    @Field(() => SortOrderInput, {nullable:true})
+    userId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    guestId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    firstName?: SortOrderInput;
+
+    @Field(() => SortOrder, {nullable:true})
+    creationSource?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    telephoneNumber?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    email?: SortOrderInput;
+
+    @Field(() => SortOrder, {nullable:true})
+    isVerified?: keyof typeof SortOrder;
+
     @Field(() => SortOrder, {nullable:true})
     totalDue?: keyof typeof SortOrder;
 
@@ -25,13 +47,30 @@ export class CustomerOrderByWithAggregationInput {
     description?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
-    deletedAt?: SortOrderInput;
-
-    @Field(() => SortOrderInput, {nullable:true})
     NIP?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     companyName?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    deletedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    updatedBy?: SortOrderInput;
 
     @Field(() => CustomerCountOrderByAggregateInput, {nullable:true})
     @Type(() => CustomerCountOrderByAggregateInput)

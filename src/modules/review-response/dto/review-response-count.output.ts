@@ -6,5 +6,5 @@ import { Int } from '@nestjs/graphql';
 export class ReviewResponseCount {
 
     @Field(() => Int, {nullable:false})
-    otherReviewResponses?: number;
+    childrenResponses?: number;
 }

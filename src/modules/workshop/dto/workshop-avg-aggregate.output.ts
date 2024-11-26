@@ -9,8 +9,11 @@ export class WorkshopAvgAggregate {
     workshopId?: number;
 
     @Field(() => Float, {nullable:true})
-    personId?: number;
+    ownerId?: number;
 
     @Field(() => Float, {nullable:true})
     addressId?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

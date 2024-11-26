@@ -15,8 +15,14 @@ export class ServiceRequestAvgAggregate {
     vehicleId?: number;
 
     @Field(() => Float, {nullable:true})
-    personId?: number;
+    userId?: number;
+
+    @Field(() => Float, {nullable:true})
+    guestId?: number;
 
     @Field(() => Float, {nullable:true})
     approvedServiceId?: number;
+
+    @Field(() => Float, {nullable:true})
+    resolvedBy?: number;
 }

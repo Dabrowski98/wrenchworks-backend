@@ -3,11 +3,22 @@ import { registerEnumType } from '@nestjs/graphql';
 export enum CustomerScalarFieldEnum {
     customerId = "customerId",
     workshopId = "workshopId",
+    userId = "userId",
+    guestId = "guestId",
+    firstName = "firstName",
+    creationSource = "creationSource",
+    telephoneNumber = "telephoneNumber",
+    email = "email",
+    isVerified = "isVerified",
     totalDue = "totalDue",
     description = "description",
-    deletedAt = "deletedAt",
     NIP = "NIP",
-    companyName = "companyName"
+    companyName = "companyName",
+    deletedAt = "deletedAt",
+    createdAt = "createdAt",
+    createdBy = "createdBy",
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy"
 }
 
 

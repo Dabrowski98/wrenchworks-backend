@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { PermissionSetWhereUniqueInput } from './permission-set-where-unique.input';
 import { Type } from 'class-transformer';
 import { PermissionSetCreateWithoutEmployeesInput } from './permission-set-create-without-employees.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class PermissionSetCreateOrConnectWithoutEmployeesInput {
@@ -14,5 +15,6 @@ export class PermissionSetCreateOrConnectWithoutEmployeesInput {
 
     @Field(() => PermissionSetCreateWithoutEmployeesInput, {nullable:false})
     @Type(() => PermissionSetCreateWithoutEmployeesInput)
+    @ValidateNested()
     create!: PermissionSetCreateWithoutEmployeesInput;
 }

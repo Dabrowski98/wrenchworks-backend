@@ -33,6 +33,18 @@ export class WorkshopJobGroupBy {
     @Field(() => Boolean, {nullable:false})
     availability!: boolean;
 
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    createdBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
     @Field(() => WorkshopJobCountAggregate, {nullable:true})
     _count?: WorkshopJobCountAggregate;
 

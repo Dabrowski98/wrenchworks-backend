@@ -12,4 +12,7 @@ export class WorkshopDetailsAvgAggregate {
 
     @Field(() => GraphQLDecimal, {nullable:true})
     rating?: Decimal;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

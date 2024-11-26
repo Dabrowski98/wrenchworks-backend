@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { ReviewWhereUniqueInput } from './review-where-unique.input';
 import { Type } from 'class-transformer';
 import { ReviewCreateWithoutUserInput } from './review-create-without-user.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class ReviewCreateOrConnectWithoutUserInput {
@@ -14,5 +15,6 @@ export class ReviewCreateOrConnectWithoutUserInput {
 
     @Field(() => ReviewCreateWithoutUserInput, {nullable:false})
     @Type(() => ReviewCreateWithoutUserInput)
+    @ValidateNested()
     create!: ReviewCreateWithoutUserInput;
 }

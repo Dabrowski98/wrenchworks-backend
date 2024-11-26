@@ -1,18 +1,22 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import * as Validator from 'class-validator';
 import { ServiceRequestWhereInput } from './service-request-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
-import { EnumServiceRequestsStatusNullableFilter } from '../../prisma/dto/enum-service-requests-status-nullable-filter.input';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
+import { EnumServiceRequestStatusNullableFilter } from '../../prisma/dto/enum-service-request-status-nullable-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { HideField } from 'nestjs-graphql';
 import { JobListRelationFilter } from '../../job/dto/job-list-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceNullableRelationFilter } from '../../service/dto/service-nullable-relation-filter.input';
 import { VehicleRelationFilter } from '../../vehicle/dto/vehicle-relation-filter.input';
 import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
-import { PersonRelationFilter } from '../../person/dto/person-relation-filter.input';
+import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
+import { GuestNullableRelationFilter } from '../../guest/dto/guest-nullable-relation-filter.input';
 
 @InputType()
 export class ServiceRequestWhereUniqueInput {
@@ -21,6 +25,11 @@ export class ServiceRequestWhereUniqueInput {
     serviceRequestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    guestId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
     approvedServiceId?: bigint | number;
 
     @Field(() => [ServiceRequestWhereInput], {nullable:true})
@@ -38,38 +47,60 @@ export class ServiceRequestWhereUniqueInput {
     @Field(() => BigIntFilter, {nullable:true})
     vehicleId?: BigIntFilter;
 
-    @Field(() => BigIntFilter, {nullable:true})
-    personId?: BigIntFilter;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    userId?: BigIntNullableFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    requestedAt?: DateTimeFilter;
-
-    @Field(() => EnumServiceRequestsStatusNullableFilter, {nullable:true})
-    status?: EnumServiceRequestsStatusNullableFilter;
+    @Field(() => EnumServiceRequestStatusNullableFilter, {nullable:true})
+    status?: EnumServiceRequestStatusNullableFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    createdAt?: DateTimeNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
+    resolvedAt?: DateTimeNullableFilter;
+
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    @HideField()
+    resolvedBy?: BigIntNullableFilter;
+
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableFilter;
 
     @Field(() => JobListRelationFilter, {nullable:true})
+    @Type(() => JobListRelationFilter)
+    @ValidateNested()
     @Type(() => JobListRelationFilter)
     jobs?: JobListRelationFilter;
 
     @Field(() => ServiceNullableRelationFilter, {nullable:true})
     @Type(() => ServiceNullableRelationFilter)
+    @ValidateNested()
+    @Type(() => ServiceNullableRelationFilter)
     approvedService?: ServiceNullableRelationFilter;
 
     @Field(() => VehicleRelationFilter, {nullable:true})
+    @Type(() => VehicleRelationFilter)
+    @ValidateNested()
     @Type(() => VehicleRelationFilter)
     vehicle?: VehicleRelationFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})
     @Type(() => WorkshopRelationFilter)
+    @ValidateNested()
+    @Type(() => WorkshopRelationFilter)
     workshop?: WorkshopRelationFilter;
 
-    @Field(() => PersonRelationFilter, {nullable:true})
-    @Type(() => PersonRelationFilter)
-    person?: PersonRelationFilter;
+    @Field(() => UserNullableRelationFilter, {nullable:true})
+    @Type(() => UserNullableRelationFilter)
+    user?: UserNullableRelationFilter;
+
+    @Field(() => GuestNullableRelationFilter, {nullable:true})
+    @Type(() => GuestNullableRelationFilter)
+    guest?: GuestNullableRelationFilter;
 }

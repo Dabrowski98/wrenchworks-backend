@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class VehicleUncheckedUpdateManyWithoutVehicleModelInput {
@@ -9,8 +10,12 @@ export class VehicleUncheckedUpdateManyWithoutVehicleModelInput {
     vehicleId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
+    userId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    guestId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
+    @HideField()
     deletedAt?: Date | string;
 }

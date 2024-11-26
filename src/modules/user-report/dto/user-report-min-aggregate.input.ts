@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { HideField } from 'nestjs-graphql';
 
 @InputType()
 export class UserReportMinAggregateInput {
@@ -14,7 +15,10 @@ export class UserReportMinAggregateInput {
     reportText?: true;
 
     @Field(() => Boolean, {nullable:true})
-    reportedType?: true;
+    reportType?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    reportedEntityType?: true;
 
     @Field(() => Boolean, {nullable:true})
     reportedId?: true;
@@ -23,8 +27,10 @@ export class UserReportMinAggregateInput {
     status?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     createdAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    @HideField()
     updatedAt?: true;
 }

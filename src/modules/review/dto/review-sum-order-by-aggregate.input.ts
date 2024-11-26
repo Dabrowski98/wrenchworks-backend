@@ -16,4 +16,7 @@ export class ReviewSumOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     rating?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    originalRating?: keyof typeof SortOrder;
 }

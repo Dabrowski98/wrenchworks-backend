@@ -23,7 +23,7 @@ export class VehicleModelAggregateArgs {
     orderBy?: Array<VehicleModelOrderByWithRelationInput>;
 
     @Field(() => VehicleModelWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brandName'>;
+    cursor?: Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

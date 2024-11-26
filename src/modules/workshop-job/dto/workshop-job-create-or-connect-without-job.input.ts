@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { WorkshopJobWhereUniqueInput } from './workshop-job-where-unique.input';
 import { Type } from 'class-transformer';
 import { WorkshopJobCreateWithoutJobInput } from './workshop-job-create-without-job.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class WorkshopJobCreateOrConnectWithoutJobInput {
@@ -14,5 +15,6 @@ export class WorkshopJobCreateOrConnectWithoutJobInput {
 
     @Field(() => WorkshopJobCreateWithoutJobInput, {nullable:false})
     @Type(() => WorkshopJobCreateWithoutJobInput)
+    @ValidateNested()
     create!: WorkshopJobCreateWithoutJobInput;
 }

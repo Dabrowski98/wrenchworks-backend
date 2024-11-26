@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from 'nestjs-graphql';
 import { ServiceRequestCountOrderByAggregateInput } from './service-request-count-order-by-aggregate.input';
 import { ServiceRequestAvgOrderByAggregateInput } from './service-request-avg-order-by-aggregate.input';
 import { ServiceRequestMaxOrderByAggregateInput } from './service-request-max-order-by-aggregate.input';
@@ -20,11 +21,14 @@ export class ServiceRequestOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     vehicleId?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    personId?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    userId?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    requestedAt?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    guestId?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    approvedServiceId?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
@@ -33,9 +37,19 @@ export class ServiceRequestOrderByWithAggregationInput {
     description?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
-    approvedServiceId?: SortOrderInput;
+    @HideField()
+    createdAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
+    resolvedBy?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    @HideField()
     deletedAt?: SortOrderInput;
 
     @Field(() => ServiceRequestCountOrderByAggregateInput, {nullable:true})

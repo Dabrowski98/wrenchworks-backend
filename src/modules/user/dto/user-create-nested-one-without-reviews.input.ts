@@ -1,15 +1,24 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { UserCreateWithoutReviewsInput } from './user-create-without-reviews.input';
-import { Type } from 'class-transformer';
+import { HideField } from '@nestjs/graphql';
 import { UserCreateOrConnectWithoutReviewsInput } from './user-create-or-connect-without-reviews.input';
 import { Prisma } from '@prisma/client';
 import { UserWhereUniqueInput } from './user-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class UserCreateNestedOneWithoutReviewsInput {
 
+    @HideField()
+    create?: UserCreateWithoutReviewsInput;
+
+    @HideField()
+    connectOrCreate?: UserCreateOrConnectWithoutReviewsInput;
+
     @Field(() => UserWhereUniqueInput, {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'personId' | 'username' | 'username'>;
+    @ValidateNested()
+    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'addressId'>;
 }

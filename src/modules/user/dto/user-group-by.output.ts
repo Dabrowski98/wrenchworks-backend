@@ -15,16 +15,13 @@ export class UserGroupBy {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    personId?: bigint | number;
-
     @Field(() => String, {nullable:false})
     username!: string;
 
     @HideField()
     password!: string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
     email?: string;
 
     @Field(() => String, {nullable:true})
@@ -35,6 +32,18 @@ export class UserGroupBy {
 
     @Field(() => UsersStatus, {nullable:true})
     status?: keyof typeof UsersStatus;
+
+    @Field(() => String, {nullable:false})
+    firstName!: string;
+
+    @Field(() => String, {nullable:false})
+    lastName!: string;
+
+    @Field(() => String, {nullable:true})
+    telephoneNumber?: string;
+
+    @Field(() => String, {nullable:true})
+    addressId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;

@@ -8,7 +8,10 @@ export class VehicleAvgAggregateInput {
     vehicleId?: true;
 
     @Field(() => Boolean, {nullable:true})
-    personId?: true;
+    userId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    guestId?: true;
 
     @Field(() => Boolean, {nullable:true})
     modelId?: true;

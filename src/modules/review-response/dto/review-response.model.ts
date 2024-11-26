@@ -3,6 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { Review } from '../../review/dto/review.model';
+import { Type } from 'class-transformer';
 import { User } from '../../user/dto/user.model';
 import { ReviewResponseCount } from './review-response-count.output';
 
@@ -24,19 +25,29 @@ export class ReviewResponse {
     @Field(() => String, {nullable:false})
     responseText!: string;
 
-    @Field(() => Date, {nullable:false})
-    responseDate!: Date;
+    @Field(() => String, {nullable:true})
+    originalResponseText!: string | null;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:false,defaultValue:'pending'})
+    @Field(() => Date, {nullable:true})
+    createdAt!: Date | null;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
+
+    /**
+     * Note: Optional because field defaults to pending
+     */
+    @Field(() => ReviewsResponsesStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
     status!: keyof typeof ReviewsResponsesStatus;
 
     @Field(() => ReviewResponse, {nullable:true})
-    reviewResponse?: ReviewResponse | null;
+    parentResponse?: ReviewResponse | null;
 
     @Field(() => [ReviewResponse], {nullable:true})
-    otherReviewResponses?: Array<ReviewResponse>;
+    childrenResponses?: Array<ReviewResponse>;
 
     @Field(() => Review, {nullable:false})
+    @Type(() => Review)
     review?: Review;
 
     @Field(() => User, {nullable:false})

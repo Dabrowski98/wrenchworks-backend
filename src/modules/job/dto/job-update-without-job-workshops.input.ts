@@ -4,7 +4,6 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { JobCategoryUpdateOneRequiredWithoutJobsNestedInput } from '../../job-category/dto/job-category-update-one-required-without-jobs-nested.input';
 import { ServiceRequestUpdateManyWithoutJobsNestedInput } from '../../service-request/dto/service-request-update-many-without-jobs-nested.input';
-import { Type } from 'class-transformer';
 
 @InputType()
 export class JobUpdateWithoutJobWorkshopsInput {
@@ -26,12 +25,12 @@ export class JobUpdateWithoutJobWorkshopsInput {
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
+    @Validator.IsOptional()
     isPopular?: boolean;
 
-    @Field(() => JobCategoryUpdateOneRequiredWithoutJobsNestedInput, {nullable:true})
+    @HideField()
     jobCategory?: JobCategoryUpdateOneRequiredWithoutJobsNestedInput;
 
-    @Field(() => ServiceRequestUpdateManyWithoutJobsNestedInput, {nullable:true})
-    @Type(() => ServiceRequestUpdateManyWithoutJobsNestedInput)
+    @HideField()
     serviceRequests?: ServiceRequestUpdateManyWithoutJobsNestedInput;
 }

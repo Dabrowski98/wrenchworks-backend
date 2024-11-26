@@ -67,4 +67,10 @@ export class PermissionSetMaxAggregate {
 
     @Field(() => Boolean, {nullable:true})
     canModifyPermissions?: boolean;
+
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
 }

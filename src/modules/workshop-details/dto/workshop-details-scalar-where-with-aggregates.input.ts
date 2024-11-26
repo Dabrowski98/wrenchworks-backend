@@ -7,6 +7,8 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { EnumWorkshopsDetailsStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-workshops-details-status-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { HideField } from 'nestjs-graphql';
+import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class WorkshopDetailsScalarWhereWithAggregatesInput {
@@ -37,9 +39,6 @@ export class WorkshopDetailsScalarWhereWithAggregatesInput {
     description?: StringNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    telephoneNumber?: StringNullableWithAggregatesFilter;
-
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     logoURL?: StringNullableWithAggregatesFilter;
 
     @Field(() => EnumWorkshopsDetailsStatusNullableWithAggregatesFilter, {nullable:true})
@@ -49,5 +48,14 @@ export class WorkshopDetailsScalarWhereWithAggregatesInput {
     NIP?: StringNullableWithAggregatesFilter;
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

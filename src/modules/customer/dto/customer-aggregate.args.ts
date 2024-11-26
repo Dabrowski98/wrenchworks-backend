@@ -25,7 +25,7 @@ export class CustomerAggregateArgs {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
-    cursor?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId_workshopId'>;
+    cursor?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

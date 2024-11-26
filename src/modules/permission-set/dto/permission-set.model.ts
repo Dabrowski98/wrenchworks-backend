@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Employee } from '../../employee/dto/employee.model';
+import { Type } from 'class-transformer';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { PermissionSetCount } from './permission-set-count.output';
 
@@ -14,10 +15,13 @@ export class PermissionSet {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId!: bigint | null;
 
-    @Field(() => String, {nullable:false,defaultValue:'CUSTOM'})
+    @Field(() => String, {nullable:false})
     setName!: string;
 
-    @Field(() => Boolean, {nullable:false,defaultValue:false})
+    /**
+     * Note: Optional on all bool fields because they default to false
+     */
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional on all bool fields because they default to false'})
     canReadWorkshopDetails!: boolean;
 
     @Field(() => Boolean, {nullable:false,defaultValue:false})
@@ -71,10 +75,18 @@ export class PermissionSet {
     @Field(() => Boolean, {nullable:false,defaultValue:false})
     canModifyPermissions!: boolean;
 
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
     @Field(() => [Employee], {nullable:true})
+    @Type(() => Employee)
     employees?: Array<Employee>;
 
     @Field(() => Workshop, {nullable:true})
+    @Type(() => Workshop)
     workshop?: Workshop | null;
 
     @Field(() => PermissionSetCount, {nullable:false})
