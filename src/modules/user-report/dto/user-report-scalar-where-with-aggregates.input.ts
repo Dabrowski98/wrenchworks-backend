@@ -6,7 +6,7 @@ import { EnumUserReportTypeWithAggregatesFilter } from '../../prisma/dto/enum-us
 import { EnumUserReportsReportedEntityTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-with-aggregates-filter.input';
 import { EnumUserReportsStatusWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-status-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class UserReportScalarWhereWithAggregatesInput {
@@ -41,11 +41,9 @@ export class UserReportScalarWhereWithAggregatesInput {
     @Field(() => EnumUserReportsStatusWithAggregatesFilter, {nullable:true})
     status?: EnumUserReportsStatusWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 }

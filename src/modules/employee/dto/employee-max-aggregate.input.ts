@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class EmployeeMaxAggregateInput {
@@ -29,23 +29,18 @@ export class EmployeeMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     joinedAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     deletedAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdBy?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedBy?: true;
 }

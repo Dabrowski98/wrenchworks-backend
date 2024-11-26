@@ -46,19 +46,15 @@ export class WorkshopJobUpdateWithoutWorkshopInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 

@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -46,23 +46,18 @@ export class EmployeeUncheckedUpdateManyWithoutPermissionSetInput {
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 }

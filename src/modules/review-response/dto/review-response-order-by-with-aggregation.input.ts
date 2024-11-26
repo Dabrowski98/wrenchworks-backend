@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ReviewResponseCountOrderByAggregateInput } from './review-response-count-order-by-aggregate.input';
 import { ReviewResponseAvgOrderByAggregateInput } from './review-response-avg-order-by-aggregate.input';
 import { ReviewResponseMaxOrderByAggregateInput } from './review-response-max-order-by-aggregate.input';
@@ -30,11 +30,9 @@ export class ReviewResponseOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     originalResponseText?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     createdAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedAt?: SortOrderInput;
 

@@ -7,7 +7,7 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { EnumWorkshopsDetailsStatusNullableFilter } from '../../prisma/dto/enum-workshops-details-status-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { ValidateNested } from 'class-validator';
@@ -49,15 +49,12 @@ export class WorkshopDetailsWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     NIP?: StringNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 

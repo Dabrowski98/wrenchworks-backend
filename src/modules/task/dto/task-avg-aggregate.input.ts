@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class TaskAvgAggregateInput {
@@ -20,15 +20,12 @@ export class TaskAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     partsCost?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdBy?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedBy?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     resolvedBy?: true;
 }

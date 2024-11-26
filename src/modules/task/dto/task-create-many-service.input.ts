@@ -56,27 +56,21 @@ export class TaskCreateManyServiceInput {
     @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 }

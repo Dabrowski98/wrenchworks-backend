@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { ReviewResponseUncheckedCreateNestedManyWithoutParentResponseInput } from './review-response-unchecked-create-nested-many-without-parent-response.input';
 import { Type } from 'class-transformer';
@@ -33,11 +33,9 @@ export class ReviewResponseUncheckedCreateWithoutUserInput {
     @Validator.IsOptional()
     originalResponseText?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 

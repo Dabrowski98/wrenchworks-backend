@@ -26,7 +26,7 @@ generator nestgraphql {
     decorate_1_type = "*Input"
     decorate_1_field = [deletedAt, createdAt, createdBy, updatedAt, updatedBy, resolvedAt, resolvedBy]
     decorate_1_name = "HideField"
-    decorate_1_from = "nestjs-graphql"
+    decorate_1_from = "@nestjs/graphql"
     decorate_1_arguments = "[]"
 
     decorate_2_type = "*Input"

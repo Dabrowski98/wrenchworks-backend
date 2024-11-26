@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { CustomerUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../customer/dto/customer-unchecked-update-many-without-workshop-nested.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -55,19 +55,15 @@ export class WorkshopUncheckedUpdateWithoutReviewsInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

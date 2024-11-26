@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class UserReportCountAggregateInput {
@@ -26,11 +26,9 @@ export class UserReportCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     status?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedAt?: true;
 

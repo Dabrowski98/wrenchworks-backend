@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class ReviewResponseMinAggregateInput {
@@ -23,11 +23,9 @@ export class ReviewResponseMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     originalResponseText?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedAt?: true;
 

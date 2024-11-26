@@ -15,7 +15,6 @@ export class VehicleCreateManyUserInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

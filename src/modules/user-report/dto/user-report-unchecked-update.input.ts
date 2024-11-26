@@ -5,7 +5,7 @@ import * as Validator from 'class-validator';
 import { UserReportType } from '../../prisma/dto/user-report-type.enum';
 import { UserReportsReportedEntityType } from '../../prisma/dto/user-reports-reported-entity-type.enum';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -40,11 +40,9 @@ export class UserReportUncheckedUpdateInput {
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 }

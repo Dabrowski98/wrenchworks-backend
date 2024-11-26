@@ -5,7 +5,7 @@ import { VehicleModelModelNameBrandCompoundUniqueInput } from './vehicle-model-m
 import { VehicleModelWhereInput } from './vehicle-model-where.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { VehicleListRelationFilter } from '../../vehicle/dto/vehicle-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -35,11 +35,9 @@ export class VehicleModelWhereUniqueInput {
     @Field(() => StringFilter, {nullable:true})
     brand?: StringFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 

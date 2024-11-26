@@ -9,7 +9,7 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestNullableRelationFilter } from '../../service-request/dto/service-request-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
@@ -76,23 +76,18 @@ export class ServiceWhereInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     addedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     resolvedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     resolvedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 

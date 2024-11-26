@@ -8,7 +8,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class ServiceUncheckedUpdateManyWithoutWorkshopInput {
@@ -70,23 +70,18 @@ export class ServiceUncheckedUpdateManyWithoutWorkshopInput {
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

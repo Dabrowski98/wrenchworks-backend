@@ -15,7 +15,6 @@ export class VehicleCreateManyVehicleModelInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

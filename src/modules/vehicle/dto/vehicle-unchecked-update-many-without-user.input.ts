@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleUncheckedUpdateManyWithoutUserInput {
@@ -15,7 +15,6 @@ export class VehicleUncheckedUpdateManyWithoutUserInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

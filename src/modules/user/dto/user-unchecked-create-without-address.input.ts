@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { VehicleUncheckedCreateNestedManyWithoutUserInput } from '../../vehicle/dto/vehicle-unchecked-create-nested-many-without-user.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -82,15 +82,12 @@ export class UserUncheckedCreateWithoutAddressInput {
     @Validator.IsOptional()
     telephoneNumber?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

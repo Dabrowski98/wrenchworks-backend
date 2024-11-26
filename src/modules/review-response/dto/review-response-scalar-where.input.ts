@@ -5,7 +5,7 @@ import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.i
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { EnumReviewsResponsesStatusFilter } from '../../prisma/dto/enum-reviews-responses-status-filter.input';
 
 @InputType()
@@ -38,11 +38,9 @@ export class ReviewResponseScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     originalResponseText?: StringNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 

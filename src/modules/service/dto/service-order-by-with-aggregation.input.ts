@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceCountOrderByAggregateInput } from './service-count-order-by-aggregate.input';
 import { Type } from 'class-transformer';
 import { ServiceAvgOrderByAggregateInput } from './service-avg-order-by-aggregate.input';
@@ -55,23 +55,18 @@ export class ServiceOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     addedBy?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     resolvedAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     resolvedBy?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedBy?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     deletedAt?: SortOrderInput;
 

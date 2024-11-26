@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleScalarWhereWithAggregatesInput {
@@ -29,7 +29,6 @@ export class VehicleScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     modelId?: BigIntWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { JoinWorkshopRequestStatus } from '../../prisma/dto/join-workshop-request-status.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class JoinWorkshopRequestUncheckedUpdateWithoutUserInput {
@@ -28,23 +28,18 @@ export class JoinWorkshopRequestUncheckedUpdateWithoutUserInput {
     @Validator.IsOptional()
     status?: keyof typeof JoinWorkshopRequestStatus;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 }

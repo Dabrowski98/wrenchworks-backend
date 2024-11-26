@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class ServiceMinOrderByAggregateInput {
@@ -48,23 +48,18 @@ export class ServiceMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     addedBy?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     resolvedAt?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     resolvedBy?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     updatedAt?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     updatedBy?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     deletedAt?: keyof typeof SortOrder;
 }

@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestListRelationFilter } from '../../service-request/dto/service-request-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -38,7 +38,6 @@ export class VehicleWhereInput {
     @Field(() => BigIntFilter, {nullable:true})
     modelId?: BigIntFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 

@@ -9,7 +9,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { EmployeeUncheckedCreateNestedManyWithoutTasksInput } from '../../employee/dto/employee-unchecked-create-nested-many-without-tasks.input';
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
@@ -58,27 +58,21 @@ export class TaskUncheckedCreateWithoutWorkshopJobInput {
     @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 

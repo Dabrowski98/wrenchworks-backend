@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { JobOrderByRelationAggregateInput } from '../../job/dto/job-order-by-relation-aggregate.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -39,19 +39,15 @@ export class ServiceRequestOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     description?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     createdAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     resolvedAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     resolvedBy?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     deletedAt?: SortOrderInput;
 

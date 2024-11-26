@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { Type } from 'class-transformer';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { ValidateNested } from 'class-validator';
 
@@ -32,15 +32,12 @@ export class WorkshopDetailsOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     NIP?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedBy?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     deletedAt?: SortOrderInput;
 

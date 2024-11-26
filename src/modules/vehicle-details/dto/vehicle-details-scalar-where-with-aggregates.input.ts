@@ -6,7 +6,7 @@ import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-null
 import { EnumFuelTypeNullableWithAggregatesFilter } from '../../prisma/dto/enum-fuel-type-nullable-with-aggregates-filter.input';
 import { EnumBodyColorsNullableWithAggregatesFilter } from '../../prisma/dto/enum-body-colors-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleDetailsScalarWhereWithAggregatesInput {
@@ -50,7 +50,6 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     @Field(() => EnumBodyColorsNullableWithAggregatesFilter, {nullable:true})
     bodyColor?: EnumBodyColorsNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

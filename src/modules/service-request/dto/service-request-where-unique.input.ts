@@ -8,7 +8,7 @@ import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.i
 import { EnumServiceRequestStatusNullableFilter } from '../../prisma/dto/enum-service-request-status-nullable-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { JobListRelationFilter } from '../../job/dto/job-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -56,19 +56,15 @@ export class ServiceRequestWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     resolvedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     resolvedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 

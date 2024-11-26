@@ -14,7 +14,6 @@ export class VehicleUpdateWithoutVehicleModelInput {
     @HideField()
     vehicleId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

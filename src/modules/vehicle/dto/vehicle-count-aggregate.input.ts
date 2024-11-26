@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleCountAggregateInput {
@@ -17,7 +17,6 @@ export class VehicleCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     deletedAt?: true;
 

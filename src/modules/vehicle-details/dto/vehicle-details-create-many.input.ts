@@ -5,7 +5,7 @@ import { Int } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { FuelType } from '../../prisma/dto/fuel-type.enum';
 import { BodyColors } from '../../prisma/dto/body-colors.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleDetailsCreateManyInput {
@@ -66,7 +66,6 @@ export class VehicleDetailsCreateManyInput {
     @Validator.IsOptional()
     bodyColor?: keyof typeof BodyColors;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

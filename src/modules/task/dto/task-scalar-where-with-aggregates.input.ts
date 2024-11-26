@@ -8,7 +8,7 @@ import { EnumTasksStatusNullableWithAggregatesFilter } from '../../prisma/dto/en
 import { FloatWithAggregatesFilter } from '../../prisma/dto/float-with-aggregates-filter.input';
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 
 @InputType()
@@ -51,27 +51,21 @@ export class TaskScalarWhereWithAggregatesInput {
     @Type(() => DecimalWithAggregatesFilter)
     partsCost?: DecimalWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     createdBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     resolvedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     resolvedBy?: BigIntNullableWithAggregatesFilter;
 }

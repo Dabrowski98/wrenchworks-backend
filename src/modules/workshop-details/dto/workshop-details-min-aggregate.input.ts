@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class WorkshopDetailsMinAggregateInput {
@@ -26,15 +26,12 @@ export class WorkshopDetailsMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     NIP?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedBy?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     deletedAt?: true;
 }

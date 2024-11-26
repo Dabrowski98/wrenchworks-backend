@@ -36,11 +36,9 @@ export class UserReportUpdateInput {
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 

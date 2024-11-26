@@ -7,7 +7,7 @@ import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable
 import { EnumUsersStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-users-status-nullable-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class UserScalarWhereWithAggregatesInput {
@@ -54,15 +54,12 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addressId?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

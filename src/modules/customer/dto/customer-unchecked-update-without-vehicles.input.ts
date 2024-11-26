@@ -8,7 +8,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceUncheckedUpdateManyWithoutCustomerNestedInput } from '../../service/dto/service-unchecked-update-many-without-customer-nested.input';
 import { ValidateNested } from 'class-validator';
 
@@ -81,23 +81,18 @@ export class CustomerUncheckedUpdateWithoutVehiclesInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 

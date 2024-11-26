@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { VehicleModelCountOrderByAggregateInput } from './vehicle-model-count-order-by-aggregate.input';
 import { VehicleModelAvgOrderByAggregateInput } from './vehicle-model-avg-order-by-aggregate.input';
 import { VehicleModelMaxOrderByAggregateInput } from './vehicle-model-max-order-by-aggregate.input';
@@ -21,11 +21,9 @@ export class VehicleModelOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     brand?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     createdAt?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     updatedAt?: SortOrderInput;
 

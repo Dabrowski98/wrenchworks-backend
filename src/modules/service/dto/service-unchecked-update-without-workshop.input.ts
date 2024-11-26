@@ -8,7 +8,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestUncheckedUpdateOneWithoutApprovedServiceNestedInput } from '../../service-request/dto/service-request-unchecked-update-one-without-approved-service-nested.input';
 import { ValidateNested } from 'class-validator';
 import { TaskUncheckedUpdateManyWithoutServiceNestedInput } from '../../task/dto/task-unchecked-update-many-without-service-nested.input';
@@ -73,23 +73,18 @@ export class ServiceUncheckedUpdateWithoutWorkshopInput {
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

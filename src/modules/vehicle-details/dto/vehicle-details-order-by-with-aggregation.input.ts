@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { VehicleDetailsCountOrderByAggregateInput } from './vehicle-details-count-order-by-aggregate.input';
 import { VehicleDetailsAvgOrderByAggregateInput } from './vehicle-details-avg-order-by-aggregate.input';
 import { VehicleDetailsMaxOrderByAggregateInput } from './vehicle-details-max-order-by-aggregate.input';
@@ -42,7 +42,6 @@ export class VehicleDetailsOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     bodyColor?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
     @HideField()
     deletedAt?: SortOrderInput;
 

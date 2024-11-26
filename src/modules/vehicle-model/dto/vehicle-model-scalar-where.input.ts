@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class VehicleModelScalarWhereInput {
@@ -26,11 +26,9 @@ export class VehicleModelScalarWhereInput {
     @Field(() => StringFilter, {nullable:true})
     brand?: StringFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 }

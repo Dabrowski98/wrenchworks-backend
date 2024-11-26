@@ -8,7 +8,7 @@ import { EnumUserReportTypeFilter } from '../../prisma/dto/enum-user-report-type
 import { EnumUserReportsReportedEntityTypeFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-filter.input';
 import { EnumUserReportsStatusFilter } from '../../prisma/dto/enum-user-reports-status-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';
 
@@ -45,11 +45,9 @@ export class UserReportWhereUniqueInput {
     @Field(() => EnumUserReportsStatusFilter, {nullable:true})
     status?: EnumUserReportsStatusFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 

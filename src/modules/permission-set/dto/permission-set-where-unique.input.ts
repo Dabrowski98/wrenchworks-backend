@@ -6,7 +6,7 @@ import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.i
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -87,11 +87,9 @@ export class PermissionSetWhereUniqueInput {
     @Field(() => BoolFilter, {nullable:true})
     canModifyPermissions?: BoolFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableFilter;
 

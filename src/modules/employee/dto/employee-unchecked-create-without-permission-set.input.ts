@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceUncheckedCreateNestedManyWithoutEmployeeInput } from '../../service/dto/service-unchecked-create-nested-many-without-employee.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -51,23 +51,18 @@ export class EmployeeUncheckedCreateWithoutPermissionSetInput {
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 

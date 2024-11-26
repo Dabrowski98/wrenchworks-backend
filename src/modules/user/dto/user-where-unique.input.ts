@@ -8,7 +8,7 @@ import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.in
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { EnumUsersStatusNullableFilter } from '../../prisma/dto/enum-users-status-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { AddressNullableRelationFilter } from '../../address/dto/address-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -68,15 +68,12 @@ export class UserWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     telephoneNumber?: StringNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 

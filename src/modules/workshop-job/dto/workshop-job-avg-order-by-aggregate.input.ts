@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class WorkshopJobAvgOrderByAggregateInput {
@@ -21,11 +21,9 @@ export class WorkshopJobAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     maxPrice?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     createdBy?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
     @HideField()
     updatedBy?: keyof typeof SortOrder;
 }

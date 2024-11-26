@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { EmployeeUncheckedUpdateManyWithoutPermissionSetNestedInput } from '../../employee/dto/employee-unchecked-update-many-without-permission-set-nested.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -112,11 +112,9 @@ export class PermissionSetUncheckedUpdateWithoutWorkshopInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 

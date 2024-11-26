@@ -16,7 +16,6 @@ export class VehicleCreateWithoutServiceRequestsInput {
     @HideField()
     vehicleId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

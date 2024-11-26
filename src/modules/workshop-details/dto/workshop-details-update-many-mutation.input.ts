@@ -7,7 +7,7 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -55,15 +55,12 @@ export class WorkshopDetailsUpdateManyMutationInput {
     @Validator.IsOptional()
     NIP?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

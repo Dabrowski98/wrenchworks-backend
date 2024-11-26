@@ -9,7 +9,7 @@ import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class ServiceScalarWhereWithAggregatesInput {
@@ -69,23 +69,18 @@ export class ServiceScalarWhereWithAggregatesInput {
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addedBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     resolvedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     resolvedBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableWithAggregatesFilter;
 }

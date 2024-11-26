@@ -18,11 +18,9 @@ export class VehicleModelCreateManyVehiclesBrandInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName!: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 }

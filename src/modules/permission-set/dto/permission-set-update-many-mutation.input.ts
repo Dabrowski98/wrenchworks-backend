@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -105,11 +105,9 @@ export class PermissionSetUpdateManyMutationInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 }

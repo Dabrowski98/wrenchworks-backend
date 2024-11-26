@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestUncheckedCreateNestedManyWithoutVehicleInput } from '../../service-request/dto/service-request-unchecked-create-nested-many-without-vehicle.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -21,7 +21,6 @@ export class VehicleUncheckedCreateWithoutVehicleModelInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

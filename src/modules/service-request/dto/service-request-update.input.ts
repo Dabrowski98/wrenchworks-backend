@@ -29,19 +29,15 @@ export class ServiceRequestUpdateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 

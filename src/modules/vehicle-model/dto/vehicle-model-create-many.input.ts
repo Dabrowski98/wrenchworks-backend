@@ -25,11 +25,9 @@ export class VehicleModelCreateManyInput {
     @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
     brand!: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 }

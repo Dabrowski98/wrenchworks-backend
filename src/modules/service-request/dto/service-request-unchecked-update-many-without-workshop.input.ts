@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.enum';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class ServiceRequestUncheckedUpdateManyWithoutWorkshopInput {
@@ -37,19 +37,15 @@ export class ServiceRequestUncheckedUpdateManyWithoutWorkshopInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     resolvedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     deletedAt?: Date | string;
 }

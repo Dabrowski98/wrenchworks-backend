@@ -41,11 +41,9 @@ export class ReviewUpdateWithoutUserInput {
     @HideField()
     originalReviewText?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 

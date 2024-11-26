@@ -4,7 +4,7 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { EnumJoinWorkshopRequestStatusFilter } from '../../prisma/dto/enum-join-workshop-request-status-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';
@@ -42,23 +42,18 @@ export class JoinWorkshopRequestWhereInput {
     @Field(() => EnumJoinWorkshopRequestStatusFilter, {nullable:true})
     status?: EnumJoinWorkshopRequestStatusFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     createdBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     resolvedAt?: DateTimeNullableFilter;
 

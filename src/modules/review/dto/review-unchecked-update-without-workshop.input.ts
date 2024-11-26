@@ -7,7 +7,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { ReviewResponseUncheckedUpdateManyWithoutReviewNestedInput } from '../../review-response/dto/review-response-unchecked-update-many-without-review-nested.input';
 import { ValidateNested } from 'class-validator';
@@ -49,11 +49,9 @@ export class ReviewUncheckedUpdateWithoutWorkshopInput {
     @Validator.IsOptional()
     originalReviewText?: string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 

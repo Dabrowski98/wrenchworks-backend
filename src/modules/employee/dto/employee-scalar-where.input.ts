@@ -7,7 +7,7 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { IntNullableFilter } from '../../prisma/dto/int-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class EmployeeScalarWhereInput {
@@ -45,23 +45,18 @@ export class EmployeeScalarWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     joinedAt?: DateTimeFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     deletedAt?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     createdAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     createdBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
     @HideField()
     updatedAt?: DateTimeNullableFilter;
 
-    @Field(() => BigIntNullableFilter, {nullable:true})
     @HideField()
     updatedBy?: BigIntNullableFilter;
 }

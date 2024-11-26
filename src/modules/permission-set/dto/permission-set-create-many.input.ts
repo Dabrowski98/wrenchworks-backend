@@ -114,11 +114,9 @@ export class PermissionSetCreateManyInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @Field(() => Date, {nullable:true})
     @HideField()
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
     @HideField()
     updatedBy?: bigint | number;
 }

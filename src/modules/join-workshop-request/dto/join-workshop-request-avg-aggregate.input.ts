@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from 'nestjs-graphql';
+import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class JoinWorkshopRequestAvgAggregateInput {
@@ -17,11 +17,9 @@ export class JoinWorkshopRequestAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     employeeId?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     createdBy?: true;
 
-    @Field(() => Boolean, {nullable:true})
     @HideField()
     updatedBy?: true;
 }
