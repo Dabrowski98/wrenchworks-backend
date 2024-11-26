@@ -26,10 +26,11 @@ export class UserReportUncheckedUpdateManyInput {
     reportText?: string;
 
     @Field(() => UserReportType, {nullable:true})
+    @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType?: keyof typeof UserReportType;
 
     @Field(() => UserReportsReportedEntityType, {nullable:true})
-    @Validator.IsEnum(UserReportsReportedEntity, { message: 'Invalid reported entity type' })
+    @Validator.IsEnum(UserReportsReportedEntityType, { message: 'Invalid reported entity type' })
     reportedEntityType?: keyof typeof UserReportsReportedEntityType;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})

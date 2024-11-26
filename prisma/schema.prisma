@@ -617,7 +617,7 @@ model ServiceRequest {
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
-  /// @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
+  /// @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
   /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
@@ -779,8 +779,9 @@ model UserReport {
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Report text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   reportText         String                     @db.Text
+  /// @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
   reportType         UserReportType
-  /// @Validator.IsEnum(UserReportsReportedEntity, { message: 'Invalid reported entity type' })
+  /// @Validator.IsEnum(UserReportsReportedEntityType, { message: 'Invalid reported entity type' })
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   reportedEntityType UserReportsReportedEntityType
   /// @FieldType('Scalars.GraphQLBigInt')

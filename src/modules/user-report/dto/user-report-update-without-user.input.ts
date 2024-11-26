@@ -22,6 +22,7 @@ export class UserReportUpdateWithoutUserInput {
     reportText?: string;
 
     @Field(() => UserReportType, {nullable:true})
+    @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType?: keyof typeof UserReportType;
 
     @HideField()

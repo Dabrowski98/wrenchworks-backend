@@ -23,10 +23,11 @@ export class UserReportCreateManyUserInput {
     reportText!: string;
 
     @Field(() => UserReportType, {nullable:false})
+    @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType!: keyof typeof UserReportType;
 
     @Field(() => UserReportsReportedEntityType, {nullable:false})
-    @Validator.IsEnum(UserReportsReportedEntity, { message: 'Invalid reported entity type' })
+    @Validator.IsEnum(UserReportsReportedEntityType, { message: 'Invalid reported entity type' })
     reportedEntityType!: keyof typeof UserReportsReportedEntityType;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})

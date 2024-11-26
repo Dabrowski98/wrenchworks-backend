@@ -18,7 +18,7 @@ export class ServiceRequestUpdateWithoutGuestInput {
     serviceRequestId?: bigint | number;
 
     @Field(() => ServiceRequestStatus, {nullable:true})
-    @Validator.IsEnum(ServiceRequestsStatus, { message: 'Invalid service request status' })
+    @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
     @Validator.IsOptional()
     status?: keyof typeof ServiceRequestStatus;
 
