@@ -1,21 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Recursively traverses the given directory and removes specified strings from each `.ts` file.
- * Removes only the lines that become empty after the removals, preserving existing empty lines.
- * @param {string} directoryPath - The path to the directory to process.
- * @param {string[]} stringsToRemove - An array of exact strings to remove from the files.
- */
 function flexibleRemoveStrings(directoryPath, stringsToRemove) {
-    // Convert strings to remove into regular expressions with global flag
     const regexPatterns = stringsToRemove.map(str => {
-        // Escape special regex characters in the string
         const escapedStr = str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
         return new RegExp(escapedStr, 'g');
     });
 
-    // Read all items in the current directory
     const items = fs.readdirSync(directoryPath);
 
     items.forEach(item => {
@@ -23,14 +14,11 @@ function flexibleRemoveStrings(directoryPath, stringsToRemove) {
         const stats = fs.statSync(itemPath);
 
         if (stats.isDirectory()) {
-            // Recursively process subdirectories
             flexibleRemoveStrings(itemPath, stringsToRemove);
         } else if (path.extname(item) === '.ts') {
-            // Process TypeScript files
             let fileContent = fs.readFileSync(itemPath, 'utf8');
             let modified = false;
 
-            // Split content into lines for processing
             let lines = fileContent.split('\n');
             let updatedLines = [];
 
@@ -39,7 +27,6 @@ function flexibleRemoveStrings(directoryPath, stringsToRemove) {
                 let modifiedLine = line;
                 let lineModified = false;
 
-                // Remove each specified string from the line
                 regexPatterns.forEach((pattern, idx) => {
                     if (pattern.test(modifiedLine)) {
                         modifiedLine = modifiedLine.replace(pattern, '');
@@ -49,18 +36,14 @@ function flexibleRemoveStrings(directoryPath, stringsToRemove) {
                 });
 
                 if (lineModified && modifiedLine.trim() === '') {
-                    // Line was modified and is now empty; do not include it
                     modified = true;
-                    // Optionally, log the removal of the empty line
                     console.log(`Removed empty line at Line ${index + 1} in ${itemPath}`);
                 } else {
-                    // Keep the modified or original line
                     updatedLines.push(modifiedLine);
                 }
             });
 
             if (modified) {
-                // Rejoin the lines into a single string
                 fileContent = updatedLines.join('\n');
 
                 // Additional cleanup:
@@ -78,10 +61,8 @@ function flexibleRemoveStrings(directoryPath, stringsToRemove) {
     });
 }
 
-// Entry point: Target the 'src/modules' directory
 const targetDirectory = path.join(__dirname, '../src/modules');
 
-// Define the strings you want to remove
 const stringsToRemove = [
     // "import { CREATE, UPDATE } from 'src/constants/validation-groups';",
     // "@Validator.IsOptional({groups: [UPDATE]})",
@@ -91,11 +72,9 @@ const stringsToRemove = [
     // "{groups: [CREATE]}",
 ];
 
-// Ensure the target directory exists
 if (!fs.existsSync(targetDirectory)) {
     console.error(`Error: The directory ${targetDirectory} does not exist.`);
     process.exit(1);
 }
 
-// Execute the removal process
 flexibleRemoveStrings(targetDirectory, stringsToRemove);

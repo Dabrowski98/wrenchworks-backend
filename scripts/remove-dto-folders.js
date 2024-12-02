@@ -1,40 +1,74 @@
 const fs = require('fs');
 const path = require('path');
 
-// Set the path to the src/modules directory
-const modulesDir = path.join(__dirname,'..', 'src', 'modules');
+const modulesDir = path.join(__dirname, '..', 'src', 'modules');
 
-// Function to delete 'dto' folders recursively
-function removeDtoFolders(directory) {
-  // Read the contents of the directory
-  fs.readdir(directory, { withFileTypes: true }, (err, files) => {
+const modulesToDeleteDto = [
+  'address',
+  'customer',
+  'employee',
+  'guest',
+  'job',
+  'job-category',
+  'join-workshop-request',
+  'permission-set',
+  'review',
+  'review-response',
+  'service',
+  'service-request',
+  'session-data',
+  'task',
+  'prisma',
+  'user',
+  'user-report',
+  'vehicle',
+  'vehicle-brand',
+  'vehicle-details',
+  'vehicle-model',
+  'workshop',
+  'workshop-details',
+  'workshop-job'
+];
+
+function removeDtoFromSpecifiedModules(directory) {
+  fs.readdir(directory, { withFileTypes: true }, (err, modules) => {
     if (err) {
-      console.error(`Error reading directory ${directory}: ${err.message}`);
+      console.error(
+        `Error reading modules directory ${directory}: ${err.message}`,
+      );
       return;
     }
 
-    // Loop through each item in the directory
-    files.forEach((file) => {
-      const filePath = path.join(directory, file.name);
+    modules.forEach((module) => {
+      if (module.isDirectory()) {
+        const moduleName = module.name;
+        if (modulesToDeleteDto.includes(moduleName)) {
+          const dtoPath = path.join(directory, moduleName, 'dto');
 
-      if (file.isDirectory()) {
-        // If the folder is named 'dto', delete it
-        if (file.name === 'dto') {
-          fs.rm(filePath, { recursive: true, force: true }, (err) => {
-            if (err) {
-              console.error(`Error deleting directory ${filePath}: ${err.message}`);
-            } else {
-              console.log(`Deleted directory: ${filePath}`);
+          fs.access(dtoPath, fs.constants.F_OK, (accessErr) => {
+            if (accessErr) {
+              console.warn(
+                `'dto' folder does not exist in module: ${moduleName}`,
+              );
+              return;
             }
+
+            fs.rm(dtoPath, { recursive: true, force: true }, (rmErr) => {
+              if (rmErr) {
+                console.error(
+                  `Error deleting 'dto' folder in module ${moduleName}: ${rmErr.message}`,
+                );
+              } else {
+                console.log(`Deleted 'dto' folder in module: ${moduleName}`);
+              }
+            });
           });
         } else {
-          // If it's another folder, recursively call removeDtoFolders
-          removeDtoFolders(filePath);
+          console.log(`Skipped module: ${moduleName}`);
         }
       }
     });
   });
 }
 
-// Start the script by removing 'dto' folders in modulesDir
-removeDtoFolders(modulesDir);
+removeDtoFromSpecifiedModules(modulesDir);
