@@ -7,7 +7,6 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleBrandUncheckedCreateInput {
 
@@ -17,12 +16,6 @@ export class VehicleBrandUncheckedCreateInput {
     @Validator.IsOptional({groups: [UPDATE]})
     @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
     brandName!: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => VehicleModelUncheckedCreateNestedManyWithoutVehiclesBrandInput, {nullable:true})
     @ValidateNested()

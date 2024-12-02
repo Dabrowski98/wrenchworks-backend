@@ -12,6 +12,4 @@ export class PermissionSetAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     workshopId?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

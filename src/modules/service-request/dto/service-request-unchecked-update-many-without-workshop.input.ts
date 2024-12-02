@@ -37,15 +37,4 @@ export class ServiceRequestUncheckedUpdateManyWithoutWorkshopInput {
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

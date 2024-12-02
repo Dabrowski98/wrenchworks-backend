@@ -15,6 +15,7 @@ import { WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput } from '../
 import { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-workshop-nested.input';
 import { JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-unchecked-update-many-without-workshops-nested.input';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-workshop-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 @InputType()
 export class WorkshopUncheckedUpdateWithoutAddressInput {
@@ -27,14 +28,16 @@ export class WorkshopUncheckedUpdateWithoutAddressInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
-    @Validator.IsOptional()
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Email is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     email?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Telephone number must be a string' })
     @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
-    @Validator.IsOptional()
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Telephone number is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber?: string;
 
     @Field(() => Boolean, {nullable:true})
@@ -51,18 +54,6 @@ export class WorkshopUncheckedUpdateWithoutAddressInput {
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
     isOfferingService?: boolean;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
 
     @Field(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     @Type(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput)

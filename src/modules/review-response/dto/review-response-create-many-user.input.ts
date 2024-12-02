@@ -6,12 +6,8 @@ import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class ReviewResponseCreateManyUserInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     reviewId!: bigint | number;
@@ -27,15 +23,4 @@ export class ReviewResponseCreateManyUserInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText!: string;
 
-    @HideField()
-    originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    status?: keyof typeof ReviewsResponsesStatus;
-}
+    }

@@ -27,9 +27,6 @@ export class EmployeeGroupBy {
     @Field(() => String, {nullable:false})
     login!: string;
 
-    @HideField()
-    password!: string;
-
     @Field(() => Int, {nullable:true})
     permissionSetId?: number;
 

@@ -4,12 +4,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleModelCreateManyVehiclesBrandInput {
-
-    @HideField()
-    modelId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Model name must be a string' })
@@ -18,9 +14,4 @@ export class VehicleModelCreateManyVehiclesBrandInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName!: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-}
+    }

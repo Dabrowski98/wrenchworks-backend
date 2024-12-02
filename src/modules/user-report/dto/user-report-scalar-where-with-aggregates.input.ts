@@ -41,9 +41,4 @@ export class UserReportScalarWhereWithAggregatesInput {
     @Field(() => EnumUserReportsStatusWithAggregatesFilter, {nullable:true})
     status?: EnumUserReportsStatusWithAggregatesFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

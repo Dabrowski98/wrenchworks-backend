@@ -1,17 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { WorkshopUpdateOneWithoutAddressNestedInput } from '../../workshop/dto/workshop-update-one-without-address-nested.input';
-import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class AddressUpdateWithoutUserInput {
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    addressId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Country must be a string' })
@@ -60,6 +55,4 @@ export class AddressUpdateWithoutUserInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     postCode?: string;
 
-    @HideField()
-    workshop?: WorkshopUpdateOneWithoutAddressNestedInput;
-}
+    }

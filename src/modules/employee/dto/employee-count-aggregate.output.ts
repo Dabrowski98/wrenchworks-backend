@@ -21,9 +21,6 @@ export class EmployeeCountAggregate {
     @Field(() => Int, {nullable:false})
     login!: number;
 
-    @HideField()
-    password!: number;
-
     @Field(() => Int, {nullable:false})
     permissionSetId!: number;
 

@@ -31,4 +31,7 @@ export class UserCount {
 
     @Field(() => Int, {nullable:false})
     joinWorkshopRequests?: number;
+
+    @Field(() => Int, {nullable:false})
+    sessionData?: number;
 }

@@ -7,9 +7,6 @@ import * as Validator from 'class-validator';
 @InputType()
 export class ServiceRequestUpdateManyMutationInput {
 
-    @HideField()
-    serviceRequestId?: bigint | number;
-
     @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
     @Validator.IsOptional()
@@ -21,15 +18,4 @@ export class ServiceRequestUpdateManyMutationInput {
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

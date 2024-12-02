@@ -69,18 +69,4 @@ export class ServiceScalarWhereWithAggregatesInput {
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addedBy?: BigIntNullableWithAggregatesFilter;
 
-    @HideField()
-    resolvedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

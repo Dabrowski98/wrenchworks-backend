@@ -8,12 +8,8 @@ import { ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../
 import { UserUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../user/dto/user-update-one-required-without-review-responses-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class ReviewResponseUpdateWithoutParentResponseInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
@@ -22,26 +18,9 @@ export class ReviewResponseUpdateWithoutParentResponseInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
 
-    @HideField()
-    originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
     @Validator.IsOptional()
     status?: keyof typeof ReviewsResponsesStatus;
 
-    @HideField()
-    childrenResponses?: ReviewResponseUpdateManyWithoutParentResponseNestedInput;
-
-    @HideField()
-    review?: ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput;
-
-    @HideField()
-    user?: UserUpdateOneRequiredWithoutReviewResponsesNestedInput;
-}
+    }

@@ -14,12 +14,8 @@ import { ValidateNested } from 'class-validator';
 import { ServiceCreateNestedOneWithoutTasksInput } from '../../service/dto/service-create-nested-one-without-tasks.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class TaskCreateWithoutEmployeesInput {
-
-    @HideField()
-    taskId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -54,24 +50,6 @@ export class TaskCreateWithoutEmployeesInput {
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
     @Validator.IsOptional()
     partsCost?: Decimal;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
 
     @Field(() => WorkshopJobCreateNestedOneWithoutTasksInput, {nullable:false})
     @Type(() => WorkshopJobCreateNestedOneWithoutTasksInput)

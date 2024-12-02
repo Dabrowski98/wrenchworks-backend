@@ -26,12 +26,6 @@ export class ReviewCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     originalReviewText?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     status?: true;
 

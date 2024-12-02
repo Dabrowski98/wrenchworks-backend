@@ -11,7 +11,7 @@ export class UserCreateOrConnectWithoutVehiclesInput {
 
     @Field(() => UserWhereUniqueInput, {nullable:false})
     @Type(() => UserWhereUniqueInput)
-    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'addressId'>;
+    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'email' | 'addressId'>;
 
     @Field(() => UserCreateWithoutVehiclesInput, {nullable:false})
     @Type(() => UserCreateWithoutVehiclesInput)

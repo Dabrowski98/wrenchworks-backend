@@ -38,12 +38,6 @@ export class ReviewResponseScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     originalResponseText?: StringNullableWithAggregatesFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
     @Field(() => EnumReviewsResponsesStatusWithAggregatesFilter, {nullable:true})
     status?: EnumReviewsResponsesStatusWithAggregatesFilter;
 }

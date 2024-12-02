@@ -53,21 +53,6 @@ export class CustomerOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     companyName?: SortOrderInput;
 
-    @HideField()
-    deletedAt?: SortOrderInput;
-
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => ServiceOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ServiceOrderByRelationAggregateInput)
     @ValidateNested()

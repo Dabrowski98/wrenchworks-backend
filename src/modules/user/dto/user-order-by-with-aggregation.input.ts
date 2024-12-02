@@ -21,8 +21,11 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     password?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    email?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    email?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    telephoneNumber?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     avatarURL?: SortOrderInput;
@@ -33,26 +36,14 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    firstName?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    lastName?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    firstName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
-    telephoneNumber?: SortOrderInput;
+    lastName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
-
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
 
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})
     _count?: UserCountOrderByAggregateInput;

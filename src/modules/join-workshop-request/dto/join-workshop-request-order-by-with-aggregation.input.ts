@@ -30,21 +30,6 @@ export class JoinWorkshopRequestOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    resolvedAt?: SortOrderInput;
-
     @Field(() => JoinWorkshopRequestCountOrderByAggregateInput, {nullable:true})
     _count?: JoinWorkshopRequestCountOrderByAggregateInput;
 

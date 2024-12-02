@@ -57,21 +57,6 @@ export class ServiceOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     addedBy?: SortOrderInput;
 
-    @HideField()
-    resolvedAt?: SortOrderInput;
-
-    @HideField()
-    resolvedBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => ServiceRequestOrderByWithRelationInput, {nullable:true})
     @Type(() => ServiceRequestOrderByWithRelationInput)
     @ValidateNested()

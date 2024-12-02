@@ -21,12 +21,4 @@ export class TaskAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     partsCost?: keyof typeof SortOrder;
 
-    @HideField()
-    createdBy?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedBy?: keyof typeof SortOrder;
-}
+    }

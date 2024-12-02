@@ -30,7 +30,7 @@ export class WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput {
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 
     @Field(() => WorkshopUpdateToOneWithWhereWithoutServiceRequestsInput, {nullable:true})
     @Type(() => WorkshopUpdateToOneWithWhereWithoutServiceRequestsInput)

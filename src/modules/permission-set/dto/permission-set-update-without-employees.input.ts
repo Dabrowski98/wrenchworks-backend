@@ -5,7 +5,6 @@ import { HideField } from '@nestjs/graphql';
 import { WorkshopUpdateOneWithoutPermissionSetsNestedInput } from '../../workshop/dto/workshop-update-one-without-permission-sets-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetUpdateWithoutEmployeesInput {
 
@@ -106,12 +105,4 @@ export class PermissionSetUpdateWithoutEmployeesInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    workshop?: WorkshopUpdateOneWithoutPermissionSetsNestedInput;
-}
+    }

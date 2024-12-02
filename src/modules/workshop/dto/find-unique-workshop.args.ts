@@ -9,5 +9,5 @@ export class FindUniqueWorkshopArgs {
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:false})
     @Type(() => WorkshopWhereUniqueInput)
-    where!: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    where!: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 }

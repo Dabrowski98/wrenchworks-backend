@@ -1,15 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class AddressUpdateManyMutationInput {
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    addressId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Country must be a string' })

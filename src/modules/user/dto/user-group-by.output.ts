@@ -18,11 +18,11 @@ export class UserGroupBy {
     @Field(() => String, {nullable:false})
     username!: string;
 
-    @HideField()
-    password!: string;
+    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    email!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
-    email?: string;
+    @Field(() => String, {nullable:false})
+    telephoneNumber!: string;
 
     @Field(() => String, {nullable:true})
     avatarURL?: string;
@@ -33,14 +33,11 @@ export class UserGroupBy {
     @Field(() => UsersStatus, {nullable:true})
     status?: keyof typeof UsersStatus;
 
-    @Field(() => String, {nullable:false})
-    firstName!: string;
-
-    @Field(() => String, {nullable:false})
-    lastName!: string;
+    @Field(() => String, {nullable:true})
+    firstName?: string;
 
     @Field(() => String, {nullable:true})
-    telephoneNumber?: string;
+    lastName?: string;
 
     @Field(() => String, {nullable:true})
     addressId?: bigint | number;

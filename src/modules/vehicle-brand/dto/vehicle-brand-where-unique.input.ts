@@ -9,7 +9,6 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleBrandWhereUniqueInput {
 
@@ -28,12 +27,6 @@ export class VehicleBrandWhereUniqueInput {
 
     @Field(() => [VehicleBrandWhereInput], {nullable:true})
     NOT?: Array<VehicleBrandWhereInput>;
-
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
 
     @Field(() => VehicleModelListRelationFilter, {nullable:true})
     @ValidateNested()

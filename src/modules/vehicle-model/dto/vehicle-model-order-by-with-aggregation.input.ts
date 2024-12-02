@@ -21,12 +21,6 @@ export class VehicleModelOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     brand?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
     @Field(() => VehicleModelCountOrderByAggregateInput, {nullable:true})
     _count?: VehicleModelCountOrderByAggregateInput;
 

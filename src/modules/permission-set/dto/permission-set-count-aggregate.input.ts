@@ -68,12 +68,6 @@ export class PermissionSetCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     canModifyPermissions?: true;
 
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

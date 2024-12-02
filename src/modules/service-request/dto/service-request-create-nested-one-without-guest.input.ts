@@ -4,6 +4,7 @@ import { ServiceRequestCreateWithoutGuestInput } from './service-request-create-
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateOrConnectWithoutGuestInput } from './service-request-create-or-connect-without-guest.input';
+import { HideField } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { ServiceRequestWhereUniqueInput } from './service-request-where-unique.input';
 
@@ -15,13 +16,4 @@ export class ServiceRequestCreateNestedOneWithoutGuestInput {
     @ValidateNested()
     create?: ServiceRequestCreateWithoutGuestInput;
 
-    @Field(() => ServiceRequestCreateOrConnectWithoutGuestInput, {nullable:true})
-    @Type(() => ServiceRequestCreateOrConnectWithoutGuestInput)
-    @ValidateNested()
-    connectOrCreate?: ServiceRequestCreateOrConnectWithoutGuestInput;
-
-    @Field(() => ServiceRequestWhereUniqueInput, {nullable:true})
-    @Type(() => ServiceRequestWhereUniqueInput)
-    @ValidateNested()
-    connect?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>;
-}
+    }

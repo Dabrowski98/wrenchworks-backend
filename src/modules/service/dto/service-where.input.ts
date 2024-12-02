@@ -76,21 +76,6 @@ export class ServiceWhereInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     addedBy?: BigIntNullableFilter;
 
-    @HideField()
-    resolvedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
     @Field(() => ServiceRequestNullableRelationFilter, {nullable:true})
     @Type(() => ServiceRequestNullableRelationFilter)
     @ValidateNested()

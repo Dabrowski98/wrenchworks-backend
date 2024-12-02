@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleModelUncheckedUpdateManyInput {
 
@@ -26,9 +25,4 @@ export class VehicleModelUncheckedUpdateManyInput {
     @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
     brand?: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-}
+    }

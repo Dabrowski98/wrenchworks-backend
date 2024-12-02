@@ -68,9 +68,4 @@ export class PermissionSetMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     canModifyPermissions?: true;
 
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-}
+    }

@@ -11,14 +11,8 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class WorkshopCreateNestedOneWithoutPermissionSetsInput {
 
-    @HideField()
-    create?: WorkshopCreateWithoutPermissionSetsInput;
-
-    @HideField()
-    connectOrCreate?: WorkshopCreateOrConnectWithoutPermissionSetsInput;
-
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 }

@@ -33,9 +33,6 @@ export class Employee {
     /**
      * Note: Password will be hashed before storage
      */
-    @HideField()
-    password!: string;
-
     @Field(() => Int, {nullable:true})
     permissionSetId!: number | null;
 

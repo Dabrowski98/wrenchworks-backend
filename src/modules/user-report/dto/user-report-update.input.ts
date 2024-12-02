@@ -8,12 +8,8 @@ import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserUpdateOneRequiredWithoutUserReportsNestedInput } from '../../user/dto/user-update-one-required-without-user-reports-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class UserReportUpdateInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -26,23 +22,9 @@ export class UserReportUpdateInput {
     @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType?: keyof typeof UserReportType;
 
-    @HideField()
-    reportedEntityType?: keyof typeof UserReportsReportedEntityType;
-
-    @HideField()
-    reportedId?: bigint | number;
-
     @Field(() => UserReportsStatus, {nullable:true})
     @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    user?: UserUpdateOneRequiredWithoutUserReportsNestedInput;
-}
+    }

@@ -12,7 +12,6 @@ import { Type } from 'class-transformer';
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class TaskUncheckedUpdateManyWithoutServiceInput {
 
@@ -56,21 +55,4 @@ export class TaskUncheckedUpdateManyWithoutServiceInput {
     @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-}
+    }

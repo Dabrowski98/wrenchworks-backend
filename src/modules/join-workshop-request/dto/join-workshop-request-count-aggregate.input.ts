@@ -23,21 +23,6 @@ export class JoinWorkshopRequestCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     status?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    createdBy?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
-    @HideField()
-    resolvedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

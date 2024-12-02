@@ -70,18 +70,4 @@ export class ServiceUncheckedUpdateManyWithoutWorkshopInput {
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
 
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

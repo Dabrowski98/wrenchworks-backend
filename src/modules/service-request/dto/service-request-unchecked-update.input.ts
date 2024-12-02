@@ -43,18 +43,6 @@ export class ServiceRequestUncheckedUpdateInput {
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => JobUncheckedUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
     @Type(() => JobUncheckedUpdateManyWithoutServiceRequestsNestedInput)
     @ValidateNested()

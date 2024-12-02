@@ -14,7 +14,6 @@ import { EmployeeUncheckedCreateNestedManyWithoutTasksInput } from '../../employ
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class TaskUncheckedCreateWithoutWorkshopJobInput {
 
@@ -57,24 +56,6 @@ export class TaskUncheckedCreateWithoutWorkshopJobInput {
     @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
     @Validator.IsOptional()
     partsCost?: Decimal;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
 
     @Field(() => EmployeeUncheckedCreateNestedManyWithoutTasksInput, {nullable:true})
     @Type(() => EmployeeUncheckedCreateNestedManyWithoutTasksInput)

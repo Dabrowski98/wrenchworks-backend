@@ -75,12 +75,6 @@ export class PermissionSetOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     canModifyPermissions?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => PermissionSetCountOrderByAggregateInput, {nullable:true})
     _count?: PermissionSetCountOrderByAggregateInput;
 

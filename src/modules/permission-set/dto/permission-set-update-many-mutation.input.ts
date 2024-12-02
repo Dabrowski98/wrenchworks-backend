@@ -4,7 +4,6 @@ import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetUpdateManyMutationInput {
 
@@ -105,9 +104,4 @@ export class PermissionSetUpdateManyMutationInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

@@ -12,17 +12,9 @@ import { PermissionSetWhereUniqueInput } from './permission-set-where-unique.inp
 @InputType()
 export class PermissionSetCreateNestedManyWithoutWorkshopInput {
 
-    @HideField()
-    create?: Array<PermissionSetCreateWithoutWorkshopInput>;
-
     @Field(() => [PermissionSetCreateOrConnectWithoutWorkshopInput], {nullable:true})
     @Type(() => PermissionSetCreateOrConnectWithoutWorkshopInput)
     @ValidateNested()
     connectOrCreate?: Array<PermissionSetCreateOrConnectWithoutWorkshopInput>;
 
-    @HideField()
-    createMany?: PermissionSetCreateManyWorkshopInputEnvelope;
-
-    @HideField()
-    connect?: Array<Prisma.AtLeast<PermissionSetWhereUniqueInput, 'permissionSetId'>>;
-}
+    }

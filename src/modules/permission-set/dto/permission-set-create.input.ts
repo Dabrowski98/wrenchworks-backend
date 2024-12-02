@@ -8,7 +8,6 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetCreateInput {
 
@@ -108,15 +107,6 @@ export class PermissionSetCreateInput {
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    employees?: EmployeeCreateNestedManyWithoutPermissionSetInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutPermissionSetsInput, {nullable:true})
     @Type(() => WorkshopCreateNestedOneWithoutPermissionSetsInput)

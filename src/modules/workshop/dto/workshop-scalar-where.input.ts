@@ -43,15 +43,4 @@ export class WorkshopScalarWhereInput {
     @Field(() => BoolNullableFilter, {nullable:true})
     isOfferingService?: BoolNullableFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-}
+    }

@@ -39,21 +39,6 @@ export class EmployeeOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     joinedAt?: keyof typeof SortOrder;
 
-    @HideField()
-    deletedAt?: SortOrderInput;
-
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => PermissionSetOrderByWithRelationInput, {nullable:true})
     @ValidateNested()
     @Type(() => PermissionSetOrderByWithRelationInput)

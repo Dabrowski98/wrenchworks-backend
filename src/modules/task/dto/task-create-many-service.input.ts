@@ -12,12 +12,8 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class TaskCreateManyServiceInput {
-
-    @HideField()
-    taskId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopJobId!: bigint | number;
@@ -56,21 +52,4 @@ export class TaskCreateManyServiceInput {
     @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-}
+    }

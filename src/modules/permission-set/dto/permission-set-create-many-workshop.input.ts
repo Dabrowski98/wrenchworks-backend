@@ -5,12 +5,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetCreateManyWorkshopInput {
-
-    @HideField()
-    permissionSetId?: number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Set name must be a string' })
@@ -109,9 +105,4 @@ export class PermissionSetCreateManyWorkshopInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

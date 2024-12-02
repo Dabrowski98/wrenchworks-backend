@@ -23,6 +23,7 @@ import { WorkshopDetailsNullableRelationFilter } from '../../workshop-details/dt
 import { WorkshopJobListRelationFilter } from '../../workshop-job/dto/workshop-job-list-relation-filter.input';
 import { JobCategoryListRelationFilter } from '../../job-category/dto/job-category-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 @InputType()
 export class WorkshopWhereUniqueInput {
@@ -33,6 +34,12 @@ export class WorkshopWhereUniqueInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     addressId?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    @Validator.IsEmail({}, { message: 'Invalid email format' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Email is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
+    email?: string;
 
     @Field(() => [WorkshopWhereInput], {nullable:true})
     AND?: Array<WorkshopWhereInput>;
@@ -47,9 +54,6 @@ export class WorkshopWhereUniqueInput {
     ownerId?: BigIntFilter;
 
     @Field(() => StringFilter, {nullable:true})
-    email?: StringFilter;
-
-    @Field(() => StringFilter, {nullable:true})
     telephoneNumber?: StringFilter;
 
     @Field(() => BoolNullableFilter, {nullable:true})
@@ -60,18 +64,6 @@ export class WorkshopWhereUniqueInput {
 
     @Field(() => BoolNullableFilter, {nullable:true})
     isOfferingService?: BoolNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
 
     @Field(() => AddressNullableRelationFilter, {nullable:true})
     @ValidateNested()

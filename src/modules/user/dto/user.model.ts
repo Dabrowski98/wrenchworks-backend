@@ -14,6 +14,7 @@ import { Review } from '../../review/dto/review.model';
 import { ReviewResponse } from '../../review-response/dto/review-response.model';
 import { UserReport } from '../../user-report/dto/user-report.model';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
+import { SessionData } from '../../session-data/dto/session-data.model';
 import { UserCount } from './user-count.output';
 
 /**
@@ -31,11 +32,11 @@ export class User {
     /**
      * Note: Password will be hashed before storage
      */
-    @HideField()
-    password!: string;
+    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    email!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
-    email!: string | null;
+    @Field(() => String, {nullable:false})
+    telephoneNumber!: string;
 
     @Field(() => String, {nullable:true})
     avatarURL!: string | null;
@@ -46,14 +47,11 @@ export class User {
     @Field(() => UsersStatus, {nullable:true,defaultValue:'INACTIVE'})
     status!: keyof typeof UsersStatus | null;
 
-    @Field(() => String, {nullable:false})
-    firstName!: string;
-
-    @Field(() => String, {nullable:false})
-    lastName!: string;
+    @Field(() => String, {nullable:true})
+    firstName!: string | null;
 
     @Field(() => String, {nullable:true})
-    telephoneNumber!: string | null;
+    lastName!: string | null;
 
     @Field(() => String, {nullable:true})
     addressId!: bigint | null;
@@ -105,6 +103,9 @@ export class User {
 
     @Field(() => [JoinWorkshopRequest], {nullable:true})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
+
+    @Field(() => [SessionData], {nullable:true})
+    sessionData?: Array<SessionData>;
 
     @Field(() => UserCount, {nullable:false})
     _count?: UserCount;

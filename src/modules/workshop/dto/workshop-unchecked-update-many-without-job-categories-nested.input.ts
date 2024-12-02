@@ -32,22 +32,22 @@ export class WorkshopUncheckedUpdateManyWithoutJobCategoriesNestedInput {
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    set?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>>;
+    set?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>>;
 
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    disconnect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>>;
+    disconnect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>>;
 
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    delete?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>>;
+    delete?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>>;
 
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>>;
+    connect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>>;
 
     @Field(() => [WorkshopUpdateWithWhereUniqueWithoutJobCategoriesInput], {nullable:true})
     @Type(() => WorkshopUpdateWithWhereUniqueWithoutJobCategoriesInput)

@@ -40,9 +40,6 @@ export class VehicleWhereUniqueInput {
     @Field(() => BigIntFilter, {nullable:true})
     modelId?: BigIntFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
     @Field(() => ServiceRequestListRelationFilter, {nullable:true})
     @Type(() => ServiceRequestListRelationFilter)
     @ValidateNested()

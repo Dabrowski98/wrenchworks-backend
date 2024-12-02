@@ -16,7 +16,6 @@ import {
   WorkshopCount,
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { Person } from '../person/dto';
 import { WorkshopDetails } from '../workshop-details/dto';
 import { Address } from '../address/dto';
 import { WorkshopJob } from '../workshop-job/dto';
@@ -29,24 +28,25 @@ import { Service } from '../service';
 import { Customer } from '../customer';
 import { Employee } from '../employee';
 import { PermissionSet } from '../permission-set';
+import { User } from '../user/dto';
 
 @Resolver(() => Workshop)
 export class WorkshopResolver {
   constructor(private readonly workshopService: WorkshopService) {}
 
-  @Mutation(() => Workshop)
-  createWorkshop(@Args() args: CreateOneWorkshopArgs): Promise<Workshop> {
-    return this.workshopService.createWorkshop(args);
-  }
+  // @Mutation(() => Workshop)
+  // createWorkshop(@Args() args: CreateOneWorkshopArgs): Promise<Workshop> {
+  //   return this.workshopService.createWorkshop(args);
+  // }
 
-  @Mutation(() => Workshop)
-  updateWorkshop(@Args() args: UpdateOneWorkshopArgs): Promise<Workshop> {
-    if (Object.keys(args.data).length === 0) {
-      throw new NoDataProvidedForUpdate(Workshop);
-    }
+  // @Mutation(() => Workshop)
+  // updateWorkshop(@Args() args: UpdateOneWorkshopArgs): Promise<Workshop> {
+  //   if (Object.keys(args.data).length === 0) {
+  //     throw new NoDataProvidedForUpdate(Workshop);
+  //   }
 
-    return this.workshopService.updateWorkshop(args);
-  }
+  //   return this.workshopService.updateWorkshop(args);
+  // }
 
   @Mutation(() => DeletePayload)
   deleteWorkshop(
@@ -94,9 +94,9 @@ export class WorkshopResolver {
     return this.workshopService.jobCategories(workshop.workshopId);
   }
 
-  @ResolveField(() => Person)
-  person(@Parent() workshop: Workshop): Promise<Person> {
-    return this.workshopService.person(workshop.workshopId);
+  @ResolveField(() => User)
+  user(@Parent() workshop: Workshop): Promise<User> {
+    return this.workshopService.user(workshop.workshopId);
   }
 
   @ResolveField(() => Address)

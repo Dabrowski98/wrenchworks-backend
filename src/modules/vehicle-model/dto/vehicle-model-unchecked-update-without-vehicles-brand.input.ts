@@ -8,7 +8,6 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleModelUncheckedUpdateWithoutVehiclesBrandInput {
 
@@ -21,12 +20,6 @@ export class VehicleModelUncheckedUpdateWithoutVehiclesBrandInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Model name is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => VehicleUncheckedUpdateManyWithoutVehicleModelNestedInput, {nullable:true})
     @Type(() => VehicleUncheckedUpdateManyWithoutVehicleModelNestedInput)

@@ -69,9 +69,4 @@ export class PermissionSetMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     canModifyPermissions?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

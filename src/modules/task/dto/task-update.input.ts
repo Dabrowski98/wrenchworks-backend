@@ -15,12 +15,8 @@ import { ServiceUpdateOneRequiredWithoutTasksNestedInput } from '../../service/d
 import { EmployeeUpdateManyWithoutTasksNestedInput } from '../../employee/dto/employee-update-many-without-tasks-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class TaskUpdateInput {
-
-    @HideField()
-    taskId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Custom name must be a string' })
@@ -56,32 +52,11 @@ export class TaskUpdateInput {
     @Validator.IsOptional()
     partsCost?: Decimal;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
     @Field(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput, {nullable:true})
     @Type(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput)
     @ValidateNested()
     @Type(() => WorkshopJobUpdateOneRequiredWithoutTasksNestedInput)
     workshopJob?: WorkshopJobUpdateOneRequiredWithoutTasksNestedInput;
-
-    @HideField()
-    service?: ServiceUpdateOneRequiredWithoutTasksNestedInput;
 
     @Field(() => EmployeeUpdateManyWithoutTasksNestedInput, {nullable:true})
     @Type(() => EmployeeUpdateManyWithoutTasksNestedInput)

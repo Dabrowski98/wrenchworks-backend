@@ -33,12 +33,6 @@ export class UserReportOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
     @Field(() => UserReportCountOrderByAggregateInput, {nullable:true})
     _count?: UserReportCountOrderByAggregateInput;
 

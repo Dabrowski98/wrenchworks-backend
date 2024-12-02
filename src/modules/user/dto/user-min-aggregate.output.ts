@@ -13,11 +13,11 @@ export class UserMinAggregate {
     @Field(() => String, {nullable:true})
     username?: string;
 
-    @HideField()
-    password?: string;
-
     @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
     email?: string;
+
+    @Field(() => String, {nullable:true})
+    telephoneNumber?: string;
 
     @Field(() => String, {nullable:true})
     avatarURL?: string;
@@ -33,9 +33,6 @@ export class UserMinAggregate {
 
     @Field(() => String, {nullable:true})
     lastName?: string;
-
-    @Field(() => String, {nullable:true})
-    telephoneNumber?: string;
 
     @Field(() => String, {nullable:true})
     addressId?: bigint | number;

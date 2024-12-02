@@ -43,12 +43,6 @@ export class UserReportWhereInput {
     @Field(() => EnumUserReportsStatusFilter, {nullable:true})
     status?: EnumUserReportsStatusFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
     user?: UserRelationFilter;

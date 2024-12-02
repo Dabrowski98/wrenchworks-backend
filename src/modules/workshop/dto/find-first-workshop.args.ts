@@ -19,7 +19,7 @@ export class FindFirstWorkshopArgs {
     orderBy?: Array<WorkshopOrderByWithRelationInput>;
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    cursor?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

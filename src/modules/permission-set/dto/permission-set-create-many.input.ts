@@ -6,12 +6,8 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetCreateManyInput {
-
-    @HideField()
-    permissionSetId?: number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
@@ -114,9 +110,4 @@ export class PermissionSetCreateManyInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

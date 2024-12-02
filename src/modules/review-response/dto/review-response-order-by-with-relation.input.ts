@@ -30,12 +30,6 @@ export class ReviewResponseOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     originalResponseText?: SortOrderInput;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 

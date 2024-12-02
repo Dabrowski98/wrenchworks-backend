@@ -34,7 +34,7 @@ export class CustomerUncheckedUpdateManyWithoutUserInput {
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Telephone number must be a string' })
     @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
     @Validator.IsOptional()
     telephoneNumber?: string;
 
@@ -76,18 +76,4 @@ export class CustomerUncheckedUpdateManyWithoutUserInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

@@ -45,18 +45,6 @@ export class WorkshopOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     isOfferingService?: SortOrderInput;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => AddressOrderByWithRelationInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressOrderByWithRelationInput)

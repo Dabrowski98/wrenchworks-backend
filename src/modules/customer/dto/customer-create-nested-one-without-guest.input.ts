@@ -1,20 +1,23 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { CustomerCreateWithoutGuestInput } from './customer-create-without-guest.input';
-import { HideField } from '@nestjs/graphql';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { CustomerCreateOrConnectWithoutGuestInput } from './customer-create-or-connect-without-guest.input';
 import { Prisma } from '@prisma/client';
 import { CustomerWhereUniqueInput } from './customer-where-unique.input';
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class CustomerCreateNestedOneWithoutGuestInput {
 
-    @HideField()
+    @Field(() => CustomerCreateWithoutGuestInput, {nullable:true})
+    @Type(() => CustomerCreateWithoutGuestInput)
+    @ValidateNested()
     create?: CustomerCreateWithoutGuestInput;
 
-    @HideField()
+    @Field(() => CustomerCreateOrConnectWithoutGuestInput, {nullable:true})
+    @Type(() => CustomerCreateOrConnectWithoutGuestInput)
+    @ValidateNested()
     connectOrCreate?: CustomerCreateOrConnectWithoutGuestInput;
 
     @Field(() => CustomerWhereUniqueInput, {nullable:true})

@@ -22,9 +22,6 @@ export class EmployeeMinAggregate {
     @Field(() => String, {nullable:true})
     login?: string;
 
-    @HideField()
-    password?: string;
-
     @Field(() => Int, {nullable:true})
     permissionSetId?: number;
 

@@ -4,6 +4,7 @@ import { ServiceRequestCreateWithoutWorkshopInput } from './service-request-crea
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateOrConnectWithoutWorkshopInput } from './service-request-create-or-connect-without-workshop.input';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestCreateManyWorkshopInputEnvelope } from './service-request-create-many-workshop-input-envelope.input';
 import { Prisma } from '@prisma/client';
 import { ServiceRequestWhereUniqueInput } from './service-request-where-unique.input';
@@ -16,18 +17,9 @@ export class ServiceRequestCreateNestedManyWithoutWorkshopInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutWorkshopInput>;
 
-    @Field(() => [ServiceRequestCreateOrConnectWithoutWorkshopInput], {nullable:true})
-    @Type(() => ServiceRequestCreateOrConnectWithoutWorkshopInput)
-    @ValidateNested()
-    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutWorkshopInput>;
-
     @Field(() => ServiceRequestCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyWorkshopInputEnvelope)
     @ValidateNested()
     createMany?: ServiceRequestCreateManyWorkshopInputEnvelope;
 
-    @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
-    @Type(() => ServiceRequestWhereUniqueInput)
-    @ValidateNested()
-    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
-}
+    }

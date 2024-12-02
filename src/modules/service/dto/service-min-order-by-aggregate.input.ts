@@ -48,18 +48,4 @@ export class ServiceMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     addedBy?: keyof typeof SortOrder;
 
-    @HideField()
-    resolvedAt?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    deletedAt?: keyof typeof SortOrder;
-}
+    }

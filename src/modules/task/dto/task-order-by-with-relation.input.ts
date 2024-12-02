@@ -36,24 +36,6 @@ export class TaskOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     partsCost?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    resolvedAt?: SortOrderInput;
-
-    @HideField()
-    resolvedBy?: SortOrderInput;
-
     @Field(() => WorkshopJobOrderByWithRelationInput, {nullable:true})
     @Type(() => WorkshopJobOrderByWithRelationInput)
     @ValidateNested()

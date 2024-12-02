@@ -4,12 +4,8 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class JobCategoryCreateManyParentInput {
-
-    @HideField()
-    categoryId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })

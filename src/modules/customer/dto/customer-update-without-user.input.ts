@@ -1,6 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { CustomerCreationSource } from '../../prisma/dto/customer-creation-source.enum';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -8,7 +8,6 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { HideField } from '@nestjs/graphql';
 import { ServiceUpdateManyWithoutCustomerNestedInput } from '../../service/dto/service-update-many-without-customer-nested.input';
 import { GuestUpdateOneWithoutCustomerNestedInput } from '../../guest/dto/guest-update-one-without-customer-nested.input';
 import { VehicleUpdateManyWithoutCustomersNestedInput } from '../../vehicle/dto/vehicle-update-many-without-customers-nested.input';
@@ -16,9 +15,6 @@ import { WorkshopUpdateOneRequiredWithoutCustomersNestedInput } from '../../work
 
 @InputType()
 export class CustomerUpdateWithoutUserInput {
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    customerId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
@@ -32,7 +28,7 @@ export class CustomerUpdateWithoutUserInput {
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Telephone number must be a string' })
     @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
     @Validator.IsOptional()
     telephoneNumber?: string;
 
@@ -74,30 +70,4 @@ export class CustomerUpdateWithoutUserInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    services?: ServiceUpdateManyWithoutCustomerNestedInput;
-
-    @HideField()
-    guest?: GuestUpdateOneWithoutCustomerNestedInput;
-
-    @HideField()
-    vehicles?: VehicleUpdateManyWithoutCustomersNestedInput;
-
-    @HideField()
-    workshop?: WorkshopUpdateOneRequiredWithoutCustomersNestedInput;
-}
+    }

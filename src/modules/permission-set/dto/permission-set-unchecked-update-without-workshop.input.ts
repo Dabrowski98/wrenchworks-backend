@@ -8,7 +8,6 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetUncheckedUpdateWithoutWorkshopInput {
 
@@ -111,12 +110,6 @@ export class PermissionSetUncheckedUpdateWithoutWorkshopInput {
     @Validator.IsBoolean({ message: 'Permission must be a boolean' })
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
 
     @Field(() => EmployeeUncheckedUpdateManyWithoutPermissionSetNestedInput, {nullable:true})
     @Type(() => EmployeeUncheckedUpdateManyWithoutPermissionSetNestedInput)

@@ -20,6 +20,7 @@ import { ReviewListRelationFilter } from '../../review/dto/review-list-relation-
 import { ReviewResponseListRelationFilter } from '../../review-response/dto/review-response-list-relation-filter.input';
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
+import { SessionDataListRelationFilter } from '../../session-data/dto/session-data-list-relation-filter.input';
 
 @InputType()
 export class UserWhereInput {
@@ -42,8 +43,11 @@ export class UserWhereInput {
     @Field(() => StringFilter, {nullable:true})
     password?: StringFilter;
 
-    @Field(() => StringNullableFilter, {nullable:true})
-    email?: StringNullableFilter;
+    @Field(() => StringFilter, {nullable:true})
+    email?: StringFilter;
+
+    @Field(() => StringFilter, {nullable:true})
+    telephoneNumber?: StringFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
     avatarURL?: StringNullableFilter;
@@ -54,26 +58,14 @@ export class UserWhereInput {
     @Field(() => EnumUsersStatusNullableFilter, {nullable:true})
     status?: EnumUsersStatusNullableFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    firstName?: StringFilter;
-
-    @Field(() => StringFilter, {nullable:true})
-    lastName?: StringFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    firstName?: StringNullableFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
-    telephoneNumber?: StringNullableFilter;
+    lastName?: StringNullableFilter;
 
     @Field(() => BigIntNullableFilter, {nullable:true})
     addressId?: BigIntNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
 
     @Field(() => AddressNullableRelationFilter, {nullable:true})
     @ValidateNested()
@@ -129,4 +121,7 @@ export class UserWhereInput {
 
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
+
+    @Field(() => SessionDataListRelationFilter, {nullable:true})
+    sessionData?: SessionDataListRelationFilter;
 }

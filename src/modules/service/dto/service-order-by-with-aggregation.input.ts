@@ -55,21 +55,6 @@ export class ServiceOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     addedBy?: SortOrderInput;
 
-    @HideField()
-    resolvedAt?: SortOrderInput;
-
-    @HideField()
-    resolvedBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => ServiceCountOrderByAggregateInput, {nullable:true})
     @Type(() => ServiceCountOrderByAggregateInput)
     _count?: ServiceCountOrderByAggregateInput;

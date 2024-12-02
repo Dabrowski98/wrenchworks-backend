@@ -63,6 +63,4 @@ export class VehicleDetailsCreateWithoutVehicleInput {
     @Validator.IsOptional()
     bodyColor?: keyof typeof BodyColors;
 
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

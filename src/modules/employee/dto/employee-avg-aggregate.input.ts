@@ -17,9 +17,4 @@ export class EmployeeAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     permissionSetId?: true;
 
-    @HideField()
-    createdBy?: true;
-
-    @HideField()
-    updatedBy?: true;
-}
+    }

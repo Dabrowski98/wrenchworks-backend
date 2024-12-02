@@ -56,18 +56,6 @@ export class ServiceRequestWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    resolvedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
     @Field(() => JobListRelationFilter, {nullable:true})
     @Type(() => JobListRelationFilter)
     @ValidateNested()

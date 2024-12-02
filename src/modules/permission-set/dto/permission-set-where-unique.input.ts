@@ -87,12 +87,6 @@ export class PermissionSetWhereUniqueInput {
     @Field(() => BoolFilter, {nullable:true})
     canModifyPermissions?: BoolFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
     @Field(() => EmployeeListRelationFilter, {nullable:true})
     @Type(() => EmployeeListRelationFilter)
     @ValidateNested()

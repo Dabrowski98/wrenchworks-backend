@@ -18,6 +18,9 @@ export class UserMaxAggregateInput {
     email?: true;
 
     @Field(() => Boolean, {nullable:true})
+    telephoneNumber?: true;
+
+    @Field(() => Boolean, {nullable:true})
     avatarURL?: true;
 
     @Field(() => Boolean, {nullable:true})
@@ -33,17 +36,6 @@ export class UserMaxAggregateInput {
     lastName?: true;
 
     @Field(() => Boolean, {nullable:true})
-    telephoneNumber?: true;
-
-    @Field(() => Boolean, {nullable:true})
     addressId?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    deletedAt?: true;
-}
+    }

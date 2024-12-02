@@ -12,11 +12,11 @@ export class UserCountAggregate {
     @Field(() => Int, {nullable:false})
     username!: number;
 
-    @HideField()
-    password!: number;
-
     @Field(() => Int, {nullable:false})
     email!: number;
+
+    @Field(() => Int, {nullable:false})
+    telephoneNumber!: number;
 
     @Field(() => Int, {nullable:false})
     avatarURL!: number;
@@ -32,9 +32,6 @@ export class UserCountAggregate {
 
     @Field(() => Int, {nullable:false})
     lastName!: number;
-
-    @Field(() => Int, {nullable:false})
-    telephoneNumber!: number;
 
     @Field(() => Int, {nullable:false})
     addressId!: number;

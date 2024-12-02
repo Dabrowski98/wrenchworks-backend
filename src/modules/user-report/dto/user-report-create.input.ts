@@ -10,12 +10,8 @@ import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class UserReportCreateInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -39,12 +35,6 @@ export class UserReportCreateInput {
     @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => UserCreateNestedOneWithoutUserReportsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutUserReportsInput)

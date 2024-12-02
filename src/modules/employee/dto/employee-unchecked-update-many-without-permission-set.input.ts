@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class EmployeeUncheckedUpdateManyWithoutPermissionSetInput {
 
@@ -36,7 +35,7 @@ export class EmployeeUncheckedUpdateManyWithoutPermissionSetInput {
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Password must be a string' })
     @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8, }$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
     @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
     @Validator.IsOptional({groups: [UPDATE]})
     password?: string;
@@ -46,18 +45,4 @@ export class EmployeeUncheckedUpdateManyWithoutPermissionSetInput {
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

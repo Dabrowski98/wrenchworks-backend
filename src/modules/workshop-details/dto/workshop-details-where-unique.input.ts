@@ -50,15 +50,6 @@ export class WorkshopDetailsWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     NIP?: StringNullableFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
     @Field(() => WorkshopRelationFilter, {nullable:true})
     @Type(() => WorkshopRelationFilter)
     @ValidateNested()

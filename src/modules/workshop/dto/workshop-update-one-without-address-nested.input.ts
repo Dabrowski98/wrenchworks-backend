@@ -41,7 +41,7 @@ export class WorkshopUpdateOneWithoutAddressNestedInput {
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 
     @Field(() => WorkshopUpdateToOneWithWhereWithoutAddressInput, {nullable:true})
     @Type(() => WorkshopUpdateToOneWithWhereWithoutAddressInput)

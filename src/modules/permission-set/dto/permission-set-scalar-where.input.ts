@@ -82,9 +82,4 @@ export class PermissionSetScalarWhereInput {
     @Field(() => BoolFilter, {nullable:true})
     canModifyPermissions?: BoolFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-}
+    }

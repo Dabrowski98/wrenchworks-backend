@@ -10,12 +10,6 @@ export class GuestUpdateManyMutationInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId?: bigint | number;
 
-    @HideField()
-    firstName?: string;
-
-    @HideField()
-    telephoneNumber?: string;
-
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()

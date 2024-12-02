@@ -5,12 +5,8 @@ import * as Validator from 'class-validator';
 import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class ReviewResponseUpdateManyMutationInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
@@ -18,15 +14,6 @@ export class ReviewResponseUpdateManyMutationInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
-
-    @HideField()
-    originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })

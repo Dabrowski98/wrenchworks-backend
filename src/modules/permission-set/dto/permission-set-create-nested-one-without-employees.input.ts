@@ -11,14 +11,9 @@ import { PermissionSetWhereUniqueInput } from './permission-set-where-unique.inp
 @InputType()
 export class PermissionSetCreateNestedOneWithoutEmployeesInput {
 
-    @HideField()
-    create?: PermissionSetCreateWithoutEmployeesInput;
-
     @Field(() => PermissionSetCreateOrConnectWithoutEmployeesInput, {nullable:true})
     @Type(() => PermissionSetCreateOrConnectWithoutEmployeesInput)
     @ValidateNested()
     connectOrCreate?: PermissionSetCreateOrConnectWithoutEmployeesInput;
 
-    @HideField()
-    connect?: Prisma.AtLeast<PermissionSetWhereUniqueInput, 'permissionSetId'>;
-}
+    }

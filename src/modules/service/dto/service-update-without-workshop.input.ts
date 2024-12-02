@@ -19,9 +19,6 @@ import { VehicleUpdateOneRequiredWithoutServicesNestedInput } from '../../vehicl
 @InputType()
 export class ServiceUpdateWithoutWorkshopInput {
 
-    @HideField()
-    serviceId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     serviceRequestId?: bigint | number;
@@ -66,30 +63,6 @@ export class ServiceUpdateWithoutWorkshopInput {
 
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    serviceRequest?: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput;
-
-    @HideField()
-    tasks?: TaskUpdateManyWithoutServiceNestedInput;
-
-    @HideField()
-    customer?: CustomerUpdateOneRequiredWithoutServicesNestedInput;
 
     @Field(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
     @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)

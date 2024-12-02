@@ -30,9 +30,4 @@ export class ServiceSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     addedBy?: keyof typeof SortOrder;
 
-    @HideField()
-    resolvedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

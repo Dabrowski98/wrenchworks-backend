@@ -65,18 +65,4 @@ export class CustomerScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     companyName?: StringNullableWithAggregatesFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    createdAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableWithAggregatesFilter;
-}
+    }

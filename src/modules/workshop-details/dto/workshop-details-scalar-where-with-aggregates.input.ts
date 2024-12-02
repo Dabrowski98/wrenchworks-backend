@@ -47,12 +47,4 @@ export class WorkshopDetailsScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     NIP?: StringNullableWithAggregatesFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

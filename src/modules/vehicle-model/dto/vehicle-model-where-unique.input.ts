@@ -35,12 +35,6 @@ export class VehicleModelWhereUniqueInput {
     @Field(() => StringFilter, {nullable:true})
     brand?: StringFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
     @Field(() => VehicleListRelationFilter, {nullable:true})
     @Type(() => VehicleListRelationFilter)
     @ValidateNested()

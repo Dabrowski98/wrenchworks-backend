@@ -15,6 +15,7 @@ import { ReviewOrderByRelationAggregateInput } from '../../review/dto/review-ord
 import { ReviewResponseOrderByRelationAggregateInput } from '../../review-response/dto/review-response-order-by-relation-aggregate.input';
 import { UserReportOrderByRelationAggregateInput } from '../../user-report/dto/user-report-order-by-relation-aggregate.input';
 import { JoinWorkshopRequestOrderByRelationAggregateInput } from '../../join-workshop-request/dto/join-workshop-request-order-by-relation-aggregate.input';
+import { SessionDataOrderByRelationAggregateInput } from '../../session-data/dto/session-data-order-by-relation-aggregate.input';
 
 @InputType()
 export class UserOrderByWithRelationInput {
@@ -28,8 +29,11 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     password?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    email?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    email?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    telephoneNumber?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     avatarURL?: SortOrderInput;
@@ -40,26 +44,14 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    firstName?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    lastName?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    firstName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
-    telephoneNumber?: SortOrderInput;
+    lastName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
-
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
 
     @Field(() => AddressOrderByWithRelationInput, {nullable:true})
     @ValidateNested()
@@ -115,4 +107,7 @@ export class UserOrderByWithRelationInput {
 
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
+
+    @Field(() => SessionDataOrderByRelationAggregateInput, {nullable:true})
+    sessionData?: SessionDataOrderByRelationAggregateInput;
 }

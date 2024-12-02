@@ -1,24 +1,15 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { VehicleCreateWithoutServiceRequestsInput } from './vehicle-create-without-service-requests.input';
-import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { HideField } from '@nestjs/graphql';
 import { VehicleCreateOrConnectWithoutServiceRequestsInput } from './vehicle-create-or-connect-without-service-requests.input';
 import { Prisma } from '@prisma/client';
 import { VehicleWhereUniqueInput } from './vehicle-where-unique.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class VehicleCreateNestedOneWithoutServiceRequestsInput {
-
-    @Field(() => VehicleCreateWithoutServiceRequestsInput, {nullable:true})
-    @Type(() => VehicleCreateWithoutServiceRequestsInput)
-    @ValidateNested()
-    create?: VehicleCreateWithoutServiceRequestsInput;
-
-    @Field(() => VehicleCreateOrConnectWithoutServiceRequestsInput, {nullable:true})
-    @Type(() => VehicleCreateOrConnectWithoutServiceRequestsInput)
-    @ValidateNested()
-    connectOrCreate?: VehicleCreateOrConnectWithoutServiceRequestsInput;
 
     @Field(() => VehicleWhereUniqueInput, {nullable:true})
     @Type(() => VehicleWhereUniqueInput)

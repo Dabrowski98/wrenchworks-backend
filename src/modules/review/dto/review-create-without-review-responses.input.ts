@@ -13,12 +13,8 @@ import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/w
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class ReviewCreateWithoutReviewResponsesInput {
-
-    @HideField()
-    reviewId?: bigint | number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -29,24 +25,12 @@ export class ReviewCreateWithoutReviewResponsesInput {
     @Validator.IsOptional()
     rating?: Decimal;
 
-    @HideField()
-    originalRating?: Decimal;
-
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     reviewText!: string;
-
-    @HideField()
-    originalReviewText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:true})
     @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })

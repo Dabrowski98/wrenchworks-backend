@@ -11,14 +11,8 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class WorkshopCreateNestedManyWithoutJobCategoriesInput {
 
-    @HideField()
-    create?: Array<WorkshopCreateWithoutJobCategoriesInput>;
-
-    @HideField()
-    connectOrCreate?: Array<WorkshopCreateOrConnectWithoutJobCategoriesInput>;
-
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>>;
+    connect?: Array<Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>>;
 }

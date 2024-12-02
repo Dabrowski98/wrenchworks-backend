@@ -8,12 +8,8 @@ import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class UserReportCreateWithoutUserInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -38,9 +34,4 @@ export class UserReportCreateWithoutUserInput {
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-}
+    }

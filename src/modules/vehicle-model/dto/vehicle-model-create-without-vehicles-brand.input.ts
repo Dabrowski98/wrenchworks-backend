@@ -5,12 +5,8 @@ import * as Validator from 'class-validator';
 import { VehicleCreateNestedManyWithoutVehicleModelInput } from '../../vehicle/dto/vehicle-create-nested-many-without-vehicle-model.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleModelCreateWithoutVehiclesBrandInput {
-
-    @HideField()
-    modelId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Model name must be a string' })
@@ -19,12 +15,4 @@ export class VehicleModelCreateWithoutVehiclesBrandInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName!: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    vehicles?: VehicleCreateNestedManyWithoutVehicleModelInput;
-}
+    }

@@ -13,12 +13,6 @@ export class VehicleBrandOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     brandName?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
     @Field(() => VehicleModelOrderByRelationAggregateInput, {nullable:true})
     @ValidateNested()
     @Type(() => VehicleModelOrderByRelationAggregateInput)

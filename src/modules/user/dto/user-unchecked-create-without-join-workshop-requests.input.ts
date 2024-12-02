@@ -14,8 +14,8 @@ import { WorkshopUncheckedCreateNestedManyWithoutUserInput } from '../../worksho
 import { ReviewUncheckedCreateNestedManyWithoutUserInput } from '../../review/dto/review-unchecked-create-nested-many-without-user.input';
 import { ReviewResponseUncheckedCreateNestedManyWithoutUserInput } from '../../review-response/dto/review-response-unchecked-create-nested-many-without-user.input';
 import { UserReportUncheckedCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-unchecked-create-nested-many-without-user.input';
+import { SessionDataUncheckedCreateNestedManyWithoutUserInput } from '../../session-data/dto/session-data-unchecked-create-nested-many-without-user.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserUncheckedCreateWithoutJoinWorkshopRequestsInput {
@@ -34,15 +34,22 @@ export class UserUncheckedCreateWithoutJoinWorkshopRequestsInput {
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Password must be a string' })
     @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8, }$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
     @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
+    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
-    email?: string;
+    email!: string;
+
+    @Field(() => String, {nullable:false})
+    @Validator.IsString({ message: 'Telephone number must be a string' })
+    @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
+    @Validator.IsOptional()
+    telephoneNumber!: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Avatar URL must be a string' })
@@ -60,39 +67,21 @@ export class UserUncheckedCreateWithoutJoinWorkshopRequestsInput {
     @Validator.IsOptional()
     status?: keyof typeof UsersStatus;
 
-    @Field(() => String, {nullable:false})
+    @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
-    @Validator.IsOptional({ groups: [UPDATE]})
-    firstName!: string;
-
-    @Field(() => String, {nullable:false})
-    @Validator.IsString({ message: 'Last name must be a string' })
-    @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Last name is required' })
-    @Validator.IsOptional({ groups: [UPDATE]})
-    lastName!: string;
+    @Validator.IsOptional()
+    firstName?: string;
 
     @Field(() => String, {nullable:true})
-    @Validator.IsString({ message: 'Telephone number must be a string' })
-    @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
+    @Validator.IsString({ message: 'Last name must be a string' })
+    @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
     @Validator.IsOptional()
-    telephoneNumber?: string;
+    lastName?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     addressId?: bigint | number;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
 
     @Field(() => VehicleUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
     @Type(() => VehicleUncheckedCreateNestedManyWithoutUserInput)
@@ -140,4 +129,7 @@ export class UserUncheckedCreateWithoutJoinWorkshopRequestsInput {
     @ValidateNested()
     @Type(() => UserReportUncheckedCreateNestedManyWithoutUserInput)
     userReports?: UserReportUncheckedCreateNestedManyWithoutUserInput;
+
+    @Field(() => SessionDataUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
+    sessionData?: SessionDataUncheckedCreateNestedManyWithoutUserInput;
 }

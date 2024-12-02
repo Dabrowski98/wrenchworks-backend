@@ -11,7 +11,7 @@ export class UserCreateOrConnectWithoutServiceRequestsInput {
 
     @Field(() => UserWhereUniqueInput, {nullable:false})
     @Type(() => UserWhereUniqueInput)
-    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'addressId'>;
+    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'email' | 'addressId'>;
 
     @Field(() => UserCreateWithoutServiceRequestsInput, {nullable:false})
     @Type(() => UserCreateWithoutServiceRequestsInput)

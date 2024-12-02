@@ -8,7 +8,6 @@ import { ReviewResponseUncheckedUpdateManyWithoutParentResponseNestedInput } fro
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class ReviewResponseUncheckedUpdateWithoutReviewInput {
 
@@ -32,12 +31,6 @@ export class ReviewResponseUncheckedUpdateWithoutReviewInput {
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:true})
     @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })

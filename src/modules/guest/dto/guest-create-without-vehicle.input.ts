@@ -9,7 +9,6 @@ import { CustomerCreateNestedOneWithoutGuestInput } from '../../customer/dto/cus
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class GuestCreateWithoutVehicleInput {
 
@@ -25,7 +24,7 @@ export class GuestCreateWithoutVehicleInput {
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Telephone number must be a string' })
     @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
     @Validator.IsOptional()
     telephoneNumber?: string;
 
@@ -53,6 +52,4 @@ export class GuestCreateWithoutVehicleInput {
     @Type(() => ServiceRequestCreateNestedOneWithoutGuestInput)
     serviceRequest?: ServiceRequestCreateNestedOneWithoutGuestInput;
 
-    @HideField()
-    customer?: CustomerCreateNestedOneWithoutGuestInput;
-}
+    }

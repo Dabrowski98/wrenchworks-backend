@@ -14,29 +14,11 @@ import { GuestCreateNestedOneWithoutServiceRequestInput } from '../../guest/dto/
 @InputType()
 export class ServiceRequestCreateWithoutApprovedServiceInput {
 
-    @HideField()
-    serviceRequestId?: bigint | number;
-
-    @HideField()
-    status?: keyof typeof ServiceRequestStatus;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
     @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
     @Validator.IsOptional()
     description?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
 
     @Field(() => JobCreateNestedManyWithoutServiceRequestsInput, {nullable:true})
     @Type(() => JobCreateNestedManyWithoutServiceRequestsInput)
@@ -60,6 +42,4 @@ export class ServiceRequestCreateWithoutApprovedServiceInput {
     @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
     user?: UserCreateNestedOneWithoutServiceRequestsInput;
 
-    @HideField()
-    guest?: GuestCreateNestedOneWithoutServiceRequestInput;
-}
+    }

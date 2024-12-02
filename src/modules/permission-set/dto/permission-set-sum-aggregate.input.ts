@@ -11,6 +11,4 @@ export class PermissionSetSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     workshopId?: true;
 
-    @HideField()
-    updatedBy?: true;
-}
+    }

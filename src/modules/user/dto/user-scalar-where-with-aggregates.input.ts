@@ -30,8 +30,11 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     password?: StringWithAggregatesFilter;
 
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    email?: StringNullableWithAggregatesFilter;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    email?: StringWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    telephoneNumber?: StringWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     avatarURL?: StringNullableWithAggregatesFilter;
@@ -42,24 +45,13 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => EnumUsersStatusNullableWithAggregatesFilter, {nullable:true})
     status?: EnumUsersStatusNullableWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    firstName?: StringWithAggregatesFilter;
-
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    lastName?: StringWithAggregatesFilter;
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    firstName?: StringNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    telephoneNumber?: StringNullableWithAggregatesFilter;
+    lastName?: StringNullableWithAggregatesFilter;
 
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addressId?: BigIntNullableWithAggregatesFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

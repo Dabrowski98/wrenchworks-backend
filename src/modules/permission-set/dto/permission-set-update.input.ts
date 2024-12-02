@@ -6,7 +6,6 @@ import { EmployeeUpdateManyWithoutPermissionSetNestedInput } from '../../employe
 import { WorkshopUpdateOneWithoutPermissionSetsNestedInput } from '../../workshop/dto/workshop-update-one-without-permission-sets-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class PermissionSetUpdateInput {
 
@@ -107,15 +106,4 @@ export class PermissionSetUpdateInput {
     @Validator.IsOptional()
     canModifyPermissions?: boolean;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    employees?: EmployeeUpdateManyWithoutPermissionSetNestedInput;
-
-    @HideField()
-    workshop?: WorkshopUpdateOneWithoutPermissionSetsNestedInput;
-}
+    }

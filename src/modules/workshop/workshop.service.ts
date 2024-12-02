@@ -12,11 +12,6 @@ import {
   NoDataProvidedForUpdate,
 } from 'src/common/custom-errors/errors.config';
 import { Address } from '../address/dto';
-import {
-  AddressCreateWithoutWorkshopsInput,
-  AddressUpdateWithoutWorkshopsInput,
-} from '../address/dto';
-import { Person } from '../person/dto';
 import { WorkshopDetails } from '../workshop-details';
 import { ServiceRequest } from '../service-request';
 import { Review } from '../review';
@@ -27,57 +22,56 @@ import { Employee } from '../employee';
 import { PermissionSet } from '../permission-set';
 import { Service } from '../service';
 import { JobCategory } from '../job-category';
+import { User } from '../user/dto';
 
 @Injectable()
 export class WorkshopService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createWorkshop(args: CreateOneWorkshopArgs): Promise<Workshop> {
-    const {
-      address,
-      personId,
-      workshopDetails,
-      workshopJobs,
-      categoryIds,
-      ...restData
-    } = args.data;
+  // async createWorkshop(args: CreateOneWorkshopArgs): Promise<Workshop> {
+  //   const {
+  //     address,
+  //     workshopDetails,
+  //     workshopJobs,
+  //     ...restData
+  //   } = args.data;
 
-    return this.prisma.workshop.create({
-      data: {
-        person: { connect: { personId } },
-        ...restData,
-        ...(address && { address: { create: address.create } }),
-        ...(workshopDetails && {
-          workshopDetails: { create: workshopDetails },
-        }),
-        ...(workshopJobs && {
-          workshopJobs: { createMany: workshopJobs },
-        }),
-        ...(categoryIds && {
-          jobCategories: {
-            connect: categoryIds.map((id) => ({ categoryId: id })),
-          },
-        }),
-      },
-    });
-  }
+  //   return this.prisma.workshop.create({
+  //     data: {
+  //       user: { connect: { userId: args.data.userId } },
+  //       ...restData,
+  //       ...(address && { address: { create: address.create } }),
+  //       ...(workshopDetails && {
+  //         workshopDetails: { create: workshopDetails },
+  //       }),
+  //       ...(workshopJobs && {
+  //         workshopJobs: { createMany: workshopJobs },
+  //       }),
+  //       ...(categoryIds && {
+  //         jobCategories: {
+  //           connect: categoryIds.map((id) => ({ categoryId: id })),
+  //         },
+  //       }),
+  //     },
+  //   });
+  // }
 
-  async updateWorkshop(args: UpdateOneWorkshopArgs): Promise<Workshop> {
-    const { data, workshopId } = args;
-    const { personId, address, workshopDetails, ...restData } = data;
+  // async updateWorkshop(args: UpdateOneWorkshopArgs): Promise<Workshop> {
+  //   const { data, workshopId } = args;
+  //   const { personId, address, workshopDetails, ...restData } = data;
 
-    return this.prisma.workshop.update({
-      where: { workshopId },
-      data: {
-        ...restData,
-        ...(address && { address: { update: address } }),
-        ...(personId && { person: { connect: { personId } } }),
-        ...(workshopDetails && {
-          workshopDetails: { update: workshopDetails },
-        }),
-      },
-    });
-  }
+  //   return this.prisma.workshop.update({
+  //     where: { workshopId },
+  //     data: {
+  //       ...restData,
+  //       ...(address && { address: { update: address } }),
+  //       ...(personId && { person: { connect: { personId } } }),
+  //       ...(workshopDetails && {
+  //         workshopDetails: { update: workshopDetails },
+  //       }),
+  //     },
+  //   });
+  // }
 
   async findAllWorkshops(args: FindManyWorkshopArgs): Promise<Workshop[]> {
     return this.prisma.workshop.findMany(args);
@@ -169,13 +163,13 @@ export class WorkshopService {
         ).services;
     }
 
-    async person(workshopId: bigint): Promise<Person> {
+    async user(workshopId: bigint): Promise<User> {
         return (
           await this.prisma.workshop.findUnique({
             where: { workshopId },
-            include: { person: true },
+            include: { user: true },
           })
-        ).person;
+        ).user;
     }
 
     async workshopDetails(workshopId: bigint): Promise<WorkshopDetails> {

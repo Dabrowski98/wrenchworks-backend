@@ -15,27 +15,24 @@ import { UserCreateNestedOneWithoutWorkshopsInput } from '../../user/dto/user-cr
 import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 @InputType()
 export class WorkshopCreateWithoutWorkshopJobsInput {
 
-    @HideField()
-    workshopId?: bigint | number;
-
     @Field(() => String, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
-    @Validator.IsOptional()
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Email is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     email!: string;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Telephone number must be a string' })
     @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-    @Validator.Matches(/^\+?[0-9]{8, 12}$/, { message: 'Invalid telephone number format' })
-    @Validator.IsOptional()
+    @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Telephone number is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber!: string;
-
-    @HideField()
-    isVerified?: boolean;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
@@ -47,43 +44,10 @@ export class WorkshopCreateWithoutWorkshopJobsInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => AddressCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressCreateNestedOneWithoutWorkshopInput)
     address?: AddressCreateNestedOneWithoutWorkshopInput;
-
-    @HideField()
-    customers?: CustomerCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => EmployeeCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @Type(() => EmployeeCreateNestedManyWithoutWorkshopInput)
-    @ValidateNested()
-    @Type(() => EmployeeCreateNestedManyWithoutWorkshopInput)
-    employees?: EmployeeCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    permissionSets?: PermissionSetCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    reviews?: ReviewCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    services?: ServiceCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
@@ -100,6 +64,4 @@ export class WorkshopCreateWithoutWorkshopJobsInput {
     @Type(() => JobCategoryCreateNestedManyWithoutWorkshopsInput)
     jobCategories?: JobCategoryCreateNestedManyWithoutWorkshopsInput;
 
-    @HideField()
-    joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput;
-}
+    }

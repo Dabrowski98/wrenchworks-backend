@@ -7,12 +7,8 @@ import { UserReportsReportedEntityType } from '../../prisma/dto/user-reports-rep
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class UserReportUpdateManyMutationInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -25,20 +21,9 @@ export class UserReportUpdateManyMutationInput {
     @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType?: keyof typeof UserReportType;
 
-    @HideField()
-    reportedEntityType?: keyof typeof UserReportsReportedEntityType;
-
-    @HideField()
-    reportedId?: bigint | number;
-
     @Field(() => UserReportsStatus, {nullable:true})
     @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
     @Validator.IsOptional()
     status?: keyof typeof UserReportsStatus;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-}
+    }

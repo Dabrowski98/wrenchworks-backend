@@ -13,9 +13,6 @@ import { Type } from 'class-transformer';
 @InputType()
 export class ServiceUpdateManyMutationInput {
 
-    @HideField()
-    serviceId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     serviceRequestId?: bigint | number;
@@ -61,18 +58,4 @@ export class ServiceUpdateManyMutationInput {
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
 
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

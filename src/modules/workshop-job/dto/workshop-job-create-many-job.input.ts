@@ -12,9 +12,6 @@ import { Type } from 'class-transformer';
 @InputType()
 export class WorkshopJobCreateManyJobInput {
 
-    @HideField()
-    workshopJobId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;
 
@@ -47,15 +44,4 @@ export class WorkshopJobCreateManyJobInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

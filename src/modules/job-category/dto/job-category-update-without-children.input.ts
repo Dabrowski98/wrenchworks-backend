@@ -9,12 +9,8 @@ import { JobUpdateManyWithoutJobCategoryNestedInput } from '../../job/dto/job-up
 import { WorkshopUpdateManyWithoutJobCategoriesNestedInput } from '../../workshop/dto/workshop-update-many-without-job-categories-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class JobCategoryUpdateWithoutChildrenInput {
-
-    @HideField()
-    categoryId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -39,9 +35,4 @@ export class JobCategoryUpdateWithoutChildrenInput {
     @Type(() => JobCategoryUpdateOneWithoutChildrenNestedInput)
     parent?: JobCategoryUpdateOneWithoutChildrenNestedInput;
 
-    @HideField()
-    jobs?: JobUpdateManyWithoutJobCategoryNestedInput;
-
-    @HideField()
-    workshops?: WorkshopUpdateManyWithoutJobCategoriesNestedInput;
-}
+    }

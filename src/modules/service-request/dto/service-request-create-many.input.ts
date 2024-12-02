@@ -8,9 +8,6 @@ import { ServiceRequestStatus } from '../../prisma/dto/service-request-status.en
 @InputType()
 export class ServiceRequestCreateManyInput {
 
-    @HideField()
-    serviceRequestId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;
 
@@ -29,24 +26,10 @@ export class ServiceRequestCreateManyInput {
     @Validator.IsOptional()
     approvedServiceId?: bigint | number;
 
-    @HideField()
-    status?: keyof typeof ServiceRequestStatus;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Description must be a string' })
     @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

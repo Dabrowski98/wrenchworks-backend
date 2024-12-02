@@ -11,7 +11,6 @@ import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-statu
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class WorkshopDetailsUncheckedUpdateInput {
 
@@ -59,12 +58,4 @@ export class WorkshopDetailsUncheckedUpdateInput {
     @Validator.IsOptional()
     NIP?: string;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

@@ -26,9 +26,4 @@ export class VehicleModelScalarWhereInput {
     @Field(() => StringFilter, {nullable:true})
     brand?: StringFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-}
+    }

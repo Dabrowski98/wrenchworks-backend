@@ -27,6 +27,7 @@ export { UserCreateNestedOneWithoutJoinWorkshopRequestsInput } from './user-crea
 export { UserCreateNestedOneWithoutReviewResponsesInput } from './user-create-nested-one-without-review-responses.input';
 export { UserCreateNestedOneWithoutReviewsInput } from './user-create-nested-one-without-reviews.input';
 export { UserCreateNestedOneWithoutServiceRequestsInput } from './user-create-nested-one-without-service-requests.input';
+export { UserCreateNestedOneWithoutSessionDataInput } from './user-create-nested-one-without-session-data.input';
 export { UserCreateNestedOneWithoutUserReportsInput } from './user-create-nested-one-without-user-reports.input';
 export { UserCreateNestedOneWithoutVehiclesInput } from './user-create-nested-one-without-vehicles.input';
 export { UserCreateNestedOneWithoutWorkshopsInput } from './user-create-nested-one-without-workshops.input';
@@ -37,6 +38,7 @@ export { UserCreateOrConnectWithoutJoinWorkshopRequestsInput } from './user-crea
 export { UserCreateOrConnectWithoutReviewResponsesInput } from './user-create-or-connect-without-review-responses.input';
 export { UserCreateOrConnectWithoutReviewsInput } from './user-create-or-connect-without-reviews.input';
 export { UserCreateOrConnectWithoutServiceRequestsInput } from './user-create-or-connect-without-service-requests.input';
+export { UserCreateOrConnectWithoutSessionDataInput } from './user-create-or-connect-without-session-data.input';
 export { UserCreateOrConnectWithoutUserReportsInput } from './user-create-or-connect-without-user-reports.input';
 export { UserCreateOrConnectWithoutVehiclesInput } from './user-create-or-connect-without-vehicles.input';
 export { UserCreateOrConnectWithoutWorkshopsInput } from './user-create-or-connect-without-workshops.input';
@@ -47,6 +49,7 @@ export { UserCreateWithoutJoinWorkshopRequestsInput } from './user-create-withou
 export { UserCreateWithoutReviewResponsesInput } from './user-create-without-review-responses.input';
 export { UserCreateWithoutReviewsInput } from './user-create-without-reviews.input';
 export { UserCreateWithoutServiceRequestsInput } from './user-create-without-service-requests.input';
+export { UserCreateWithoutSessionDataInput } from './user-create-without-session-data.input';
 export { UserCreateWithoutUserReportsInput } from './user-create-without-user-reports.input';
 export { UserCreateWithoutVehiclesInput } from './user-create-without-vehicles.input';
 export { UserCreateWithoutWorkshopsInput } from './user-create-without-workshops.input';
@@ -76,6 +79,7 @@ export { UserUncheckedCreateWithoutJoinWorkshopRequestsInput } from './user-unch
 export { UserUncheckedCreateWithoutReviewResponsesInput } from './user-unchecked-create-without-review-responses.input';
 export { UserUncheckedCreateWithoutReviewsInput } from './user-unchecked-create-without-reviews.input';
 export { UserUncheckedCreateWithoutServiceRequestsInput } from './user-unchecked-create-without-service-requests.input';
+export { UserUncheckedCreateWithoutSessionDataInput } from './user-unchecked-create-without-session-data.input';
 export { UserUncheckedCreateWithoutUserReportsInput } from './user-unchecked-create-without-user-reports.input';
 export { UserUncheckedCreateWithoutVehiclesInput } from './user-unchecked-create-without-vehicles.input';
 export { UserUncheckedCreateWithoutWorkshopsInput } from './user-unchecked-create-without-workshops.input';
@@ -89,6 +93,7 @@ export { UserUncheckedUpdateWithoutJoinWorkshopRequestsInput } from './user-unch
 export { UserUncheckedUpdateWithoutReviewResponsesInput } from './user-unchecked-update-without-review-responses.input';
 export { UserUncheckedUpdateWithoutReviewsInput } from './user-unchecked-update-without-reviews.input';
 export { UserUncheckedUpdateWithoutServiceRequestsInput } from './user-unchecked-update-without-service-requests.input';
+export { UserUncheckedUpdateWithoutSessionDataInput } from './user-unchecked-update-without-session-data.input';
 export { UserUncheckedUpdateWithoutUserReportsInput } from './user-unchecked-update-without-user-reports.input';
 export { UserUncheckedUpdateWithoutVehiclesInput } from './user-unchecked-update-without-vehicles.input';
 export { UserUncheckedUpdateWithoutWorkshopsInput } from './user-unchecked-update-without-workshops.input';
@@ -97,6 +102,7 @@ export { UserUpdateManyMutationInput } from './user-update-many-mutation.input';
 export { UserUpdateOneRequiredWithoutJoinWorkshopRequestsNestedInput } from './user-update-one-required-without-join-workshop-requests-nested.input';
 export { UserUpdateOneRequiredWithoutReviewResponsesNestedInput } from './user-update-one-required-without-review-responses-nested.input';
 export { UserUpdateOneRequiredWithoutReviewsNestedInput } from './user-update-one-required-without-reviews-nested.input';
+export { UserUpdateOneRequiredWithoutSessionDataNestedInput } from './user-update-one-required-without-session-data-nested.input';
 export { UserUpdateOneRequiredWithoutUserReportsNestedInput } from './user-update-one-required-without-user-reports-nested.input';
 export { UserUpdateOneRequiredWithoutWorkshopsNestedInput } from './user-update-one-required-without-workshops-nested.input';
 export { UserUpdateOneWithoutAddressNestedInput } from './user-update-one-without-address-nested.input';
@@ -111,6 +117,7 @@ export { UserUpdateToOneWithWhereWithoutJoinWorkshopRequestsInput } from './user
 export { UserUpdateToOneWithWhereWithoutReviewResponsesInput } from './user-update-to-one-with-where-without-review-responses.input';
 export { UserUpdateToOneWithWhereWithoutReviewsInput } from './user-update-to-one-with-where-without-reviews.input';
 export { UserUpdateToOneWithWhereWithoutServiceRequestsInput } from './user-update-to-one-with-where-without-service-requests.input';
+export { UserUpdateToOneWithWhereWithoutSessionDataInput } from './user-update-to-one-with-where-without-session-data.input';
 export { UserUpdateToOneWithWhereWithoutUserReportsInput } from './user-update-to-one-with-where-without-user-reports.input';
 export { UserUpdateToOneWithWhereWithoutVehiclesInput } from './user-update-to-one-with-where-without-vehicles.input';
 export { UserUpdateToOneWithWhereWithoutWorkshopsInput } from './user-update-to-one-with-where-without-workshops.input';
@@ -121,6 +128,7 @@ export { UserUpdateWithoutJoinWorkshopRequestsInput } from './user-update-withou
 export { UserUpdateWithoutReviewResponsesInput } from './user-update-without-review-responses.input';
 export { UserUpdateWithoutReviewsInput } from './user-update-without-reviews.input';
 export { UserUpdateWithoutServiceRequestsInput } from './user-update-without-service-requests.input';
+export { UserUpdateWithoutSessionDataInput } from './user-update-without-session-data.input';
 export { UserUpdateWithoutUserReportsInput } from './user-update-without-user-reports.input';
 export { UserUpdateWithoutVehiclesInput } from './user-update-without-vehicles.input';
 export { UserUpdateWithoutWorkshopsInput } from './user-update-without-workshops.input';
@@ -132,6 +140,7 @@ export { UserUpsertWithoutJoinWorkshopRequestsInput } from './user-upsert-withou
 export { UserUpsertWithoutReviewResponsesInput } from './user-upsert-without-review-responses.input';
 export { UserUpsertWithoutReviewsInput } from './user-upsert-without-reviews.input';
 export { UserUpsertWithoutServiceRequestsInput } from './user-upsert-without-service-requests.input';
+export { UserUpsertWithoutSessionDataInput } from './user-upsert-without-session-data.input';
 export { UserUpsertWithoutUserReportsInput } from './user-upsert-without-user-reports.input';
 export { UserUpsertWithoutVehiclesInput } from './user-upsert-without-vehicles.input';
 export { UserUpsertWithoutWorkshopsInput } from './user-upsert-without-workshops.input';

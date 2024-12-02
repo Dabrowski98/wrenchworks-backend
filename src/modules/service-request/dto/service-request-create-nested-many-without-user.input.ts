@@ -4,6 +4,7 @@ import { ServiceRequestCreateWithoutUserInput } from './service-request-create-w
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateOrConnectWithoutUserInput } from './service-request-create-or-connect-without-user.input';
+import { HideField } from '@nestjs/graphql';
 import { ServiceRequestCreateManyUserInputEnvelope } from './service-request-create-many-user-input-envelope.input';
 import { Prisma } from '@prisma/client';
 import { ServiceRequestWhereUniqueInput } from './service-request-where-unique.input';
@@ -16,18 +17,9 @@ export class ServiceRequestCreateNestedManyWithoutUserInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutUserInput>;
 
-    @Field(() => [ServiceRequestCreateOrConnectWithoutUserInput], {nullable:true})
-    @Type(() => ServiceRequestCreateOrConnectWithoutUserInput)
-    @ValidateNested()
-    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutUserInput>;
-
     @Field(() => ServiceRequestCreateManyUserInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyUserInputEnvelope)
     @ValidateNested()
     createMany?: ServiceRequestCreateManyUserInputEnvelope;
 
-    @Field(() => [ServiceRequestWhereUniqueInput], {nullable:true})
-    @Type(() => ServiceRequestWhereUniqueInput)
-    @ValidateNested()
-    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
-}
+    }

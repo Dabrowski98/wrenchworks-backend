@@ -7,12 +7,8 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
-
 @InputType()
 export class VehicleModelCreateWithoutVehiclesInput {
-
-    @HideField()
-    modelId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Model name must be a string' })
@@ -20,12 +16,6 @@ export class VehicleModelCreateWithoutVehiclesInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Model name is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName!: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => VehicleBrandCreateNestedOneWithoutVehicleModelsInput, {nullable:false})
     @ValidateNested()

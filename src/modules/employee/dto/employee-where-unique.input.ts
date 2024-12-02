@@ -59,21 +59,6 @@ export class EmployeeWhereUniqueInput {
     @Field(() => DateTimeFilter, {nullable:true})
     joinedAt?: DateTimeFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
     @Field(() => PermissionSetNullableRelationFilter, {nullable:true})
     @ValidateNested()
     @Type(() => PermissionSetNullableRelationFilter)

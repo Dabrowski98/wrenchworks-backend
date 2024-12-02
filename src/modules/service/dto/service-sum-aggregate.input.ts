@@ -29,9 +29,4 @@ export class ServiceSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     addedBy?: true;
 
-    @HideField()
-    resolvedBy?: true;
-
-    @HideField()
-    updatedBy?: true;
-}
+    }

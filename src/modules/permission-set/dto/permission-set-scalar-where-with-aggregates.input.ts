@@ -82,9 +82,4 @@ export class PermissionSetScalarWhereWithAggregatesInput {
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     canModifyPermissions?: BoolWithAggregatesFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableWithAggregatesFilter;
-}
+    }

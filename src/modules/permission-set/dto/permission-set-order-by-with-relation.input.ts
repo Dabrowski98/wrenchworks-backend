@@ -74,12 +74,6 @@ export class PermissionSetOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     canModifyPermissions?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => EmployeeOrderByRelationAggregateInput, {nullable:true})
     @Type(() => EmployeeOrderByRelationAggregateInput)
     @ValidateNested()

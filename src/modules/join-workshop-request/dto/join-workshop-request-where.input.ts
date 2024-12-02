@@ -42,21 +42,6 @@ export class JoinWorkshopRequestWhereInput {
     @Field(() => EnumJoinWorkshopRequestStatusFilter, {nullable:true})
     status?: EnumJoinWorkshopRequestStatusFilter;
 
-    @HideField()
-    createdAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    resolvedAt?: DateTimeNullableFilter;
-
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
     user?: UserRelationFilter;

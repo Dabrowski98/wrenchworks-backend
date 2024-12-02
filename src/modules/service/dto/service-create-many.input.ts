@@ -10,9 +10,6 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 @InputType()
 export class ServiceCreateManyInput {
 
-    @HideField()
-    serviceId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     serviceRequestId?: bigint | number;
@@ -35,22 +32,10 @@ export class ServiceCreateManyInput {
     @Validator.IsOptional()
     description?: string;
 
-    @HideField()
-    status?: keyof typeof ServicesStatus;
-
-    @HideField()
-    payedOff?: boolean;
-
-    @HideField()
-    paymentAmount?: Decimal;
-
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service start date must be a valid date' })
     @Validator.IsOptional()
     serviceStartDate?: Date | string;
-
-    @HideField()
-    serviceEndDate?: Date | string;
 
     @Field(() => Date, {nullable:true})
     addedAt?: Date | string;
@@ -58,18 +43,4 @@ export class ServiceCreateManyInput {
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
 
-    @HideField()
-    resolvedAt?: Date | string;
-
-    @HideField()
-    resolvedBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

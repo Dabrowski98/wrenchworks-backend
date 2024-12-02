@@ -10,7 +10,7 @@ export class WorkshopUpdateWithWhereUniqueWithoutUserInput {
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:false})
     @Type(() => WorkshopWhereUniqueInput)
-    where!: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId'>;
+    where!: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 
     @Field(() => WorkshopUpdateWithoutUserInput, {nullable:false})
     @Type(() => WorkshopUpdateWithoutUserInput)

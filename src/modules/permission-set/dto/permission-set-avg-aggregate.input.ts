@@ -11,6 +11,4 @@ export class PermissionSetAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     workshopId?: true;
 
-    @HideField()
-    updatedBy?: true;
-}
+    }

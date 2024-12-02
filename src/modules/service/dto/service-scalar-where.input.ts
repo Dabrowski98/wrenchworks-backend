@@ -69,18 +69,4 @@ export class ServiceScalarWhereInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     addedBy?: BigIntNullableFilter;
 
-    @HideField()
-    resolvedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-}
+    }
