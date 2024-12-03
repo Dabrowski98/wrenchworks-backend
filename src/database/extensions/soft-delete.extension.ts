@@ -2,7 +2,7 @@ import { createSoftDeleteExtension } from 'prisma-extension-soft-delete';
 
 export const softDeleteExtension = createSoftDeleteExtension({
   models: {
-    Person: true,
+    Workshop: true,
   },
   defaultConfig: {
     field: 'deletedAt',

@@ -29,18 +29,21 @@ generator nestgraphql {
     decorate_1_from = "@nestjs/graphql"
     decorate_1_arguments = "[]"
 
+    //Validate nested relation fields
     decorate_2_type = "*Input"
     decorate_2_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
     decorate_2_name = ValidateNested
     decorate_2_from = "class-validator"
     decorate_2_arguments = "[]"
 
+    //Validate nested input fields.
     decorate_3_type = "*Input"
     decorate_3_field = [create ,createMany ,connectOrCreate, upsert, connect, disconnect, delete, set, update, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany, deleteMany, deleteOne, updateOne, updateMany, upsertMany]
     decorate_3_name = ValidateNested
     decorate_3_from = "class-validator"
     decorate_3_arguments = "[]"
 
+    //Validate nested args fields.
     decorate_4_type = "*Args"
     decorate_4_field = data
     decorate_4_name = ValidateNested
@@ -54,15 +57,15 @@ generator nestgraphql {
     decorate_5_arguments = "['() => {propertyType.0}']"
     decorate_5_name = Type
 
-    //what to allow where https://docs.google.com/spreadsheets/d/1WHhCGJFKA0y567dnyL-4qyfEKDiHxrUjK4j1JVdaLeU/edit?usp=sharing
-
-    decorate_CI-create-field-only_type = ["AddressCreateNested*Without*", "WorkshopDetailsCreateNested*Without*",  "JobCategoryCreateNested*WithoutParentInput"]
+    // What to allow where https://docs.google.com/spreadsheets/d/1WHhCGJFKA0y567dnyL-4qyfEKDiHxrUjK4j1JVdaLeU/edit?usp=sharing
+    // Deciding which fields to hide in CreateInputs to avoid circular dependencies and to narrow down the nested fields actions.
+    decorate_CI-create-field-only_type = ["AddressCreateNested*Without*", "JoinWorkshopRequestCreateNested*Without*Input", "ServiceRequestCreateNested*Without*Input", "TaskCreateNested*WithoutServiceInput", "VehicleCreateNested*WithoutGuestInput", "VehicleDetailsCreateNested*Without*Input", "WorkshopDetailsCreateNested*Without*Input", "WorkshopJobCreateNested*WithoutWorkshopInput"]
     decorate_CI-create-field-only_field = "!(create|createMany)"
     decorate_CI-create-field-only_name = "HideField"
     decorate_CI-create-field-only_from = "@nestjs/graphql"
     decorate_CI-create-field-only_arguments = "[]"
 
-    decorate_CI-connect-field-only_type = ["CustomerCreateNested*Without*", "EmployeeCreateNested*Without*", "JobCreateNested*Without*", "ReviewCreateNested*Without*", "ReviewResponseCreateNested*Without*", "UserCreateNested*Without*", "VehicleModelCreateNested*Without*", "WorkshopCreateNested*Without*", "JobCategoryCreateNested*WithoutChildrenInput", "JobCategoryCreateNestedManyWithoutWorkshopsInput"]
+    decorate_CI-connect-field-only_type = ["CustomerCreateNested*WithoutVehiclesInput", "EmployeeCreateNested*Without*Input", "GuestCreateNested*Without*Input", "JobCreateNested*Without*Input", "JobCategoryCreateNested*Without*Input", "ReviewCreateNested*Without*Input", "ReviewResponseCreateNested*Without*Input", "ServiceCreateNested*Without*Input", "UserCreateNested*Without*Input", "VehicleCreateNested*WithoutServicesInput", "VehicleCreateNested*WithoutServiceRequestsInput", "VehicleCreateNested*WithoutVehicleDetailsInput", "VehicleModelCreateNested*Without*Input","WorkshopCreateNested*Without*Input", "WorkshopJobCreateNested*WithoutTasksInput"]
     decorate_CI-connect-field-only_field = "!(connect)"
     decorate_CI-connect-field-only_name = "HideField"
     decorate_CI-connect-field-only_from = "@nestjs/graphql"
@@ -84,7 +87,7 @@ datasource db {
 
 
 model Address{ 
-  // @HideField({ match: '@(Address)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   addressId        BigInt           @id @unique @default(autoincrement()) @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Country must be a string' })
@@ -128,6 +131,7 @@ model Address{
 
 model Customer {
   /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(Customer)@(Create|Update)*Input' })
   customerId                BigInt     @id @unique(map: "customer_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                BigInt     @db.UnsignedBigInt
@@ -144,7 +148,7 @@ model Customer {
   creationSource            CustomerCreationSource 
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
   telephoneNumber           String?                     @db.VarChar(12)
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -174,9 +178,9 @@ model Customer {
   /// @Validator.IsOptional()
   companyName  String?      @db.VarChar(30)
   deletedAt    DateTime?    @db.Timestamp(0)
-  createdAt    DateTime?    @default(now()) @db.Timestamp(0)
+  createdAt    DateTime     @default(now()) @db.Timestamp(0)
   createdBy    BigInt?      @db.UnsignedBigInt
-  updatedAt    DateTime?    @db.Timestamp(0)
+  updatedAt    DateTime     @db.Timestamp(0) @updatedAt
   updatedBy    BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
@@ -190,7 +194,7 @@ model Customer {
   workshop     Workshop       @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
 
   @@index([workshopId])
-}
+} 
 
 model Employee {
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
@@ -214,7 +218,7 @@ model Employee {
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
+  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
@@ -227,9 +231,9 @@ model Employee {
   /// Note: Optional because field defaults to now()
   joinedAt              DateTime          @default(now()) @db.DateTime(0)
   deletedAt             DateTime?         @db.Timestamp(0)
-  createdAt             DateTime?         @default(now()) @db.Timestamp(0)
+  createdAt             DateTime          @default(now()) @db.Timestamp(0)
   createdBy             BigInt?           @db.UnsignedBigInt
-  updatedAt             DateTime?         @db.Timestamp(0)
+  updatedAt             DateTime          @db.Timestamp(0) @updatedAt
   updatedBy             BigInt?           @db.UnsignedBigInt
   permissionSet         PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
@@ -260,7 +264,7 @@ model Guest {
   firstName                     String              @db.VarChar(30)
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
+  /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   telephoneNumber               String?             @db.VarChar(12)
@@ -361,9 +365,9 @@ model JoinWorkshopRequest {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
   status              JoinWorkshopRequestStatus  @default(PENDING)
-  createdAt           DateTime?                  @default(now()) @db.DateTime(0)
+  createdAt           DateTime                   @default(now()) @db.DateTime(0)
   createdBy           BigInt?                    @db.UnsignedBigInt
-  updatedAt           DateTime?                  @db.Timestamp(0)
+  updatedAt           DateTime                   @db.Timestamp(0) @updatedAt
   updatedBy           BigInt?                    @db.UnsignedBigInt
   resolvedAt          DateTime?                  @db.DateTime(0)
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
@@ -441,7 +445,7 @@ model PermissionSet {
   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
   /// @Validator.IsOptional()
   canModifyPermissions       Boolean      @default(false)
-  updatedAt                  DateTime?    @db.Timestamp(0)
+  updatedAt                  DateTime     @db.Timestamp(0) @updatedAt
   updatedBy                  BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
   employees                   Employee[]
@@ -476,8 +480,8 @@ model Review {
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   originalReviewText  String?           @db.Text
-  createdAt           DateTime?         @default(now()) @db.DateTime(0)
-  updatedAt           DateTime?         @db.Timestamp(0)
+  createdAt           DateTime          @default(now()) @db.DateTime(0)
+  updatedAt           DateTime          @db.Timestamp(0) @updatedAt
   /// @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
@@ -512,8 +516,8 @@ model ReviewResponse {
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   originalResponseText   String?                  @db.Text
-  createdAt              DateTime?                @default(now()) @db.DateTime(0)
-  updatedAt              DateTime?                @db.Timestamp(0)
+  createdAt              DateTime                 @default(now()) @db.DateTime(0)
+  updatedAt              DateTime                 @db.Timestamp(0) @updatedAt
   /// @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
   /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -576,11 +580,11 @@ model Service {
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   serviceEndDate      DateTime?         @db.DateTime(0)
-  addedAt             DateTime?         @default(now()) @db.DateTime(0)
+  addedAt             DateTime          @default(now()) @db.DateTime(0)
   addedBy             BigInt?           @db.UnsignedBigInt
   resolvedAt          DateTime?         @db.DateTime(0)
   resolvedBy          BigInt?           @db.UnsignedBigInt
-  updatedAt           DateTime?         @db.Timestamp(0)
+  updatedAt           DateTime          @db.Timestamp(0) @updatedAt
   updatedBy           BigInt?           @db.UnsignedBigInt
   deletedAt           DateTime?         @db.Timestamp(0)
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
@@ -603,30 +607,30 @@ model Service {
 model ServiceRequest {
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
-  serviceRequestId       BigInt                   @id @unique(map: "service_request_id") @default(autoincrement()) @db.UnsignedBigInt
+  serviceRequestId      BigInt                    @id @unique(map: "service_request_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId            BigInt                    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId             BigInt                    @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
-  userId                BigInt?                    @db.UnsignedBigInt
+  userId                BigInt?                   @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
-  guestId               BigInt?                    @db.UnsignedBigInt @unique
+  guestId               BigInt?                   @db.UnsignedBigInt @unique
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
-  approvedServiceId     BigInt?                  @unique(map: "approved_service_id") @db.UnsignedBigInt
+  approvedServiceId     BigInt?                   @unique(map: "approved_service_id") @db.UnsignedBigInt
   /// @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
   /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
-  status                ServiceRequestStatus?    @default(PENDING)
+  status                ServiceRequestStatus?     @default(PENDING)
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   description           String?                   @db.Text
-  createdAt             DateTime?                 @default(now()) @db.DateTime(0)
+  createdAt             DateTime                  @default(now()) @db.DateTime(0)
   resolvedAt            DateTime?                 @db.DateTime(0)
   resolvedBy            BigInt?                   @db.UnsignedBigInt
   deletedAt             DateTime?                 @db.Timestamp(0)
@@ -644,6 +648,27 @@ model ServiceRequest {
   @@index([vehicleId])
   @@index([workshopId])
   @@index([userId])
+}
+
+model SessionData {
+  /// @HideField({ match: '@(SessionData)@(Create|Update)*Input' })
+  /// @FieldType('Scalars.GraphQLBigInt')
+  sessionDataId    BigInt      @id @unique @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  userId           BigInt      @db.UnsignedBigInt
+  refreshToken     String      @db.VarChar(1000)
+  deviceId         String      @db.VarChar(255)
+  deviceName       String?     @db.VarChar(255)
+  deviceInfo       String?     @db.VarChar(255)
+  ipAddress        String?     @db.VarChar(45)
+  issuedAt         DateTime    @default(now()) @db.Timestamp(0)
+  expiresAt        DateTime    @db.Timestamp(0)
+  revoked          Boolean     @default(false)
+
+  user             User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, deviceId])
 }
 
 model Task {
@@ -679,9 +704,9 @@ model Task {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
-  createdAt            DateTime?             @default(now()) @db.DateTime(0)
+  createdAt            DateTime              @default(now()) @db.DateTime(0)
   createdBy            BigInt?               @db.UnsignedBigInt
-  updatedAt            DateTime?             @db.Timestamp(0)
+  updatedAt            DateTime              @db.Timestamp(0) @updatedAt
   updatedBy            BigInt?               @db.UnsignedBigInt
   resolvedAt           DateTime?             @db.DateTime(0)
   resolvedBy           BigInt?               @db.UnsignedBigInt
@@ -706,15 +731,19 @@ model User {
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, { message: 'Password must contain at least one letter, one number and one special character' })
+  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
   password          String              @db.VarChar(255)
-  /// @FieldType({name: 'Scalars.GraphQLEmailAddress', from: 'graphql-scalars'})
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
-  email             String?             @db.VarChar(320)
+  email             String              @db.VarChar(320) @unique
+  /// @Validator.IsString({ message: 'Telephone number must be a string' })
+  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
+  /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsOptional()
+  telephoneNumber   String              @db.VarChar(12)
   /// @Validator.IsString({ message: 'Avatar URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Avatar URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()
@@ -729,26 +758,19 @@ model User {
   status            UsersStatus?        @default(INACTIVE)
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
-  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
-  /// @Validator.IsOptional({ groups: [UPDATE]})
-  firstName        String           @db.VarChar(30)
+  /// @Validator.IsOptional()
+  firstName        String?               @db.VarChar(30)
   /// @Validator.IsString({ message: 'Last name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
-  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Last name is required' })
-  /// @Validator.IsOptional({ groups: [UPDATE]})
-  lastName         String           @db.VarChar(30)
-  /// @Validator.IsString({ message: 'Telephone number must be a string' })
-  /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
-  telephoneNumber  String?          @db.VarChar(12)
+  lastName         String?               @db.VarChar(30)
   /// @Validator.IsOptional()
-  addressId        BigInt?          @db.UnsignedBigInt @unique
-  createdAt        DateTime?        @default(now()) @db.Timestamp(0)
-  updatedAt        DateTime?        @db.Timestamp(0)
-  deletedAt        DateTime?        @db.Timestamp(0)
-  address          Address?         @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
-  /// @HideField({match: '@(User)@(Update)*Input'})
+  addressId        BigInt?              @db.UnsignedBigInt @unique
+  createdAt        DateTime             @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime             @db.Timestamp(0) @updatedAt
+  deletedAt        DateTime?            @db.Timestamp(0)
+  address          Address?             @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
+  /// @HideField({match: '@(User)@(Create|Update)*Input'})
   vehicles         Vehicle[]
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   serviceRequests  ServiceRequest[]
@@ -766,6 +788,8 @@ model User {
   userReports       UserReport[]
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   joinWorkshopRequests JoinWorkshopRequest[]
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
+  sessionData       SessionData[]
 }
 
 model UserReport {
@@ -791,8 +815,8 @@ model UserReport {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
   status             UserReportsStatus          @default(PENDING)
-  createdAt          DateTime?                  @default(now()) @db.DateTime(0)
-  updatedAt          DateTime?                  @db.Timestamp(0)
+  createdAt          DateTime                   @default(now()) @db.DateTime(0)
+  updatedAt          DateTime                   @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
@@ -835,8 +859,8 @@ model VehicleBrand {
   /// @Validator.IsOptional({groups: [UPDATE]}) 
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brandName       String            @id @unique(map: "brand_name") @db.VarChar(50)
-  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
-  updatedAt       DateTime?         @default(now()) @db.Timestamp(0)
+  createdAt       DateTime          @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime          @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(VehicleBrand)@(Create|Update)*Input' })
   vehicleModels   VehicleModel[]
 }
@@ -901,8 +925,8 @@ model VehicleModel {
   /// @Validator.IsOptional({ groups: [UPDATE]})
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brand          String          @db.VarChar(50) @map("brandName")
-  createdAt      DateTime?       @default(now()) @db.Timestamp(0)
-  updatedAt      DateTime?       @default(now()) @db.Timestamp(0)
+  createdAt      DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime        @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   vehicles       Vehicle[]
   /// @HideField({ match: '@(VehicleModel)@(Update)*Input' })
@@ -922,12 +946,14 @@ model Workshop {
   /// @Validator.IsOptional()
   addressId                 BigInt?                      @db.UnsignedBigInt @unique
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
-  /// @Validator.IsOptional()
-  email                     String                      @db.VarChar(320)
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Email is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  email                     String                      @db.VarChar(320) @unique
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
-  /// @Validator.Matches(/^\+?[0-9]{8,12}$/, { message: 'Invalid telephone number format' })
-  /// @Validator.IsOptional()
+  /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Telephone number is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
   telephoneNumber           String                      @db.VarChar(12)
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
@@ -939,14 +965,14 @@ model Workshop {
   /// @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
   /// @Validator.IsOptional()
   isOfferingService         Boolean?                    @default(false)
-  createdAt                 DateTime?                   @default(now()) @db.Timestamp(0)
-  updatedAt                 DateTime?                   @db.Timestamp(0)
+  createdAt                 DateTime                    @default(now()) @db.Timestamp(0)
+  updatedAt                 DateTime                    @db.Timestamp(0) @updatedAt
   updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   customers                 Customer[]
-  /// @HideField({ match: '@(Workshop)@(Update)*Input' })
+  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   employees                 Employee[]
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   permissionSets            PermissionSet[]
@@ -1001,7 +1027,7 @@ model WorkshopDetails {
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP              String?                   @db.Char(10)
-  updatedAt        DateTime?                 @db.Timestamp(0)
+  updatedAt        DateTime                  @db.Timestamp(0) @updatedAt
   updatedBy        BigInt?                   @db.UnsignedBigInt
   deletedAt        DateTime?                 @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })
@@ -1034,9 +1060,9 @@ model WorkshopJob {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to true
   availability            Boolean   @default(true)
-  createdAt               DateTime?                 @default(now()) @db.Timestamp(0)
+  createdAt               DateTime                  @default(now()) @db.Timestamp(0)
   createdBy               BigInt?                   @db.UnsignedBigInt
-  updatedAt               DateTime?                 @db.Timestamp(0)
+  updatedAt               DateTime                  @db.Timestamp(0) @updatedAt
   updatedBy               BigInt?                   @db.UnsignedBigInt
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   tasks                   Task[]    

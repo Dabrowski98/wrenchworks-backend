@@ -10,7 +10,7 @@ import {
   DeleteOneAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
-import { User } from '../user';
+import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
 
 
@@ -21,7 +21,7 @@ export class AddressService {
   async createAddress(args: CreateOneAddressArgs): Promise<Address> {
     return this.prisma.address.create(args);
   }
-
+ 
   async updateAddress(args: UpdateOneAddressArgs): Promise<Address> {
     return this.prisma.address.update(args);
   }

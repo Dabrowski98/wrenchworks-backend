@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/exception-filters/global-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
-import { CREATE, UPDATE } from './constants/validation-groups';
+import { ValidationError } from './common/custom-errors/errors.config';
 
 dotenv.config();
 
@@ -19,8 +19,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       enableDebugMessages: true,
       exceptionFactory: (errors) => {
-        console.log(JSON.stringify(errors, null, 2));
-        return new BadRequestException(errors);
+        const validationErrors = errors.map((error) => ({
+          property: error.property,
+          constraints: Object.values(error.constraints),
+        }));
+        return new ValidationError(validationErrors);
       },
     }),
   );

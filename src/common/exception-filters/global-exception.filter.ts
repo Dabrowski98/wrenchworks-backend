@@ -1,7 +1,8 @@
-import { ArgumentsHost, Catch, HttpException, Logger } from '@nestjs/common';
+import { ArgumentsHost, BadRequestException, Catch, HttpException, Logger } from '@nestjs/common';
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { GraphQLError } from 'graphql';
+import { ValidationError } from '../custom-errors/errors.config';
 
 @Catch()
 export class GlobalExceptionFilter implements GqlExceptionFilter {
@@ -10,7 +11,7 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const gqlHost = GqlArgumentsHost.create(host);
     const stackTrace = exception.stack || '';
-    let gqlError;
+    let gqlError: GraphQLError;
 
     if (exception instanceof HttpException) {
       gqlError = this.handleHttpException(exception);
@@ -22,6 +23,11 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
       this.logger.error(
         `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} - ${stackTrace} \n ${exception.message}`,
       );
+    } else if (exception instanceof ValidationError) {
+      gqlError = this.handleValidationError(exception);
+      this.logger.error(
+        `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} \n ${JSON.stringify(exception.errors, null, 2)} \n ${stackTrace} \n ${exception.message}`,
+      );
     } else {
       gqlError = this.handleOtherError(exception);
       this.logger.error(
@@ -32,7 +38,7 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
     return gqlError;
   }
 
-  private handleOtherError(exception: any): any {
+  private handleOtherError(exception: any): GraphQLError {
     return new GraphQLError(exception.message || 'Internal server error', {
       extensions: {
         code: exception.code || 500,
@@ -41,11 +47,21 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
     });
   }
 
-  private handleHttpException(exception: HttpException) {
+  private handleHttpException(exception: HttpException): GraphQLError {
     return new GraphQLError(exception.message || 'Internal server error', {
       extensions: {
         code: this.getGraphQLErrorCode(exception),
         status: exception.getStatus(),
+      },
+    });
+  }
+
+  private handleValidationError(exception: ValidationError): GraphQLError {
+    return new GraphQLError('Validation Failed', {
+      extensions: {
+        code: exception.code,
+        status: exception.status,
+        errors: exception.errors,
       },
     });
   }
@@ -57,7 +73,7 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
           return new GraphQLError('Unique constraint violation', {
             extensions: {
               code: 409,
-              status: 'BAD_USER_INPUT',
+              status: 'CONFLICT',
             },
           });
         case 'P2025':
