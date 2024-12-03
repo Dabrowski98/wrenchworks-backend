@@ -38,22 +38,22 @@ export class SessionDataUpdateManyWithoutUserNestedInput {
     @Field(() => [SessionDataWhereUniqueInput], {nullable:true})
     @Type(() => SessionDataWhereUniqueInput)
     @ValidateNested()
-    set?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>>;
+    set?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>>;
 
     @Field(() => [SessionDataWhereUniqueInput], {nullable:true})
     @Type(() => SessionDataWhereUniqueInput)
     @ValidateNested()
-    disconnect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>>;
+    disconnect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>>;
 
     @Field(() => [SessionDataWhereUniqueInput], {nullable:true})
     @Type(() => SessionDataWhereUniqueInput)
     @ValidateNested()
-    delete?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>>;
+    delete?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>>;
 
     @Field(() => [SessionDataWhereUniqueInput], {nullable:true})
     @Type(() => SessionDataWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>>;
+    connect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>>;
 
     @Field(() => [SessionDataUpdateWithWhereUniqueWithoutUserInput], {nullable:true})
     @Type(() => SessionDataUpdateWithWhereUniqueWithoutUserInput)

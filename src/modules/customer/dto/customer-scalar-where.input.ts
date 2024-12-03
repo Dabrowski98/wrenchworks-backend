@@ -9,6 +9,7 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 
 @InputType()
 export class CustomerScalarWhereInput {

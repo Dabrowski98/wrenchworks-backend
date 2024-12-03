@@ -12,6 +12,7 @@ import { UserUpdateOneRequiredWithoutReviewsNestedInput } from '../../user/dto/u
 import { ReviewResponseUpdateManyWithoutReviewNestedInput } from '../../review-response/dto/review-response-update-many-without-review-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class ReviewUpdateWithoutWorkshopInput {
 

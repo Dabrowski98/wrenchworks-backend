@@ -27,6 +27,12 @@ export class SessionDataScalarWhereInput {
     @Field(() => StringFilter, {nullable:true})
     refreshToken?: StringFilter;
 
+    @Field(() => StringFilter, {nullable:true})
+    deviceId?: StringFilter;
+
+    @Field(() => StringNullableFilter, {nullable:true})
+    deviceName?: StringNullableFilter;
+
     @Field(() => StringNullableFilter, {nullable:true})
     deviceInfo?: StringNullableFilter;
 

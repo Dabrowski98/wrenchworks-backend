@@ -6,9 +6,10 @@ import { WorkshopWhereInput } from './workshop-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
-import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { AddressNullableRelationFilter } from '../../address/dto/address-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -24,6 +25,7 @@ import { WorkshopJobListRelationFilter } from '../../workshop-job/dto/workshop-j
 import { JobCategoryListRelationFilter } from '../../job-category/dto/job-category-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopWhereUniqueInput {

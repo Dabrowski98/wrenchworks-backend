@@ -9,6 +9,7 @@ import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 
 @InputType()
 export class CustomerScalarWhereWithAggregatesInput {

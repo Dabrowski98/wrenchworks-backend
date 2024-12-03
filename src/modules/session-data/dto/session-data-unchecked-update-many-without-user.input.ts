@@ -12,6 +12,12 @@ export class SessionDataUncheckedUpdateManyWithoutUserInput {
     refreshToken?: string;
 
     @Field(() => String, {nullable:true})
+    deviceId?: string;
+
+    @Field(() => String, {nullable:true})
+    deviceName?: string;
+
+    @Field(() => String, {nullable:true})
     deviceInfo?: string;
 
     @Field(() => String, {nullable:true})

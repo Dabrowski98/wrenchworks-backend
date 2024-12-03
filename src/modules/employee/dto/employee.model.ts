@@ -45,14 +45,14 @@ export class Employee {
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
     @Field(() => String, {nullable:true})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

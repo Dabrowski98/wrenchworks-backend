@@ -17,6 +17,7 @@ import { UserReportUncheckedUpdateManyWithoutUserNestedInput } from '../../user-
 import { SessionDataUncheckedUpdateManyWithoutUserNestedInput } from '../../session-data/dto/session-data-unchecked-update-many-without-user-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserUncheckedUpdateWithoutJoinWorkshopRequestsInput {
 

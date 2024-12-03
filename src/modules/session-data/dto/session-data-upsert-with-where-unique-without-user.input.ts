@@ -12,7 +12,7 @@ export class SessionDataUpsertWithWhereUniqueWithoutUserInput {
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:false})
     @Type(() => SessionDataWhereUniqueInput)
-    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
+    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
 
     @Field(() => SessionDataUpdateWithoutUserInput, {nullable:false})
     @Type(() => SessionDataUpdateWithoutUserInput)

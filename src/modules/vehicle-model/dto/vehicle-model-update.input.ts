@@ -6,6 +6,7 @@ import { VehicleUpdateManyWithoutVehicleModelNestedInput } from '../../vehicle/d
 import { VehicleBrandUpdateOneRequiredWithoutVehicleModelsNestedInput } from '../../vehicle-brand/dto/vehicle-brand-update-one-required-without-vehicle-models-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class VehicleModelUpdateInput {
 

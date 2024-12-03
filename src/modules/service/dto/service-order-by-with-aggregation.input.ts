@@ -49,8 +49,8 @@ export class ServiceOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     serviceEndDate?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    addedAt?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    addedAt?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     addedBy?: SortOrderInput;

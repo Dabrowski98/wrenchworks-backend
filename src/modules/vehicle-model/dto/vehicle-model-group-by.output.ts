@@ -19,11 +19,11 @@ export class VehicleModelGroupBy {
     @Field(() => String, {nullable:false})
     brand!: string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => VehicleModelCountAggregate, {nullable:true})
     _count?: VehicleModelCountAggregate;

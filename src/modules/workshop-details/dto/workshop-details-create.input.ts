@@ -12,6 +12,7 @@ import { WorkshopCreateNestedOneWithoutWorkshopDetailsInput } from '../../worksh
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopDetailsCreateInput {
 

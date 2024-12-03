@@ -18,6 +18,7 @@ import { UserReportUpdateManyWithoutUserNestedInput } from '../../user-report/dt
 import { SessionDataUpdateManyWithoutUserNestedInput } from '../../session-data/dto/session-data-update-many-without-user-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserUpdateWithoutJoinWorkshopRequestsInput {
 

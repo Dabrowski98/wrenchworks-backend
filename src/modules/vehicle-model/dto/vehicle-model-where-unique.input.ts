@@ -4,7 +4,7 @@ import * as Scalars from 'graphql-scalars';
 import { VehicleModelModelNameBrandCompoundUniqueInput } from './vehicle-model-model-name-brand-compound-unique.input';
 import { VehicleModelWhereInput } from './vehicle-model-where.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { VehicleListRelationFilter } from '../../vehicle/dto/vehicle-list-relation-filter.input';
 import { Type } from 'class-transformer';

@@ -4,6 +4,8 @@ export enum SessionDataScalarFieldEnum {
     sessionDataId = "sessionDataId",
     userId = "userId",
     refreshToken = "refreshToken",
+    deviceId = "deviceId",
+    deviceName = "deviceName",
     deviceInfo = "deviceInfo",
     ipAddress = "ipAddress",
     issuedAt = "issuedAt",

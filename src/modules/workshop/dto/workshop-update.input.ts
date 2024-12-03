@@ -18,6 +18,7 @@ import { JobCategoryUpdateManyWithoutWorkshopsNestedInput } from '../../job-cate
 import { JoinWorkshopRequestUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-workshop-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopUpdateInput {
 

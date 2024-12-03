@@ -11,6 +11,7 @@ import { TaskCreateNestedManyWithoutEmployeesInput } from '../../task/dto/task-c
 import { UserCreateNestedOneWithoutEmployeesInput } from '../../user/dto/user-create-nested-one-without-employees.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class EmployeeCreateWithoutWorkshopInput {
 

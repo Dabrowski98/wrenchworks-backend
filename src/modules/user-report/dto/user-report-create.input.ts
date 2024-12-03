@@ -10,6 +10,7 @@ import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserReportCreateInput {
 

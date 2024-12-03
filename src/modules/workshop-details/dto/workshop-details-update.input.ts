@@ -11,6 +11,7 @@ import { HideField } from '@nestjs/graphql';
 import { WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-details-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopDetailsUpdateInput {
 

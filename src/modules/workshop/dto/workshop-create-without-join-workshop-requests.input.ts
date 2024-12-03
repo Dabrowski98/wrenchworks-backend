@@ -17,6 +17,7 @@ import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopCreateWithoutJoinWorkshopRequestsInput {
 

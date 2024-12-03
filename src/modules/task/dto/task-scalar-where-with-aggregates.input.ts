@@ -7,9 +7,10 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { EnumTasksStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-tasks-status-nullable-with-aggregates-filter.input';
 import { FloatWithAggregatesFilter } from '../../prisma/dto/float-with-aggregates-filter.input';
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
-import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class TaskScalarWhereWithAggregatesInput {

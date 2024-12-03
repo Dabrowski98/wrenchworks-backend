@@ -15,6 +15,12 @@ export class SessionDataMaxOrderByAggregateInput {
     refreshToken?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    deviceId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    deviceName?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     deviceInfo?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

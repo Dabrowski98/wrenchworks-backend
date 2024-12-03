@@ -5,6 +5,7 @@ import { HideField } from '@nestjs/graphql';
 import { VehicleModelUpdateManyWithoutVehiclesBrandNestedInput } from '../../vehicle-model/dto/vehicle-model-update-many-without-vehicles-brand-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class VehicleBrandUpdateInput {
 

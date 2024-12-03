@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
-import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { HideField } from '@nestjs/graphql';
 import { UserReportCountOrderByAggregateInput } from './user-report-count-order-by-aggregate.input';
 import { UserReportAvgOrderByAggregateInput } from './user-report-avg-order-by-aggregate.input';

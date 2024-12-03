@@ -70,8 +70,8 @@ export class ServiceWhereInput {
     @Field(() => DateTimeNullableFilter, {nullable:true})
     serviceEndDate?: DateTimeNullableFilter;
 
-    @Field(() => DateTimeNullableFilter, {nullable:true})
-    addedAt?: DateTimeNullableFilter;
+    @Field(() => DateTimeFilter, {nullable:true})
+    addedAt?: DateTimeFilter;
 
     @Field(() => BigIntNullableFilter, {nullable:true})
     addedBy?: BigIntNullableFilter;

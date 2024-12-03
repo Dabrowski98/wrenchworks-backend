@@ -15,6 +15,12 @@ export class SessionData {
     @Field(() => String, {nullable:false})
     refreshToken!: string;
 
+    @Field(() => String, {nullable:false})
+    deviceId!: string;
+
+    @Field(() => String, {nullable:true})
+    deviceName!: string | null;
+
     @Field(() => String, {nullable:true})
     deviceInfo!: string | null;
 

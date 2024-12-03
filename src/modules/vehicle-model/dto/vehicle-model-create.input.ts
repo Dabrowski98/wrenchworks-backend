@@ -8,6 +8,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class VehicleModelCreateInput {
 

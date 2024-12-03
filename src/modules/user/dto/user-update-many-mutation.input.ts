@@ -6,6 +6,7 @@ import * as Scalars from 'graphql-scalars';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserUpdateManyMutationInput {
 

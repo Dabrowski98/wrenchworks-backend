@@ -28,11 +28,11 @@ export class ReviewResponse {
     @Field(() => String, {nullable:true})
     originalResponseText!: string | null;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     /**
      * Note: Optional because field defaults to pending

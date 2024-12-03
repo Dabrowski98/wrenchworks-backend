@@ -43,11 +43,11 @@ export class Workshop {
     @Field(() => Boolean, {nullable:true,defaultValue:false})
     isOfferingService!: boolean | null;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

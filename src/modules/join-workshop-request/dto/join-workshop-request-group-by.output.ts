@@ -29,14 +29,14 @@ export class JoinWorkshopRequestGroupBy {
     @Field(() => JoinWorkshopRequestStatus, {nullable:false})
     status!: keyof typeof JoinWorkshopRequestStatus;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
 
     @Field(() => String, {nullable:true})
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;

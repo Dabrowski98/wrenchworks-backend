@@ -33,11 +33,11 @@ export class UserReport {
     @Field(() => UserReportsStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
     status!: keyof typeof UserReportsStatus;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => User, {nullable:false})
     user?: User;

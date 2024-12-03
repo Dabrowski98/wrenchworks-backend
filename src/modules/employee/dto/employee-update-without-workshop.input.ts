@@ -11,6 +11,7 @@ import { TaskUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-u
 import { UserUpdateOneWithoutEmployeesNestedInput } from '../../user/dto/user-update-one-without-employees-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class EmployeeUpdateWithoutWorkshopInput {
 

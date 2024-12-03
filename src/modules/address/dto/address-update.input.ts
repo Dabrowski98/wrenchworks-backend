@@ -6,6 +6,7 @@ import { UserUpdateOneWithoutAddressNestedInput } from '../../user/dto/user-upda
 import { WorkshopUpdateOneWithoutAddressNestedInput } from '../../workshop/dto/workshop-update-one-without-address-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class AddressUpdateInput {
 

@@ -61,8 +61,8 @@ export class Service {
     @Field(() => Date, {nullable:true})
     serviceEndDate!: Date | null;
 
-    @Field(() => Date, {nullable:true})
-    addedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    addedAt!: Date;
 
     @Field(() => String, {nullable:true})
     addedBy!: bigint | null;
@@ -73,8 +73,8 @@ export class Service {
     @Field(() => String, {nullable:true})
     resolvedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

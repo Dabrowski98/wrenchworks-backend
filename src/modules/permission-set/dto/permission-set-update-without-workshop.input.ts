@@ -5,6 +5,7 @@ import { HideField } from '@nestjs/graphql';
 import { EmployeeUpdateManyWithoutPermissionSetNestedInput } from '../../employee/dto/employee-update-many-without-permission-set-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class PermissionSetUpdateWithoutWorkshopInput {
 

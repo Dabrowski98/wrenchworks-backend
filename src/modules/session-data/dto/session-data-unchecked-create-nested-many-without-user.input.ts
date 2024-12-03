@@ -29,5 +29,5 @@ export class SessionDataUncheckedCreateNestedManyWithoutUserInput {
     @Field(() => [SessionDataWhereUniqueInput], {nullable:true})
     @Type(() => SessionDataWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>>;
+    connect?: Array<Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>>;
 }

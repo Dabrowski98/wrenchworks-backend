@@ -7,7 +7,7 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { EnumUserReportTypeFilter } from '../../prisma/dto/enum-user-report-type-filter.input';
 import { EnumUserReportsReportedEntityTypeFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-filter.input';
 import { EnumUserReportsStatusFilter } from '../../prisma/dto/enum-user-reports-status-filter.input';
-import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';

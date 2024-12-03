@@ -15,6 +15,12 @@ export class SessionDataCountAggregate {
     refreshToken!: number;
 
     @Field(() => Int, {nullable:false})
+    deviceId!: number;
+
+    @Field(() => Int, {nullable:false})
+    deviceName!: number;
+
+    @Field(() => Int, {nullable:false})
     deviceInfo!: number;
 
     @Field(() => Int, {nullable:false})

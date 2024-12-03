@@ -34,11 +34,11 @@ export class ReviewGroupBy {
     @Field(() => String, {nullable:true})
     originalReviewText?: string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => ReviewsStatus, {nullable:false})
     status!: keyof typeof ReviewsStatus;

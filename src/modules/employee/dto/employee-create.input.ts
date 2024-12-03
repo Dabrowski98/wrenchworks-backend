@@ -12,6 +12,7 @@ import { UserCreateNestedOneWithoutEmployeesInput } from '../../user/dto/user-cr
 import { WorkshopCreateNestedOneWithoutEmployeesInput } from '../../workshop/dto/workshop-create-nested-one-without-employees.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class EmployeeCreateInput {
 

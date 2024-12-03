@@ -18,6 +18,7 @@ import { JoinWorkshopRequestCreateNestedManyWithoutUserInput } from '../../join-
 import { SessionDataCreateNestedManyWithoutUserInput } from '../../session-data/dto/session-data-create-nested-many-without-user.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserCreateWithoutReviewResponsesInput {
 

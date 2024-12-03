@@ -5,6 +5,7 @@ import * as Validator from 'class-validator';
 import { WorkshopUpdateOneWithoutAddressNestedInput } from '../../workshop/dto/workshop-update-one-without-address-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class AddressUpdateWithoutUserInput {
 

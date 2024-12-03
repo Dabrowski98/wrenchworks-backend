@@ -20,6 +20,12 @@ export class SessionDataOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     refreshToken?: keyof typeof SortOrder;
 
+    @Field(() => SortOrder, {nullable:true})
+    deviceId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    deviceName?: SortOrderInput;
+
     @Field(() => SortOrderInput, {nullable:true})
     deviceInfo?: SortOrderInput;
 

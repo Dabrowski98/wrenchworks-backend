@@ -41,8 +41,8 @@ export class ServiceRequest {
     @Field(() => String, {nullable:true})
     description!: string | null;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
     @Field(() => Date, {nullable:true})
     resolvedAt!: Date | null;

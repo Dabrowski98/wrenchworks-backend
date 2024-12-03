@@ -3,9 +3,10 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { EnumJoinWorkshopRequestStatusFilter } from '../../prisma/dto/enum-join-workshop-request-status-filter.input';
-import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 
 @InputType()
 export class JoinWorkshopRequestScalarWhereInput {

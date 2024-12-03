@@ -35,8 +35,8 @@ export class ServiceRequestGroupBy {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
 
     @Field(() => Date, {nullable:true})
     resolvedAt?: Date | string;

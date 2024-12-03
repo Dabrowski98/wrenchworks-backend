@@ -10,6 +10,7 @@ import { JobUpdateManyWithoutJobCategoryNestedInput } from '../../job/dto/job-up
 import { WorkshopUpdateManyWithoutJobCategoriesNestedInput } from '../../workshop/dto/workshop-update-many-without-job-categories-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class JobCategoryUpdateInput {
 

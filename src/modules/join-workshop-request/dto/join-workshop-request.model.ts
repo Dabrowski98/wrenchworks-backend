@@ -34,14 +34,14 @@ export class JoinWorkshopRequest {
     @Field(() => JoinWorkshopRequestStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to PENDING'})
     status!: keyof typeof JoinWorkshopRequestStatus;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
     @Field(() => String, {nullable:true})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

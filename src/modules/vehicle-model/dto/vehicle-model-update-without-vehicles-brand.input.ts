@@ -5,6 +5,7 @@ import * as Validator from 'class-validator';
 import { VehicleUpdateManyWithoutVehicleModelNestedInput } from '../../vehicle/dto/vehicle-update-many-without-vehicle-model-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class VehicleModelUpdateWithoutVehiclesBrandInput {
 

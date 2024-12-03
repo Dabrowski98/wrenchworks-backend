@@ -9,6 +9,7 @@ import { CustomerCreateNestedOneWithoutGuestInput } from '../../customer/dto/cus
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class GuestCreateWithoutVehicleInput {
 

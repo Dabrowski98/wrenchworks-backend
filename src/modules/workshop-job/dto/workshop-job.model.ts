@@ -36,14 +36,14 @@ export class WorkshopJob {
     @Field(() => Boolean, {nullable:false,defaultValue:true,description:'Note: Optional because field defaults to true'})
     availability!: boolean;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
     @Field(() => String, {nullable:true})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

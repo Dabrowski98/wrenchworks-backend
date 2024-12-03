@@ -6,6 +6,7 @@ import { UsersStatus } from '../../prisma/dto/users-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserUncheckedUpdateManyInput {
 

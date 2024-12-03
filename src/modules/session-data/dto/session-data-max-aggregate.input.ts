@@ -14,6 +14,12 @@ export class SessionDataMaxAggregateInput {
     refreshToken?: true;
 
     @Field(() => Boolean, {nullable:true})
+    deviceId?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    deviceName?: true;
+
+    @Field(() => Boolean, {nullable:true})
     deviceInfo?: true;
 
     @Field(() => Boolean, {nullable:true})

@@ -55,6 +55,7 @@ export { SessionDataUpdateWithWhereUniqueWithoutUserInput } from './session-data
 export { SessionDataUpdateWithoutUserInput } from './session-data-update-without-user.input';
 export { SessionDataUpdateInput } from './session-data-update.input';
 export { SessionDataUpsertWithWhereUniqueWithoutUserInput } from './session-data-upsert-with-where-unique-without-user.input';
+export { SessionDataUserIdDeviceIdCompoundUniqueInput } from './session-data-user-id-device-id-compound-unique.input';
 export { SessionDataWhereUniqueInput } from './session-data-where-unique.input';
 export { SessionDataWhereInput } from './session-data-where.input';
 export { SessionData } from './session-data.model';

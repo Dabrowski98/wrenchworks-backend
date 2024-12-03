@@ -16,6 +16,7 @@ import { JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput } from '../..
 import { JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-create-nested-many-without-workshop.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopUncheckedCreateWithoutEmployeesInput {
 

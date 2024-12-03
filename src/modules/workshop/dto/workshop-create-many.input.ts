@@ -5,6 +5,7 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class WorkshopCreateManyInput {
 

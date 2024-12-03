@@ -10,6 +10,12 @@ export class SessionDataCreateInput {
     @Field(() => String, {nullable:false})
     refreshToken!: string;
 
+    @Field(() => String, {nullable:false})
+    deviceId!: string;
+
+    @Field(() => String, {nullable:true})
+    deviceName?: string;
+
     @Field(() => String, {nullable:true})
     deviceInfo?: string;
 

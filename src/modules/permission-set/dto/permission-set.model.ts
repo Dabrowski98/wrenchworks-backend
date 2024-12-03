@@ -75,8 +75,8 @@ export class PermissionSet {
     @Field(() => Boolean, {nullable:false,defaultValue:false})
     canModifyPermissions!: boolean;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

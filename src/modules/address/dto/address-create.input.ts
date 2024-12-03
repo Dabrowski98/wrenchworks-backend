@@ -6,6 +6,7 @@ import { UserCreateNestedOneWithoutAddressInput } from '../../user/dto/user-crea
 import { WorkshopCreateNestedOneWithoutAddressInput } from '../../workshop/dto/workshop-create-nested-one-without-address.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class AddressCreateInput {
 

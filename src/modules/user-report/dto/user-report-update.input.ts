@@ -8,6 +8,7 @@ import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserUpdateOneRequiredWithoutUserReportsNestedInput } from '../../user/dto/user-update-one-required-without-user-reports-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class UserReportUpdateInput {
 

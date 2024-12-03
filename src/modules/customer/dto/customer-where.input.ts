@@ -9,6 +9,7 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { GuestNullableRelationFilter } from '../../guest/dto/guest-nullable-relation-filter.input';

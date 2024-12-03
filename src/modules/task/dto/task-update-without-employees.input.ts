@@ -14,6 +14,7 @@ import { ValidateNested } from 'class-validator';
 import { ServiceUpdateOneRequiredWithoutTasksNestedInput } from '../../service/dto/service-update-one-required-without-tasks-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class TaskUpdateWithoutEmployeesInput {
 

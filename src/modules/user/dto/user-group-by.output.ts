@@ -42,11 +42,11 @@ export class UserGroupBy {
     @Field(() => String, {nullable:true})
     addressId?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

@@ -18,11 +18,11 @@ export class VehicleModel {
     @Field(() => String, {nullable:false})
     brand!: string;
 
-    @Field(() => Date, {nullable:true})
-    createdAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt!: Date | null;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date;
 
     @Field(() => [Vehicle], {nullable:true})
     @Type(() => Vehicle)

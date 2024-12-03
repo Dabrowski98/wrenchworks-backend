@@ -15,6 +15,7 @@ import { ServiceUpdateOneRequiredWithoutTasksNestedInput } from '../../service/d
 import { EmployeeUpdateManyWithoutTasksNestedInput } from '../../employee/dto/employee-update-many-without-tasks-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
+
 @InputType()
 export class TaskUpdateInput {
 

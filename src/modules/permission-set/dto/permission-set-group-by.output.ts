@@ -73,8 +73,8 @@ export class PermissionSetGroupBy {
     @Field(() => Boolean, {nullable:false})
     canModifyPermissions!: boolean;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;

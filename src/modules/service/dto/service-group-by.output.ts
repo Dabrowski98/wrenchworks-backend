@@ -49,8 +49,8 @@ export class ServiceGroupBy {
     @Field(() => Date, {nullable:true})
     serviceEndDate?: Date | string;
 
-    @Field(() => Date, {nullable:true})
-    addedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    addedAt!: Date | string;
 
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
@@ -61,8 +61,8 @@ export class ServiceGroupBy {
     @Field(() => String, {nullable:true})
     resolvedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
+    @Field(() => Date, {nullable:false})
+    updatedAt!: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;
