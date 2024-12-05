@@ -9,5 +9,5 @@ export class DeleteOneSessionDataArgs {
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:false})
     @Type(() => SessionDataWhereUniqueInput)
-    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
+    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
 }

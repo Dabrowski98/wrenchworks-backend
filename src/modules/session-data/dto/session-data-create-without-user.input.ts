@@ -1,9 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class SessionDataCreateWithoutUserInput {
+
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => String, {nullable:false})
     refreshToken!: string;

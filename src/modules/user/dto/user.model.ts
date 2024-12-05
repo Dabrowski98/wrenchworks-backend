@@ -32,7 +32,7 @@ export class User {
     /**
      * Note: Password will be hashed before storage
      */
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    @Field(() => String, {nullable:false})
     email!: string;
 
     @Field(() => String, {nullable:false})

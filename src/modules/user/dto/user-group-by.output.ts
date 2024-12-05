@@ -18,7 +18,7 @@ export class UserGroupBy {
     @Field(() => String, {nullable:false})
     username!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    @Field(() => String, {nullable:false})
     email!: string;
 
     @Field(() => String, {nullable:false})

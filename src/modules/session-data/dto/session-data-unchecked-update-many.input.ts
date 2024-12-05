@@ -5,8 +5,8 @@ import * as Scalars from 'graphql-scalars';
 @InputType()
 export class SessionDataUncheckedUpdateManyInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    sessionDataId?: bigint | number;
+    @Field(() => String, {nullable:true})
+    sessionDataId?: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;

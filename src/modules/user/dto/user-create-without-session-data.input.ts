@@ -2,7 +2,6 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import * as Scalars from 'graphql-scalars';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
 import { AddressCreateNestedOneWithoutUserInput } from '../../address/dto/address-create-nested-one-without-user.input';
 import { ValidateNested } from 'class-validator';
@@ -38,7 +37,7 @@ export class UserCreateWithoutSessionDataInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    @Field(() => String, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email!: string;

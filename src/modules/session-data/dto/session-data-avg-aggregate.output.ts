@@ -6,8 +6,5 @@ import { Float } from '@nestjs/graphql';
 export class SessionDataAvgAggregate {
 
     @Field(() => Float, {nullable:true})
-    sessionDataId?: number;
-
-    @Field(() => Float, {nullable:true})
     userId?: number;
 }

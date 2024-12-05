@@ -5,8 +5,8 @@ import * as Scalars from 'graphql-scalars';
 @ObjectType()
 export class SessionDataMaxAggregate {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    sessionDataId?: bigint | number;
+    @Field(() => String, {nullable:true})
+    sessionDataId?: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;

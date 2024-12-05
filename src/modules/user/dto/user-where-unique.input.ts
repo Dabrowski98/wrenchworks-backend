@@ -30,7 +30,7 @@ export class UserWhereUniqueInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
+    @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;

@@ -11,7 +11,7 @@ export class UpsertOneSessionDataArgs {
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:false})
     @Type(() => SessionDataWhereUniqueInput)
-    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
+    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
 
     @Field(() => SessionDataCreateInput, {nullable:false})
     @Type(() => SessionDataCreateInput)

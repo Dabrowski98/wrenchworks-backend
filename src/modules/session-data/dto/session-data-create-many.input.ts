@@ -1,10 +1,12 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class SessionDataCreateManyInput {
+
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint | number;

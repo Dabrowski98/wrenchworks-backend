@@ -41,7 +41,7 @@ export class UserUncheckedUpdateInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password?: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:true})
+    @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;

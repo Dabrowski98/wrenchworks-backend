@@ -651,9 +651,8 @@ model ServiceRequest {
 }
 
 model SessionData {
-  /// @HideField({ match: '@(SessionData)@(Create|Update)*Input' })
-  /// @FieldType('Scalars.GraphQLBigInt')
-  sessionDataId    BigInt      @id @unique @default(autoincrement()) @db.UnsignedBigInt
+  /// @HideField({ match: '@(SessionData)@(Update)*Input' })
+  sessionDataId    String      @id @unique @db.Char(36)
   /// @FieldType('Scalars.GraphQLBigInt')
   userId           BigInt      @db.UnsignedBigInt
   refreshToken     String      @db.VarChar(1000)
@@ -668,7 +667,6 @@ model SessionData {
   user             User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@index([userId])
-  @@unique([userId, deviceId])
 }
 
 model Task {

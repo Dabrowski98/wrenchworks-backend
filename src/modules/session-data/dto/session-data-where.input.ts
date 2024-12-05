@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
+import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
@@ -20,8 +20,8 @@ export class SessionDataWhereInput {
     @Field(() => [SessionDataWhereInput], {nullable:true})
     NOT?: Array<SessionDataWhereInput>;
 
-    @Field(() => BigIntFilter, {nullable:true})
-    sessionDataId?: BigIntFilter;
+    @Field(() => StringFilter, {nullable:true})
+    sessionDataId?: StringFilter;
 
     @Field(() => BigIntFilter, {nullable:true})
     userId?: BigIntFilter;

@@ -101,3 +101,10 @@ ALTER TABLE `workshopdetails` MODIFY `updatedAt` TIMESTAMP(0) NOT NULL;
 -- AlterTable
 ALTER TABLE `workshopjob` MODIFY `createdAt` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     MODIFY `updatedAt` TIMESTAMP(0) NOT NULL;
+
+ALTER TABLE `sessiondata` DROP PRIMARY KEY,
+    MODIFY `sessionDataId` CHAR(36) NOT NULL,
+    ADD PRIMARY KEY (`sessionDataId`);
+
+ALTER TABLE `sessiondata` ADD COLUMN `deviceId` VARCHAR(255) NOT NULL,
+    ADD COLUMN `deviceName` VARCHAR(255) NULL;

@@ -6,8 +6,5 @@ import * as Scalars from 'graphql-scalars';
 export class SessionDataSumAggregate {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    sessionDataId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 }

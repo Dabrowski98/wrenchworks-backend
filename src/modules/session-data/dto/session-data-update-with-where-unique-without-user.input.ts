@@ -10,7 +10,7 @@ export class SessionDataUpdateWithWhereUniqueWithoutUserInput {
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:false})
     @Type(() => SessionDataWhereUniqueInput)
-    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
+    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
 
     @Field(() => SessionDataUpdateWithoutUserInput, {nullable:false})
     @Type(() => SessionDataUpdateWithoutUserInput)

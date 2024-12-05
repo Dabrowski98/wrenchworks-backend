@@ -316,11 +316,6 @@ type DeletePayload {
   success: Boolean!
 }
 
-"""
-A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
-"""
-scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
-
 type Employee {
   _count: EmployeeCount!
   createdAt: DateTime!
@@ -704,15 +699,20 @@ input JoinWorkshopRequestWhereInput {
   workshopId: BigIntFilter
 }
 
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
   deleteAddress(addressId: BigInt!): DeletePayload!
-  logout(sessionDataId: BigInt!): Boolean!
-  logoutAll(userId: BigInt!): Boolean!
-  refreshTokens(refreshToken: String!, sessionDataId: BigInt!): SignInUserResponse!
+  loginUser(loginUserInput: LoginUserInput!): SignInUserResponse!
+  logout(refreshToken: String!): Boolean!
+  logoutAll(deviceId: String, userId: BigInt!): Boolean!
+  refreshTokens(refreshToken: String!): SignInUserResponse!
+  registerUser(registerUserInput: RegisterUserInput!): User!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
-  userSignIn(signInUserInput: SignInUserInput!): SignInUserResponse!
-  userSignUp(signUpInput: SignUpUserInput!): User!
 }
 
 input NestedBigIntFilter {
@@ -1029,7 +1029,17 @@ type Query {
   address(addressId: BigInt!): Address!
   addresses: [Address!]!
   findUser(where: UserWhereUniqueInput!): BigInt!
-  test: String!
+}
+
+input RegisterUserInput {
+  address: AddressCreateNestedOneWithoutUserInput
+  avatarURL: String
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+  telephoneNumber: String!
+  username: String!
 }
 
 type Review {
@@ -1314,7 +1324,7 @@ type SessionData {
   issuedAt: DateTime!
   refreshToken: String!
   revoked: Boolean!
-  sessionDataId: BigInt!
+  sessionDataId: String!
   user: User!
   userId: BigInt!
 }
@@ -1337,32 +1347,15 @@ input SessionDataWhereInput {
   issuedAt: DateTimeFilter
   refreshToken: StringFilter
   revoked: BoolFilter
-  sessionDataId: BigIntFilter
+  sessionDataId: StringFilter
   user: UserRelationFilter
   userId: BigIntFilter
-}
-
-input SignInUserInput {
-  """The email of the user"""
-  email: String!
-  password: String!
 }
 
 type SignInUserResponse {
   accessToken: String!
   refreshToken: String!
   user: User!
-}
-
-input SignUpUserInput {
-  address: AddressCreateNestedOneWithoutUserInput
-  avatarURL: String
-  email: String!
-  firstName: String
-  lastName: String
-  password: String!
-  telephoneNumber: String!
-  username: String!
 }
 
 input StringFilter {
@@ -1462,7 +1455,7 @@ type User {
   createdAt: DateTime!
   customers: [Customer!]
   deletedAt: DateTime
-  email: EmailAddress!
+  email: String!
   employees: [Employee!]
   firstName: String
   isVerified: Boolean
@@ -1522,7 +1515,7 @@ type UserMaxAggregate {
   avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
-  email: EmailAddress
+  email: String
   firstName: String
   isVerified: Boolean
   lastName: String
@@ -1538,7 +1531,7 @@ type UserMinAggregate {
   avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
-  email: EmailAddress
+  email: String
   firstName: String
   isVerified: Boolean
   lastName: String
@@ -1664,7 +1657,7 @@ input UserWhereUniqueInput {
   addressId: String
   avatarURL: StringNullableFilter
   customers: CustomerListRelationFilter
-  email: EmailAddress
+  email: String
   employees: EmployeeListRelationFilter
   firstName: StringNullableFilter
   isVerified: BoolNullableFilter

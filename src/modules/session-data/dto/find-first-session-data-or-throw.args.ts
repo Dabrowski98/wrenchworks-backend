@@ -19,7 +19,7 @@ export class FindFirstSessionDataOrThrowArgs {
     orderBy?: Array<SessionDataOrderByWithRelationInput>;
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
+    cursor?: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

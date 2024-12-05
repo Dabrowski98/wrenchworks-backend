@@ -1,79 +1,85 @@
 import {
   Resolver,
-  Query,
-  Context,
   Mutation,
+  Query,
   Args,
-  Int,
-  GqlContextType,
+  Context,
 } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-// import { SignUpUserResponse } from './dto/sign-up-user.response';
-import { SignInUserResponse } from './dto/sign-in-user.response';
-// import { SignUpUserInput } from './dto/sign-up.user.input';
-import { SignInUserInput } from './dto/sign-in-user.input';
-import { User, UserCreateInput } from '../user/dto';
-import { ContextType, UseGuards } from '@nestjs/common';
+import { SignInUserResponse } from './dto/login-user.response';
+import { LoginUserInput } from './dto/login-user.input';
+import { RegisterUserInput } from './dto/register-user.input';
+import { User } from '../user/dto';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
-import { UnauthorizedException } from '@nestjs/common';
-import * as Scalars from 'graphql-scalars';
-import { GraphQLBigInt } from 'graphql-scalars';
-import { SignUpUserInput } from './dto/sign-up.user.input';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { IpAddress } from 'src/common/decorators/ip-address.decorator';
+import { DeviceInfo } from 'src/common/decorators/device-info.decorator';
+import { DeviceId } from 'src/common/decorators/device-id.decorator';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => User)
-  async userSignUp(
-    @Args('signUpInput') signUpUserInput: SignUpUserInput,
+  async registerUser(
+    @Args('registerUserInput') registerUserInput: RegisterUserInput,
   ): Promise<User> {
-    return this.authService.userSignUp(signUpUserInput);
+    return this.authService.registerUser(registerUserInput);
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => SignInUserResponse)
-  async userSignIn(
-    @Args('signInUserInput') signInUserInput: SignInUserInput,
+  async loginUser(
+    @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context: any,
+    @DeviceId() deviceId: string,
+    @IpAddress() ipAddress: string,
+    @DeviceInfo() deviceInfo: string,
   ): Promise<SignInUserResponse> {
-    const deviceId =
-      context.req.headers['device-id'] || `default-${context.user.userId}`;
-    return this.authService.userSignIn(context.user, deviceId);
+    return this.authService.loginUser(
+      context.user,
+      deviceId,
+      ipAddress,
+      deviceInfo,
+    );
   }
 
   @Mutation(() => SignInUserResponse)
   async refreshTokens(
-    @Args('sessionDataId', { type: () => GraphQLBigInt }) sessionDataId: bigint,
     @Args('refreshToken') refreshToken: string,
+    @DeviceId() deviceId: string,
+    @IpAddress() ipAddress: string,
+    @DeviceInfo() deviceInfo: string,
   ): Promise<SignInUserResponse> {
-    try {
-      return await this.authService.refreshTokens(sessionDataId, refreshToken);
-    } catch (error) {
-      throw new UnauthorizedException('Could not refresh tokens');
-    }
+    return this.authService.refreshTokens(
+      refreshToken,
+      deviceId,
+      ipAddress,
+      deviceInfo,
+    );
   }
 
   @Mutation(() => Boolean)
-  async logout(
-    @Args('sessionDataId', { type: () => GraphQLBigInt }) sessionDataId: bigint,
-  ): Promise<boolean> {
-    await this.authService.revokeRefreshToken(sessionDataId);
+  async logout(@Args('refreshToken') refreshToken: string): Promise<boolean> {
+    try {
+      await this.authService.revokeRefreshToken(refreshToken);
+    } catch {
+      return false;
+    }
     return true;
   }
 
   @Mutation(() => Boolean)
   async logoutAll(
     @Args('userId', { type: () => GraphQLBigInt }) userId: bigint,
+    @Args('deviceId', { nullable: true }) deviceId?: string,
   ): Promise<boolean> {
-    await this.authService.revokeAllRefreshTokens(userId);
-    return true;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Query(() => String)
-  async test(@Context() context: any): Promise<string> {
-    return "LUKS"
+    try {
+      return await this.authService.revokeAllRefreshTokens(userId, deviceId);
+    } catch {
+      return false;
+    }
   }
 }

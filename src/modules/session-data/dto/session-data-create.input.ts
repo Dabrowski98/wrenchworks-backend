@@ -1,11 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { HideField } from '@nestjs/graphql';
 import { UserCreateNestedOneWithoutSessionDataInput } from '../../user/dto/user-create-nested-one-without-session-data.input';
 import { Type } from 'class-transformer';
 
 @InputType()
 export class SessionDataCreateInput {
+
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => String, {nullable:false})
     refreshToken!: string;

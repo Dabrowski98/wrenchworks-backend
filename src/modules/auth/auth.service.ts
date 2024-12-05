@@ -6,133 +6,179 @@ import { User, UserCreateInput } from '../user/dto';
 // import { SignUpUserResponse } from './dto/sign-up-user.response';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserService } from '../user/user.service';
-import { SignInUserResponse } from './dto/sign-in-user.response';
-import { SignInUserInput } from './dto/sign-in-user.input';
-import { SignUpUserInput } from './dto/sign-up.user.input';
+import { SignInUserResponse } from './dto/login-user.response';
+import { LoginUserInput } from './dto/login-user.input';
+import { RegisterUserInput } from './dto/register-user.input';
+import { v4 as uuidv4 } from 'uuid';
+import { SessionData } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async userSignUp(input: SignUpUserInput): Promise<User> {
+  // TODO: Turn salt rounds into Peppers
+  async registerUser(input: RegisterUserInput): Promise<User> {
     const hashedPassword = await bcrypt.hash(input.password, 10);
     const userData = { ...input, password: hashedPassword };
     return this.userService.createUser(userData);
   }
 
-  async userSignIn(user: User, deviceId: string): Promise<SignInUserResponse> {
+  // TODO: limit the number of sessions per user.
+  async loginUser(
+    user: User,
+    deviceId: string,
+    ipAddress: string,
+    deviceInfo: string,
+  ): Promise<SignInUserResponse> {
+    await this.revokeAllRefreshTokens(user.userId, deviceId);
     const { accessToken, refreshToken } = await this.generateTokens(user);
-    await this.upsertRefreshToken(user.userId, refreshToken, deviceId);
+    await this.createSessionData(refreshToken, deviceId, ipAddress, deviceInfo);
     return { accessToken, refreshToken, user };
   }
 
-  async validateUser(email: string, pass: string): Promise<User | null> {
+  async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userService.findUser({ where: { email } });
     if (!user) return null;
-    const isPasswordValid = await bcrypt.compare(pass, user.password);
-    const { password, ...result } = user;
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const { password: _, ...result } = user;
+
     return isPasswordValid ? result : null;
   }
 
-  async generateTokens(
+  private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const payload = {
-      email: user.email,
-      sub: user.userId,
-    };
+    const payload = { sub: user.userId };
+
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15s',
+      expiresIn: '20s',
       secret: process.env.ACCESS_SECRET,
     });
-    const refreshToken = this.jwtService.sign(
-      { payload, accessToken },
-      { expiresIn: '30s', secret: process.env.REFRESH_SECRET },
-    );
+
+    const refreshToken = this.jwtService.sign(payload, {
+      jwtid: uuidv4(),
+      expiresIn: '10s',
+      secret: process.env.REFRESH_SECRET,
+    });
+
     return { accessToken, refreshToken };
   }
 
-  async upsertRefreshToken(
-    userId: bigint,
+  private async createSessionData(
     refreshToken: string,
     deviceId: string,
+    ipAddress: string,
+    deviceInfo: string,
   ) {
-    const x = await this.jwtService.decode(refreshToken);
-    await this.prisma.sessionData.upsert({
-      where: { userId_deviceId: { userId, deviceId } },
-      update: {
+    const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
+      secret: process.env.REFRESH_SECRET,
+    });
+
+    await this.prisma.sessionData.create({
+      data: {
+        sessionDataId: decodedRefreshToken.jti,
+        userId: decodedRefreshToken.sub,
+        deviceId,
+        ipAddress,
+        deviceInfo,
         refreshToken,
-        revoked: false,
-        issuedAt: new Date(x.iat * 1000),
-        expiresAt: new Date(x.exp * 1000),
+        issuedAt: new Date(decodedRefreshToken.iat * 1000),
+        expiresAt: new Date(decodedRefreshToken.exp * 1000),
       },
-      create: {
+    });
+  }
+
+  async revokeRefreshToken(refreshToken: string) {
+    const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
+      secret: process.env.REFRESH_SECRET,
+    });
+
+    await this.prisma.sessionData.updateMany({
+      where: {
+        sessionDataId: decodedRefreshToken.jti,
+        revoked: false,
+      },
+      data: { revoked: true },
+    });
+  }
+
+  async revokeAllRefreshTokens(userId: bigint, deviceId?: string) {
+    const result = await this.prisma.sessionData.updateMany({
+      where: {
         userId,
         deviceId,
-        refreshToken,
         revoked: false,
-        issuedAt: new Date(x.iat * 1000),
-        expiresAt: new Date(x.exp * 1000),
+        expiresAt: { gt: new Date() },
       },
-    });
-  }
-
-  async revokeRefreshToken(sessionDataId: bigint) {
-    await this.prisma.sessionData.update({
-      where: { sessionDataId, revoked: false },
       data: { revoked: true },
     });
-  }
 
-  async revokeAllRefreshTokens(userId: bigint) {
-    await this.prisma.sessionData.updateMany({
-      where: { userId, revoked: false },
-      data: { revoked: true },
-    });
+    if (result.count === 0) return false;
+    return true;
   }
 
   async refreshTokens(
-    sessionDataId: bigint,
-    refreshToken: string,
+    providedRefreshToken: string,
+    deviceId: string,
+    ipAddress: string,
+    deviceInfo: string,
   ): Promise<SignInUserResponse> {
-    const session = await this.prisma.sessionData.findUnique({
-      where: { sessionDataId },
-    });
+    const session = await this.getSession(providedRefreshToken);
 
-    if (!session || session.revoked || session.expiresAt < new Date()) {
-      throw new UnauthorizedException(
-        'Refresh token not found, revoked, or expired',
-      );
-    }
-
-    const isValid = await bcrypt.compare(refreshToken, session.refreshToken);
-    if (!isValid) {
+    if (!session) {
       throw new UnauthorizedException('Invalid refresh token');
     }
-
     const user = await this.userService.findUser({
       where: { userId: session.userId },
     });
+
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    const tokens = await this.generateTokens(user);
-    await this.upsertRefreshToken(
-      session.userId,
-      tokens.refreshToken,
-      session.deviceId,
-    );
-    await this.revokeRefreshToken(session.sessionDataId);
+    const { accessToken, refreshToken } = await this.generateTokens(user);
+    await this.revokeAllRefreshTokens(user.userId, deviceId);
+    await this.createSessionData(refreshToken, deviceId, ipAddress, deviceInfo);
 
-    return {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      user,
-    };
+    return { accessToken, refreshToken, user };
+  }
+
+  private async getSession(providedRefreshToken: string): Promise<SessionData> {
+    const decodedRefreshToken = this.jwtService.decode(providedRefreshToken);
+
+    if (!decodedRefreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const session = await this.prisma.sessionData.findUnique({
+      where: { sessionDataId: decodedRefreshToken.jti },
+    });
+
+    if (!session) {
+      throw new UnauthorizedException('Refresh token not found');
+    }
+
+    if (session.revoked || session.expiresAt < new Date()) {
+      await this.revokeAllRefreshTokens(session.userId);
+      throw new UnauthorizedException('Refresh token revoked or expired');
+    }
+
+    try {
+      await this.jwtService.verify(providedRefreshToken, {
+        secret: process.env.REFRESH_SECRET,
+      });
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    if (providedRefreshToken !== session.refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    return session;
   }
 }

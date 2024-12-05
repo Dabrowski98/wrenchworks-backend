@@ -2,7 +2,6 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import * as Scalars from 'graphql-scalars';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
@@ -26,7 +25,7 @@ export class UserCreateManyInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
-    @Field(() => Scalars.GraphQLEmailAddress, {nullable:false})
+    @Field(() => String, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email!: string;

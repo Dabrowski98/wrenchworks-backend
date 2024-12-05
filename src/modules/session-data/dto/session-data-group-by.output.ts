@@ -10,8 +10,8 @@ import { SessionDataMaxAggregate } from './session-data-max-aggregate.output';
 @ObjectType()
 export class SessionDataGroupBy {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    sessionDataId!: bigint | number;
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint | number;

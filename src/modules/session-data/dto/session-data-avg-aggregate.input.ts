@@ -5,8 +5,5 @@ import { InputType } from '@nestjs/graphql';
 export class SessionDataAvgAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
-    sessionDataId?: true;
-
-    @Field(() => Boolean, {nullable:true})
     userId?: true;
 }

@@ -1,12 +1,11 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class SessionDataUncheckedCreateWithoutUserInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    sessionDataId?: bigint | number;
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => String, {nullable:false})
     refreshToken!: string;

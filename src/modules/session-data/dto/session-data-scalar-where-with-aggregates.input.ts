@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
+import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-filter.input';
@@ -18,8 +18,8 @@ export class SessionDataScalarWhereWithAggregatesInput {
     @Field(() => [SessionDataScalarWhereWithAggregatesInput], {nullable:true})
     NOT?: Array<SessionDataScalarWhereWithAggregatesInput>;
 
-    @Field(() => BigIntWithAggregatesFilter, {nullable:true})
-    sessionDataId?: BigIntWithAggregatesFilter;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    sessionDataId?: StringWithAggregatesFilter;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     userId?: BigIntWithAggregatesFilter;

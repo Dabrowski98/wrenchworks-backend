@@ -6,8 +6,8 @@ import { User } from '../../user/dto/user.model';
 @ObjectType()
 export class SessionData {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    sessionDataId!: bigint;
+    @Field(() => String, {nullable:false})
+    sessionDataId!: string;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint;

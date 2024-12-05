@@ -1,7 +1,5 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
-import { SessionDataUserIdDeviceIdCompoundUniqueInput } from './session-data-user-id-device-id-compound-unique.input';
 import { SessionDataWhereInput } from './session-data-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
@@ -14,11 +12,8 @@ import { Type } from 'class-transformer';
 @InputType()
 export class SessionDataWhereUniqueInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    sessionDataId?: bigint | number;
-
-    @Field(() => SessionDataUserIdDeviceIdCompoundUniqueInput, {nullable:true})
-    userId_deviceId?: SessionDataUserIdDeviceIdCompoundUniqueInput;
+    @Field(() => String, {nullable:true})
+    sessionDataId?: string;
 
     @Field(() => [SessionDataWhereInput], {nullable:true})
     AND?: Array<SessionDataWhereInput>;
