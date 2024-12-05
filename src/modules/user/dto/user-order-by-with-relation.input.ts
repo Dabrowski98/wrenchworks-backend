@@ -51,6 +51,9 @@ export class UserOrderByWithRelationInput {
     lastName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    role?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
 
     @Field(() => AddressOrderByWithRelationInput, {nullable:true})

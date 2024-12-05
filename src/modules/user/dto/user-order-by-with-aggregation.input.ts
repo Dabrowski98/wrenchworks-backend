@@ -43,6 +43,9 @@ export class UserOrderByWithAggregationInput {
     lastName?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    role?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
 
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})

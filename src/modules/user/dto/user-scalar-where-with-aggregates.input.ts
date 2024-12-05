@@ -5,6 +5,7 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable-with-aggregates-filter.input';
 import { EnumUsersStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-users-status-nullable-with-aggregates-filter.input';
+import { EnumUserRoleNullableWithAggregatesFilter } from '../../prisma/dto/enum-user-role-nullable-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -51,6 +52,9 @@ export class UserScalarWhereWithAggregatesInput {
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     lastName?: StringNullableWithAggregatesFilter;
+
+    @Field(() => EnumUserRoleNullableWithAggregatesFilter, {nullable:true})
+    role?: EnumUserRoleNullableWithAggregatesFilter;
 
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     addressId?: BigIntNullableWithAggregatesFilter;

@@ -3,6 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserRole } from '../../prisma/dto/user-role.enum';
 import { Address } from '../../address/dto/address.model';
 import { Type } from 'class-transformer';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
@@ -52,6 +53,9 @@ export class User {
 
     @Field(() => String, {nullable:true})
     lastName!: string | null;
+
+    @Field(() => UserRole, {nullable:true,defaultValue:'USER'})
+    role!: keyof typeof UserRole | null;
 
     @Field(() => String, {nullable:true})
     addressId!: bigint | null;

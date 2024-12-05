@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserRole } from '../../prisma/dto/user-role.enum';
 import { AddressCreateNestedOneWithoutUserInput } from '../../address/dto/address-create-nested-one-without-user.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';

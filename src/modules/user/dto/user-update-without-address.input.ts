@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserRole } from '../../prisma/dto/user-role.enum';
 import { VehicleUpdateManyWithoutUserNestedInput } from '../../vehicle/dto/vehicle-update-many-without-user-nested.input';
 import { ServiceRequestUpdateManyWithoutUserNestedInput } from '../../service-request/dto/service-request-update-many-without-user-nested.input';
 import { CustomerUpdateManyWithoutUserNestedInput } from '../../customer/dto/customer-update-many-without-user-nested.input';

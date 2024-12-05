@@ -36,6 +36,9 @@ export class UserMinAggregateInput {
     lastName?: true;
 
     @Field(() => Boolean, {nullable:true})
+    role?: true;
+
+    @Field(() => Boolean, {nullable:true})
     addressId?: true;
 
     }

@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserRole } from '../../prisma/dto/user-role.enum';
 import { HideField } from '@nestjs/graphql';
 import { VehicleUncheckedCreateNestedManyWithoutUserInput } from '../../vehicle/dto/vehicle-unchecked-create-nested-many-without-user.input';
 import { Type } from 'class-transformer';
@@ -79,6 +80,11 @@ export class UserUncheckedCreateWithoutEmployeesInput {
     @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
     @Validator.IsOptional()
     lastName?: string;
+
+    @Field(() => UserRole, {nullable:true})
+    @Validator.IsEnum(UserRole, { message: 'Invalid user role' })
+    @Validator.IsOptional()
+    role?: keyof typeof UserRole;
 
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()

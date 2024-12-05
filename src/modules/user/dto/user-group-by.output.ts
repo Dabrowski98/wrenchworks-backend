@@ -3,6 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
 import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserRole } from '../../prisma/dto/user-role.enum';
 import { UserCountAggregate } from './user-count-aggregate.output';
 import { UserAvgAggregate } from './user-avg-aggregate.output';
 import { UserSumAggregate } from './user-sum-aggregate.output';
@@ -38,6 +39,9 @@ export class UserGroupBy {
 
     @Field(() => String, {nullable:true})
     lastName?: string;
+
+    @Field(() => UserRole, {nullable:true})
+    role?: keyof typeof UserRole;
 
     @Field(() => String, {nullable:true})
     addressId?: bigint | number;

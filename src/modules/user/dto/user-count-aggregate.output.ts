@@ -34,6 +34,9 @@ export class UserCountAggregate {
     lastName!: number;
 
     @Field(() => Int, {nullable:false})
+    role!: number;
+
+    @Field(() => Int, {nullable:false})
     addressId!: number;
 
     @Field(() => Int, {nullable:false})

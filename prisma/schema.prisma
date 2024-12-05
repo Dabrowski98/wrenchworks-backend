@@ -762,6 +762,10 @@ model User {
   /// @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   lastName         String?               @db.VarChar(30)
+  /// @Validator.IsEnum(UserRole, { message: 'Invalid user role' })
+  /// @HideField({ match: '@(User)@(Create|Update)*Input' })
+  /// @Validator.IsOptional()
+  role             UserRole?             @default(USER)
   /// @Validator.IsOptional()
   addressId        BigInt?              @db.UnsignedBigInt @unique
   createdAt        DateTime             @default(now()) @db.Timestamp(0)
@@ -1092,6 +1096,11 @@ enum UserReportType {
   FRAUDULENT_ACTIVITY
   WORKSHOP_IMPERSONATION
   OTHER
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 enum ServiceRequestStatus {
