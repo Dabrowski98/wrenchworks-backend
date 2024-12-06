@@ -54,8 +54,8 @@ export class User {
     @Field(() => String, {nullable:true})
     lastName!: string | null;
 
-    @Field(() => UserRole, {nullable:true,defaultValue:'USER'})
-    role!: keyof typeof UserRole | null;
+    @Field(() => UserRole, {nullable:false,defaultValue:'USER'})
+    role!: keyof typeof UserRole;
 
     @Field(() => String, {nullable:true})
     addressId!: bigint | null;

@@ -1054,7 +1054,6 @@ input PermissionSetWhereInput {
 type Query {
   address(addressId: BigInt!): Address!
   addresses: [Address!]!
-  adminTest: String!
   findUser(where: UserWhereUniqueInput!): BigInt!
 }
 

@@ -765,7 +765,7 @@ model User {
   /// @Validator.IsEnum(UserRole, { message: 'Invalid user role' })
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @Validator.IsOptional()
-  role             UserRole?             @default(USER)
+  role             UserRole              @default(USER)
   /// @Validator.IsOptional()
   addressId        BigInt?              @db.UnsignedBigInt @unique
   createdAt        DateTime             @default(now()) @db.Timestamp(0)

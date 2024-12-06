@@ -42,8 +42,8 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     lastName?: SortOrderInput;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    role?: SortOrderInput;
+    @Field(() => SortOrder, {nullable:true})
+    role?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;

@@ -41,8 +41,10 @@ export { EnumUserReportsReportedEntityTypeFilter } from './enum-user-reports-rep
 export { EnumUserReportsReportedEntityTypeWithAggregatesFilter } from './enum-user-reports-reported-entity-type-with-aggregates-filter.input';
 export { EnumUserReportsStatusFilter } from './enum-user-reports-status-filter.input';
 export { EnumUserReportsStatusWithAggregatesFilter } from './enum-user-reports-status-with-aggregates-filter.input';
+export { EnumUserRoleFilter } from './enum-user-role-filter.input';
 export { EnumUserRoleNullableFilter } from './enum-user-role-nullable-filter.input';
 export { EnumUserRoleNullableWithAggregatesFilter } from './enum-user-role-nullable-with-aggregates-filter.input';
+export { EnumUserRoleWithAggregatesFilter } from './enum-user-role-with-aggregates-filter.input';
 export { EnumUsersStatusNullableFilter } from './enum-users-status-nullable-filter.input';
 export { EnumUsersStatusNullableWithAggregatesFilter } from './enum-users-status-nullable-with-aggregates-filter.input';
 export { EnumWorkshopsDetailsStatusNullableFilter } from './enum-workshops-details-status-nullable-filter.input';
@@ -95,8 +97,10 @@ export { NestedEnumUserReportsReportedEntityTypeFilter } from './nested-enum-use
 export { NestedEnumUserReportsReportedEntityTypeWithAggregatesFilter } from './nested-enum-user-reports-reported-entity-type-with-aggregates-filter.input';
 export { NestedEnumUserReportsStatusFilter } from './nested-enum-user-reports-status-filter.input';
 export { NestedEnumUserReportsStatusWithAggregatesFilter } from './nested-enum-user-reports-status-with-aggregates-filter.input';
+export { NestedEnumUserRoleFilter } from './nested-enum-user-role-filter.input';
 export { NestedEnumUserRoleNullableFilter } from './nested-enum-user-role-nullable-filter.input';
 export { NestedEnumUserRoleNullableWithAggregatesFilter } from './nested-enum-user-role-nullable-with-aggregates-filter.input';
+export { NestedEnumUserRoleWithAggregatesFilter } from './nested-enum-user-role-with-aggregates-filter.input';
 export { NestedEnumUsersStatusNullableFilter } from './nested-enum-users-status-nullable-filter.input';
 export { NestedEnumUsersStatusNullableWithAggregatesFilter } from './nested-enum-users-status-nullable-with-aggregates-filter.input';
 export { NestedEnumWorkshopsDetailsStatusNullableFilter } from './nested-enum-workshops-details-status-nullable-filter.input';

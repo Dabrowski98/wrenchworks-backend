@@ -40,8 +40,8 @@ export class UserGroupBy {
     @Field(() => String, {nullable:true})
     lastName?: string;
 
-    @Field(() => UserRole, {nullable:true})
-    role?: keyof typeof UserRole;
+    @Field(() => UserRole, {nullable:false})
+    role!: keyof typeof UserRole;
 
     @Field(() => String, {nullable:true})
     addressId?: bigint | number;

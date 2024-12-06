@@ -5,7 +5,7 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { EnumUsersStatusNullableFilter } from '../../prisma/dto/enum-users-status-nullable-filter.input';
-import { EnumUserRoleNullableFilter } from '../../prisma/dto/enum-user-role-nullable-filter.input';
+import { EnumUserRoleFilter } from '../../prisma/dto/enum-user-role-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -66,8 +66,8 @@ export class UserWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     lastName?: StringNullableFilter;
 
-    @Field(() => EnumUserRoleNullableFilter, {nullable:true})
-    role?: EnumUserRoleNullableFilter;
+    @Field(() => EnumUserRoleFilter, {nullable:true})
+    role?: EnumUserRoleFilter;
 
     @Field(() => BigIntNullableFilter, {nullable:true})
     addressId?: BigIntNullableFilter;

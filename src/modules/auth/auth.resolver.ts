@@ -84,19 +84,12 @@ export class AuthResolver {
     ) {
       throw new ForbiddenException('You can only logout your own sessions');
     }
-    console.log(context.req.user.userId);
-    console.log(userId);
+
     try {
       return await this.authService.revokeAllRefreshTokens(userId);
     } catch {
       return false;
     }
-  }
-
-  @Query(() => String)
-  @Roles(UserRole.ADMIN)
-  async adminTest(@Context() context: any) {
-    return 'admin';
   }
 
   @Roles(UserRole.ADMIN)
