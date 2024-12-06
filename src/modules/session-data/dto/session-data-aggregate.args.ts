@@ -23,7 +23,7 @@ export class SessionDataAggregateArgs {
     orderBy?: Array<SessionDataOrderByWithRelationInput>;
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
+    cursor?: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

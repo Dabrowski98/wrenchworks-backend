@@ -33,8 +33,5 @@ export class SessionDataCountAggregate {
     expiresAt!: number;
 
     @Field(() => Int, {nullable:false})
-    revoked!: number;
-
-    @Field(() => Int, {nullable:false})
     _all!: number;
 }

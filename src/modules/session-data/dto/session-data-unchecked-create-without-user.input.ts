@@ -27,7 +27,4 @@ export class SessionDataUncheckedCreateWithoutUserInput {
 
     @Field(() => Date, {nullable:false})
     expiresAt!: Date | string;
-
-    @Field(() => Boolean, {nullable:true})
-    revoked?: boolean;
 }

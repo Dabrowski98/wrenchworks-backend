@@ -38,9 +38,6 @@ export class SessionDataOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    revoked?: keyof typeof SortOrder;
-
     @Field(() => SessionDataCountOrderByAggregateInput, {nullable:true})
     _count?: SessionDataCountOrderByAggregateInput;
 

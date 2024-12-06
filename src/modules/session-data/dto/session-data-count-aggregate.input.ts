@@ -32,8 +32,5 @@ export class SessionDataCountAggregateInput {
     expiresAt?: true;
 
     @Field(() => Boolean, {nullable:true})
-    revoked?: true;
-
-    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

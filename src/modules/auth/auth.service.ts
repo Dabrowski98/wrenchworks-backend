@@ -12,6 +12,8 @@ import { RegisterUserInput } from './dto/register-user.input';
 import { v4 as uuidv4 } from 'uuid';
 import { SessionData } from '@prisma/client';
 
+const MAX_SESSIONS_PER_USER = 5;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,9 +36,13 @@ export class AuthService {
     ipAddress: string,
     deviceInfo: string,
   ): Promise<SignInUserResponse> {
-    await this.revokeAllRefreshTokens(user.userId, deviceId);
     const { accessToken, refreshToken } = await this.generateTokens(user);
-    await this.createSessionData(refreshToken, deviceId, ipAddress, deviceInfo);
+    await this.createNewSessionData(
+      refreshToken,
+      deviceId,
+      ipAddress,
+      deviceInfo,
+    );
     return { accessToken, refreshToken, user };
   }
 
@@ -53,23 +59,23 @@ export class AuthService {
   private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const payload = { sub: user.userId };
+    const payload = { sub: user.userId, role: user.role };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '20s',
+      expiresIn: '15m',
       secret: process.env.ACCESS_SECRET,
     });
 
     const refreshToken = this.jwtService.sign(payload, {
       jwtid: uuidv4(),
-      expiresIn: '10s',
+      expiresIn: '1d',
       secret: process.env.REFRESH_SECRET,
     });
 
     return { accessToken, refreshToken };
   }
 
-  private async createSessionData(
+  private async createNewSessionData(
     refreshToken: string,
     deviceId: string,
     ipAddress: string,
@@ -78,6 +84,23 @@ export class AuthService {
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.REFRESH_SECRET,
     });
+
+    const allUserSessions = await this.prisma.sessionData.findMany({
+      where: {
+        userId: decodedRefreshToken.sub,
+      },
+    });
+
+    const session = allUserSessions.find((a) => a.deviceId === deviceId);
+
+    if (session) {
+      await this.revokeRefreshToken(session.refreshToken);
+    } else if (allUserSessions.length >= MAX_SESSIONS_PER_USER) {
+      const oldestSession = allUserSessions.sort(
+        (a, b) => a.issuedAt.getTime() - b.issuedAt.getTime(),
+      )[0];
+      await this.revokeRefreshToken(oldestSession.refreshToken);
+    }
 
     await this.prisma.sessionData.create({
       data: {
@@ -94,28 +117,20 @@ export class AuthService {
   }
 
   async revokeRefreshToken(refreshToken: string) {
-    const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
-      secret: process.env.REFRESH_SECRET,
-    });
+    const decodedRefreshToken = await this.jwtService.decode(refreshToken);
 
-    await this.prisma.sessionData.updateMany({
-      where: {
-        sessionDataId: decodedRefreshToken.jti,
-        revoked: false,
-      },
-      data: { revoked: true },
+    if (!decodedRefreshToken) return false;
+
+    await this.prisma.sessionData.delete({
+      where: { sessionDataId: decodedRefreshToken.jti },
     });
   }
 
-  async revokeAllRefreshTokens(userId: bigint, deviceId?: string) {
-    const result = await this.prisma.sessionData.updateMany({
+  async revokeAllRefreshTokens(userId: bigint) {
+    const result = await this.prisma.sessionData.deleteMany({
       where: {
         userId,
-        deviceId,
-        revoked: false,
-        expiresAt: { gt: new Date() },
       },
-      data: { revoked: true },
     });
 
     if (result.count === 0) return false;
@@ -133,6 +148,7 @@ export class AuthService {
     if (!session) {
       throw new UnauthorizedException('Invalid refresh token');
     }
+    console.log(session);
     const user = await this.userService.findUser({
       where: { userId: session.userId },
     });
@@ -142,9 +158,13 @@ export class AuthService {
     }
 
     const { accessToken, refreshToken } = await this.generateTokens(user);
-    await this.revokeAllRefreshTokens(user.userId, deviceId);
-    await this.createSessionData(refreshToken, deviceId, ipAddress, deviceInfo);
-
+    await this.revokeRefreshToken(providedRefreshToken);
+    await this.createNewSessionData(
+      refreshToken,
+      deviceId,
+      ipAddress,
+      deviceInfo,
+    );
     return { accessToken, refreshToken, user };
   }
 
@@ -163,7 +183,7 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token not found');
     }
 
-    if (session.revoked || session.expiresAt < new Date()) {
+    if (session.expiresAt < new Date()) {
       await this.revokeAllRefreshTokens(session.userId);
       throw new UnauthorizedException('Refresh token revoked or expired');
     }

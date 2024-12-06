@@ -30,7 +30,4 @@ export class SessionDataMaxAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     expiresAt?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    revoked?: true;
 }

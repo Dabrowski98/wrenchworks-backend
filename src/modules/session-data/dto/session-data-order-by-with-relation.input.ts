@@ -35,9 +35,6 @@ export class SessionDataOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    revoked?: keyof typeof SortOrder;
-
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
     user?: UserOrderByWithRelationInput;

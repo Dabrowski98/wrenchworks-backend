@@ -1,6 +1,8 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { PrismaService } from "src/database/prisma.service";
+import { ExecutionContext } from "@nestjs/common";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,6 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
-        return { userId: payload.sub, email: payload.email };
+        return { userId: payload.sub, role: payload.role };
     }
 }

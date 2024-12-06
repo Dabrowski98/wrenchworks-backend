@@ -4,7 +4,6 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
-import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-filter.input';
 
 @InputType()
 export class SessionDataScalarWhereWithAggregatesInput {
@@ -44,7 +43,4 @@ export class SessionDataScalarWhereWithAggregatesInput {
 
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     expiresAt?: DateTimeWithAggregatesFilter;
-
-    @Field(() => BoolWithAggregatesFilter, {nullable:true})
-    revoked?: BoolWithAggregatesFilter;
 }

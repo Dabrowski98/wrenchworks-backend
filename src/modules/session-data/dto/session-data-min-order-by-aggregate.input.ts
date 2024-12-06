@@ -31,7 +31,4 @@ export class SessionDataMinOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    revoked?: keyof typeof SortOrder;
 }

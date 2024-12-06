@@ -25,7 +25,4 @@ export class SessionDataUpdateManyMutationInput {
 
     @Field(() => Date, {nullable:true})
     expiresAt?: Date | string;
-
-    @Field(() => Boolean, {nullable:true})
-    revoked?: boolean;
 }

@@ -33,9 +33,6 @@ export class SessionData {
     @Field(() => Date, {nullable:false})
     expiresAt!: Date;
 
-    @Field(() => Boolean, {nullable:false,defaultValue:false})
-    revoked!: boolean;
-
     @Field(() => User, {nullable:false})
     user?: User;
 }

@@ -28,9 +28,6 @@ export class SessionDataUpdateInput {
     @Field(() => Date, {nullable:true})
     expiresAt?: Date | string;
 
-    @Field(() => Boolean, {nullable:true})
-    revoked?: boolean;
-
     @Field(() => UserUpdateOneRequiredWithoutSessionDataNestedInput, {nullable:true})
     @Type(() => UserUpdateOneRequiredWithoutSessionDataNestedInput)
     user?: UserUpdateOneRequiredWithoutSessionDataNestedInput;

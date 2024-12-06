@@ -1,2 +1,2 @@
-export { GqlAuthGuard } from './gql-auth.guard';
 export { JwtAuthGuard } from './jwt-auth.guard';
+export { LoginAuthGuard } from './login-auth.guard';

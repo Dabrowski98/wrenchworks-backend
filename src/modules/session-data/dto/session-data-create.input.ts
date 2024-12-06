@@ -30,9 +30,6 @@ export class SessionDataCreateInput {
     @Field(() => Date, {nullable:false})
     expiresAt!: Date | string;
 
-    @Field(() => Boolean, {nullable:true})
-    revoked?: boolean;
-
     @Field(() => UserCreateNestedOneWithoutSessionDataInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutSessionDataInput)
     user!: UserCreateNestedOneWithoutSessionDataInput;

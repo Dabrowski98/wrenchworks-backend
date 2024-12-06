@@ -37,9 +37,6 @@ export class SessionDataGroupBy {
     @Field(() => Date, {nullable:false})
     expiresAt!: Date | string;
 
-    @Field(() => Boolean, {nullable:false})
-    revoked!: boolean;
-
     @Field(() => SessionDataCountAggregate, {nullable:true})
     _count?: SessionDataCountAggregate;
 

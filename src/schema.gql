@@ -463,6 +463,13 @@ input EnumUserReportsStatusFilter {
   notIn: [UserReportsStatus!]
 }
 
+input EnumUserRoleNullableFilter {
+  equals: UserRole
+  in: [UserRole!]
+  not: NestedEnumUserRoleNullableFilter
+  notIn: [UserRole!]
+}
+
 input EnumUsersStatusNullableFilter {
   equals: UsersStatus
   in: [UsersStatus!]
@@ -709,7 +716,7 @@ type Mutation {
   deleteAddress(addressId: BigInt!): DeletePayload!
   loginUser(loginUserInput: LoginUserInput!): SignInUserResponse!
   logout(refreshToken: String!): Boolean!
-  logoutAll(deviceId: String, userId: BigInt!): Boolean!
+  logoutAll(userId: BigInt!): Boolean!
   refreshTokens(refreshToken: String!): SignInUserResponse!
   registerUser(registerUserInput: RegisterUserInput!): User!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
@@ -873,6 +880,13 @@ input NestedEnumUserReportsStatusFilter {
   in: [UserReportsStatus!]
   not: NestedEnumUserReportsStatusFilter
   notIn: [UserReportsStatus!]
+}
+
+input NestedEnumUserRoleNullableFilter {
+  equals: UserRole
+  in: [UserRole!]
+  not: NestedEnumUserRoleNullableFilter
+  notIn: [UserRole!]
 }
 
 input NestedEnumUsersStatusNullableFilter {
@@ -1323,7 +1337,6 @@ type SessionData {
   ipAddress: String
   issuedAt: DateTime!
   refreshToken: String!
-  revoked: Boolean!
   sessionDataId: String!
   user: User!
   userId: BigInt!
@@ -1346,7 +1359,6 @@ input SessionDataWhereInput {
   ipAddress: StringNullableFilter
   issuedAt: DateTimeFilter
   refreshToken: StringFilter
-  revoked: BoolFilter
   sessionDataId: StringFilter
   user: UserRelationFilter
   userId: BigIntFilter
@@ -1463,6 +1475,7 @@ type User {
   lastName: String
   reviewResponses: [ReviewResponse!]
   reviews: [Review!]
+  role: UserRole
   serviceRequests: [ServiceRequest!]
   sessionData: [SessionData!]
   status: UsersStatus
@@ -1503,6 +1516,7 @@ type UserCountAggregate {
   firstName: Int!
   isVerified: Int!
   lastName: Int!
+  role: Int!
   status: Int!
   telephoneNumber: Int!
   updatedAt: Int!
@@ -1519,6 +1533,7 @@ type UserMaxAggregate {
   firstName: String
   isVerified: Boolean
   lastName: String
+  role: UserRole
   status: UsersStatus
   telephoneNumber: String
   updatedAt: DateTime
@@ -1535,6 +1550,7 @@ type UserMinAggregate {
   firstName: String
   isVerified: Boolean
   lastName: String
+  role: UserRole
   status: UsersStatus
   telephoneNumber: String
   updatedAt: DateTime
@@ -1616,6 +1632,11 @@ enum UserReportsStatus {
   PENDING
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 type UserSumAggregate {
   addressId: String
   userId: BigInt
@@ -1638,6 +1659,7 @@ input UserWhereInput {
   password: StringFilter
   reviewResponses: ReviewResponseListRelationFilter
   reviews: ReviewListRelationFilter
+  role: EnumUserRoleNullableFilter
   serviceRequests: ServiceRequestListRelationFilter
   sessionData: SessionDataListRelationFilter
   status: EnumUsersStatusNullableFilter
@@ -1666,6 +1688,7 @@ input UserWhereUniqueInput {
   password: StringFilter
   reviewResponses: ReviewResponseListRelationFilter
   reviews: ReviewListRelationFilter
+  role: EnumUserRoleNullableFilter
   serviceRequests: ServiceRequestListRelationFilter
   sessionData: SessionDataListRelationFilter
   status: EnumUsersStatusNullableFilter

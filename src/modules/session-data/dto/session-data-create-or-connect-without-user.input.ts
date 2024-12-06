@@ -11,7 +11,7 @@ export class SessionDataCreateOrConnectWithoutUserInput {
 
     @Field(() => SessionDataWhereUniqueInput, {nullable:false})
     @Type(() => SessionDataWhereUniqueInput)
-    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId'>;
+    where!: Prisma.AtLeast<SessionDataWhereUniqueInput, 'sessionDataId' | 'userId_deviceId'>;
 
     @Field(() => SessionDataCreateWithoutUserInput, {nullable:false})
     @Type(() => SessionDataCreateWithoutUserInput)
