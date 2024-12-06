@@ -11,8 +11,11 @@ import { IpAddress } from 'src/common/decorators/ip-address.decorator';
 import { DeviceInfo } from 'src/common/decorators/device-info.decorator';
 import { DeviceId } from 'src/common/decorators/device-id.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { UserRole } from '@prisma/client';
 import { Public } from 'src/common/decorators/public.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from '../prisma';
+import { CreateAdminInput } from './dto/create-admin.input';
+import { RolesGuard } from './guards/roles.guard';
 
 @Resolver()
 export class AuthResolver {
@@ -88,5 +91,20 @@ export class AuthResolver {
     } catch {
       return false;
     }
+  }
+
+  @Query(() => String)
+  @Roles(UserRole.ADMIN)
+  async adminTest(@Context() context: any) {
+    return 'admin';
+  }
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  @Mutation(() => User)
+  async createAdmin(
+    @Args('createAdminInput') createAdminInput: CreateAdminInput,
+  ): Promise<User> {
+    return this.authService.createAdmin(createAdminInput);
   }
 }

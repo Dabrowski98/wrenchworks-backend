@@ -12,6 +12,7 @@ import { CleanupModule } from './common/cleanup/cleanup.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { Reflector } from '@nestjs/core';
+import { RolesGuard } from './modules/auth/guards/roles.guard';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -40,7 +41,12 @@ import { Reflector } from '@nestjs/core';
     AddressModule,
     UserModule,
   ],
-  providers: [Logger, Reflector, { provide: APP_GUARD, useClass: JwtAuthGuard }],
+  providers: [
+    Logger,
+    Reflector,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
+  ],
   controllers: [AppController],
 })
 export class AppModule {}

@@ -178,6 +178,17 @@ input BoolNullableFilter {
   not: NestedBoolNullableFilter
 }
 
+input CreateAdminInput {
+  address: AddressCreateNestedOneWithoutUserInput
+  avatarURL: String
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+  telephoneNumber: String!
+  username: String!
+}
+
 type Customer {
   NIP: String
   _count: CustomerCount!
@@ -713,6 +724,7 @@ input LoginUserInput {
 
 type Mutation {
   createAddress(data: AddressCreateInput!): Address!
+  createAdmin(createAdminInput: CreateAdminInput!): User!
   deleteAddress(addressId: BigInt!): DeletePayload!
   loginUser(loginUserInput: LoginUserInput!): SignInUserResponse!
   logout(refreshToken: String!): Boolean!
@@ -1042,6 +1054,7 @@ input PermissionSetWhereInput {
 type Query {
   address(addressId: BigInt!): Address!
   addresses: [Address!]!
+  adminTest: String!
   findUser(where: UserWhereUniqueInput!): BigInt!
 }
 

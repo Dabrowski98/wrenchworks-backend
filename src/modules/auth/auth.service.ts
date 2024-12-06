@@ -11,6 +11,8 @@ import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 import { v4 as uuidv4 } from 'uuid';
 import { SessionData } from '@prisma/client';
+import { UserRole } from '../prisma';
+import { CreateAdminInput } from './dto/create-admin.input';
 
 const MAX_SESSIONS_PER_USER = 5;
 
@@ -25,11 +27,14 @@ export class AuthService {
   // TODO: Turn salt rounds into Peppers
   async registerUser(input: RegisterUserInput): Promise<User> {
     const hashedPassword = await bcrypt.hash(input.password, 10);
-    const userData = { ...input, password: hashedPassword };
+    const userData = {
+      ...input,
+      password: hashedPassword,
+      role: UserRole.USER,
+    };
     return this.userService.createUser(userData);
   }
 
-  // TODO: limit the number of sessions per user.
   async loginUser(
     user: User,
     deviceId: string,
@@ -200,5 +205,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
     return session;
+  }
+
+  async createAdmin(input: CreateAdminInput): Promise<User> {
+    const hashedPassword = await bcrypt.hash(input.password, 10);
+    const userData = {
+      ...input,
+      password: hashedPassword,
+      role: UserRole.ADMIN,
+    };
+    return this.userService.createUser(userData);
   }
 }
