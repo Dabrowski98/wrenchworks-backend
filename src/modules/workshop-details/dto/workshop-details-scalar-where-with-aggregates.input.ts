@@ -6,10 +6,9 @@ import { DecimalNullableWithAggregatesFilter } from '../../prisma/dto/decimal-nu
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { EnumWorkshopsDetailsStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-workshops-details-status-nullable-with-aggregates-filter.input';
-import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
-import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class WorkshopDetailsScalarWhereWithAggregatesInput {

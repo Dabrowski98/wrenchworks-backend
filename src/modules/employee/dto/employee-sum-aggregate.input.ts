@@ -14,7 +14,4 @@ export class EmployeeSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     userId?: true;
 
-    @Field(() => Boolean, {nullable:true})
-    permissionSetId?: true;
-
     }

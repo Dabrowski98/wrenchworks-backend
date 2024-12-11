@@ -35,8 +35,8 @@ export class JoinWorkshopRequestGroupBy {
     @Field(() => String, {nullable:true})
     createdBy?: bigint | number;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;

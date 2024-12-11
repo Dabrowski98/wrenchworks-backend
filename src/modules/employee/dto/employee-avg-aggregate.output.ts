@@ -15,9 +15,6 @@ export class EmployeeAvgAggregate {
     userId?: number;
 
     @Field(() => Float, {nullable:true})
-    permissionSetId?: number;
-
-    @Field(() => Float, {nullable:true})
     createdBy?: number;
 
     @Field(() => Float, {nullable:true})

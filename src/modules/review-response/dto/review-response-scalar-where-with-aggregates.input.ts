@@ -6,6 +6,7 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { EnumReviewsResponsesStatusWithAggregatesFilter } from '../../prisma/dto/enum-reviews-responses-status-with-aggregates-filter.input';
 
 @InputType()

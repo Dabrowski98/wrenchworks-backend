@@ -5,17 +5,17 @@ import * as Validator from 'class-validator';
 import { WorkshopWhereInput } from './workshop-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
-import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { AddressNullableRelationFilter } from '../../address/dto/address-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CustomerListRelationFilter } from '../../customer/dto/customer-list-relation-filter.input';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
-import { PermissionSetListRelationFilter } from '../../permission-set/dto/permission-set-list-relation-filter.input';
 import { ReviewListRelationFilter } from '../../review/dto/review-list-relation-filter.input';
 import { ServiceRequestListRelationFilter } from '../../service-request/dto/service-request-list-relation-filter.input';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
@@ -24,6 +24,7 @@ import { WorkshopDetailsNullableRelationFilter } from '../../workshop-details/dt
 import { WorkshopJobListRelationFilter } from '../../workshop-job/dto/workshop-job-list-relation-filter.input';
 import { JobCategoryListRelationFilter } from '../../job-category/dto/job-category-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
+import { WorkshopDeviceListRelationFilter } from '../../workshop-device/dto/workshop-device-list-relation-filter.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -58,6 +59,12 @@ export class WorkshopWhereUniqueInput {
     @Field(() => StringFilter, {nullable:true})
     telephoneNumber?: StringFilter;
 
+    @Field(() => StringFilter, {nullable:true})
+    password?: StringFilter;
+
+    @Field(() => StringNullableFilter, {nullable:true})
+    refreshToken?: StringNullableFilter;
+
     @Field(() => BoolNullableFilter, {nullable:true})
     isVerified?: BoolNullableFilter;
 
@@ -83,11 +90,6 @@ export class WorkshopWhereUniqueInput {
     @ValidateNested()
     @Type(() => EmployeeListRelationFilter)
     employees?: EmployeeListRelationFilter;
-
-    @Field(() => PermissionSetListRelationFilter, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetListRelationFilter)
-    permissionSets?: PermissionSetListRelationFilter;
 
     @Field(() => ReviewListRelationFilter, {nullable:true})
     @Type(() => ReviewListRelationFilter)
@@ -130,4 +132,7 @@ export class WorkshopWhereUniqueInput {
 
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
+
+    @Field(() => WorkshopDeviceListRelationFilter, {nullable:true})
+    workshopPCs?: WorkshopDeviceListRelationFilter;
 }

@@ -2,7 +2,6 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
-import { Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class EmployeeMinAggregate {
@@ -16,14 +15,14 @@ export class EmployeeMinAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     nickname?: string;
 
     @Field(() => String, {nullable:true})
     login?: string;
 
-    @Field(() => Int, {nullable:true})
-    permissionSetId?: number;
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
 
     @Field(() => Date, {nullable:true})
     joinedAt?: Date | string;

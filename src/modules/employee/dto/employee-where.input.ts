@@ -4,14 +4,12 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { IntNullableFilter } from '../../prisma/dto/int-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
-import { PermissionSetNullableRelationFilter } from '../../permission-set/dto/permission-set-nullable-relation-filter.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
 import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
@@ -47,16 +45,11 @@ export class EmployeeWhereInput {
     @Field(() => StringFilter, {nullable:true})
     password?: StringFilter;
 
-    @Field(() => IntNullableFilter, {nullable:true})
-    permissionSetId?: IntNullableFilter;
+    @Field(() => StringNullableFilter, {nullable:true})
+    refreshToken?: StringNullableFilter;
 
     @Field(() => DateTimeFilter, {nullable:true})
     joinedAt?: DateTimeFilter;
-
-    @Field(() => PermissionSetNullableRelationFilter, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetNullableRelationFilter)
-    permissionSet?: PermissionSetNullableRelationFilter;
 
     @Field(() => ServiceListRelationFilter, {nullable:true})
     @Type(() => ServiceListRelationFilter)

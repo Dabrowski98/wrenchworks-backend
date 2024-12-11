@@ -7,13 +7,13 @@ import { CustomerUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../cus
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { EmployeeUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../employee/dto/employee-unchecked-update-many-without-workshop-nested.input';
-import { PermissionSetUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../permission-set/dto/permission-set-unchecked-update-many-without-workshop-nested.input';
 import { ReviewUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../review/dto/review-unchecked-update-many-without-workshop-nested.input';
 import { ServiceRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../service-request/dto/service-request-unchecked-update-many-without-workshop-nested.input';
 import { ServiceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../service/dto/service-unchecked-update-many-without-workshop-nested.input';
 import { WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput } from '../../workshop-details/dto/workshop-details-unchecked-update-one-without-workshop-nested.input';
 import { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-workshop-nested.input';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-workshop-nested.input';
+import { WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-device/dto/workshop-device-unchecked-update-many-without-workshop-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -44,6 +44,17 @@ export class WorkshopUncheckedUpdateWithoutJobCategoriesInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber?: string;
 
+    @Field(() => String, {nullable:true})
+    @Validator.IsString({ message: 'Password must be a string' })
+    @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    password?: string;
+
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
+
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
     @Validator.IsOptional()
@@ -70,11 +81,6 @@ export class WorkshopUncheckedUpdateWithoutJobCategoriesInput {
     @ValidateNested()
     @Type(() => EmployeeUncheckedUpdateManyWithoutWorkshopNestedInput)
     employees?: EmployeeUncheckedUpdateManyWithoutWorkshopNestedInput;
-
-    @Field(() => PermissionSetUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetUncheckedUpdateManyWithoutWorkshopNestedInput)
-    permissionSets?: PermissionSetUncheckedUpdateManyWithoutWorkshopNestedInput;
 
     @Field(() => ReviewUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     @Type(() => ReviewUncheckedUpdateManyWithoutWorkshopNestedInput)
@@ -108,4 +114,7 @@ export class WorkshopUncheckedUpdateWithoutJobCategoriesInput {
 
     @Field(() => JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput;
+
+    @Field(() => WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
+    workshopPCs?: WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput;
 }

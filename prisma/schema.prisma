@@ -180,7 +180,7 @@ model Customer {
   deletedAt    DateTime?    @db.Timestamp(0)
   createdAt    DateTime     @default(now()) @db.Timestamp(0)
   createdBy    BigInt?      @db.UnsignedBigInt
-  updatedAt    DateTime     @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?     @db.Timestamp(0) @updatedAt
   updatedBy    BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
@@ -204,6 +204,8 @@ model Employee {
   workshopId            BigInt            @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                BigInt?           @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  // roleId                BigInt?           @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Nickname must be a string' })
   /// @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
@@ -222,10 +224,12 @@ model Employee {
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
-  password              String              @db.VarChar(256)
-  /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
-  /// @Validator.IsOptional()
-  permissionSetId       Int?              @db.UnsignedInt
+  password              String              @db.VarChar(255)
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
+  refreshToken          String?             @db.VarChar(255)
+  // /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
+  // /// @Validator.IsOptional()
+  // permissionSetId       Int?              @db.UnsignedInt
   /// @Validator.IsDate({ message: 'Joined at must be a valid date' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to now()
@@ -233,9 +237,10 @@ model Employee {
   deletedAt             DateTime?         @db.Timestamp(0)
   createdAt             DateTime          @default(now()) @db.Timestamp(0)
   createdBy             BigInt?           @db.UnsignedBigInt
-  updatedAt             DateTime          @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
   updatedBy             BigInt?           @db.UnsignedBigInt
-  permissionSet         PermissionSet?    @relation(fields: [permissionSetId], references: [permissionSetId], onDelete: NoAction, map: "fk_employeeCanHavePermissionSetAssigned")
+  /// Note: Connect or Create only allowed
+  // role                  EmployeeRole?     @relation(fields: [roleId], references: [roleId], onDelete: NoAction, map: "fk_employeeCanHaveRoleAssigned")
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
   services              Service[]
   joinWorkshopRequests  JoinWorkshopRequest[]
@@ -243,14 +248,40 @@ model Employee {
   tasks                 Task[]
   /// Note: Depends solely on join workshop request status.
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  user                  User?           @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
+  user                  User?            @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
   /// @HideField({ match: '@(Employee)@(Update)*Input' })
-  workshop              Workshop          @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
+  workshop              Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
 
   @@unique([login, workshopId])
-  @@index([permissionSetId])
+  // @@index([permissionSetId])
   @@index([workshopId])
 }
+
+// model EmployeeRole {
+//   /// @FieldType('Scalars.GraphQLBigInt')
+//   roleId               BigInt @id @unique(map: "role_id") @default(autoincrement()) @db.UnsignedBigInt
+//   /// @FieldType('Scalars.GraphQLBigInt')
+//   workshopId           BigInt @db.UnsignedBigInt
+//   /// @Validator.IsString({ message: 'Name must be a string' })
+//   /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
+//   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+//   /// @Validator.IsOptional({ groups: [UPDATE]})
+//   name                 String @db.VarChar(30)
+//   employees            Employee[]
+//   permissions          EmployeePermission[]
+//   workshops            Workshop[]
+
+// }
+
+// model EmployeePermission {
+//   /// @FieldType('Scalars.GraphQLBigInt')
+//   permissionId         BigInt @id @unique(map: "permission_id") @default(autoincrement()) @db.UnsignedBigInt
+//   /// @Validator.IsString({ message: 'Name must be a string' })
+//   /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
+//   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+//   name                 String @db.VarChar(30)
+//   employeeRoles        EmployeeRole[]
+// }
 
 // TODO: PHONE NUMBER OR EMAIL IS REQUIRED.
 /// Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.
@@ -367,7 +398,7 @@ model JoinWorkshopRequest {
   status              JoinWorkshopRequestStatus  @default(PENDING)
   createdAt           DateTime                   @default(now()) @db.DateTime(0)
   createdBy           BigInt?                    @db.UnsignedBigInt
-  updatedAt           DateTime                   @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
   updatedBy           BigInt?                    @db.UnsignedBigInt
   resolvedAt          DateTime?                  @db.DateTime(0)
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
@@ -378,82 +409,82 @@ model JoinWorkshopRequest {
   employee            Employee                   @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeCanRespondToJoinRequest")
 }
 
-model PermissionSet {
-  /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
-  /// @FieldType('Scalars.GraphQLBigInt')
-  permissionSetId             Int       @id @unique(map: "permission_set_id") @default(autoincrement()) @db.UnsignedInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  /// @Validator.IsOptional()
-  workshopId                  BigInt?      @db.UnsignedBigInt
-  /// @Validator.IsString({ message: 'Set name must be a string' })
-  /// @Validator.Length(2, 30, { message: 'Set name must be between 2 and 30 characters' })
-  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Set name is required' })
-  /// @Validator.IsOptional({groups: [UPDATE]})
-  setName                     String       @db.VarChar(30)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  /// Note: Optional on all bool fields because they default to false
-  canReadWorkshopDetails      Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canUpdateWorkshopDetails    Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyWorkshopDetails    Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canReadEmployees            Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canUpdateEmployees          Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyEmployees          Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canReadCustomers            Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canUpdateCustomers          Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyCustomers          Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canReadServices             Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canUpdateServices           Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyServices          Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canReadTasks               Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canUpdateTasks             Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyTasks             Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canReadReports             Boolean      @default(false)
-  /// @Validator.IsBoolean({  message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canGenerateReports         Boolean      @default(false)
-  /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-  /// @Validator.IsOptional()
-  canModifyPermissions       Boolean      @default(false)
-  updatedAt                  DateTime     @db.Timestamp(0) @updatedAt
-  updatedBy                  BigInt?      @db.UnsignedBigInt
-  /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
-  employees                   Employee[]
-  /// @HideField({ match: '@(PermissionSet)@(Update)*Input' })
-  workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
+// model PermissionSet {
+//   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
+//   /// @FieldType('Scalars.GraphQLBigInt')
+//   permissionSetId             Int       @id @unique(map: "permission_set_id") @default(autoincrement()) @db.UnsignedInt
+//   /// @FieldType('Scalars.GraphQLBigInt')
+//   /// @Validator.IsOptional()
+//   workshopId                  BigInt?      @db.UnsignedBigInt
+//   /// @Validator.IsString({ message: 'Set name must be a string' })
+//   /// @Validator.Length(2, 30, { message: 'Set name must be between 2 and 30 characters' })
+//   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Set name is required' })
+//   /// @Validator.IsOptional({groups: [UPDATE]})
+//   setName                     String       @db.VarChar(30)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   /// Note: Optional on all bool fields because they default to false
+//   canReadWorkshopDetails      Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canUpdateWorkshopDetails    Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyWorkshopDetails    Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canReadEmployees            Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canUpdateEmployees          Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyEmployees          Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canReadCustomers            Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canUpdateCustomers          Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyCustomers          Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canReadServices             Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canUpdateServices           Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyServices          Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canReadTasks               Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canUpdateTasks             Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyTasks             Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canReadReports             Boolean      @default(false)
+//   /// @Validator.IsBoolean({  message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canGenerateReports         Boolean      @default(false)
+//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
+//   /// @Validator.IsOptional()
+//   canModifyPermissions       Boolean      @default(false)
+//   updatedAt          DateTime?     @db.Timestamp(0) @updatedAt
+//   updatedBy                  BigInt?      @db.UnsignedBigInt
+//   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
+//   employees                   Employee[]
+//   /// @HideField({ match: '@(PermissionSet)@(Update)*Input' })
+//   workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
 
-  @@index([workshopId])
-}
+//   @@index([workshopId])
+// }
 
 model Review {
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
@@ -481,7 +512,7 @@ model Review {
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   originalReviewText  String?           @db.Text
   createdAt           DateTime          @default(now()) @db.DateTime(0)
-  updatedAt           DateTime          @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
   /// @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
@@ -517,7 +548,7 @@ model ReviewResponse {
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   originalResponseText   String?                  @db.Text
   createdAt              DateTime                 @default(now()) @db.DateTime(0)
-  updatedAt              DateTime                 @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                 @db.Timestamp(0) @updatedAt
   /// @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
   /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -584,7 +615,7 @@ model Service {
   addedBy             BigInt?           @db.UnsignedBigInt
   resolvedAt          DateTime?         @db.DateTime(0)
   resolvedBy          BigInt?           @db.UnsignedBigInt
-  updatedAt           DateTime          @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
   updatedBy           BigInt?           @db.UnsignedBigInt
   deletedAt           DateTime?         @db.Timestamp(0)
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
@@ -704,7 +735,7 @@ model Task {
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
   createdAt            DateTime              @default(now()) @db.DateTime(0)
   createdBy            BigInt?               @db.UnsignedBigInt
-  updatedAt            DateTime              @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?              @db.Timestamp(0) @updatedAt
   updatedBy            BigInt?               @db.UnsignedBigInt
   resolvedAt           DateTime?             @db.DateTime(0)
   resolvedBy           BigInt?               @db.UnsignedBigInt
@@ -725,7 +756,7 @@ model User {
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Username is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  username          String              @db.VarChar(30)
+  username          String              @db.VarChar(30) @unique
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
@@ -769,7 +800,7 @@ model User {
   /// @Validator.IsOptional()
   addressId        BigInt?              @db.UnsignedBigInt @unique
   createdAt        DateTime             @default(now()) @db.Timestamp(0)
-  updatedAt        DateTime             @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?             @db.Timestamp(0) @updatedAt
   deletedAt        DateTime?            @db.Timestamp(0)
   address          Address?             @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
@@ -818,7 +849,7 @@ model UserReport {
   /// Note: Optional because field defaults to pending
   status             UserReportsStatus          @default(PENDING)
   createdAt          DateTime                   @default(now()) @db.DateTime(0)
-  updatedAt          DateTime                   @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
@@ -862,7 +893,7 @@ model VehicleBrand {
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brandName       String            @id @unique(map: "brand_name") @db.VarChar(50)
   createdAt       DateTime          @default(now()) @db.Timestamp(0)
-  updatedAt       DateTime          @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(VehicleBrand)@(Create|Update)*Input' })
   vehicleModels   VehicleModel[]
 }
@@ -928,7 +959,7 @@ model VehicleModel {
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brand          String          @db.VarChar(50) @map("brandName")
   createdAt      DateTime        @default(now()) @db.Timestamp(0)
-  updatedAt      DateTime        @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?        @db.Timestamp(0) @updatedAt
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   vehicles       Vehicle[]
   /// @HideField({ match: '@(VehicleModel)@(Update)*Input' })
@@ -957,6 +988,14 @@ model Workshop {
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Telephone number is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   telephoneNumber           String                      @db.VarChar(12)
+  /// @HideField(output: true)
+  /// @Validator.IsString({ message: 'Password must be a string' })
+  /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+  /// @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
+  /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+  /// @Validator.IsOptional({groups: [UPDATE]})
+  /// Note: Password will be hashed before storage
+  password                  String                      @db.VarChar(255)
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -968,7 +1007,7 @@ model Workshop {
   /// @Validator.IsOptional()
   isOfferingService         Boolean?                    @default(false)
   createdAt                 DateTime                    @default(now()) @db.Timestamp(0)
-  updatedAt                 DateTime                    @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                    @db.Timestamp(0) @updatedAt
   updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
@@ -976,15 +1015,13 @@ model Workshop {
   customers                 Customer[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   employees                 Employee[]
-  /// @HideField({ match: '@(Workshop)@(Create)*Input' })
-  permissionSets            PermissionSet[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   reviews                   Review[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   serviceRequests           ServiceRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
-  /// @HideField({ match: '@(Workshop)@(Update)*Input' })
+  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   user                      User                      @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
   workshopDetails           WorkshopDetails?
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
@@ -993,8 +1030,40 @@ model Workshop {
   jobCategories             JobCategory[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   joinWorkshopRequests      JoinWorkshopRequest[]
+  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
+  workshopDevices           WorkshopDevice[]
+
 
   @@index([ownerId])
+}
+
+model WorkshopDevice {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  workshopDeviceId    BigInt                    @id @unique(map: "workshop_device_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  workshopId          BigInt                    @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Serial number must be a string' })
+  /// @Validator.Length(1, 255, { message: 'Serial number must be between 1 and 255 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Serial number is required' })
+  /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
+  serialNumber        String                    @db.VarChar(255)
+  /// @Validator.IsString({ message: 'PC name must be a string' })
+  /// @Validator.Length(1, 255, { message: 'PC name must be between 1 and 255 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'PC name is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  deviceName           String                    @db.VarChar(255)
+  // /// @Validator.IsString({ message: 'Device token must be a string' })
+  // /// @Validator.Length(1, 255, { message: 'Device token must be between 1 and 255 characters' })
+  // /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device token is required' })
+  // deviceToken String @db.VarChar(255)
+  createdAt           DateTime                  @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
+  createdBy           BigInt                    @db.UnsignedBigInt
+  /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
+  workshop            Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDevice")
+
+  @@unique([workshopId, serialNumber])
+  @@index([workshopId])
 }
 
 model WorkshopDetails {
@@ -1019,7 +1088,7 @@ model WorkshopDetails {
   /// @Validator.IsString({ message: 'Logo URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Logo URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()
-  logoURL          String?                   @db.VarChar(256)
+  logoURL          String?                   @db.VarChar(255)
   /// @Validator.IsEnum(WorkshopsDetailsStatus, { message: 'Invalid workshop status' })
   /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -1029,7 +1098,7 @@ model WorkshopDetails {
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP              String?                   @db.Char(10)
-  updatedAt        DateTime                  @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
   updatedBy        BigInt?                   @db.UnsignedBigInt
   deletedAt        DateTime?                 @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })
@@ -1064,7 +1133,7 @@ model WorkshopJob {
   availability            Boolean   @default(true)
   createdAt               DateTime                  @default(now()) @db.Timestamp(0)
   createdBy               BigInt?                   @db.UnsignedBigInt
-  updatedAt               DateTime                  @db.Timestamp(0) @updatedAt
+  updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
   updatedBy               BigInt?                   @db.UnsignedBigInt
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   tasks                   Task[]    

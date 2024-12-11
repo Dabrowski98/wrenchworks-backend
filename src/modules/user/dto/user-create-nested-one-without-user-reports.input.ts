@@ -14,5 +14,5 @@ export class UserCreateNestedOneWithoutUserReportsInput {
     @Field(() => UserWhereUniqueInput, {nullable:true})
     @Type(() => UserWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'email' | 'addressId'>;
+    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'username' | 'email' | 'addressId'>;
 }

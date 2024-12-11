@@ -8,6 +8,7 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 
 @InputType()
 export class WorkshopJobScalarWhereInput {

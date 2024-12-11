@@ -40,8 +40,8 @@ export class Review {
     @Field(() => Date, {nullable:false})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
 
     /**
      * Note: Optional because field defaults to PENDING

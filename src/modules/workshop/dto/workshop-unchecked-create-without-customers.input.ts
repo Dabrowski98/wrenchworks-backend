@@ -6,7 +6,6 @@ import { HideField } from '@nestjs/graphql';
 import { EmployeeUncheckedCreateNestedManyWithoutWorkshopInput } from '../../employee/dto/employee-unchecked-create-nested-many-without-workshop.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { PermissionSetUncheckedCreateNestedManyWithoutWorkshopInput } from '../../permission-set/dto/permission-set-unchecked-create-nested-many-without-workshop.input';
 import { ReviewUncheckedCreateNestedManyWithoutWorkshopInput } from '../../review/dto/review-unchecked-create-nested-many-without-workshop.input';
 import { ServiceRequestUncheckedCreateNestedManyWithoutWorkshopInput } from '../../service-request/dto/service-request-unchecked-create-nested-many-without-workshop.input';
 import { ServiceUncheckedCreateNestedManyWithoutWorkshopInput } from '../../service/dto/service-unchecked-create-nested-many-without-workshop.input';
@@ -14,6 +13,7 @@ import { WorkshopDetailsUncheckedCreateNestedOneWithoutWorkshopInput } from '../
 import { WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-unchecked-create-nested-many-without-workshop.input';
 import { JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-unchecked-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-create-nested-many-without-workshop.input';
+import { WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput } from '../../workshop-device/dto/workshop-device-unchecked-create-nested-many-without-workshop.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -44,6 +44,17 @@ export class WorkshopUncheckedCreateWithoutCustomersInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber!: string;
 
+    @Field(() => String, {nullable:false})
+    @Validator.IsString({ message: 'Password must be a string' })
+    @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    password!: string;
+
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
+
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
     @Validator.IsOptional()
@@ -64,11 +75,6 @@ export class WorkshopUncheckedCreateWithoutCustomersInput {
     @ValidateNested()
     @Type(() => EmployeeUncheckedCreateNestedManyWithoutWorkshopInput)
     employees?: EmployeeUncheckedCreateNestedManyWithoutWorkshopInput;
-
-    @Field(() => PermissionSetUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetUncheckedCreateNestedManyWithoutWorkshopInput)
-    permissionSets?: PermissionSetUncheckedCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => ReviewUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
     @Type(() => ReviewUncheckedCreateNestedManyWithoutWorkshopInput)
@@ -107,4 +113,7 @@ export class WorkshopUncheckedCreateWithoutCustomersInput {
 
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput;
+
+    @Field(() => WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
+    workshopPCs?: WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput;
 }

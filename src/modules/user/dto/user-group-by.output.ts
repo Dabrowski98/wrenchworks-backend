@@ -49,8 +49,8 @@ export class UserGroupBy {
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

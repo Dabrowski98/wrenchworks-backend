@@ -34,8 +34,8 @@ export class WorkshopDetailsGroupBy {
     @Field(() => String, {nullable:true})
     NIP?: string;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;

@@ -8,7 +8,6 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CustomerOrderByRelationAggregateInput } from '../../customer/dto/customer-order-by-relation-aggregate.input';
 import { EmployeeOrderByRelationAggregateInput } from '../../employee/dto/employee-order-by-relation-aggregate.input';
-import { PermissionSetOrderByRelationAggregateInput } from '../../permission-set/dto/permission-set-order-by-relation-aggregate.input';
 import { ReviewOrderByRelationAggregateInput } from '../../review/dto/review-order-by-relation-aggregate.input';
 import { ServiceRequestOrderByRelationAggregateInput } from '../../service-request/dto/service-request-order-by-relation-aggregate.input';
 import { ServiceOrderByRelationAggregateInput } from '../../service/dto/service-order-by-relation-aggregate.input';
@@ -17,6 +16,7 @@ import { WorkshopDetailsOrderByWithRelationInput } from '../../workshop-details/
 import { WorkshopJobOrderByRelationAggregateInput } from '../../workshop-job/dto/workshop-job-order-by-relation-aggregate.input';
 import { JobCategoryOrderByRelationAggregateInput } from '../../job-category/dto/job-category-order-by-relation-aggregate.input';
 import { JoinWorkshopRequestOrderByRelationAggregateInput } from '../../join-workshop-request/dto/join-workshop-request-order-by-relation-aggregate.input';
+import { WorkshopDeviceOrderByRelationAggregateInput } from '../../workshop-device/dto/workshop-device-order-by-relation-aggregate.input';
 
 @InputType()
 export class WorkshopOrderByWithRelationInput {
@@ -35,6 +35,12 @@ export class WorkshopOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     telephoneNumber?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    password?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    refreshToken?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     isVerified?: SortOrderInput;
@@ -61,11 +67,6 @@ export class WorkshopOrderByWithRelationInput {
     @ValidateNested()
     @Type(() => EmployeeOrderByRelationAggregateInput)
     employees?: EmployeeOrderByRelationAggregateInput;
-
-    @Field(() => PermissionSetOrderByRelationAggregateInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetOrderByRelationAggregateInput)
-    permissionSets?: PermissionSetOrderByRelationAggregateInput;
 
     @Field(() => ReviewOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ReviewOrderByRelationAggregateInput)
@@ -108,4 +109,7 @@ export class WorkshopOrderByWithRelationInput {
 
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
+
+    @Field(() => WorkshopDeviceOrderByRelationAggregateInput, {nullable:true})
+    workshopPCs?: WorkshopDeviceOrderByRelationAggregateInput;
 }

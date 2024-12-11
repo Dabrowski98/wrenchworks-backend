@@ -31,7 +31,7 @@ export class EmployeeOrderByWithAggregationInput {
     password?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
-    permissionSetId?: SortOrderInput;
+    refreshToken?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     joinedAt?: keyof typeof SortOrder;

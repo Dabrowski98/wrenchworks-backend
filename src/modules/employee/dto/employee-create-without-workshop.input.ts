@@ -1,10 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { PermissionSetCreateNestedOneWithoutEmployeesInput } from '../../permission-set/dto/permission-set-create-nested-one-without-employees.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ServiceCreateNestedManyWithoutEmployeeInput } from '../../service/dto/service-create-nested-many-without-employee.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-employee.input';
 import { TaskCreateNestedManyWithoutEmployeesInput } from '../../task/dto/task-create-nested-many-without-employees.input';
@@ -15,7 +13,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 @InputType()
 export class EmployeeCreateWithoutWorkshopInput {
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
     @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
@@ -42,11 +40,6 @@ export class EmployeeCreateWithoutWorkshopInput {
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
-
-    @Field(() => PermissionSetCreateNestedOneWithoutEmployeesInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetCreateNestedOneWithoutEmployeesInput)
-    permissionSet?: PermissionSetCreateNestedOneWithoutEmployeesInput;
 
     @Field(() => JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput;

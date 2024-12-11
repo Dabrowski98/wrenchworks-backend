@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { HideField } from '@nestjs/graphql';
+import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { VehicleModelCountOrderByAggregateInput } from './vehicle-model-count-order-by-aggregate.input';
 import { VehicleModelAvgOrderByAggregateInput } from './vehicle-model-avg-order-by-aggregate.input';
 import { VehicleModelMaxOrderByAggregateInput } from './vehicle-model-max-order-by-aggregate.input';

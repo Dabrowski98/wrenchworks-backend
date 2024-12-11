@@ -12,9 +12,6 @@ export class WorkshopCount {
     employees?: number;
 
     @Field(() => Int, {nullable:false})
-    permissionSets?: number;
-
-    @Field(() => Int, {nullable:false})
     reviews?: number;
 
     @Field(() => Int, {nullable:false})
@@ -31,4 +28,7 @@ export class WorkshopCount {
 
     @Field(() => Int, {nullable:false})
     joinWorkshopRequests?: number;
+
+    @Field(() => Int, {nullable:false})
+    workshopPCs?: number;
 }

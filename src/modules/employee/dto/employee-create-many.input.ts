@@ -3,7 +3,6 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { Int } from '@nestjs/graphql';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -16,7 +15,7 @@ export class EmployeeCreateManyInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
     @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
@@ -38,11 +37,6 @@ export class EmployeeCreateManyInput {
     @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
-
-    @Field(() => Int, {nullable:true})
-    @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
-    @Validator.IsOptional()
-    permissionSetId?: number;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })

@@ -24,5 +24,3 @@ export { AddressModule } from './address/address.module';
 // export { WorkshopDetailsModule } from './workshop-details/workshop-details.module';
 // export { WorkshopJobModule } from './workshop-job/workshop-job.module';
 // export { WorkshopJobCategoryModule } from './workshop-job-category/workshop-job-category.module';
-
-

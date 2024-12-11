@@ -6,6 +6,7 @@ import { VehicleModelWhereInput } from './vehicle-model-where.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { VehicleListRelationFilter } from '../../vehicle/dto/vehicle-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';

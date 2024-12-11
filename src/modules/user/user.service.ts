@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { FindUniqueUserArgs, UserCreateInput } from './dto';
+import { FindUniqueUserArgs, User, UserCreateInput } from './dto';
 
 @Injectable()
 export class UserService {

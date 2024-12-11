@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 
 @ObjectType()
 export class WorkshopMinAggregate {
@@ -19,6 +20,9 @@ export class WorkshopMinAggregate {
 
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
+
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
 
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;

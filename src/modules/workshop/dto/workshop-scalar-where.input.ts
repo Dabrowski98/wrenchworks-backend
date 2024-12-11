@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
+import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -34,6 +35,12 @@ export class WorkshopScalarWhereInput {
 
     @Field(() => StringFilter, {nullable:true})
     telephoneNumber?: StringFilter;
+
+    @Field(() => StringFilter, {nullable:true})
+    password?: StringFilter;
+
+    @Field(() => StringNullableFilter, {nullable:true})
+    refreshToken?: StringNullableFilter;
 
     @Field(() => BoolNullableFilter, {nullable:true})
     isVerified?: BoolNullableFilter;

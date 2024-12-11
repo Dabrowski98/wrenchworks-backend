@@ -6,6 +6,8 @@ export enum WorkshopScalarFieldEnum {
     addressId = "addressId",
     email = "email",
     telephoneNumber = "telephoneNumber",
+    password = "password",
+    refreshToken = "refreshToken",
     isVerified = "isVerified",
     isManagingWork = "isManagingWork",
     isOfferingService = "isOfferingService",

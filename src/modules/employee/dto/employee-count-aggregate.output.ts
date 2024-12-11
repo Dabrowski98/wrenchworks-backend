@@ -22,7 +22,7 @@ export class EmployeeCountAggregate {
     login!: number;
 
     @Field(() => Int, {nullable:false})
-    permissionSetId!: number;
+    refreshToken!: number;
 
     @Field(() => Int, {nullable:false})
     joinedAt!: number;

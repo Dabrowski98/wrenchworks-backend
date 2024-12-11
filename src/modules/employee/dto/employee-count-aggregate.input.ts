@@ -24,7 +24,7 @@ export class EmployeeCountAggregateInput {
     password?: true;
 
     @Field(() => Boolean, {nullable:true})
-    permissionSetId?: true;
+    refreshToken?: true;
 
     @Field(() => Boolean, {nullable:true})
     joinedAt?: true;

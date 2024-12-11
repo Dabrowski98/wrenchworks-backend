@@ -7,7 +7,7 @@ export enum EmployeeScalarFieldEnum {
     nickname = "nickname",
     login = "login",
     password = "password",
-    permissionSetId = "permissionSetId",
+    refreshToken = "refreshToken",
     joinedAt = "joinedAt",
     deletedAt = "deletedAt",
     createdAt = "createdAt",

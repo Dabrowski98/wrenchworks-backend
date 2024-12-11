@@ -53,8 +53,8 @@ export class Task {
     @Field(() => String, {nullable:true})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

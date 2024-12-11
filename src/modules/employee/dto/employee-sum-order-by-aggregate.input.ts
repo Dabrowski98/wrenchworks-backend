@@ -15,7 +15,4 @@ export class EmployeeSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     userId?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    permissionSetId?: keyof typeof SortOrder;
-
     }

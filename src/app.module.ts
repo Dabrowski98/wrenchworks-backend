@@ -9,10 +9,10 @@ import { HelperModule } from './common/helper/helper.module';
 import { UserModule } from './modules/user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CleanupModule } from './common/cleanup/cleanup.module';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { Reflector } from '@nestjs/core';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { EntityJwtAuthGuard, RolesGuard } from './modules/auth/auth-common-guards';
+
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -21,7 +21,6 @@ import { RolesGuard } from './modules/auth/guards/roles.guard';
       sortSchema: true,
       playground: false,
       formatError: (error) => {
-        console.log(error.message);
         let originalError = error.extensions?.originalError as
           | Error
           | undefined;
@@ -44,7 +43,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard';
   providers: [
     Logger,
     Reflector,
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: EntityJwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
   controllers: [AppController],

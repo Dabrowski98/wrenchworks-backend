@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopCountAggregate } from './workshop-count-aggregate.output';
 import { WorkshopAvgAggregate } from './workshop-avg-aggregate.output';
 import { WorkshopSumAggregate } from './workshop-sum-aggregate.output';
@@ -25,6 +26,9 @@ export class WorkshopGroupBy {
     @Field(() => String, {nullable:false})
     telephoneNumber!: string;
 
+    @Field(() => String, {nullable:true})
+    refreshToken?: string;
+
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
 
@@ -37,8 +41,8 @@ export class WorkshopGroupBy {
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;

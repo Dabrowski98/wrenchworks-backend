@@ -4,6 +4,7 @@ import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggreg
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class VehicleModelScalarWhereWithAggregatesInput {

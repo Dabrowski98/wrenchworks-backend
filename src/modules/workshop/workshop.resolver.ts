@@ -25,18 +25,21 @@ import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { NoDataProvidedForUpdate } from 'src/common/custom-errors/errors.config';
 import { JobCategory } from '../job-category';
 import { Service } from '../service';
-import { Customer } from '../customer';
-import { Employee } from '../employee';
-import { PermissionSet } from '../permission-set';
+import { Customer } from '../customer/dto';
+import { Employee } from '../employee/dto';
 import { User } from '../user/dto';
+import { CurrentUserID } from 'src/common/decorators/get-decorators/current-user-id.decorator';
 
 @Resolver(() => Workshop)
 export class WorkshopResolver {
   constructor(private readonly workshopService: WorkshopService) {}
 
   // @Mutation(() => Workshop)
-  // createWorkshop(@Args() args: CreateOneWorkshopArgs): Promise<Workshop> {
-  //   return this.workshopService.createWorkshop(args);
+  // createWorkshop(
+  //   @Args() args: CreateOneWorkshopArgs,
+  //   @CurrentUserID() userId: bigint,
+  // ): Promise<Workshop> {
+  //   return this.workshopService.createWorkshop(args, userId);
   // }
 
   // @Mutation(() => Workshop)
@@ -59,7 +62,7 @@ export class WorkshopResolver {
   workshop(
     @Args('workshopId', { type: () => GraphQLBigInt }) workshopId: bigint,
   ): Promise<Workshop> {
-    return this.workshopService.findWorkshopById(workshopId);
+    return this.workshopService.findWorkshop({ where: { workshopId } });
   }
 
   @Query(() => [Workshop])
@@ -68,11 +71,6 @@ export class WorkshopResolver {
   }
 
   //RESOLVE FIELDS
-
-  @ResolveField(() => [PermissionSet])
-  permissionSets(@Parent() workshop: Workshop): Promise<PermissionSet[]> {
-    return this.workshopService.permissionSets(workshop.workshopId);
-  }
 
   @ResolveField(() => [Employee])
   employees(@Parent() workshop: Workshop): Promise<Employee[]> {

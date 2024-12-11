@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { HideField } from '@nestjs/graphql';
+import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
 import { Type } from 'class-transformer';
 

@@ -21,8 +21,8 @@ export class VehicleModel {
     @Field(() => Date, {nullable:false})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
 
     @Field(() => [Vehicle], {nullable:true})
     @Type(() => Vehicle)

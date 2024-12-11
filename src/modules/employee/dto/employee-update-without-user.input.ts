@@ -1,10 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
+import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { PermissionSetUpdateOneWithoutEmployeesNestedInput } from '../../permission-set/dto/permission-set-update-one-without-employees-nested.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ServiceUpdateManyWithoutEmployeeNestedInput } from '../../service/dto/service-update-many-without-employee-nested.input';
 import { JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-employee-nested.input';
 import { TaskUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-update-many-without-employees-nested.input';
@@ -15,7 +13,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 @InputType()
 export class EmployeeUpdateWithoutUserInput {
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
     @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
@@ -42,11 +40,6 @@ export class EmployeeUpdateWithoutUserInput {
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
-
-    @Field(() => PermissionSetUpdateOneWithoutEmployeesNestedInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => PermissionSetUpdateOneWithoutEmployeesNestedInput)
-    permissionSet?: PermissionSetUpdateOneWithoutEmployeesNestedInput;
 
     @Field(() => JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput;

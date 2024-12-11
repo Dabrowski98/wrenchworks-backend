@@ -73,8 +73,8 @@ export class Service {
     @Field(() => String, {nullable:true})
     resolvedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;

@@ -6,7 +6,6 @@ import { AddressCreateNestedOneWithoutWorkshopInput } from '../../address/dto/ad
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CustomerCreateNestedManyWithoutWorkshopInput } from '../../customer/dto/customer-create-nested-many-without-workshop.input';
-import { PermissionSetCreateNestedManyWithoutWorkshopInput } from '../../permission-set/dto/permission-set-create-nested-many-without-workshop.input';
 import { ReviewCreateNestedManyWithoutWorkshopInput } from '../../review/dto/review-create-nested-many-without-workshop.input';
 import { ServiceRequestCreateNestedManyWithoutWorkshopInput } from '../../service-request/dto/service-request-create-nested-many-without-workshop.input';
 import { ServiceCreateNestedManyWithoutWorkshopInput } from '../../service/dto/service-create-nested-many-without-workshop.input';
@@ -15,6 +14,7 @@ import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../worksh
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
+import { WorkshopDeviceCreateNestedManyWithoutWorkshopInput } from '../../workshop-device/dto/workshop-device-create-nested-many-without-workshop.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -35,6 +35,14 @@ export class WorkshopCreateWithoutEmployeesInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber!: string;
 
+    @Field(() => String, {nullable:false})
+    @Validator.IsString({ message: 'Password must be a string' })
+    @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
+    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
+    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
+    @Validator.IsOptional({groups: [UPDATE]})
+    password!: string;
+
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
@@ -49,10 +57,6 @@ export class WorkshopCreateWithoutEmployeesInput {
     @ValidateNested()
     @Type(() => AddressCreateNestedOneWithoutWorkshopInput)
     address?: AddressCreateNestedOneWithoutWorkshopInput;
-
-    @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
-    @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
-    user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput)

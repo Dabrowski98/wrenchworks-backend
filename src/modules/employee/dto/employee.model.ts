@@ -2,10 +2,8 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
-import { Int } from '@nestjs/graphql';
-import { PermissionSet } from '../../permission-set/dto/permission-set.model';
-import { Type } from 'class-transformer';
 import { Service } from '../../service/dto/service.model';
+import { Type } from 'class-transformer';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
 import { Task } from '../../task/dto/task.model';
 import { User } from '../../user/dto/user.model';
@@ -24,7 +22,7 @@ export class Employee {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId!: bigint | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     nickname!: string | null;
 
     @Field(() => String, {nullable:false})
@@ -33,8 +31,8 @@ export class Employee {
     /**
      * Note: Password will be hashed before storage
      */
-    @Field(() => Int, {nullable:true})
-    permissionSetId!: number | null;
+    @Field(() => String, {nullable:true})
+    refreshToken!: string | null;
 
     /**
      * Note: Optional because field defaults to now()
@@ -51,17 +49,16 @@ export class Employee {
     @Field(() => String, {nullable:true})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    updatedAt!: Date | null;
 
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;
 
-    @Field(() => PermissionSet, {nullable:true})
-    @Type(() => PermissionSet)
-    permissionSet?: PermissionSet | null;
-
-    @Field(() => [Service], {nullable:true})
+    /**
+     * Note: Connect or Create only allowed
+     */
+    @Field(() => [Service], {nullable:true,description:'Note: Connect or Create only allowed'})
     @Type(() => Service)
     services?: Array<Service>;
 

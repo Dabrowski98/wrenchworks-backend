@@ -8,6 +8,7 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { EnumReviewsStatusFilter } from '../../prisma/dto/enum-reviews-status-filter.input';
 
 @InputType()

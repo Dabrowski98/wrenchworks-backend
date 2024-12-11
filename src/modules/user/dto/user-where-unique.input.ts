@@ -24,12 +24,22 @@ import { ReviewResponseListRelationFilter } from '../../review-response/dto/revi
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { SessionDataListRelationFilter } from '../../session-data/dto/session-data-list-relation-filter.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserWhereUniqueInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    @Validator.IsString({ message: 'Username must be a string' })
+    @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
+    @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Username is required' })
+    @Validator.IsOptional({ groups: [UPDATE]})
+    username?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -48,9 +58,6 @@ export class UserWhereUniqueInput {
 
     @Field(() => [UserWhereInput], {nullable:true})
     NOT?: Array<UserWhereInput>;
-
-    @Field(() => StringFilter, {nullable:true})
-    username?: StringFilter;
 
     @Field(() => StringFilter, {nullable:true})
     password?: StringFilter;

@@ -32,8 +32,8 @@ export class ReviewResponseGroupBy {
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 
-    @Field(() => Date, {nullable:false})
-    updatedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
 
     @Field(() => ReviewsResponsesStatus, {nullable:false})
     status!: keyof typeof ReviewsResponsesStatus;
