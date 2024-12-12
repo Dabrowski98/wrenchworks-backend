@@ -24,9 +24,6 @@ export class WorkshopMaxAggregateInput {
     password?: true;
 
     @Field(() => Boolean, {nullable:true})
-    refreshToken?: true;
-
-    @Field(() => Boolean, {nullable:true})
     isVerified?: true;
 
     @Field(() => Boolean, {nullable:true})

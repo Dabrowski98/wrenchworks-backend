@@ -18,4 +18,15 @@ export class WorkshopDeviceCountOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     deviceName?: keyof typeof SortOrder;
 
-    }
+    @Field(() => SortOrder, {nullable:true})
+    lastLoginAt?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    lastLoginBy?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    acceptedAt?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    acceptedBy?: keyof typeof SortOrder;
+}

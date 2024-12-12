@@ -30,5 +30,5 @@ export class WorkshopCount {
     joinWorkshopRequests?: number;
 
     @Field(() => Int, {nullable:false})
-    workshopPCs?: number;
+    workshopDevices?: number;
 }

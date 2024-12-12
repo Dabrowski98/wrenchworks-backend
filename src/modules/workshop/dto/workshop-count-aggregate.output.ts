@@ -22,9 +22,6 @@ export class WorkshopCountAggregate {
     telephoneNumber!: number;
 
     @Field(() => Int, {nullable:false})
-    refreshToken!: number;
-
-    @Field(() => Int, {nullable:false})
     isVerified!: number;
 
     @Field(() => Int, {nullable:false})

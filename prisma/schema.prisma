@@ -251,9 +251,9 @@ model Employee {
   user                  User?            @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
   /// @HideField({ match: '@(Employee)@(Update)*Input' })
   workshop              Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
 
   @@unique([login, workshopId])
-  // @@index([permissionSetId])
   @@index([workshopId])
 }
 
@@ -1007,7 +1007,7 @@ model Workshop {
   /// @Validator.IsOptional()
   isOfferingService         Boolean?                    @default(false)
   createdAt                 DateTime                    @default(now()) @db.Timestamp(0)
-  updatedAt          DateTime?                    @db.Timestamp(0) @updatedAt
+  updatedAt                 DateTime?                   @db.Timestamp(0) @updatedAt
   updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
@@ -1022,7 +1022,7 @@ model Workshop {
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
-  user                      User                      @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
+  user                      User                        @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
   workshopDetails           WorkshopDetails?
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   workshopJobs              WorkshopJob[]
@@ -1031,38 +1031,69 @@ model Workshop {
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   joinWorkshopRequests      JoinWorkshopRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
+  workshopDeviceOTP         WorkshopDeviceOTP?
+  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   workshopDevices           WorkshopDevice[]
-
 
   @@index([ownerId])
 }
 
 model WorkshopDevice {
   /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
   workshopDeviceId    BigInt                    @id @unique(map: "workshop_device_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   workshopId          BigInt                    @db.UnsignedBigInt
   /// @Validator.IsString({ message: 'Serial number must be a string' })
   /// @Validator.Length(1, 255, { message: 'Serial number must be between 1 and 255 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Serial number is required' })
   /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   serialNumber        String                    @db.VarChar(255)
-  /// @Validator.IsString({ message: 'PC name must be a string' })
-  /// @Validator.Length(1, 255, { message: 'PC name must be between 1 and 255 characters' })
-  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'PC name is required' })
+  /// @Validator.IsString({ message: 'Device name must be a string' })
+  /// @Validator.Length(1, 255, { message: 'Device name must be between 1 and 255 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
-  deviceName           String                    @db.VarChar(255)
-  // /// @Validator.IsString({ message: 'Device token must be a string' })
-  // /// @Validator.Length(1, 255, { message: 'Device token must be between 1 and 255 characters' })
-  // /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device token is required' })
-  // deviceToken String @db.VarChar(255)
-  createdAt           DateTime                  @default(now()) @db.Timestamp(0)
-  updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
-  createdBy           BigInt                    @db.UnsignedBigInt
+  deviceName          String                    @db.VarChar(255)
+  lastLoginAt         DateTime?                 @db.Timestamp(0)
+  lastLoginBy         BigInt?                   @db.UnsignedBigInt
+  updatedAt           DateTime?                 @db.Timestamp(0) @updatedAt
+  updatedBy           BigInt?                   @db.UnsignedBigInt
+  acceptedAt          DateTime?                 @db.Timestamp(0)
+  acceptedBy          BigInt?                   @db.UnsignedBigInt
   /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
   workshop            Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDevice")
 
   @@unique([workshopId, serialNumber])
+  @@index([workshopId])
+}
+
+model WorkshopDeviceOTP {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  workshopDeviceOTPId                   BigInt      @id @unique(map: "workshop_device_otp_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  employeeId                            BigInt      @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  workshopId                            BigInt      @db.UnsignedBigInt @unique
+  /// @Validator.IsString({ message: 'Code must be a string' })
+  /// @Validator.Length(7, 7, { message: 'Code must be exactly 7 characters' })
+  /// @Validator.Matches(/^[0-9]{7}$/, { message: 'Invalid code format' })
+  /// @Validator.IsNotEmpty()
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  code                                  String      @unique @db.Char(7)
+  /// @Validator.IsDate()
+  /// @Validator.IsNotEmpty()
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  expiresAt                             DateTime
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  createdAt                             DateTime    @default(now()) @db.Timestamp(0)
+  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  workshop                              Workshop    @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDeviceOTP")
+
+  @@index([code])
   @@index([workshopId])
 }
 
@@ -1098,7 +1129,7 @@ model WorkshopDetails {
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP              String?                   @db.Char(10)
-  updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
+  updatedAt        DateTime?                  @db.Timestamp(0) @updatedAt
   updatedBy        BigInt?                   @db.UnsignedBigInt
   deletedAt        DateTime?                 @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })

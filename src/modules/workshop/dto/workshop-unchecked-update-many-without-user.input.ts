@@ -38,9 +38,6 @@ export class WorkshopUncheckedUpdateManyWithoutUserInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password?: string;
 
-    @Field(() => String, {nullable:true})
-    refreshToken?: string;
-
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
     @Validator.IsOptional()

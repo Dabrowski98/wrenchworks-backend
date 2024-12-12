@@ -18,11 +18,20 @@ export class WorkshopDeviceMaxAggregate {
     deviceName?: string;
 
     @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
+    lastLoginAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    lastLoginBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
     @Field(() => String, {nullable:true})
-    createdBy?: bigint | number;
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    acceptedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    acceptedBy?: bigint | number;
 }

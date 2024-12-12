@@ -14,6 +14,7 @@ import { WorkshopDetails } from '../../workshop-details/dto/workshop-details.mod
 import { WorkshopJob } from '../../workshop-job/dto/workshop-job.model';
 import { JobCategory } from '../../job-category/dto/job-category.model';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
+import { WorkshopDeviceOTP } from '../../workshop-device-otp/dto/workshop-device-otp.model';
 import { WorkshopDevice } from '../../workshop-device/dto/workshop-device.model';
 import { WorkshopCount } from './workshop-count.output';
 
@@ -38,9 +39,6 @@ export class Workshop {
     /**
      * Note: Password will be hashed before storage
      */
-    @Field(() => String, {nullable:true})
-    refreshToken!: string | null;
-
     @Field(() => Boolean, {nullable:true,defaultValue:false})
     isVerified!: boolean | null;
 
@@ -104,8 +102,11 @@ export class Workshop {
     @Field(() => [JoinWorkshopRequest], {nullable:true})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
 
+    @Field(() => WorkshopDeviceOTP, {nullable:true})
+    workshopDeviceOTP?: WorkshopDeviceOTP | null;
+
     @Field(() => [WorkshopDevice], {nullable:true})
-    workshopPCs?: Array<WorkshopDevice>;
+    workshopDevices?: Array<WorkshopDevice>;
 
     @Field(() => WorkshopCount, {nullable:false})
     _count?: WorkshopCount;

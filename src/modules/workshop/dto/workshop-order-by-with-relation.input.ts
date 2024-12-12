@@ -16,6 +16,7 @@ import { WorkshopDetailsOrderByWithRelationInput } from '../../workshop-details/
 import { WorkshopJobOrderByRelationAggregateInput } from '../../workshop-job/dto/workshop-job-order-by-relation-aggregate.input';
 import { JobCategoryOrderByRelationAggregateInput } from '../../job-category/dto/job-category-order-by-relation-aggregate.input';
 import { JoinWorkshopRequestOrderByRelationAggregateInput } from '../../join-workshop-request/dto/join-workshop-request-order-by-relation-aggregate.input';
+import { WorkshopDeviceOTPOrderByWithRelationInput } from '../../workshop-device-otp/dto/workshop-device-otp-order-by-with-relation.input';
 import { WorkshopDeviceOrderByRelationAggregateInput } from '../../workshop-device/dto/workshop-device-order-by-relation-aggregate.input';
 
 @InputType()
@@ -38,9 +39,6 @@ export class WorkshopOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     password?: keyof typeof SortOrder;
-
-    @Field(() => SortOrderInput, {nullable:true})
-    refreshToken?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     isVerified?: SortOrderInput;
@@ -110,6 +108,9 @@ export class WorkshopOrderByWithRelationInput {
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
 
+    @Field(() => WorkshopDeviceOTPOrderByWithRelationInput, {nullable:true})
+    workshopDeviceOTP?: WorkshopDeviceOTPOrderByWithRelationInput;
+
     @Field(() => WorkshopDeviceOrderByRelationAggregateInput, {nullable:true})
-    workshopPCs?: WorkshopDeviceOrderByRelationAggregateInput;
+    workshopDevices?: WorkshopDeviceOrderByRelationAggregateInput;
 }

@@ -12,5 +12,11 @@ export class WorkshopDeviceAvgAggregate {
     workshopId?: number;
 
     @Field(() => Float, {nullable:true})
-    createdBy?: number;
+    lastLoginBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
+
+    @Field(() => Float, {nullable:true})
+    acceptedBy?: number;
 }

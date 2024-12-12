@@ -13,6 +13,7 @@ import { ServiceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../serv
 import { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-workshop-nested.input';
 import { JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-unchecked-update-many-without-workshops-nested.input';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-workshop-nested.input';
+import { WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput } from '../../workshop-device-otp/dto/workshop-device-otp-unchecked-update-one-without-workshop-nested.input';
 import { WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-device/dto/workshop-device-unchecked-update-many-without-workshop-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
@@ -51,9 +52,6 @@ export class WorkshopUncheckedUpdateWithoutWorkshopDetailsInput {
     @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
     @Validator.IsOptional({groups: [UPDATE]})
     password?: string;
-
-    @Field(() => String, {nullable:true})
-    refreshToken?: string;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
@@ -114,6 +112,9 @@ export class WorkshopUncheckedUpdateWithoutWorkshopDetailsInput {
     @Field(() => JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput;
 
+    @Field(() => WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput, {nullable:true})
+    workshopDeviceOTP?: WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput;
+
     @Field(() => WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
-    workshopPCs?: WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput;
+    workshopDevices?: WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput;
 }

@@ -5,7 +5,6 @@ import * as Validator from 'class-validator';
 import { WorkshopWhereInput } from './workshop-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -24,6 +23,7 @@ import { WorkshopDetailsNullableRelationFilter } from '../../workshop-details/dt
 import { WorkshopJobListRelationFilter } from '../../workshop-job/dto/workshop-job-list-relation-filter.input';
 import { JobCategoryListRelationFilter } from '../../job-category/dto/job-category-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
+import { WorkshopDeviceOTPNullableRelationFilter } from '../../workshop-device-otp/dto/workshop-device-otp-nullable-relation-filter.input';
 import { WorkshopDeviceListRelationFilter } from '../../workshop-device/dto/workshop-device-list-relation-filter.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
@@ -61,9 +61,6 @@ export class WorkshopWhereUniqueInput {
 
     @Field(() => StringFilter, {nullable:true})
     password?: StringFilter;
-
-    @Field(() => StringNullableFilter, {nullable:true})
-    refreshToken?: StringNullableFilter;
 
     @Field(() => BoolNullableFilter, {nullable:true})
     isVerified?: BoolNullableFilter;
@@ -133,6 +130,9 @@ export class WorkshopWhereUniqueInput {
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
 
+    @Field(() => WorkshopDeviceOTPNullableRelationFilter, {nullable:true})
+    workshopDeviceOTP?: WorkshopDeviceOTPNullableRelationFilter;
+
     @Field(() => WorkshopDeviceListRelationFilter, {nullable:true})
-    workshopPCs?: WorkshopDeviceListRelationFilter;
+    workshopDevices?: WorkshopDeviceListRelationFilter;
 }

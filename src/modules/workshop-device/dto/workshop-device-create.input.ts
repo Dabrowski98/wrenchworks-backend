@@ -1,17 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
-import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
-import { WorkshopCreateNestedOneWithoutWorkshopPCsInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-p-cs.input';
+import * as Validator from 'class-validator';
+import { WorkshopCreateNestedOneWithoutWorkshopDevicesInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-devices.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
 export class WorkshopDeviceCreateInput {
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    workshopDeviceId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Serial number must be a string' })
@@ -20,10 +16,22 @@ export class WorkshopDeviceCreateInput {
     serialNumber!: string;
 
     @Field(() => String, {nullable:false})
-    @Validator.IsString({ message: 'PC name must be a string' })
-    @Validator.Length(1, 255, { message: 'PC name must be between 1 and 255 characters' })
-    @Validator.IsNotEmpty({ groups: [CREATE], message: 'PC name is required' })
+    @Validator.IsString({ message: 'Device name must be a string' })
+    @Validator.Length(1, 255, { message: 'Device name must be between 1 and 255 characters' })
+    @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device name is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     deviceName!: string;
+
+    @Field(() => Date, {nullable:true})
+    lastLoginAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    lastLoginBy?: bigint | number;
+
+    @Field(() => Date, {nullable:true})
+    acceptedAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    acceptedBy?: bigint | number;
 
     }

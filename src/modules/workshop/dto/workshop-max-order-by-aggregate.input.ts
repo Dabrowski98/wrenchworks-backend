@@ -25,9 +25,6 @@ export class WorkshopMaxOrderByAggregateInput {
     password?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    refreshToken?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
     isVerified?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

@@ -1,8 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
-import { HideField } from '@nestjs/graphql';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
+import { HideField } from '@nestjs/graphql';
 import { WorkshopDeviceCountOrderByAggregateInput } from './workshop-device-count-order-by-aggregate.input';
 import { WorkshopDeviceAvgOrderByAggregateInput } from './workshop-device-avg-order-by-aggregate.input';
 import { WorkshopDeviceMaxOrderByAggregateInput } from './workshop-device-max-order-by-aggregate.input';
@@ -23,6 +23,18 @@ export class WorkshopDeviceOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
     deviceName?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    lastLoginAt?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    lastLoginBy?: SortOrderInput;
+
+    @Field(() => SortOrder, {nullable:true})
+    acceptedAt?: keyof typeof SortOrder;
+
+    @Field(() => SortOrderInput, {nullable:true})
+    acceptedBy?: SortOrderInput;
 
     @Field(() => WorkshopDeviceCountOrderByAggregateInput, {nullable:true})
     _count?: WorkshopDeviceCountOrderByAggregateInput;

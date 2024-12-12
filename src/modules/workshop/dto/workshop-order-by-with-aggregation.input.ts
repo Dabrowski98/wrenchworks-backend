@@ -31,9 +31,6 @@ export class WorkshopOrderByWithAggregationInput {
     password?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
-    refreshToken?: SortOrderInput;
-
-    @Field(() => SortOrderInput, {nullable:true})
     isVerified?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})

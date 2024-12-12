@@ -14,6 +14,7 @@ import { WorkshopDetailsUncheckedCreateNestedOneWithoutWorkshopInput } from '../
 import { WorkshopJobUncheckedCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-unchecked-create-nested-many-without-workshop.input';
 import { JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-unchecked-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-create-nested-many-without-workshop.input';
+import { WorkshopDeviceOTPUncheckedCreateNestedOneWithoutWorkshopInput } from '../../workshop-device-otp/dto/workshop-device-otp-unchecked-create-nested-one-without-workshop.input';
 import { WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput } from '../../workshop-device/dto/workshop-device-unchecked-create-nested-many-without-workshop.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
@@ -49,9 +50,6 @@ export class WorkshopUncheckedCreateWithoutUserInput {
     @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
-
-    @Field(() => String, {nullable:true})
-    refreshToken?: string;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
@@ -118,6 +116,9 @@ export class WorkshopUncheckedCreateWithoutUserInput {
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput;
 
+    @Field(() => WorkshopDeviceOTPUncheckedCreateNestedOneWithoutWorkshopInput, {nullable:true})
+    workshopDeviceOTP?: WorkshopDeviceOTPUncheckedCreateNestedOneWithoutWorkshopInput;
+
     @Field(() => WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
-    workshopPCs?: WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput;
+    workshopDevices?: WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput;
 }

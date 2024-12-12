@@ -22,14 +22,23 @@ export class WorkshopDeviceGroupBy {
     @Field(() => String, {nullable:false})
     deviceName!: string;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    lastLoginAt?: Date | string;
+
+    @Field(() => String, {nullable:true})
+    lastLoginBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:false})
-    createdBy!: bigint | number;
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
+    @Field(() => Date, {nullable:false})
+    acceptedAt!: Date | string;
+
+    @Field(() => String, {nullable:true})
+    acceptedBy?: bigint | number;
 
     @Field(() => WorkshopDeviceCountAggregate, {nullable:true})
     _count?: WorkshopDeviceCountAggregate;

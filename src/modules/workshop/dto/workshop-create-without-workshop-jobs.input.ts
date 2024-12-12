@@ -14,6 +14,7 @@ import { UserCreateNestedOneWithoutWorkshopsInput } from '../../user/dto/user-cr
 import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
+import { WorkshopDeviceOTPCreateNestedOneWithoutWorkshopInput } from '../../workshop-device-otp/dto/workshop-device-otp-create-nested-one-without-workshop.input';
 import { WorkshopDeviceCreateNestedManyWithoutWorkshopInput } from '../../workshop-device/dto/workshop-device-create-nested-many-without-workshop.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 

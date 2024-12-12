@@ -21,9 +21,6 @@ export class WorkshopMinAggregate {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
-    @Field(() => String, {nullable:true})
-    refreshToken?: string;
-
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
 

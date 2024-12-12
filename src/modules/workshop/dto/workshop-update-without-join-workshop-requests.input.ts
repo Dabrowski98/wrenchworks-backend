@@ -14,6 +14,7 @@ import { UserUpdateOneRequiredWithoutWorkshopsNestedInput } from '../../user/dto
 import { WorkshopDetailsUpdateOneWithoutWorkshopNestedInput } from '../../workshop-details/dto/workshop-details-update-one-without-workshop-nested.input';
 import { WorkshopJobUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-update-many-without-workshop-nested.input';
 import { JobCategoryUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-update-many-without-workshops-nested.input';
+import { WorkshopDeviceOTPUpdateOneWithoutWorkshopNestedInput } from '../../workshop-device-otp/dto/workshop-device-otp-update-one-without-workshop-nested.input';
 import { WorkshopDeviceUpdateManyWithoutWorkshopNestedInput } from '../../workshop-device/dto/workshop-device-update-many-without-workshop-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 

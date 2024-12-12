@@ -18,13 +18,22 @@ export class WorkshopDeviceCountAggregate {
     deviceName!: number;
 
     @Field(() => Int, {nullable:false})
-    createdAt!: number;
+    lastLoginAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    lastLoginBy!: number;
 
     @Field(() => Int, {nullable:false})
     updatedAt!: number;
 
     @Field(() => Int, {nullable:false})
-    createdBy!: number;
+    updatedBy!: number;
+
+    @Field(() => Int, {nullable:false})
+    acceptedAt!: number;
+
+    @Field(() => Int, {nullable:false})
+    acceptedBy!: number;
 
     @Field(() => Int, {nullable:false})
     _all!: number;

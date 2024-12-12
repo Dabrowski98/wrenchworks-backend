@@ -18,5 +18,17 @@ export class WorkshopDeviceCountAggregateInput {
     deviceName?: true;
 
     @Field(() => Boolean, {nullable:true})
+    lastLoginAt?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    lastLoginBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    acceptedAt?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    acceptedBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

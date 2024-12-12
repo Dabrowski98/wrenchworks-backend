@@ -11,4 +11,9 @@ export class WorkshopDeviceSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     workshopId?: true;
 
-    }
+    @Field(() => Boolean, {nullable:true})
+    lastLoginBy?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    acceptedBy?: true;
+}

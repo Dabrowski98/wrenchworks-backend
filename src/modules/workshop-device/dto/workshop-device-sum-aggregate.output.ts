@@ -12,5 +12,11 @@ export class WorkshopDeviceSumAggregate {
     workshopId?: bigint | number;
 
     @Field(() => String, {nullable:true})
-    createdBy?: bigint | number;
+    lastLoginBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
+    @Field(() => String, {nullable:true})
+    acceptedBy?: bigint | number;
 }

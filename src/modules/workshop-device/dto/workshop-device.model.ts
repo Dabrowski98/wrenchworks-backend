@@ -19,14 +19,23 @@ export class WorkshopDevice {
     @Field(() => String, {nullable:false})
     deviceName!: string;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date;
+    @Field(() => Date, {nullable:true})
+    lastLoginAt!: Date | null;
+
+    @Field(() => String, {nullable:true})
+    lastLoginBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
 
-    @Field(() => String, {nullable:false})
-    createdBy!: bigint;
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
+    @Field(() => Date, {nullable:false})
+    acceptedAt!: Date;
+
+    @Field(() => String, {nullable:true})
+    acceptedBy!: bigint | null;
 
     @Field(() => Workshop, {nullable:false})
     @Type(() => Workshop)
