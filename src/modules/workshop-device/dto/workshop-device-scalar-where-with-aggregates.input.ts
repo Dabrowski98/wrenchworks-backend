@@ -5,7 +5,6 @@ import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggrega
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
-import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 
 @InputType()
 export class WorkshopDeviceScalarWhereWithAggregatesInput {
@@ -37,8 +36,8 @@ export class WorkshopDeviceScalarWhereWithAggregatesInput {
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     lastLoginBy?: BigIntNullableWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    acceptedAt?: DateTimeWithAggregatesFilter;
+    @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
+    acceptedAt?: DateTimeNullableWithAggregatesFilter;
 
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     acceptedBy?: BigIntNullableWithAggregatesFilter;

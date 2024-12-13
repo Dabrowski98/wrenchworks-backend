@@ -52,7 +52,6 @@ export class UserAuthService {
       ipAddress,
       deviceInfo,
     );
-    console.log(user)
     return { accessToken, refreshToken, user };
   }
 

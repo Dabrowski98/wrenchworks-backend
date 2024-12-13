@@ -8,8 +8,8 @@ import { ReviewCreateNestedManyWithoutWorkshopInput } from '../../review/dto/rev
 import { ServiceRequestCreateNestedManyWithoutWorkshopInput } from '../../service-request/dto/service-request-create-nested-many-without-workshop.input';
 import { ServiceCreateNestedManyWithoutWorkshopInput } from '../../service/dto/service-create-nested-many-without-workshop.input';
 import { UserCreateNestedOneWithoutWorkshopsInput } from '../../user/dto/user-create-nested-one-without-workshops.input';
-import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { Type } from 'class-transformer';
+import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { ValidateNested } from 'class-validator';
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
@@ -53,6 +53,10 @@ export class WorkshopCreateWithoutAddressInput {
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
     isOfferingService?: boolean;
+
+    @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput)

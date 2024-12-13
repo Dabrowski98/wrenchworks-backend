@@ -11,7 +11,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CleanupModule } from './common/cleanup/cleanup.module';
 import { APP_GUARD } from '@nestjs/core';
 import { Reflector } from '@nestjs/core';
-import { EntityJwtAuthGuard, RolesGuard } from './modules/auth/auth-common-guards';
+import { RolesGuard } from './modules/auth/auth-common-guards';
+import { UserJwtAuthGuard } from './modules/auth/user-auth/guards/user-jwt-auth.guard';
+import { EmployeeJwtAuthGuard } from './modules/auth/workshop-auth/guards/user-jwt-auth.guard';
 
 @Module({
   imports: [
@@ -43,7 +45,6 @@ import { EntityJwtAuthGuard, RolesGuard } from './modules/auth/auth-common-guard
   providers: [
     Logger,
     Reflector,
-    { provide: APP_GUARD, useClass: EntityJwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
   controllers: [AppController],

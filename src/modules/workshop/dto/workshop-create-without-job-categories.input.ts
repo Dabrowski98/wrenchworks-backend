@@ -59,6 +59,10 @@ export class WorkshopCreateWithoutJobCategoriesInput {
     @Type(() => AddressCreateNestedOneWithoutWorkshopInput)
     address?: AddressCreateNestedOneWithoutWorkshopInput;
 
+    @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    user!: UserCreateNestedOneWithoutWorkshopsInput;
+
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput)
     @ValidateNested()

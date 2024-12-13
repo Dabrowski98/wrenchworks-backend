@@ -31,8 +31,8 @@ export class WorkshopDevice {
     @Field(() => String, {nullable:true})
     updatedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:false})
-    acceptedAt!: Date;
+    @Field(() => Date, {nullable:true})
+    acceptedAt!: Date | null;
 
     @Field(() => String, {nullable:true})
     acceptedBy!: bigint | null;

@@ -226,7 +226,7 @@ model Employee {
   /// Note: Password will be hashed before storage
   password              String              @db.VarChar(255)
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  refreshToken          String?             @db.VarChar(255)
+  refreshToken          String?             @db.VarChar(1000)
   // /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
   // /// @Validator.IsOptional()
   // permissionSetId       Int?              @db.UnsignedInt
@@ -1021,7 +1021,7 @@ model Workshop {
   serviceRequests           ServiceRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
-  /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   user                      User                        @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
   workshopDetails           WorkshopDetails?
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })

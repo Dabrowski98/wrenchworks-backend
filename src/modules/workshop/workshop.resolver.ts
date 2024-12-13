@@ -28,7 +28,7 @@ import { Service } from '../service';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { User } from '../user/dto';
-import { CurrentUserID } from 'src/common/decorators/get-decorators/current-user-id.decorator';
+import { CurrentEmployeeID } from 'src/common/decorators/get-decorators/current-employee-id.decorator';
 
 @Resolver(() => Workshop)
 export class WorkshopResolver {

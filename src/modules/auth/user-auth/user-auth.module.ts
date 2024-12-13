@@ -5,7 +5,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from '../../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { UserLocalStrategy } from './strategies/user-local.strategy';
-import { EntityJwtStrategy } from '../auth-common-strategies/entity-jwt.strategy';
+import { UserJwtStrategy } from './strategies/user-jwt.strategy';
+import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
 
 @Module({
   imports: [PassportModule, UserModule, JwtModule],
@@ -13,7 +14,9 @@ import { EntityJwtStrategy } from '../auth-common-strategies/entity-jwt.strategy
     UserAuthResolver,
     UserAuthService,
     UserLocalStrategy,
-    EntityJwtStrategy
+    UserJwtStrategy,
+    UserJwtAuthGuard,
   ],
 })
 export class UserAuthModule {}
+

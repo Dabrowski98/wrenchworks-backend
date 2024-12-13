@@ -50,7 +50,21 @@ input AddressCreateNestedOneWithoutUserInput {
   create: AddressCreateWithoutUserInput
 }
 
+input AddressCreateNestedOneWithoutWorkshopInput {
+  create: AddressCreateWithoutWorkshopInput
+}
+
 input AddressCreateWithoutUserInput {
+  buildingNo: String!
+  city: String!
+  country: String!
+  flatNo: String
+  postCode: String!
+  region: String!
+  street: String
+}
+
+input AddressCreateWithoutWorkshopInput {
   buildingNo: String!
   city: String!
   country: String!
@@ -814,6 +828,10 @@ type JobCategoryCountAggregate {
   parentId: Int!
 }
 
+input JobCategoryCreateNestedManyWithoutWorkshopsInput {
+  connect: [JobCategoryWhereUniqueInput!]
+}
+
 input JobCategoryListRelationFilter {
   every: JobCategoryWhereInput
   none: JobCategoryWhereInput
@@ -870,9 +888,28 @@ input JobCategoryWhereInput {
   workshops: WorkshopListRelationFilter
 }
 
+input JobCategoryWhereUniqueInput {
+  AND: [JobCategoryWhereInput!]
+  NOT: [JobCategoryWhereInput!]
+  OR: [JobCategoryWhereInput!]
+  categoryId: BigInt
+  children: JobCategoryListRelationFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobs: JobListRelationFilter
+  name: StringFilter
+  parent: JobCategoryNullableRelationFilter
+  parentId: BigIntNullableFilter
+  workshops: WorkshopListRelationFilter
+}
+
 type JobCount {
   jobWorkshops: Int!
   serviceRequests: Int!
+}
+
+input JobCreateNestedOneWithoutJobWorkshopsInput {
+  connect: JobWhereUniqueInput
 }
 
 input JobListRelationFilter {
@@ -895,6 +932,20 @@ input JobWhereInput {
   isPopular: BoolFilter
   jobCategory: JobCategoryRelationFilter
   jobId: BigIntFilter
+  jobWorkshops: WorkshopJobListRelationFilter
+  name: StringNullableFilter
+  serviceRequests: ServiceRequestListRelationFilter
+}
+
+input JobWhereUniqueInput {
+  AND: [JobWhereInput!]
+  NOT: [JobWhereInput!]
+  OR: [JobWhereInput!]
+  categoryId: BigIntFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobCategory: JobCategoryRelationFilter
+  jobId: BigInt
   jobWorkshops: WorkshopJobListRelationFilter
   name: StringNullableFilter
   serviceRequests: ServiceRequestListRelationFilter
@@ -1017,6 +1068,7 @@ type Mutation {
   refreshTokens(refreshToken: String!): LoginUserResponse!
   registerEmployee(registerEmployeeInput: RegisterEmployeeInput!): Employee!
   registerUser(registerUserInput: RegisterUserInput!): User!
+  registerWorkshop(registerWorkshopInput: RegisterWorkshopInput!): RegisterWorkshopResponse!
   removeDevice(deviceId: BigInt!): Boolean!
   requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
@@ -1274,7 +1326,6 @@ input RegisterEmployeeInput {
   login: String!
   nickname: BigInt
   password: String!
-  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
 }
 
 input RegisterUserInput {
@@ -1286,6 +1337,24 @@ input RegisterUserInput {
   password: String!
   telephoneNumber: String!
   username: String!
+}
+
+input RegisterWorkshopInput {
+  address: AddressCreateNestedOneWithoutWorkshopInput
+  email: String!
+  isManagingWork: Boolean
+  isOfferingService: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  ownerEmployee: RegisterEmployeeInput!
+  password: String!
+  telephoneNumber: String!
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+type RegisterWorkshopResponse {
+  ownerEmployee: Employee!
+  workshop: Workshop!
 }
 
 input RequestDeviceRegistrationInput {
@@ -2439,10 +2508,6 @@ type WorkshopCountAggregate {
   workshopId: Int!
 }
 
-input WorkshopCreateNestedOneWithoutEmployeesInput {
-  connect: WorkshopWhereUniqueInput
-}
-
 input WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput {
   connect: WorkshopWhereUniqueInput
 }
@@ -2481,6 +2546,18 @@ type WorkshopDetailsCountAggregate {
   updatedBy: Int!
   workshopId: Int!
   workshopName: Int!
+}
+
+input WorkshopDetailsCreateNestedOneWithoutWorkshopInput {
+  create: WorkshopDetailsCreateWithoutWorkshopInput
+}
+
+input WorkshopDetailsCreateWithoutWorkshopInput {
+  NIP: String
+  description: String
+  logoURL: String
+  rating: Decimal
+  workshopName: String!
 }
 
 type WorkshopDetailsMaxAggregate {
@@ -2546,7 +2623,7 @@ input WorkshopDetailsWhereInput {
 }
 
 type WorkshopDevice {
-  acceptedAt: DateTime!
+  acceptedAt: DateTime
   acceptedBy: String
   deviceName: String!
   lastLoginAt: DateTime
@@ -2665,7 +2742,7 @@ input WorkshopDeviceWhereInput {
   AND: [WorkshopDeviceWhereInput!]
   NOT: [WorkshopDeviceWhereInput!]
   OR: [WorkshopDeviceWhereInput!]
-  acceptedAt: DateTimeFilter
+  acceptedAt: DateTimeNullableFilter
   acceptedBy: BigIntNullableFilter
   deviceName: StringFilter
   lastLoginAt: DateTimeNullableFilter
@@ -2723,6 +2800,32 @@ type WorkshopJobCountAggregate {
   workshopId: Int!
   workshopJobDescription: Int!
   workshopJobId: Int!
+}
+
+input WorkshopJobCreateManyWorkshopInput {
+  availability: Boolean
+  jobId: BigInt!
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
+}
+
+input WorkshopJobCreateManyWorkshopInputEnvelope {
+  data: [WorkshopJobCreateManyWorkshopInput!]!
+  skipDuplicates: Boolean
+}
+
+input WorkshopJobCreateNestedManyWithoutWorkshopInput {
+  create: [WorkshopJobCreateWithoutWorkshopInput!]
+  createMany: WorkshopJobCreateManyWorkshopInputEnvelope
+}
+
+input WorkshopJobCreateWithoutWorkshopInput {
+  availability: Boolean
+  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
 }
 
 input WorkshopJobListRelationFilter {

@@ -3,12 +3,10 @@ import { WorkshopAuthService } from './workshop-auth.service';
 import { RegisterEmployeeInput } from './dto/register-employee.input';
 import { Employee } from '../../employee/dto';
 import { Args, Mutation } from '@nestjs/graphql';
-import { CurrentEmployeeID } from 'src/common/decorators/get-decorators/current-employee-id.decorator';
-import { LoginEmployeeInput } from './dto/login-employee.input';
 import { CurrentUserID } from 'src/common/decorators/get-decorators/current-user-id.decorator';
+import { LoginEmployeeInput } from './dto/login-employee.input';
 import { User } from 'src/modules/user/dto';
 import { DeviceSerialNumber } from 'src/common/decorators/get-decorators/device-serial-number.decorator';
-import { EntityJwtAuthGuard } from '../auth-common-guards';
 import {
   EntityType,
   Type,
@@ -26,11 +24,16 @@ import {
 import { EmployeeLocalAuthGuard } from './guards/employee-local-auth.guard';
 import { LoginEmployeeResponse } from './dto/login-employee.response';
 import { ChangePasswordInput } from '../auth-common-dto';
-import { CurrentEmployee } from 'src/common/decorators/get-decorators/current-employee.decorator';
 import { RequestDeviceRegistrationInput } from './dto/request-device-registration.input';
 import { WorkshopDevice } from 'src/modules/workshop-device/dto';
 import { AcceptWorkshopDeviceInput } from './dto/accept-workshop-device.input';
 import * as Scalars from 'graphql-scalars'
+import { Workshop } from 'src/modules/workshop/dto';
+import { RegisterWorkshopInput } from './dto/register-workshop.input';
+import { RegisterWorkshopResponse } from './dto/register-workshop.response';
+import { UserJwtAuthGuard } from '../user-auth/guards/user-jwt-auth.guard';
+import { EmployeeJwtAuthGuard } from './guards/user-jwt-auth.guard';
+import { CurrentEmployeeID } from 'src/common/decorators/get-decorators/current-employee-id.decorator';
 
 
 //TODO: ensure permissions
@@ -39,7 +42,21 @@ import * as Scalars from 'graphql-scalars'
 export class WorkshopAuthResolver {
   constructor(private readonly workshopAuthService: WorkshopAuthService) {}
 
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(UserJwtAuthGuard)
+  @Mutation(() => RegisterWorkshopResponse)
+  async registerWorkshop(
+    @Args('registerWorkshopInput') registerWorkshopInput: RegisterWorkshopInput,
+    @CurrentUserID() userId: bigint,
+  ) {
+    return this.workshopAuthService.registerWorkshop(
+      registerWorkshopInput,
+      userId,
+    );
+  }
+
+
+  // permitted employee can register new employee
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Employee)
   async registerEmployee(
     @Args('registerEmployeeInput') registerEmployeeInput: RegisterEmployeeInput,
@@ -51,8 +68,7 @@ export class WorkshopAuthResolver {
     );
   }
 
-  @EntityType(Type.USER)
-  @UseGuards(EmployeeLocalAuthGuard)
+  @UseGuards(UserJwtAuthGuard, EmployeeLocalAuthGuard)
   @Mutation(() => LoginEmployeeResponse)
   async loginEmployeeByUser(
     @Args('loginEmployeeInput') loginEmployeeInput: LoginEmployeeInput,
@@ -83,7 +99,7 @@ export class WorkshopAuthResolver {
     );
   }
 
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async logoutEmployee(
     @Args('refreshToken') refreshToken: string,
@@ -95,7 +111,8 @@ export class WorkshopAuthResolver {
     }
   }
 
-  @EntityType(Type.EMPLOYEE)
+  //only szef can logout other peepos
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async logoutAnotherEmployee(
     @CurrentEmployeeID() employeeId: bigint,
@@ -125,12 +142,12 @@ export class WorkshopAuthResolver {
   //   );
   // }
 
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => String)
   async generateDeviceOTP(
-    @CurrentEmployee() employee: Employee,
+    @CurrentEmployeeID() employeeId: bigint,
   ): Promise<string> {
-    return this.workshopAuthService.generateDeviceOTP(employee);
+    return this.workshopAuthService.generateDeviceOTP(employeeId);
   }
 
   //TODO: limit number of requests
@@ -146,7 +163,7 @@ export class WorkshopAuthResolver {
     return !!device;
   }
 
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => WorkshopDevice)
   async acceptDeviceRegistration(
     @Args('acceptWorkshopDeviceInput')
@@ -160,7 +177,7 @@ export class WorkshopAuthResolver {
   }
 
   //TODO: refactor
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async removeDevice (
     @Args('deviceId', { type: () => Scalars.GraphQLBigInt }) deviceId: bigint,
@@ -170,7 +187,7 @@ export class WorkshopAuthResolver {
     );
   }
 
-  @EntityType(Type.EMPLOYEE)
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async changeEmployeePassword(
     @CurrentEmployeeID() employeeId: bigint,

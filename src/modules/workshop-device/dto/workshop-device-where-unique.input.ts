@@ -8,7 +8,6 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
-import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -46,8 +45,8 @@ export class WorkshopDeviceWhereUniqueInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     lastLoginBy?: BigIntNullableFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
-    acceptedAt?: DateTimeFilter;
+    @Field(() => DateTimeNullableFilter, {nullable:true})
+    acceptedAt?: DateTimeNullableFilter;
 
     @Field(() => BigIntNullableFilter, {nullable:true})
     acceptedBy?: BigIntNullableFilter;

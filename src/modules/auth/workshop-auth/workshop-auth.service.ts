@@ -12,7 +12,6 @@ import { RegisterEmployeeInput } from './dto/register-employee.input';
 import { LoginEmployeeInput } from './dto/login-employee.input';
 import { EmployeeService } from 'src/modules/employee/employee.service';
 import { LoginEmployeeResponse } from './dto/login-employee.response';
-import { Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { ChangePasswordInput } from '../auth-common-dto';
 import { WorkshopDevice } from 'src/modules/workshop-device/dto';
@@ -20,22 +19,74 @@ import * as crypto from 'crypto';
 import { WorkshopService } from 'src/modules/workshop/workshop.service';
 import { RequestDeviceRegistrationInput } from './dto/request-device-registration.input';
 import { AcceptWorkshopDeviceInput } from './dto/accept-workshop-device.input';
+import { RegisterWorkshopInput } from './dto/register-workshop.input';
+import { Workshop } from 'src/modules/workshop/dto';
+import { UserService } from 'src/modules/user/user.service';
+import { RegisterWorkshopResponse } from './dto/register-workshop.response';
+import { Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
 
 @Injectable()
 export class WorkshopAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
+    private readonly userService: UserService,
     private readonly workshopService: WorkshopService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
 
+  async registerWorkshop(
+    input: RegisterWorkshopInput,
+    userId: bigint,
+  ): Promise<RegisterWorkshopResponse> {
+    const user = await this.userService.findUser(
+      { where: { userId } },
+      { workshops: true },
+    );
+
+    if (!user) throw new BadRequestException('User not found');
+
+    if (user.workshops.length >= Number(process.env.USER_MAX_WORKSHOPS))
+      throw new BadRequestException(
+        'User has reached the maximum number of workshops he can have',
+      );
+    const { ownerEmployee: ownerEmployeeInput, ...workshopInput } = input;
+
+    const workshopHashedPassword = await bcrypt.hash(
+      input.password,
+      Number(process.env.PASSWORD_SALT_ROUNDS),
+    );
+
+    const employeeHashedPassword = await bcrypt.hash(
+      ownerEmployeeInput.password,
+      Number(process.env.PASSWORD_SALT_ROUNDS),
+    );
+
+    const workshop = await this.workshopService.createWorkshop({
+      ...workshopInput,
+      password: workshopHashedPassword,
+      user: { connect: { userId: user.userId } },
+    });
+
+    //TODO: set all permissions to true
+    const ownerEmployee = await this.employeeService.createEmployee({
+      ...ownerEmployeeInput,
+      password: employeeHashedPassword,
+      workshop: { connect: { workshopId: workshop.workshopId } },
+    });
+
+    const updatedOwnerEmployee = await this.prisma.employee.update({
+      where: { employeeId: ownerEmployee.employeeId },
+      data: { userId: user.userId },
+    });
+
+    return { workshop, ownerEmployee: updatedOwnerEmployee };
+  }
+
   async registerEmployee(
     input: RegisterEmployeeInput,
     registrantEmployeeId: bigint,
   ): Promise<Employee> {
-    const hashedPassword = await bcrypt.hash(input.password, 10);
-
     // create guard to check that
     const registrant = await this.employeeService.findEmployee({
       where: { employeeId: registrantEmployeeId },
@@ -44,16 +95,13 @@ export class WorkshopAuthService {
     if (!registrant) {
       throw new ForbiddenException();
     }
-    //
 
-    const employeeData: RegisterEmployeeInput = {
+    const hashedPassword = await bcrypt.hash(input.password, 10);
+    input = { ...input, password: hashedPassword };
+
+    return this.employeeService.createEmployee({
       ...input,
-      password: hashedPassword,
       workshop: { connect: { workshopId: registrant.workshopId } },
-    };
-
-    return this.prisma.employee.create({
-      data: employeeData,
     });
   }
 
@@ -61,17 +109,21 @@ export class WorkshopAuthService {
     employee: Employee,
     userId: bigint,
   ): Promise<LoginEmployeeResponse> {
-    if (userId !== employee.userId)
+    if (userId != employee.userId)
       throw new ForbiddenException(
         'That employee record is not associated with that user',
       );
-
-    console.log(employee);
 
     const { accessToken, refreshToken } = await this.generateTokens(
       employee,
       'User',
     );
+
+    await this.prisma.employee.update({
+      where: { employeeId: employee.employeeId },
+      data: { refreshToken },
+    });
+
     return { accessToken, refreshToken, employee };
   }
 
@@ -90,6 +142,11 @@ export class WorkshopAuthService {
     });
 
     if (!device) throw new ForbiddenException('Device not found');
+
+    if (!device.acceptedBy)
+      throw new ForbiddenException(
+        'In order to login on this device, permitted workshop employee must accept it first',
+      );
 
     const { accessToken, refreshToken } = await this.generateTokens(
       employee,
@@ -116,7 +173,7 @@ export class WorkshopAuthService {
       loggedInBy,
     };
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
+      expiresIn: '12h',
       secret: process.env.EMPLOYEE_ACCESS_SECRET,
     });
     const refreshToken = this.jwtService.sign(payload, {
@@ -155,6 +212,12 @@ export class WorkshopAuthService {
     });
 
     if (!decodedRefreshToken) return false;
+
+    const employee = await this.employeeService.findEmployee({
+      where: { employeeId: decodedRefreshToken.sub },
+    });
+
+    if (!employee.refreshToken) return false;
 
     const result = await this.prisma.employee.update({
       where: { employeeId: decodedRefreshToken.sub },
@@ -227,7 +290,13 @@ export class WorkshopAuthService {
     return result ? true : false;
   }
 
-  async generateDeviceOTP(employee: Employee): Promise<string> {
+  async generateDeviceOTP(employeeId: bigint): Promise<string> {
+    const employee = await this.employeeService.findEmployee({
+      where: { employeeId },
+    });
+
+    if (!employee) throw new BadRequestException('Employee not found');
+
     const workshop = await this.workshopService.findWorkshop({
       where: { workshopId: employee.workshopId },
     });
@@ -348,9 +417,9 @@ export class WorkshopAuthService {
     const device = await this.prisma.workshopDevice.findUnique({
       where: { workshopDeviceId: deviceId },
     });
-    
+
     if (!device) throw new BadRequestException('Device not found');
-    
+
     return await this.prisma.workshopDevice.delete({
       where: { workshopDeviceId: deviceId },
     });

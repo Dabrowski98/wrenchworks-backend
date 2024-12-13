@@ -27,20 +27,9 @@ import { User } from '../user/dto';
 export class WorkshopService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createWorkshop(
-    input: WorkshopCreateInput,
-    ownerId: bigint,
-  ): Promise<Workshop> {
-    const {  ...restData } = input;
-
-    return this.prisma.workshop.create({
-      data: {
-        ...restData,
-        user: { connect: { userId: ownerId } },
-      },
-    });
+  async createWorkshop(input: WorkshopCreateInput): Promise<Workshop> {
+    return this.prisma.workshop.create({data: input});
   }
-
 
   // data: {
   //   user: { connect: { userId: ownerId } },
@@ -80,7 +69,7 @@ export class WorkshopService {
 
   async findWorkshop(args: FindUniqueWorkshopArgs) {
     const workshop = await this.prisma.workshop.findUnique(args);
-    
+ 
     if (!workshop) throw new RecordNotFoundError(Workshop);
 
     return workshop;

@@ -4,17 +4,20 @@ import { WorkshopAuthService as WorkshopAuthService } from './workshop-auth.serv
 import { EmployeeModule } from 'src/modules/employee/employee.module';
 import { EmployeeLocalStrategy } from './strategies/employee-local.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { EntityJwtStrategy } from '../auth-common-strategies/entity-jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { WorkshopModule } from 'src/modules/workshop/workshop.module';
+import { UserModule } from 'src/modules/user/user.module';
+import { EmployeeJwtStrategy } from './strategies/employee-jwt.strategy';
+import { EmployeeJwtAuthGuard } from './guards/user-jwt-auth.guard';
 
 @Module({
-  imports: [EmployeeModule, WorkshopModule, JwtModule, PassportModule],
+  imports: [EmployeeModule, WorkshopModule, JwtModule, PassportModule, UserModule],
   providers: [
     WorkshopAuthResolver,
     WorkshopAuthService,
     EmployeeLocalStrategy,
-    EntityJwtStrategy,
+    EmployeeJwtStrategy,
+    EmployeeJwtAuthGuard,
   ],
 })
 export class WorkshopAuthModule {}

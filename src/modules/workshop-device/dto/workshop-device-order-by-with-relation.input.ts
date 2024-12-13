@@ -28,8 +28,8 @@ export class WorkshopDeviceOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     lastLoginBy?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    acceptedAt?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    acceptedAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
     acceptedBy?: SortOrderInput;

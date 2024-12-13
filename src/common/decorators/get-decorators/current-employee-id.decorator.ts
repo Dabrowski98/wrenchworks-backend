@@ -6,8 +6,7 @@ export const CurrentEmployeeID = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     const employeeId = ctx.getContext().req?.employee?.employeeId;
-
-    if (!employeeId) throw new BadRequestException('Employee not found');
+    if (!employeeId) throw new BadRequestException('Employee not found - decorator');
 
     return employeeId;
   },

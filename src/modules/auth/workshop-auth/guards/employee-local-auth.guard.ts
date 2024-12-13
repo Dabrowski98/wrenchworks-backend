@@ -2,7 +2,6 @@ import { CanActivate, Injectable } from '@nestjs/common';
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class EmployeeLocalAuthGuard extends AuthGuard('employee-local') {

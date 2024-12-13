@@ -13,11 +13,12 @@ import { Public } from 'src/common/decorators/guard-decorators/public.decorator'
 import { Role } from 'src/common/decorators/guard-decorators/roles.decorator';
 import { UserRole } from '../../prisma';
 import { CreateAdminInput } from './dto/create-admin.input';
-import { RolesGuard, EntityJwtAuthGuard } from '../auth-common-guards';
+import { RolesGuard } from '../auth-common-guards';
 import { ENTITY_TYPE_KEY, EntityType, Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
 import { LoginAuthGuard } from './guards/user-local-auth.guard';
 import { CurrentUserID } from 'src/common/decorators/get-decorators/current-user-id.decorator';
 import { ChangePasswordInput } from '../auth-common-dto';
+import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
 
 @Resolver()
 export class UserAuthResolver {
@@ -65,7 +66,7 @@ export class UserAuthResolver {
     );
   }
 
-  @EntityType(Type.USER)
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   async logoutUser(@Args('refreshToken') refreshToken: string): Promise<boolean> {
     try {
@@ -76,7 +77,7 @@ export class UserAuthResolver {
     return true;
   }
 
-  @EntityType(Type.USER)
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   async logoutAllUserSessions(
     @Args('userId', { type: () => GraphQLBigInt }) userId: bigint,
@@ -97,7 +98,7 @@ export class UserAuthResolver {
   }
 
   @Role(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
+  @UseGuards(UserJwtAuthGuard, RolesGuard)
   @Mutation(() => User)
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
@@ -105,7 +106,7 @@ export class UserAuthResolver {
     return this.userAuthService.createAdmin(createAdminInput);
   }
 
-  @EntityType(Type.USER)
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   async changeUserPassword(
     @CurrentUserID() userId: bigint,
@@ -121,9 +122,13 @@ export class UserAuthResolver {
     }
   }
 
-  @EntityType(Type.USER)  
+  @Public()
+  @UseGuards(UserJwtAuthGuard)
   @Query(() => String)
-  async UserTest() {
+  async UserTest(
+    @CurrentUserID() userId: bigint,
+  ) {
+    console.log(userId);
     return 'Hello World from user';
   }
 }

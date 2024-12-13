@@ -1,6 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import * as Validator from 'class-validator';
-import { EmployeeCreateInput } from 'src/modules/employee/dto/employee-create.input';
+import { InputType, OmitType } from '@nestjs/graphql';
+import { EmployeeCreateInput } from '../../../employee/dto/employee-create.input';
 
 @InputType()
-export class RegisterEmployeeInput extends EmployeeCreateInput {}
+export class RegisterEmployeeInput extends OmitType(EmployeeCreateInput, ['workshop'] as const) {}

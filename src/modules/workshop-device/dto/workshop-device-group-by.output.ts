@@ -34,8 +34,8 @@ export class WorkshopDeviceGroupBy {
     @Field(() => String, {nullable:true})
     updatedBy?: bigint | number;
 
-    @Field(() => Date, {nullable:false})
-    acceptedAt!: Date | string;
+    @Field(() => Date, {nullable:true})
+    acceptedAt?: Date | string;
 
     @Field(() => String, {nullable:true})
     acceptedBy?: bigint | number;
