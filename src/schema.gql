@@ -294,6 +294,10 @@ type CustomerCountAggregate {
   workshopId: Int!
 }
 
+input CustomerCreateNestedManyWithoutVehiclesInput {
+  connect: [CustomerWhereUniqueInput!]
+}
+
 enum CustomerCreationSource {
   GUEST
   USER
@@ -357,6 +361,27 @@ input CustomerOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input CustomerOrderByWithRelationInput {
+  NIP: SortOrderInput
+  companyName: SortOrderInput
+  creationSource: SortOrder
+  customerId: SortOrder
+  description: SortOrderInput
+  email: SortOrderInput
+  firstName: SortOrderInput
+  guest: GuestOrderByWithRelationInput
+  guestId: SortOrderInput
+  isVerified: SortOrder
+  services: ServiceOrderByRelationAggregateInput
+  telephoneNumber: SortOrderInput
+  totalDue: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+  vehicles: VehicleOrderByRelationAggregateInput
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
+}
+
 input CustomerRelationFilter {
   is: CustomerWhereInput
   isNot: CustomerWhereInput
@@ -385,6 +410,30 @@ input CustomerWhereInput {
   firstName: StringNullableFilter
   guest: GuestNullableRelationFilter
   guestId: BigIntNullableFilter
+  isVerified: BoolFilter
+  services: ServiceListRelationFilter
+  telephoneNumber: StringNullableFilter
+  totalDue: DecimalFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  vehicles: VehicleListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input CustomerWhereUniqueInput {
+  AND: [CustomerWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  companyName: StringNullableFilter
+  creationSource: EnumCustomerCreationSourceFilter
+  customerId: BigInt
+  description: StringNullableFilter
+  email: StringNullableFilter
+  firstName: StringNullableFilter
+  guest: GuestNullableRelationFilter
+  guestId: BigInt
   isVerified: BoolFilter
   services: ServiceListRelationFilter
   telephoneNumber: StringNullableFilter
@@ -552,6 +601,22 @@ type EmployeeMinAggregate {
 
 input EmployeeOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input EmployeeOrderByWithRelationInput {
+  employeeId: SortOrder
+  joinWorkshopRequests: JoinWorkshopRequestOrderByRelationAggregateInput
+  joinedAt: SortOrder
+  login: SortOrder
+  nickname: SortOrderInput
+  password: SortOrder
+  refreshToken: SortOrderInput
+  services: ServiceOrderByRelationAggregateInput
+  tasks: TaskOrderByRelationAggregateInput
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
 }
 
 input EmployeeRelationFilter {
@@ -748,9 +813,84 @@ type Guest {
   vehicle: Vehicle
 }
 
+type GuestAvgAggregate {
+  guestId: Float
+}
+
+type GuestCountAggregate {
+  NIP: Int!
+  _all: Int!
+  companyName: Int!
+  email: Int!
+  firstName: Int!
+  guestId: Int!
+  telephoneNumber: Int!
+}
+
+input GuestCreateInput {
+  NIP: String
+  companyName: String
+  email: String
+  firstName: String!
+  guestId: BigInt
+  serviceRequest: ServiceRequestCreateNestedOneWithoutGuestInput
+  telephoneNumber: String
+  vehicle: VehicleCreateNestedOneWithoutGuestInput
+}
+
+type GuestMaxAggregate {
+  NIP: String
+  companyName: String
+  email: String
+  firstName: String
+  guestId: BigInt
+  telephoneNumber: String
+}
+
+type GuestMinAggregate {
+  NIP: String
+  companyName: String
+  email: String
+  firstName: String
+  guestId: BigInt
+  telephoneNumber: String
+}
+
 input GuestNullableRelationFilter {
   is: GuestWhereInput
   isNot: GuestWhereInput
+}
+
+input GuestOrderByWithRelationInput {
+  NIP: SortOrderInput
+  companyName: SortOrderInput
+  customer: CustomerOrderByWithRelationInput
+  email: SortOrderInput
+  firstName: SortOrder
+  guestId: SortOrder
+  serviceRequest: ServiceRequestOrderByWithRelationInput
+  telephoneNumber: SortOrderInput
+  vehicle: VehicleOrderByWithRelationInput
+}
+
+enum GuestScalarFieldEnum {
+  NIP
+  companyName
+  email
+  firstName
+  guestId
+  telephoneNumber
+}
+
+type GuestSumAggregate {
+  guestId: BigInt
+}
+
+input GuestUpdateInput {
+  NIP: String
+  companyName: String
+  email: String
+  guestId: BigInt
 }
 
 input GuestWhereInput {
@@ -763,6 +903,21 @@ input GuestWhereInput {
   email: StringNullableFilter
   firstName: StringFilter
   guestId: BigIntFilter
+  serviceRequest: ServiceRequestNullableRelationFilter
+  telephoneNumber: StringNullableFilter
+  vehicle: VehicleNullableRelationFilter
+}
+
+input GuestWhereUniqueInput {
+  AND: [GuestWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [GuestWhereInput!]
+  OR: [GuestWhereInput!]
+  companyName: StringNullableFilter
+  customer: CustomerNullableRelationFilter
+  email: StringNullableFilter
+  firstName: StringFilter
+  guestId: BigInt
   serviceRequest: ServiceRequestNullableRelationFilter
   telephoneNumber: StringNullableFilter
   vehicle: VehicleNullableRelationFilter
@@ -908,6 +1063,10 @@ type JobCount {
   serviceRequests: Int!
 }
 
+input JobCreateNestedManyWithoutServiceRequestsInput {
+  connect: [JobWhereUniqueInput!]
+}
+
 input JobCreateNestedOneWithoutJobWorkshopsInput {
   connect: JobWhereUniqueInput
 }
@@ -916,6 +1075,10 @@ input JobListRelationFilter {
   every: JobWhereInput
   none: JobWhereInput
   some: JobWhereInput
+}
+
+input JobOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 input JobRelationFilter {
@@ -1055,13 +1218,16 @@ type Mutation {
   changeUserPassword(changeUserPasswordInput: ChangePasswordInput!): Boolean!
   createAddress(data: AddressCreateInput!): Address!
   createAdmin(createAdminInput: CreateAdminInput!): User!
+  createGuest(data: GuestCreateInput!): Guest!
   deleteAddress(addressId: BigInt!): DeletePayload!
+  deleteEmployee(employeeId: BigInt!): Boolean!
+  deleteGuest(where: GuestWhereUniqueInput!): Guest!
   deleteWorkshop(workshopId: BigInt!): DeletePayload!
   generateDeviceOTP: String!
   loginEmployeeByUser(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
   loginEmployeeByWorkshop(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
   loginUser(loginUserInput: LoginUserInput!): LoginUserResponse!
-  logoutAllUserSessions(userId: BigInt!): Boolean!
+  logoutAllUserSessions(userId: BigInt): Boolean!
   logoutAnotherEmployee(employeeId: BigInt!): Boolean!
   logoutEmployee(refreshToken: String!): Boolean!
   logoutUser(refreshToken: String!): Boolean!
@@ -1072,6 +1238,7 @@ type Mutation {
   removeDevice(deviceId: BigInt!): Boolean!
   requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
+  updateGuest(data: GuestUpdateInput!, where: GuestWhereUniqueInput!): Guest!
 }
 
 input NestedBigIntFilter {
@@ -1314,8 +1481,13 @@ type Query {
   UserTest: String!
   address(addressId: BigInt!): Address!
   addresses: [Address!]!
+  findAllUsers: [User!]!
   findEmployee(where: EmployeeWhereUniqueInput!): Employee!
-  findUser(where: UserWhereUniqueInput!): User!
+  findUserByEmail(email: String!, options: [Boolean!]!): User!
+  findUserById(options: [Boolean!], userId: BigInt!): User!
+  findUsers(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+  guest(where: GuestWhereUniqueInput!): Guest
+  guests(cursor: GuestWhereUniqueInput, distinct: [GuestScalarFieldEnum!], orderBy: [GuestOrderByWithRelationInput!], skip: Int, take: Int, where: GuestWhereInput): [Guest!]!
   workshop(workshopId: BigInt!): Workshop!
   workshops(cursor: WorkshopWhereUniqueInput, distinct: [WorkshopScalarFieldEnum!], orderBy: [WorkshopOrderByWithRelationInput!], skip: Int, take: Int, where: WorkshopWhereInput): [Workshop!]!
 }
@@ -1677,6 +1849,29 @@ input ServiceOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input ServiceOrderByWithRelationInput {
+  addedAt: SortOrder
+  addedBy: SortOrderInput
+  customer: CustomerOrderByWithRelationInput
+  customerId: SortOrder
+  description: SortOrderInput
+  employee: EmployeeOrderByWithRelationInput
+  employeeId: SortOrder
+  payedOff: SortOrder
+  paymentAmount: SortOrder
+  serviceEndDate: SortOrderInput
+  serviceId: SortOrder
+  serviceRequest: ServiceRequestOrderByWithRelationInput
+  serviceRequestId: SortOrderInput
+  serviceStartDate: SortOrder
+  status: SortOrderInput
+  tasks: TaskOrderByRelationAggregateInput
+  vehicle: VehicleOrderByWithRelationInput
+  vehicleId: SortOrder
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
+}
+
 input ServiceRelationFilter {
   is: ServiceWhereInput
   isNot: ServiceWhereInput
@@ -1740,6 +1935,18 @@ type ServiceRequestCountAggregate {
   workshopId: Int!
 }
 
+input ServiceRequestCreateNestedOneWithoutGuestInput {
+  create: ServiceRequestCreateWithoutGuestInput
+}
+
+input ServiceRequestCreateWithoutGuestInput {
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  user: UserCreateNestedOneWithoutServiceRequestsInput
+  vehicle: VehicleCreateNestedOneWithoutServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
 input ServiceRequestListRelationFilter {
   every: ServiceRequestWhereInput
   none: ServiceRequestWhereInput
@@ -1783,6 +1990,23 @@ input ServiceRequestNullableRelationFilter {
 
 input ServiceRequestOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input ServiceRequestOrderByWithRelationInput {
+  approvedService: ServiceOrderByWithRelationInput
+  approvedServiceId: SortOrderInput
+  description: SortOrderInput
+  guest: GuestOrderByWithRelationInput
+  guestId: SortOrderInput
+  jobs: JobOrderByRelationAggregateInput
+  serviceRequestId: SortOrder
+  status: SortOrderInput
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+  vehicle: VehicleOrderByWithRelationInput
+  vehicleId: SortOrder
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
 }
 
 enum ServiceRequestStatus {
@@ -1981,6 +2205,10 @@ input TaskListRelationFilter {
   some: TaskWhereInput
 }
 
+input TaskOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input TaskWhereInput {
   AND: [TaskWhereInput!]
   NOT: [TaskWhereInput!]
@@ -2071,6 +2299,14 @@ type UserCountAggregate {
 }
 
 input UserCreateNestedOneWithoutJoinWorkshopRequestsInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutServiceRequestsInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutVehiclesInput {
   connect: UserWhereUniqueInput
 }
 
@@ -2217,6 +2453,24 @@ enum UserRole {
   USER
 }
 
+enum UserScalarFieldEnum {
+  addressId
+  avatarURL
+  createdAt
+  deletedAt
+  email
+  firstName
+  isVerified
+  lastName
+  password
+  role
+  status
+  telephoneNumber
+  updatedAt
+  userId
+  username
+}
+
 type UserSumAggregate {
   addressId: String
   userId: BigInt
@@ -2314,6 +2568,11 @@ type VehicleBrandCount {
   vehicleModels: Int!
 }
 
+input VehicleBrandOrderByWithRelationInput {
+  brandName: SortOrder
+  vehicleModels: VehicleModelOrderByRelationAggregateInput
+}
+
 input VehicleBrandRelationFilter {
   is: VehicleBrandWhereInput
   isNot: VehicleBrandWhereInput
@@ -2333,6 +2592,21 @@ type VehicleCount {
   services: Int!
 }
 
+input VehicleCreateNestedOneWithoutGuestInput {
+  create: VehicleCreateWithoutGuestInput
+}
+
+input VehicleCreateNestedOneWithoutServiceRequestsInput {
+  connect: VehicleWhereUniqueInput
+}
+
+input VehicleCreateWithoutGuestInput {
+  customers: CustomerCreateNestedManyWithoutVehiclesInput
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+}
+
 type VehicleDetails {
   VIN: String
   bodyColor: BodyColors
@@ -2348,9 +2622,39 @@ type VehicleDetails {
   yearOfProduction: Int
 }
 
+input VehicleDetailsCreateNestedOneWithoutVehicleInput {
+  create: VehicleDetailsCreateWithoutVehicleInput
+}
+
+input VehicleDetailsCreateWithoutVehicleInput {
+  VIN: String
+  bodyColor: BodyColors
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
 input VehicleDetailsNullableRelationFilter {
   is: VehicleDetailsWhereInput
   isNot: VehicleDetailsWhereInput
+}
+
+input VehicleDetailsOrderByWithRelationInput {
+  VIN: SortOrderInput
+  bodyColor: SortOrderInput
+  countryOfRegistration: SortOrderInput
+  engineCapacity: SortOrderInput
+  engineNo: SortOrderInput
+  fuelType: SortOrderInput
+  licensePlate: SortOrderInput
+  vehicle: VehicleOrderByWithRelationInput
+  vehicleDetailsId: SortOrder
+  vehicleId: SortOrder
+  yearOfProduction: SortOrderInput
 }
 
 input VehicleDetailsWhereInput {
@@ -2391,10 +2695,31 @@ type VehicleModelCount {
   vehicles: Int!
 }
 
+input VehicleModelCreateNestedOneWithoutVehiclesInput {
+  connect: VehicleModelWhereUniqueInput
+}
+
 input VehicleModelListRelationFilter {
   every: VehicleModelWhereInput
   none: VehicleModelWhereInput
   some: VehicleModelWhereInput
+}
+
+input VehicleModelModelNameBrandCompoundUniqueInput {
+  brand: String!
+  modelName: String!
+}
+
+input VehicleModelOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input VehicleModelOrderByWithRelationInput {
+  brand: SortOrder
+  modelId: SortOrder
+  modelName: SortOrder
+  vehicles: VehicleOrderByRelationAggregateInput
+  vehiclesBrand: VehicleBrandOrderByWithRelationInput
 }
 
 input VehicleModelRelationFilter {
@@ -2413,6 +2738,18 @@ input VehicleModelWhereInput {
   vehiclesBrand: VehicleBrandRelationFilter
 }
 
+input VehicleModelWhereUniqueInput {
+  AND: [VehicleModelWhereInput!]
+  NOT: [VehicleModelWhereInput!]
+  OR: [VehicleModelWhereInput!]
+  brand: StringFilter
+  modelId: BigInt
+  modelName: StringFilter
+  modelName_brand: VehicleModelModelNameBrandCompoundUniqueInput
+  vehicles: VehicleListRelationFilter
+  vehiclesBrand: VehicleBrandRelationFilter
+}
+
 input VehicleNullableRelationFilter {
   is: VehicleWhereInput
   isNot: VehicleWhereInput
@@ -2420,6 +2757,20 @@ input VehicleNullableRelationFilter {
 
 input VehicleOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input VehicleOrderByWithRelationInput {
+  customers: CustomerOrderByRelationAggregateInput
+  guest: GuestOrderByWithRelationInput
+  guestId: SortOrderInput
+  modelId: SortOrder
+  serviceRequests: ServiceRequestOrderByRelationAggregateInput
+  services: ServiceOrderByRelationAggregateInput
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+  vehicleDetails: VehicleDetailsOrderByWithRelationInput
+  vehicleId: SortOrder
+  vehicleModel: VehicleModelOrderByWithRelationInput
 }
 
 input VehicleRelationFilter {
@@ -2441,6 +2792,23 @@ input VehicleWhereInput {
   userId: BigIntNullableFilter
   vehicleDetails: VehicleDetailsNullableRelationFilter
   vehicleId: BigIntFilter
+  vehicleModel: VehicleModelRelationFilter
+}
+
+input VehicleWhereUniqueInput {
+  AND: [VehicleWhereInput!]
+  NOT: [VehicleWhereInput!]
+  OR: [VehicleWhereInput!]
+  customers: CustomerListRelationFilter
+  guest: GuestNullableRelationFilter
+  guestId: BigInt
+  modelId: BigIntFilter
+  serviceRequests: ServiceRequestListRelationFilter
+  services: ServiceListRelationFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  vehicleDetails: VehicleDetailsNullableRelationFilter
+  vehicleId: BigInt
   vehicleModel: VehicleModelRelationFilter
 }
 
@@ -2509,6 +2877,10 @@ type WorkshopCountAggregate {
 }
 
 input WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutServiceRequestsInput {
   connect: WorkshopWhereUniqueInput
 }
 
@@ -2636,58 +3008,10 @@ type WorkshopDevice {
   workshopId: BigInt!
 }
 
-type WorkshopDeviceAvgAggregate {
-  acceptedBy: Float
-  lastLoginBy: Float
-  updatedBy: Float
-  workshopDeviceId: Float
-  workshopId: Float
-}
-
-type WorkshopDeviceCountAggregate {
-  _all: Int!
-  acceptedAt: Int!
-  acceptedBy: Int!
-  deviceName: Int!
-  lastLoginAt: Int!
-  lastLoginBy: Int!
-  serialNumber: Int!
-  updatedAt: Int!
-  updatedBy: Int!
-  workshopDeviceId: Int!
-  workshopId: Int!
-}
-
 input WorkshopDeviceListRelationFilter {
   every: WorkshopDeviceWhereInput
   none: WorkshopDeviceWhereInput
   some: WorkshopDeviceWhereInput
-}
-
-type WorkshopDeviceMaxAggregate {
-  acceptedAt: DateTime
-  acceptedBy: String
-  deviceName: String
-  lastLoginAt: DateTime
-  lastLoginBy: String
-  serialNumber: String
-  updatedAt: DateTime
-  updatedBy: String
-  workshopDeviceId: BigInt
-  workshopId: BigInt
-}
-
-type WorkshopDeviceMinAggregate {
-  acceptedAt: DateTime
-  acceptedBy: String
-  deviceName: String
-  lastLoginAt: DateTime
-  lastLoginBy: String
-  serialNumber: String
-  updatedAt: DateTime
-  updatedBy: String
-  workshopDeviceId: BigInt
-  workshopId: BigInt
 }
 
 type WorkshopDeviceOTP {
@@ -2728,14 +3052,6 @@ input WorkshopDeviceOTPWhereInput {
 
 input WorkshopDeviceOrderByRelationAggregateInput {
   _count: SortOrder
-}
-
-type WorkshopDeviceSumAggregate {
-  acceptedBy: String
-  lastLoginBy: String
-  updatedBy: String
-  workshopDeviceId: BigInt
-  workshopId: BigInt
 }
 
 input WorkshopDeviceWhereInput {

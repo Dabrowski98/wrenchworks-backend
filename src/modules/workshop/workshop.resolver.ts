@@ -22,13 +22,13 @@ import { WorkshopJob } from '../workshop-job/dto';
 import { Review } from '../review/dto';
 import { ServiceRequest } from '../service-request/dto';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
-import { NoDataProvidedForUpdate } from 'src/common/custom-errors/errors.config';
+import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { JobCategory } from '../job-category';
 import { Service } from '../service';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { User } from '../user/dto';
-import { CurrentEmployeeID } from 'src/common/decorators/get-decorators/current-employee-id.decorator';
+import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
 
 @Resolver(() => Workshop)
 export class WorkshopResolver {

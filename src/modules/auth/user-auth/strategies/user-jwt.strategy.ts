@@ -1,9 +1,8 @@
 // src/modules/auth/auth-common-strategies/entity-jwt.strategy.ts
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
-
+import { Injectable } from '@nestjs/common'; 
+import { EntityType } from 'src/common/enums/entity-type.enum';
 @Injectable()
 export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
   constructor() {
@@ -15,6 +14,10 @@ export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
   }
 
   async validate(payload: any) {
-    return { userId: payload.sub, role: payload.role, entityType: Type.USER };
+    return {
+      userId: payload.sub,
+      role: payload.role,
+      entityType: EntityType.USER,
+    };
   }
 }

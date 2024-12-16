@@ -7,10 +7,11 @@ import { Prisma } from '@prisma/client';
 import { UserWhereUniqueInput } from './user-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { UserScalarFieldEnum } from './user-scalar-field.enum';
+import { Allow } from 'class-validator';
 
 @ArgsType()
 export class FindManyUserArgs {
-
+    
     @Field(() => UserWhereInput, {nullable:true})
     @Type(() => UserWhereInput)
     where?: UserWhereInput;

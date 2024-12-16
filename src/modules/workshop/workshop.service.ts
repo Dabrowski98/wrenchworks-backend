@@ -10,7 +10,7 @@ import {
   WorkshopCreateInput,
   FindUniqueWorkshopArgs,
 } from './dto';
-import { NoDataProvidedForUpdate } from 'src/common/custom-errors/errors.config';
+import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { Address } from '../address/dto';
 import { WorkshopDetails } from '../workshop-details';
 import { ServiceRequest } from '../service-request';
@@ -28,23 +28,8 @@ export class WorkshopService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createWorkshop(input: WorkshopCreateInput): Promise<Workshop> {
-    return this.prisma.workshop.create({data: input});
+    return this.prisma.workshop.create({ data: input });
   }
-
-  // data: {
-  //   user: { connect: { userId: ownerId } },
-  //   ...restData,
-  //   ...(address && { address: { create: address.create } }),
-  //   ...(workshopDetails && {
-  //     workshopDetails: { create: workshopDetails },
-  //   }),
-  //   ...(workshopJobs && {
-  //     workshopJobs: { createMany: workshopJobs },
-  //   }),
-
-  // },
-  // });
-  // }
 
   // async updateWorkshop(args: UpdateOneWorkshopArgs): Promise<Workshop> {
   //   const { data, workshopId } = args;
@@ -69,7 +54,7 @@ export class WorkshopService {
 
   async findWorkshop(args: FindUniqueWorkshopArgs) {
     const workshop = await this.prisma.workshop.findUnique(args);
- 
+
     if (!workshop) throw new RecordNotFoundError(Workshop);
 
     return workshop;

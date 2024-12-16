@@ -1,33 +1,38 @@
-import { BadRequestException, Injectable, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User, UserCreateInput } from '../../user/dto';
-// import { SignUpUserInput } from './dto/sign-up.user.input';
-// import { SignUpUserResponse } from './dto/sign-up-user.response';
-import { PrismaService } from 'src/database/prisma.service';
+import { User } from '../../user/dto';
 import { UserService } from '../../user/user.service';
 import { LoginUserResponse } from './dto/login-user.response';
-import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 import { v4 as uuidv4 } from 'uuid';
 import { SessionData } from '@prisma/client';
 import { UserRole } from '../../prisma';
 import { CreateAdminInput } from './dto/create-admin.input';
-import { Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
-import { ChangePasswordInput } from '../auth-common-dto';
-
-const MAX_SESSIONS_PER_USER = 5;
+import { EntityType } from 'src/common/enums/entity-type.enum';
+import { SessionDataService } from 'src/modules/session-data/session-data.service';
+import {
+  BadRequestError,
+  UnauthorizedError,
+} from 'src/common/custom-errors/errors.config';
+import { JwtUserPayload } from './dto/jwt-user-payload';
+import { DeviceData } from 'src/common/decorators/headers-decorators/device-data.decorator';
+import { ChangePasswordInput } from '../common-dto';
 
 @Injectable()
 export class UserAuthService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly sessionDataService: SessionDataService,
     private readonly jwtService: JwtService,
   ) {}
-
+ 
   async registerUser(input: RegisterUserInput): Promise<User> {
-    const hashedPassword = await bcrypt.hash(input.password, 10);
+    const hashedPassword = await bcrypt.hash(
+      input.password,
+      Number(process.env.SALT_ROUNDS),
+    );
+
     const userData = {
       ...input,
       password: hashedPassword,
@@ -41,22 +46,18 @@ export class UserAuthService {
 
   async loginUser(
     user: User,
-    deviceId: string,
-    ipAddress: string,
-    deviceInfo: string,
+    deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     const { accessToken, refreshToken } = await this.generateTokens(user);
     await this.createNewSessionData(
       refreshToken,
-      deviceId,
-      ipAddress,
-      deviceInfo,
+      deviceData,
     );
     return { accessToken, refreshToken, user };
   }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findUser({ where: { email } });
+    const user = await this.userService.findUserByEmail(email);
     if (!user) return null;
     const isPasswordValid = await bcrypt.compare(password, user.password);
     const { password: _, ...result } = user;
@@ -67,7 +68,11 @@ export class UserAuthService {
   private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const payload = { sub: user.userId, entityType: Type.USER, role: user.role, };
+    const payload: JwtUserPayload = {
+      sub: user.userId,
+      entityType: EntityType.USER,
+      role: user.role as UserRole,
+    };
 
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '15m',
@@ -85,42 +90,40 @@ export class UserAuthService {
 
   private async createNewSessionData(
     refreshToken: string,
-    deviceId: string,
-    ipAddress: string,
-    deviceInfo: string,
+    deviceData: DeviceData,
   ) {
+    const { deviceId, ipAddress, deviceInfo, deviceSerialNumber } = deviceData;
+
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.USER_REFRESH_SECRET,
     });
 
-    const allUserSessions = await this.prisma.sessionData.findMany({
-      where: {
-        userId: decodedRefreshToken.sub,
-      },
+    const user = await this.userService.findUserById(decodedRefreshToken.sub, {
+      includeSessionData: true,
     });
 
-    const session = allUserSessions.find((a) => a.deviceId === deviceId);
+    const session = user.sessionData.find((a) => a.deviceId === deviceId);
 
     if (session) {
       await this.revokeRefreshToken(session.refreshToken);
-    } else if (allUserSessions.length >= MAX_SESSIONS_PER_USER) {
-      const oldestSession = allUserSessions.sort(
+    } else if (
+      user.sessionData.length >= Number(process.env.USER_MAX_SESSIONS)
+    ) {
+      const oldestSession = user.sessionData.sort(
         (a, b) => a.issuedAt.getTime() - b.issuedAt.getTime(),
       )[0];
       await this.revokeRefreshToken(oldestSession.refreshToken);
     }
 
-    await this.prisma.sessionData.create({
-      data: {
-        sessionDataId: decodedRefreshToken.jti,
-        userId: decodedRefreshToken.sub,
-        deviceId,
-        ipAddress,
-        deviceInfo,
-        refreshToken,
-        issuedAt: new Date(decodedRefreshToken.iat * 1000),
-        expiresAt: new Date(decodedRefreshToken.exp * 1000),
-      },
+    await this.sessionDataService.create({
+      sessionDataId: decodedRefreshToken.jti,
+      user: { connect: { userId: decodedRefreshToken.sub } },
+      deviceId,
+      ipAddress,
+      deviceInfo,
+      refreshToken,
+      issuedAt: new Date(decodedRefreshToken.iat * 1000),
+      expiresAt: new Date(decodedRefreshToken.exp * 1000),
     });
   }
 
@@ -129,108 +132,96 @@ export class UserAuthService {
 
     if (!decodedRefreshToken) return false;
 
-    const result = await this.prisma.sessionData.delete({
-      where: { sessionDataId: decodedRefreshToken.jti },
-    });
+    const result = await this.sessionDataService.delete(
+      decodedRefreshToken.jti,
+    );
 
     return result ? true : false;
   }
 
   async revokeAllRefreshTokens(userId: bigint) {
-    const result = await this.prisma.sessionData.deleteMany({
-      where: {
-        userId,
-      },
+    const result = await this.sessionDataService.deleteMany({
+      where: { userId: { equals: userId } },
     });
 
-    return result.count > 0 ? true : false;
+    return !!result;
   }
 
   async refreshTokens(
     currentRT: string,
-    deviceId: string,
-    ipAddress: string,
-    deviceInfo: string,
+    deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     const session = await this.getSession(currentRT);
-
-    if (!session) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-    const user = await this.userService.findUser({
-      where: { userId: session.userId },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
+    const user = await this.userService.findUserById(session.userId);
 
     const { accessToken, refreshToken } = await this.generateTokens(user);
     await this.revokeRefreshToken(currentRT);
     await this.createNewSessionData(
       refreshToken,
-      deviceId,
-      ipAddress,
-      deviceInfo,
+      deviceData,
     );
     return { accessToken, refreshToken, user };
   }
 
   private async getSession(providedRefreshToken: string): Promise<SessionData> {
-    const decodedRefreshToken = this.jwtService.decode(providedRefreshToken);
-
-    if (!decodedRefreshToken) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-
-    const session = await this.prisma.sessionData.findUnique({
-      where: { sessionDataId: decodedRefreshToken.jti },
-    });
-
-    if (!session) {
-      throw new UnauthorizedException('Refresh token not found');
-    }
-
-    if (session.expiresAt < new Date()) {
-      await this.revokeAllRefreshTokens(session.userId);
-      throw new UnauthorizedException('Refresh token revoked or expired');
-    }
-
     try {
+      const decodedRefreshToken = this.jwtService.decode(providedRefreshToken);
+
+      if (!decodedRefreshToken) {
+        throw new UnauthorizedError('Invalid refresh token');
+      }
+
+      const session = await this.sessionDataService.findSessionById(
+        decodedRefreshToken.jti,
+      );
+
+      if (session.expiresAt < new Date()) {
+        await this.revokeAllRefreshTokens(session.userId);
+        throw new UnauthorizedError('Refresh token revoked or expired');
+      }
+
       await this.jwtService.verify(providedRefreshToken, {
         secret: process.env.USER_REFRESH_SECRET,
       });
-    } catch {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
 
-    if (providedRefreshToken !== session.refreshToken) {
-      throw new UnauthorizedException('Invalid refresh token');
+      if (providedRefreshToken !== session.refreshToken) {
+        throw new UnauthorizedError('Invalid refresh token');
+      }
+
+      return session;
+    } catch (error) {
+      throw new UnauthorizedError('Invalid refresh token');
     }
-    return session;
   }
 
-  async changeUserPassword(userId: bigint, changePasswordInput: ChangePasswordInput) {
-    const user = await this.userService.findUser({
-      where: { userId },
+  async changeUserPassword(
+    userId: bigint,
+    changePasswordInput: ChangePasswordInput,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (!user) throw new UnauthorizedError('User not found');
+
+    const isPasswordValid = await bcrypt.compare(
+      changePasswordInput.oldPassword,
+      user.password,
+    );
+
+    if (!isPasswordValid) throw new UnauthorizedError('Invalid old password');
+
+    if (changePasswordInput.oldPassword === changePasswordInput.newPassword)
+      throw new BadRequestError(
+        'New password cannot be the same as the old password',
+      );
+
+    const hashedPassword = await bcrypt.hash(
+      changePasswordInput.newPassword,
+      10,
+    );
+
+    return !!this.userService.updateUser(userId, {
+      password: hashedPassword,
     });
-
-    if (!user) throw new UnauthorizedException('User not found');
-
-    const isPasswordValid = await bcrypt.compare(changePasswordInput.oldPassword, user.password);
-
-    if (!isPasswordValid) throw new UnauthorizedException('Invalid old password');
-
-    if (changePasswordInput.oldPassword === changePasswordInput.newPassword) throw new BadRequestException('New password cannot be the same as the old password');
-
-    const hashedPassword = await bcrypt.hash(changePasswordInput.newPassword, 10);
-
-    const result =await this.prisma.user.update({
-      where: { userId },
-      data: { password: hashedPassword },
-    });
-
-    return result ? true : false;
   }
 
   async createAdmin(input: CreateAdminInput): Promise<User> {

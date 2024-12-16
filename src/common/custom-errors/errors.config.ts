@@ -27,16 +27,17 @@ export class DeletedAtFieldNotFound extends CustomError {
 }
 
 export class RecordNotSoftDeletedError extends CustomError {
-  constructor(model: { name: string }
-  ) {
-    super(`${model.name} needs to be soft-deleted first in order to proceed action`);
+  constructor(model: { name: string }) {
+    super(
+      `${model.name} needs to be soft-deleted first in order to proceed action`,
+    );
     this.name = 'RecordNotSoftDeletedError';
     this.code = 400;
     this.status = 'BAD_REQUEST';
   }
 }
 
-export class NoDataProvidedForUpdate extends CustomError {
+export class NoDataProvidedForUpdateError extends CustomError {
   constructor(model: { name: string }) {
     super(`No data provided for update of ${model.name}`);
     this.name = 'NoDataProvidedForUpdate';
@@ -47,7 +48,7 @@ export class NoDataProvidedForUpdate extends CustomError {
 
 export class ValidationError extends CustomError {
   constructor(errors: { property: string; constraints: string[] }[]) {
-    super("Validation Error");
+    super('Validation Error');
     this.name = 'ValidationError';
     this.code = 400;
     this.status = 'VALIDATION_ERROR';
@@ -55,3 +56,29 @@ export class ValidationError extends CustomError {
   }
 }
 
+export class BadRequestError extends CustomError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BadRequestError';
+    this.code = 400;
+    this.status = 'BAD_REQUEST';
+  }
+}
+
+export class UnauthorizedError extends CustomError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnauthorizedError';
+    this.code = 401;
+    this.status = 'UNAUTHORIZED';
+  }
+}
+
+export class ForbiddenError extends CustomError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ForbiddenError';
+    this.code = 403;
+    this.status = 'FORBIDDEN';
+  }
+}

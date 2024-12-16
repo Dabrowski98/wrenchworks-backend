@@ -5,21 +5,25 @@ import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 import { User } from '../../user/dto';
 import { ForbiddenException, UseGuards } from '@nestjs/common';
-import { IpAddress } from 'src/common/decorators/get-decorators/ip-address.decorator';
-import { DeviceInfo } from 'src/common/decorators/get-decorators/device-info.decorator';
-import { DeviceId } from 'src/common/decorators/get-decorators/device-id.decorator';
+import { IpAddress } from 'src/common/decorators/headers-decorators/ip-address.decorator';
+import { DeviceInfo } from 'src/common/decorators/headers-decorators/device-info.decorator';
+import { DeviceId } from 'src/common/decorators/headers-decorators/device-id.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { Role } from 'src/common/decorators/guard-decorators/roles.decorator';
 import { UserRole } from '../../prisma';
-import { CreateAdminInput } from './dto/create-admin.input';
-import { RolesGuard } from '../auth-common-guards';
-import { ENTITY_TYPE_KEY, EntityType, Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
-import { LoginAuthGuard } from './guards/user-local-auth.guard';
-import { CurrentUserID } from 'src/common/decorators/get-decorators/current-user-id.decorator';
-import { ChangePasswordInput } from '../auth-common-dto';
+import { CreateAdminInput } from './dto/create-admin.input'; 
 import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
+import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
+import { ForbiddenError } from 'src/common/custom-errors/errors.config';
+import { JwtUserPayload } from './dto/jwt-user-payload';
+import { DeviceData } from 'src/common/decorators/headers-decorators/device-data.decorator';
+import { LoginAuthGuard } from './guards/user-local-auth.guard';
+import { RolesGuard } from '../common-guards/roles.guard';
+import { ChangePasswordInput } from '../common-dto';
 
+@UseGuards(UserJwtAuthGuard)
 @Resolver()
 export class UserAuthResolver {
   constructor(private readonly userAuthService: UserAuthService) {}
@@ -38,37 +42,30 @@ export class UserAuthResolver {
   async loginUser(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context: any,
-    @DeviceId() deviceId: string,
-    @IpAddress() ipAddress: string,
-    @DeviceInfo() deviceInfo: string,
+    @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     return this.userAuthService.loginUser(
       context.user,
-      deviceId,
-      ipAddress,
-      deviceInfo,
+      deviceData,
     );
   }
-
+ 
   @Public()
   @Mutation(() => LoginUserResponse)
   async refreshTokens(
     @Args('refreshToken') refreshToken: string,
-    @DeviceId() deviceId: string,
-    @IpAddress() ipAddress: string,
-    @DeviceInfo() deviceInfo: string,
+    @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     return this.userAuthService.refreshTokens(
       refreshToken,
-      deviceId,
-      ipAddress,
-      deviceInfo,
+      deviceData,
     );
   }
 
-  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
-  async logoutUser(@Args('refreshToken') refreshToken: string): Promise<boolean> {
+  async logoutUser(
+    @Args('refreshToken') refreshToken: string,
+  ): Promise<boolean> {
     try {
       await this.userAuthService.revokeRefreshToken(refreshToken);
     } catch {
@@ -77,19 +74,11 @@ export class UserAuthResolver {
     return true;
   }
 
-  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   async logoutAllUserSessions(
-    @Args('userId', { type: () => GraphQLBigInt }) userId: bigint,
-    @Context() context: any,
+    @Args('userId', { type: () => GraphQLBigInt , nullable: true}) userId: bigint,
+    @CurrentUser() currentUser: JwtUserPayload,
   ): Promise<boolean> {
-    if (
-      context.req.user.role === UserRole.USER &&
-      context.req.user.userId != userId
-    ) {
-      throw new ForbiddenException('You can only logout your own sessions');
-    }
-
     try {
       return await this.userAuthService.revokeAllRefreshTokens(userId);
     } catch {
@@ -98,7 +87,7 @@ export class UserAuthResolver {
   }
 
   @Role(UserRole.ADMIN)
-  @UseGuards(UserJwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Mutation(() => User)
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
@@ -106,7 +95,6 @@ export class UserAuthResolver {
     return this.userAuthService.createAdmin(createAdminInput);
   }
 
-  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   async changeUserPassword(
     @CurrentUserID() userId: bigint,
@@ -123,11 +111,8 @@ export class UserAuthResolver {
   }
 
   @Public()
-  @UseGuards(UserJwtAuthGuard)
   @Query(() => String)
-  async UserTest(
-    @CurrentUserID() userId: bigint,
-  ) {
+  async UserTest(@CurrentUserID() userId: bigint) {
     console.log(userId);
     return 'Hello World from user';
   }

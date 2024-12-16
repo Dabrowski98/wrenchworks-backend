@@ -2,7 +2,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { Type } from 'src/common/decorators/guard-decorators/entity-type.decorator';
+import { EntityType } from 'src/common/enums/entity-type.enum';
 
 @Injectable()
 export class EmployeeJwtStrategy extends PassportStrategy(
@@ -18,6 +18,6 @@ export class EmployeeJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    return { employeeId: payload.sub, entityType: Type.EMPLOYEE };
+    return { employeeId: payload.sub, entityType: EntityType.EMPLOYEE };
   }
 }

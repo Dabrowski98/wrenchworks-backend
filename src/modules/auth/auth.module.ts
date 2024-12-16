@@ -1,9 +1,21 @@
 import { Module } from '@nestjs/common';
 import { UserAuthModule } from './user-auth/user-auth.module';
+import { EmployeeAuthModule } from './employee-auth/employee-auth.module';
 import { WorkshopAuthModule } from './workshop-auth/workshop-auth.module';
+import { DeviceAuthModule } from './device-auth/device-auth.module';
 
 @Module({
-  imports: [UserAuthModule, WorkshopAuthModule],
-  exports: [UserAuthModule, WorkshopAuthModule],
+  imports: [
+    DeviceAuthModule,
+    EmployeeAuthModule,
+    UserAuthModule,
+    WorkshopAuthModule,
+  ],
+  exports: [
+    DeviceAuthModule,
+    EmployeeAuthModule,
+    UserAuthModule,
+    WorkshopAuthModule,
+  ],
 })
 export class AuthModule {}

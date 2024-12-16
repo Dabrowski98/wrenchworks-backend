@@ -8,7 +8,7 @@ import { ValidateNested } from 'class-validator';
 export class CreateOneGuestArgs {
 
     @Field(() => GuestCreateInput, {nullable:false})
-    @Type(() => GuestCreateInput)
     @ValidateNested()
+    @Type(() => GuestCreateInput)
     data!: GuestCreateInput;
 }

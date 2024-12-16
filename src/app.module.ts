@@ -7,13 +7,14 @@ import { AddressModule, AuthModule } from './modules/index';
 import { AppController } from './app.controller';
 import { HelperModule } from './common/helper/helper.module';
 import { UserModule } from './modules/user/user.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { CleanupModule } from './common/cleanup/cleanup.module';
-import { APP_GUARD } from '@nestjs/core';
-import { Reflector } from '@nestjs/core';
-import { RolesGuard } from './modules/auth/auth-common-guards';
-import { UserJwtAuthGuard } from './modules/auth/user-auth/guards/user-jwt-auth.guard';
-import { EmployeeJwtAuthGuard } from './modules/auth/workshop-auth/guards/user-jwt-auth.guard';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { Reflector } from '@nestjs/core'; 
+import { SessionDataModule } from './modules/session-data/session-data.module';
+import { GlobalStrictValidationPipe } from './common/validation-pipes/global-strict-validation-pipe';
+import { GuestModule } from './modules/guest/guest.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
+import { RolesGuard } from './modules/auth/common-guards';
 
 @Module({
   imports: [
@@ -31,21 +32,33 @@ import { EmployeeJwtAuthGuard } from './modules/auth/workshop-auth/guards/user-j
           code: error.extensions.code,
           status: error.extensions.status,
           errors: error.extensions.errors,
+          fields: error.extensions.fields,
         };
       },
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: Number(process.env.THROTTLE_TTL),
+        limit: Number(process.env.THROTTLE_LIMIT),
+        ignoreUserAgents: [/altair/i],
+      },
+    ]),
     // ScheduleModule.forRoot(),
     // CleanupModule,
     PrismaModule,
     HelperModule,
     AuthModule,
     AddressModule,
+    GuestModule,
     UserModule,
+    SessionDataModule,
   ],
   providers: [
     Logger,
     Reflector,
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_GUARD, useClass: GqlThrottlerGuard },
+    { provide: APP_PIPE, useClass: GlobalStrictValidationPipe },
   ],
   controllers: [AppController],
 })
