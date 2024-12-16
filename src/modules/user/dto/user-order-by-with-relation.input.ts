@@ -109,8 +109,10 @@ export class UserOrderByWithRelationInput {
     userReports?: UserReportOrderByRelationAggregateInput;
 
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
 
     @Field(() => SessionDataOrderByRelationAggregateInput, {nullable:true})
+    @ValidateNested()
     sessionData?: SessionDataOrderByRelationAggregateInput;
 }

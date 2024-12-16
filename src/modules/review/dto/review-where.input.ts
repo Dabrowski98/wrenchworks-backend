@@ -11,8 +11,8 @@ import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { EnumReviewsStatusFilter } from '../../prisma/dto/enum-reviews-status-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
-import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { ReviewResponseListRelationFilter } from '../../review-response/dto/review-response-list-relation-filter.input';
 
 @InputType()
@@ -58,6 +58,7 @@ export class ReviewWhereInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})

@@ -31,7 +31,7 @@ generator nestgraphql {
 
     //Validate nested relation fields
     decorate_2_type = "*Input"
-    decorate_2_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
+    decorate_2_field = [task, workshop, workshops, address, vehicle, user, vehicleDetails, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports, joinWorkshopRequests, sessionData]
     decorate_2_name = ValidateNested
     decorate_2_from = "class-validator"
     decorate_2_arguments = "[]"
@@ -683,18 +683,19 @@ model ServiceRequest {
 
 model SessionData {
   /// @HideField({ match: '@(SessionData)@(Update)*Input' })
-  sessionDataId    String      @id @unique @db.Char(36)
+  sessionDataId        String      @id @unique @db.Char(36)
   /// @FieldType('Scalars.GraphQLBigInt')
-  userId           BigInt      @db.UnsignedBigInt
-  refreshToken     String      @db.VarChar(1000)
-  deviceId         String      @db.VarChar(255)
-  deviceName       String?     @db.VarChar(255)
-  deviceInfo       String?     @db.VarChar(255)
-  ipAddress        String?     @db.VarChar(45)
-  issuedAt         DateTime    @default(now()) @db.Timestamp(0)
-  expiresAt        DateTime    @db.Timestamp(0)
+  userId               BigInt      @db.UnsignedBigInt
+  refreshToken         String      @db.VarChar(1000)
+  deviceId             String      @db.VarChar(255)
+  deviceName           String?     @db.VarChar(255)
+  deviceInfo           String?     @db.VarChar(255)
+  ipAddress            String?     @db.VarChar(45)
+  deviceSerialNumber   String?     @db.VarChar(255)
+  issuedAt             DateTime    @default(now()) @db.Timestamp(0)
+  expiresAt            DateTime    @db.Timestamp(0)
 
-  user             User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  user                 User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@index([userId])
   @@unique([userId, deviceId])

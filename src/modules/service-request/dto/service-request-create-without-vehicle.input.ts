@@ -34,6 +34,7 @@ export class ServiceRequestCreateWithoutVehicleInput {
 
     @Field(() => UserCreateNestedOneWithoutServiceRequestsInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutServiceRequestsInput;
 
     }

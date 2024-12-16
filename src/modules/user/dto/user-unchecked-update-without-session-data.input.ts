@@ -138,5 +138,6 @@ export class UserUncheckedUpdateWithoutSessionDataInput {
     userReports?: UserReportUncheckedUpdateManyWithoutUserNestedInput;
 
     @Field(() => JoinWorkshopRequestUncheckedUpdateManyWithoutUserNestedInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedUpdateManyWithoutUserNestedInput;
 }

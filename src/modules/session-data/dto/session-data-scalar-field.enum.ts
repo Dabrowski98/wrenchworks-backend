@@ -8,6 +8,7 @@ export enum SessionDataScalarFieldEnum {
     deviceName = "deviceName",
     deviceInfo = "deviceInfo",
     ipAddress = "ipAddress",
+    deviceSerialNumber = "deviceSerialNumber",
     issuedAt = "issuedAt",
     expiresAt = "expiresAt"
 }

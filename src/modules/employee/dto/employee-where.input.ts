@@ -58,6 +58,7 @@ export class EmployeeWhereInput {
     services?: ServiceListRelationFilter;
 
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
 
     @Field(() => TaskListRelationFilter, {nullable:true})
@@ -68,6 +69,7 @@ export class EmployeeWhereInput {
 
     @Field(() => UserNullableRelationFilter, {nullable:true})
     @Type(() => UserNullableRelationFilter)
+    @ValidateNested()
     user?: UserNullableRelationFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})

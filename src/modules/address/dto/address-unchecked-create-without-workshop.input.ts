@@ -4,6 +4,7 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { UserUncheckedCreateNestedOneWithoutAddressInput } from '../../user/dto/user-unchecked-create-nested-one-without-address.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -62,5 +63,6 @@ export class AddressUncheckedCreateWithoutWorkshopInput {
 
     @Field(() => UserUncheckedCreateNestedOneWithoutAddressInput, {nullable:true})
     @Type(() => UserUncheckedCreateNestedOneWithoutAddressInput)
+    @ValidateNested()
     user?: UserUncheckedCreateNestedOneWithoutAddressInput;
 }

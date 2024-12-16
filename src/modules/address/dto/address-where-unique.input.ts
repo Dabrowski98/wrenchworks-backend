@@ -6,8 +6,8 @@ import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
-import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
 
 @InputType()
 export class AddressWhereUniqueInput {
@@ -47,6 +47,7 @@ export class AddressWhereUniqueInput {
 
     @Field(() => UserNullableRelationFilter, {nullable:true})
     @Type(() => UserNullableRelationFilter)
+    @ValidateNested()
     user?: UserNullableRelationFilter;
 
     @Field(() => WorkshopNullableRelationFilter, {nullable:true})

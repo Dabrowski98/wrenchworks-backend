@@ -10,8 +10,8 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { GuestCreateNestedOneWithoutCustomerInput } from '../../guest/dto/guest-create-nested-one-without-customer.input';
 import { UserCreateNestedOneWithoutCustomersInput } from '../../user/dto/user-create-nested-one-without-customers.input';
-import { VehicleCreateNestedManyWithoutCustomersInput } from '../../vehicle/dto/vehicle-create-nested-many-without-customers.input';
 import { ValidateNested } from 'class-validator';
+import { VehicleCreateNestedManyWithoutCustomersInput } from '../../vehicle/dto/vehicle-create-nested-many-without-customers.input';
 import { WorkshopCreateNestedOneWithoutCustomersInput } from '../../workshop/dto/workshop-create-nested-one-without-customers.input';
 
 @InputType()
@@ -72,6 +72,7 @@ export class CustomerCreateWithoutServicesInput {
 
     @Field(() => UserCreateNestedOneWithoutCustomersInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutCustomersInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutCustomersInput;
 
     @Field(() => VehicleCreateNestedManyWithoutCustomersInput, {nullable:true})

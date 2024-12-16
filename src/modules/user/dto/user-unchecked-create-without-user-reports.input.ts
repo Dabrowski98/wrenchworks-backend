@@ -133,8 +133,10 @@ export class UserUncheckedCreateWithoutUserReportsInput {
     reviewResponses?: ReviewResponseUncheckedCreateNestedManyWithoutUserInput;
 
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput;
 
     @Field(() => SessionDataUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
+    @ValidateNested()
     sessionData?: SessionDataUncheckedCreateNestedManyWithoutUserInput;
 }

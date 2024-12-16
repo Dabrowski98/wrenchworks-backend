@@ -65,6 +65,7 @@ export class CustomerOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => VehicleOrderByRelationAggregateInput, {nullable:true})

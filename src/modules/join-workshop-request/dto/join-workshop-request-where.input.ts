@@ -9,8 +9,8 @@ import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.i
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';
-import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopRelationFilter } from '../../workshop/dto/workshop-relation-filter.input';
 import { EmployeeRelationFilter } from '../../employee/dto/employee-relation-filter.input';
 
 @InputType()
@@ -45,6 +45,7 @@ export class JoinWorkshopRequestWhereInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})

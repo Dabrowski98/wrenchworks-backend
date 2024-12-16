@@ -78,6 +78,7 @@ export class ServiceRequestWhereInput {
 
     @Field(() => UserNullableRelationFilter, {nullable:true})
     @Type(() => UserNullableRelationFilter)
+    @ValidateNested()
     user?: UserNullableRelationFilter;
 
     @Field(() => GuestNullableRelationFilter, {nullable:true})

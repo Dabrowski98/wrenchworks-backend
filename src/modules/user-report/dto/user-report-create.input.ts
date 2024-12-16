@@ -8,6 +8,7 @@ import * as Scalars from 'graphql-scalars';
 import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
 import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-create-nested-one-without-user-reports.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -39,5 +40,6 @@ export class UserReportCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutUserReportsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutUserReportsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutUserReportsInput;
 }

@@ -61,6 +61,7 @@ export class WorkshopCreateWithoutWorkshopDeviceOTPInput {
 
     @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})

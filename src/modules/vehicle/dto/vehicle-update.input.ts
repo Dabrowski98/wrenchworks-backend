@@ -8,10 +8,12 @@ import { UserUpdateOneWithoutVehiclesNestedInput } from '../../user/dto/user-upd
 import { CustomerUpdateManyWithoutVehiclesNestedInput } from '../../customer/dto/customer-update-many-without-vehicles-nested.input';
 import { GuestUpdateOneWithoutVehicleNestedInput } from '../../guest/dto/guest-update-one-without-vehicle-nested.input';
 import { VehicleDetailsUpdateOneWithoutVehicleNestedInput } from '../../vehicle-details/dto/vehicle-details-update-one-without-vehicle-nested.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class VehicleUpdateInput {
 
     @Field(() => VehicleDetailsUpdateOneWithoutVehicleNestedInput, {nullable:true})
+    @ValidateNested()
     vehicleDetails?: VehicleDetailsUpdateOneWithoutVehicleNestedInput;
 }

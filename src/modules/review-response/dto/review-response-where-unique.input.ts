@@ -66,5 +66,6 @@ export class ReviewResponseWhereUniqueInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 }

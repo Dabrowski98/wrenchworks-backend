@@ -5,8 +5,8 @@ import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { HideField } from '@nestjs/graphql';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
 import { Type } from 'class-transformer';
-import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { EmployeeOrderByWithRelationInput } from '../../employee/dto/employee-order-by-with-relation.input';
 
 @InputType()
@@ -32,6 +32,7 @@ export class JoinWorkshopRequestOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})

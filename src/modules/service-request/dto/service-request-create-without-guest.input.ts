@@ -40,5 +40,6 @@ export class ServiceRequestCreateWithoutGuestInput {
 
     @Field(() => UserCreateNestedOneWithoutServiceRequestsInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutServiceRequestsInput;
 }

@@ -5,8 +5,8 @@ import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { Type } from 'class-transformer';
 import { HideField } from '@nestjs/graphql';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
-import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { ReviewResponseOrderByRelationAggregateInput } from '../../review-response/dto/review-response-order-by-relation-aggregate.input';
 
 @InputType()
@@ -39,6 +39,7 @@ export class ReviewOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})

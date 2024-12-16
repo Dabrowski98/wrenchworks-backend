@@ -5,8 +5,8 @@ import { ServiceRequestCreateNestedManyWithoutVehicleInput } from '../../service
 import { ServiceCreateNestedManyWithoutVehicleInput } from '../../service/dto/service-create-nested-many-without-vehicle.input';
 import { UserCreateNestedOneWithoutVehiclesInput } from '../../user/dto/user-create-nested-one-without-vehicles.input';
 import { Type } from 'class-transformer';
-import { CustomerCreateNestedManyWithoutVehiclesInput } from '../../customer/dto/customer-create-nested-many-without-vehicles.input';
 import { ValidateNested } from 'class-validator';
+import { CustomerCreateNestedManyWithoutVehiclesInput } from '../../customer/dto/customer-create-nested-many-without-vehicles.input';
 import { GuestCreateNestedOneWithoutVehicleInput } from '../../guest/dto/guest-create-nested-one-without-vehicle.input';
 import { VehicleDetailsCreateNestedOneWithoutVehicleInput } from '../../vehicle-details/dto/vehicle-details-create-nested-one-without-vehicle.input';
 
@@ -15,6 +15,7 @@ export class VehicleCreateWithoutVehicleModelInput {
 
     @Field(() => UserCreateNestedOneWithoutVehiclesInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutVehiclesInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutVehiclesInput;
 
     @Field(() => CustomerCreateNestedManyWithoutVehiclesInput, {nullable:true})
@@ -24,5 +25,6 @@ export class VehicleCreateWithoutVehicleModelInput {
     customers?: CustomerCreateNestedManyWithoutVehiclesInput;
 
     @Field(() => VehicleDetailsCreateNestedOneWithoutVehicleInput, {nullable:true})
+    @ValidateNested()
     vehicleDetails?: VehicleDetailsCreateNestedOneWithoutVehicleInput;
 }

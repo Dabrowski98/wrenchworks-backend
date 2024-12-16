@@ -138,5 +138,6 @@ export class UserUncheckedCreateWithoutSessionDataInput {
     userReports?: UserReportUncheckedCreateNestedManyWithoutUserInput;
 
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput;
 }

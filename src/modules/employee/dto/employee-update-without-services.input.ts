@@ -4,6 +4,7 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-employee-nested.input';
+import { ValidateNested } from 'class-validator';
 import { TaskUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-update-many-without-employees-nested.input';
 import { UserUpdateOneWithoutEmployeesNestedInput } from '../../user/dto/user-update-one-without-employees-nested.input';
 import { WorkshopUpdateOneRequiredWithoutEmployeesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-employees-nested.input';
@@ -42,6 +43,7 @@ export class EmployeeUpdateWithoutServicesInput {
     joinedAt?: Date | string;
 
     @Field(() => JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput;
 
     }

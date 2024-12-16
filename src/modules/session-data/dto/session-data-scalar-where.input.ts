@@ -38,6 +38,9 @@ export class SessionDataScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     ipAddress?: StringNullableFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    deviceSerialNumber?: StringNullableFilter;
+
     @Field(() => DateTimeFilter, {nullable:true})
     issuedAt?: DateTimeFilter;
 

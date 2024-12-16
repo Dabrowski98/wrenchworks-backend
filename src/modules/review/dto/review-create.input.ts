@@ -9,8 +9,8 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
 import { UserCreateNestedOneWithoutReviewsInput } from '../../user/dto/user-create-nested-one-without-reviews.input';
-import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopCreateNestedOneWithoutReviewsInput } from '../../workshop/dto/workshop-create-nested-one-without-reviews.input';
 import { ReviewResponseCreateNestedManyWithoutReviewInput } from '../../review-response/dto/review-response-create-nested-many-without-review.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
@@ -41,6 +41,7 @@ export class ReviewCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutReviewsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutReviewsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutReviewsInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutReviewsInput, {nullable:false})

@@ -26,6 +26,9 @@ export class SessionDataCountAggregateInput {
     ipAddress?: true;
 
     @Field(() => Boolean, {nullable:true})
+    deviceSerialNumber?: true;
+
+    @Field(() => Boolean, {nullable:true})
     issuedAt?: true;
 
     @Field(() => Boolean, {nullable:true})

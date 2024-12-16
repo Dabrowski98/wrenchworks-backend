@@ -136,8 +136,10 @@ export class UserWhereUniqueInput {
     userReports?: UserReportListRelationFilter;
 
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
 
     @Field(() => SessionDataListRelationFilter, {nullable:true})
+    @ValidateNested()
     sessionData?: SessionDataListRelationFilter;
 }

@@ -6,6 +6,7 @@ import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.in
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class SessionDataWhereInput {
@@ -40,6 +41,9 @@ export class SessionDataWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     ipAddress?: StringNullableFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    deviceSerialNumber?: StringNullableFilter;
+
     @Field(() => DateTimeFilter, {nullable:true})
     issuedAt?: DateTimeFilter;
 
@@ -48,5 +52,6 @@ export class SessionDataWhereInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 }

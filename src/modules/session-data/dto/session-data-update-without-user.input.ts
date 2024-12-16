@@ -20,6 +20,9 @@ export class SessionDataUpdateWithoutUserInput {
     @Field(() => String, {nullable:true})
     ipAddress?: string;
 
+    @Field(() => String, {nullable:true})
+    deviceSerialNumber?: string;
+
     @Field(() => Date, {nullable:true})
     issuedAt?: Date | string;
 

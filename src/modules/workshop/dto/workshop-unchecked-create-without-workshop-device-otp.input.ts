@@ -116,6 +116,7 @@ export class WorkshopUncheckedCreateWithoutWorkshopDeviceOTPInput {
     jobCategories?: JobCategoryUncheckedCreateNestedManyWithoutWorkshopsInput;
 
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => WorkshopDeviceUncheckedCreateNestedManyWithoutWorkshopInput, {nullable:true})

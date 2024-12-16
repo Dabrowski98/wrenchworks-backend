@@ -31,6 +31,9 @@ export class SessionDataGroupBy {
     @Field(() => String, {nullable:true})
     ipAddress?: string;
 
+    @Field(() => String, {nullable:true})
+    deviceSerialNumber?: string;
+
     @Field(() => Date, {nullable:false})
     issuedAt!: Date | string;
 

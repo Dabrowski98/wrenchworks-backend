@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { UserCreateNestedOneWithoutSessionDataInput } from '../../user/dto/user-create-nested-one-without-session-data.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class SessionDataCreateInput {
@@ -24,6 +25,9 @@ export class SessionDataCreateInput {
     @Field(() => String, {nullable:true})
     ipAddress?: string;
 
+    @Field(() => String, {nullable:true})
+    deviceSerialNumber?: string;
+
     @Field(() => Date, {nullable:true})
     issuedAt?: Date | string;
 
@@ -32,5 +36,6 @@ export class SessionDataCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutSessionDataInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutSessionDataInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutSessionDataInput;
 }

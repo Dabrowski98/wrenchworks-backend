@@ -34,6 +34,7 @@ export class ServiceRequestCreateWithoutWorkshopInput {
 
     @Field(() => UserCreateNestedOneWithoutServiceRequestsInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutServiceRequestsInput;
 
     }

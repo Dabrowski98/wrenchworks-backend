@@ -9,8 +9,8 @@ import { ServiceRequestCreateNestedManyWithoutWorkshopInput } from '../../servic
 import { ServiceCreateNestedManyWithoutWorkshopInput } from '../../service/dto/service-create-nested-many-without-workshop.input';
 import { UserCreateNestedOneWithoutWorkshopsInput } from '../../user/dto/user-create-nested-one-without-workshops.input';
 import { Type } from 'class-transformer';
-import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopDetailsCreateNestedOneWithoutWorkshopInput } from '../../workshop-details/dto/workshop-details-create-nested-one-without-workshop.input';
 import { WorkshopJobCreateNestedManyWithoutWorkshopInput } from '../../workshop-job/dto/workshop-job-create-nested-many-without-workshop.input';
 import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-category/dto/job-category-create-nested-many-without-workshops.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
@@ -56,6 +56,7 @@ export class WorkshopCreateWithoutAddressInput {
 
     @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})

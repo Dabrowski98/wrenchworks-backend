@@ -60,5 +60,6 @@ export class EmployeeUncheckedCreateWithoutTasksInput {
     services?: ServiceUncheckedCreateNestedManyWithoutEmployeeInput;
 
     @Field(() => JoinWorkshopRequestUncheckedCreateNestedManyWithoutEmployeeInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedCreateNestedManyWithoutEmployeeInput;
 }

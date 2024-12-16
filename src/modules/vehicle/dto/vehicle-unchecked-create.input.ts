@@ -43,5 +43,6 @@ export class VehicleUncheckedCreateInput {
     customers?: CustomerUncheckedCreateNestedManyWithoutVehiclesInput;
 
     @Field(() => VehicleDetailsUncheckedCreateNestedOneWithoutVehicleInput, {nullable:true})
+    @ValidateNested()
     vehicleDetails?: VehicleDetailsUncheckedCreateNestedOneWithoutVehicleInput;
 }

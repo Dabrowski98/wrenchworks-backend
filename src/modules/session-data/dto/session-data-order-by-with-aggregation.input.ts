@@ -32,6 +32,9 @@ export class SessionDataOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     ipAddress?: SortOrderInput;
 
+    @Field(() => SortOrderInput, {nullable:true})
+    deviceSerialNumber?: SortOrderInput;
+
     @Field(() => SortOrder, {nullable:true})
     issuedAt?: keyof typeof SortOrder;
 

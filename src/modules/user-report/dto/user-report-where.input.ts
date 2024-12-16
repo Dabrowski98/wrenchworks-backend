@@ -10,6 +10,7 @@ import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { UserRelationFilter } from '../../user/dto/user-relation-filter.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class UserReportWhereInput {
@@ -46,5 +47,6 @@ export class UserReportWhereInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 }

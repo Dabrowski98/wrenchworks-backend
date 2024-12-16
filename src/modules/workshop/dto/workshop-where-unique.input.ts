@@ -108,6 +108,7 @@ export class WorkshopWhereUniqueInput {
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)
+    @ValidateNested()
     user?: UserRelationFilter;
 
     @Field(() => WorkshopDetailsNullableRelationFilter, {nullable:true})
@@ -128,6 +129,7 @@ export class WorkshopWhereUniqueInput {
     jobCategories?: JobCategoryListRelationFilter;
 
     @Field(() => JoinWorkshopRequestListRelationFilter, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
 
     @Field(() => WorkshopDeviceOTPNullableRelationFilter, {nullable:true})

@@ -25,5 +25,6 @@ export class VehicleCreateWithoutUserInput {
     customers?: CustomerCreateNestedManyWithoutVehiclesInput;
 
     @Field(() => VehicleDetailsCreateNestedOneWithoutVehicleInput, {nullable:true})
+    @ValidateNested()
     vehicleDetails?: VehicleDetailsCreateNestedOneWithoutVehicleInput;
 }

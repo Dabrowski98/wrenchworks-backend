@@ -86,6 +86,7 @@ export class WorkshopOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => WorkshopDetailsOrderByWithRelationInput, {nullable:true})
@@ -106,6 +107,7 @@ export class WorkshopOrderByWithRelationInput {
     jobCategories?: JobCategoryOrderByRelationAggregateInput;
 
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
 
     @Field(() => WorkshopDeviceOTPOrderByWithRelationInput, {nullable:true})

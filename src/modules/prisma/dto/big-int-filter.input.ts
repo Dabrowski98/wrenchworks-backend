@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { NestedBigIntFilter } from './nested-big-int-filter.input';
-import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class BigIntFilter {

@@ -57,6 +57,7 @@ export class VehicleWhereInput {
 
     @Field(() => UserNullableRelationFilter, {nullable:true})
     @Type(() => UserNullableRelationFilter)
+    @ValidateNested()
     user?: UserNullableRelationFilter;
 
     @Field(() => CustomerListRelationFilter, {nullable:true})
@@ -70,5 +71,6 @@ export class VehicleWhereInput {
     guest?: GuestNullableRelationFilter;
 
     @Field(() => VehicleDetailsNullableRelationFilter, {nullable:true})
+    @ValidateNested()
     vehicleDetails?: VehicleDetailsNullableRelationFilter;
 }

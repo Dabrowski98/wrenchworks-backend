@@ -27,6 +27,9 @@ export class SessionData {
     @Field(() => String, {nullable:true})
     ipAddress!: string | null;
 
+    @Field(() => String, {nullable:true})
+    deviceSerialNumber!: string | null;
+
     @Field(() => Date, {nullable:false})
     issuedAt!: Date;
 

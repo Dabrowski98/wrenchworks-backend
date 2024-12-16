@@ -4,8 +4,8 @@ import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
 import { Type } from 'class-transformer';
-import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopOrderByWithRelationInput } from '../../workshop/dto/workshop-order-by-with-relation.input';
 
 @InputType()
 export class AddressOrderByWithRelationInput {
@@ -36,6 +36,7 @@ export class AddressOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})

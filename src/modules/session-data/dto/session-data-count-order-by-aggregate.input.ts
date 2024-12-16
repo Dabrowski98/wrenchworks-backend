@@ -27,6 +27,9 @@ export class SessionDataCountOrderByAggregateInput {
     ipAddress?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    deviceSerialNumber?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     issuedAt?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

@@ -38,6 +38,9 @@ export class SessionDataScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     ipAddress?: StringNullableWithAggregatesFilter;
 
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    deviceSerialNumber?: StringNullableWithAggregatesFilter;
+
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     issuedAt?: DateTimeWithAggregatesFilter;
 

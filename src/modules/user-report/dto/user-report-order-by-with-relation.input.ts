@@ -5,6 +5,7 @@ import { HideField } from '@nestjs/graphql';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
 export class UserReportOrderByWithRelationInput {
@@ -32,5 +33,6 @@ export class UserReportOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 }

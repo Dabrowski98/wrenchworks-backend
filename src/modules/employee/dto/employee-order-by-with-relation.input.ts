@@ -45,6 +45,7 @@ export class EmployeeOrderByWithRelationInput {
     services?: ServiceOrderByRelationAggregateInput;
 
     @Field(() => JoinWorkshopRequestOrderByRelationAggregateInput, {nullable:true})
+    @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestOrderByRelationAggregateInput;
 
     @Field(() => TaskOrderByRelationAggregateInput, {nullable:true})
@@ -55,6 +56,7 @@ export class EmployeeOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})

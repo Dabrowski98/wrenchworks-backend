@@ -61,6 +61,7 @@ export class WorkshopCreateWithoutJobCategoriesInput {
 
     @Field(() => UserCreateNestedOneWithoutWorkshopsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutWorkshopsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutWorkshopsInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})

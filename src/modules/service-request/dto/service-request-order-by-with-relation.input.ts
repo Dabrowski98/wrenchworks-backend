@@ -65,6 +65,7 @@ export class ServiceRequestOrderByWithRelationInput {
 
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
+    @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
     @Field(() => GuestOrderByWithRelationInput, {nullable:true})

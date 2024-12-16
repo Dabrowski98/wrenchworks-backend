@@ -79,6 +79,7 @@ export class CustomerCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutCustomersInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutCustomersInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutCustomersInput;
 
     @Field(() => VehicleCreateNestedManyWithoutCustomersInput, {nullable:true})

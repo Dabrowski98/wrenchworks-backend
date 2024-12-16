@@ -27,6 +27,9 @@ export class SessionDataCountAggregate {
     ipAddress!: number;
 
     @Field(() => Int, {nullable:false})
+    deviceSerialNumber!: number;
+
+    @Field(() => Int, {nullable:false})
     issuedAt!: number;
 
     @Field(() => Int, {nullable:false})

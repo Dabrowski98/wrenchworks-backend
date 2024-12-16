@@ -6,8 +6,8 @@ import { JoinWorkshopRequestStatus } from '../../prisma/dto/join-workshop-reques
 import { HideField } from '@nestjs/graphql';
 import { UserCreateNestedOneWithoutJoinWorkshopRequestsInput } from '../../user/dto/user-create-nested-one-without-join-workshop-requests.input';
 import { Type } from 'class-transformer';
-import { WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput } from '../../workshop/dto/workshop-create-nested-one-without-join-workshop-requests.input';
 import { ValidateNested } from 'class-validator';
+import { WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput } from '../../workshop/dto/workshop-create-nested-one-without-join-workshop-requests.input';
 import { EmployeeCreateNestedOneWithoutJoinWorkshopRequestsInput } from '../../employee/dto/employee-create-nested-one-without-join-workshop-requests.input';
 
 @InputType()
@@ -24,6 +24,7 @@ export class JoinWorkshopRequestCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutJoinWorkshopRequestsInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutJoinWorkshopRequestsInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutJoinWorkshopRequestsInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput, {nullable:false})

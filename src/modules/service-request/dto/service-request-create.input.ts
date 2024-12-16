@@ -41,6 +41,7 @@ export class ServiceRequestCreateInput {
 
     @Field(() => UserCreateNestedOneWithoutServiceRequestsInput, {nullable:true})
     @Type(() => UserCreateNestedOneWithoutServiceRequestsInput)
+    @ValidateNested()
     user?: UserCreateNestedOneWithoutServiceRequestsInput;
 
     }
