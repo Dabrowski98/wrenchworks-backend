@@ -56,7 +56,6 @@ import { RolesGuard } from './modules/auth/common-guards';
   providers: [
     Logger,
     Reflector,
-    { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: GqlThrottlerGuard },
     { provide: APP_PIPE, useClass: GlobalStrictValidationPipe },
   ],

@@ -4,6 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from 'src/common/decorators/guard-decorators/public.decorator';
+import { UnauthorizedError } from 'src/common/custom-errors/errors.config';
 
 @Injectable()
 export class UserJwtAuthGuard extends AuthGuard('user-jwt') {
@@ -21,14 +22,19 @@ export class UserJwtAuthGuard extends AuthGuard('user-jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
+
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
-    
+  
     if (err) {
         throw err;
     }
     if (isPublic) {
       return user;
+    }
+
+    if (!user) {
+      throw new UnauthorizedError('You need to be logged in');
     }
 
     return user;

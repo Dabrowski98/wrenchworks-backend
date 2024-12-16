@@ -1478,6 +1478,7 @@ enum NullsOrder {
 }
 
 type Query {
+  AdminTest: String!
   UserTest: String!
   address(addressId: BigInt!): Address!
   addresses: [Address!]!
@@ -2095,6 +2096,7 @@ type SessionData {
   deviceId: String!
   deviceInfo: String
   deviceName: String
+  deviceSerialNumber: String
   expiresAt: DateTime!
   ipAddress: String
   issuedAt: DateTime!
@@ -2121,6 +2123,7 @@ input SessionDataWhereInput {
   deviceId: StringFilter
   deviceInfo: StringNullableFilter
   deviceName: StringNullableFilter
+  deviceSerialNumber: StringNullableFilter
   expiresAt: DateTimeFilter
   ipAddress: StringNullableFilter
   issuedAt: DateTimeFilter
@@ -2450,6 +2453,8 @@ enum UserReportsStatus {
 
 enum UserRole {
   ADMIN
+  MODERATOR
+  SUPERADMIN
   USER
 }
 

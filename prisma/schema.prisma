@@ -1201,7 +1201,9 @@ enum UserReportType {
 
 enum UserRole {
   USER
+  MODERATOR
   ADMIN
+  SUPERADMIN
 }
 
 enum ServiceRequestStatus {

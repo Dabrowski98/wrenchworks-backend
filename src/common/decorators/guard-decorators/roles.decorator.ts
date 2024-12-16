@@ -3,4 +3,4 @@ import { UserRole } from 'src/modules/prisma';
 
 
 export const ROLES_KEY = 'roles';
-export const Role = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);
+export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);

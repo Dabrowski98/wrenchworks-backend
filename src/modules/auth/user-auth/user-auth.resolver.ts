@@ -10,9 +10,9 @@ import { DeviceInfo } from 'src/common/decorators/headers-decorators/device-info
 import { DeviceId } from 'src/common/decorators/headers-decorators/device-id.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
-import { Role } from 'src/common/decorators/guard-decorators/roles.decorator';
+import { Roles } from 'src/common/decorators/guard-decorators/roles.decorator';
 import { UserRole } from '../../prisma';
-import { CreateAdminInput } from './dto/create-admin.input'; 
+import { CreateAdminInput } from './dto/create-admin.input';
 import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
@@ -22,6 +22,7 @@ import { DeviceData } from 'src/common/decorators/headers-decorators/device-data
 import { LoginAuthGuard } from './guards/user-local-auth.guard';
 import { RolesGuard } from '../common-guards/roles.guard';
 import { ChangePasswordInput } from '../common-dto';
+import { AuthRoles } from 'src/common/decorators/guard-decorators/auth-roles.decorator';
 
 @UseGuards(UserJwtAuthGuard)
 @Resolver()
@@ -44,22 +45,16 @@ export class UserAuthResolver {
     @Context() context: any,
     @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
-    return this.userAuthService.loginUser(
-      context.user,
-      deviceData,
-    );
+    return this.userAuthService.loginUser(context.user, deviceData);
   }
- 
+
   @Public()
   @Mutation(() => LoginUserResponse)
   async refreshTokens(
     @Args('refreshToken') refreshToken: string,
     @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
-    return this.userAuthService.refreshTokens(
-      refreshToken,
-      deviceData,
-    );
+    return this.userAuthService.refreshTokens(refreshToken, deviceData);
   }
 
   @Mutation(() => Boolean)
@@ -76,7 +71,8 @@ export class UserAuthResolver {
 
   @Mutation(() => Boolean)
   async logoutAllUserSessions(
-    @Args('userId', { type: () => GraphQLBigInt , nullable: true}) userId: bigint,
+    @Args('userId', { type: () => GraphQLBigInt, nullable: true })
+    userId: bigint,
     @CurrentUser() currentUser: JwtUserPayload,
   ): Promise<boolean> {
     try {
@@ -86,8 +82,7 @@ export class UserAuthResolver {
     }
   }
 
-  @Role(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
+  @AuthRoles(UserRole.ADMIN)
   @Mutation(() => User)
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
@@ -109,11 +104,16 @@ export class UserAuthResolver {
       return false;
     }
   }
-
-  @Public()
+ 
+  @AuthRoles(UserRole.USER)
   @Query(() => String)
-  async UserTest(@CurrentUserID() userId: bigint) {
-    console.log(userId);
+  async UserTest() {
     return 'Hello World from user';
+  }
+
+  @AuthRoles(UserRole.ADMIN)
+  @Query(() => String)
+  async AdminTest() {
+    return 'Hello World from admin';
   }
 }

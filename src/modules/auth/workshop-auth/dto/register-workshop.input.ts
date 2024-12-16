@@ -10,6 +10,7 @@ import { Type } from 'class-transformer';
 export class RegisterWorkshopInput extends OmitType(WorkshopCreateInput, [
   'user',
 ] as const) {
+
   @Field(() => RegisterEmployeeInput, { nullable: false })
   @ValidateNested()
   @Type(() => RegisterEmployeeInput)
