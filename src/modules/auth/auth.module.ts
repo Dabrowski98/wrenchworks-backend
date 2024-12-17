@@ -3,6 +3,7 @@ import { UserAuthModule } from './user-auth/user-auth.module';
 import { EmployeeAuthModule } from './employee-auth/employee-auth.module';
 import { WorkshopAuthModule } from './workshop-auth/workshop-auth.module';
 import { DeviceAuthModule } from './device-auth/device-auth.module';
+import { UserAbilityModule } from '../ability/user-ability.module';
 
 @Module({
   imports: [

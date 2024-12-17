@@ -4,30 +4,30 @@ import { LoginUserResponse } from './dto/login-user.response';
 import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 import { User } from '../../user/dto';
-import { ForbiddenException, UseGuards } from '@nestjs/common';
-import { IpAddress } from 'src/common/decorators/headers-decorators/ip-address.decorator';
-import { DeviceInfo } from 'src/common/decorators/headers-decorators/device-info.decorator';
-import { DeviceId } from 'src/common/decorators/headers-decorators/device-id.decorator';
+import { UseGuards } from '@nestjs/common'; 
 import { GraphQLBigInt } from 'graphql-scalars';
-import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
-import { Roles } from 'src/common/decorators/guard-decorators/roles.decorator';
-import { UserRole } from '../../prisma';
+import { Public } from 'src/common/decorators/guard-decorators/public.decorator';  
 import { CreateAdminInput } from './dto/create-admin.input';
 import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
-import { ForbiddenError } from 'src/common/custom-errors/errors.config';
 import { JwtUserPayload } from './dto/jwt-user-payload';
 import { DeviceData } from 'src/common/decorators/headers-decorators/device-data.decorator';
 import { LoginAuthGuard } from './guards/user-local-auth.guard';
-import { RolesGuard } from '../common-guards/roles.guard';
 import { ChangePasswordInput } from '../common-dto';
-import { AuthRoles } from 'src/common/decorators/guard-decorators/auth-roles.decorator';
+import { UserAbilityFactory, Action } from '../../ability/user-ability.factory';
+import { UserService } from 'src/modules/user/user.service';
+import { CheckAbilities } from 'src/modules/ability/abilities.decorator';
+import { AbilitiesGuard } from 'src/modules/ability/abilities.guard';
 
-@UseGuards(UserJwtAuthGuard)
+@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver()
 export class UserAuthResolver {
-  constructor(private readonly userAuthService: UserAuthService) {}
+  constructor(
+    private readonly userAuthService: UserAuthService,
+    private readonly userAbilityFactory: UserAbilityFactory,
+    private readonly userService: UserService,
+  ) {}
 
   @Public()
   @Mutation(() => User)
@@ -35,7 +35,7 @@ export class UserAuthResolver {
     @Args('registerUserInput') registerUserInput: RegisterUserInput,
   ): Promise<User> {
     return this.userAuthService.registerUser(registerUserInput);
-  }
+  } 
 
   @Public()
   @UseGuards(LoginAuthGuard)
@@ -57,6 +57,7 @@ export class UserAuthResolver {
     return this.userAuthService.refreshTokens(refreshToken, deviceData);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
   async logoutUser(
     @Args('refreshToken') refreshToken: string,
@@ -69,6 +70,7 @@ export class UserAuthResolver {
     return true;
   }
 
+  @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
   async logoutAllUserSessions(
     @Args('userId', { type: () => GraphQLBigInt, nullable: true })
@@ -82,7 +84,7 @@ export class UserAuthResolver {
     }
   }
 
-  @AuthRoles(UserRole.ADMIN)
+  @CheckAbilities({ action: Action.Create, subject: User })
   @Mutation(() => User)
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
@@ -90,6 +92,7 @@ export class UserAuthResolver {
     return this.userAuthService.createAdmin(createAdminInput);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
   async changeUserPassword(
     @CurrentUserID() userId: bigint,
@@ -104,16 +107,23 @@ export class UserAuthResolver {
       return false;
     }
   }
- 
-  @AuthRoles(UserRole.USER)
+
+  @CheckAbilities({ action: Action.Delete, subject: User })
   @Query(() => String)
-  async UserTest() {
+  async UserTest(@CurrentUserID() currentUserId: bigint) {
     return 'Hello World from user';
   }
 
-  @AuthRoles(UserRole.ADMIN)
+  @CheckAbilities({ action: Action.Read, subject: User})
   @Query(() => String)
   async AdminTest() {
     return 'Hello World from admin';
   }
 }
+
+
+//       case UserRole.ADMIN: //can manage all apart from his own services etc.
+//         can(Action.Manage, 'all');
+//         cannot(Action.Manage, User, { role: UserRole.SUPERADMIN });
+//         cannot(Action.Manage, User, { role: UserRole.ADMIN });
+//         can(Action.Read, User);

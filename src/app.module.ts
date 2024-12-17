@@ -8,13 +8,13 @@ import { AppController } from './app.controller';
 import { HelperModule } from './common/helper/helper.module';
 import { UserModule } from './modules/user/user.module';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
-import { Reflector } from '@nestjs/core'; 
+import { Reflector } from '@nestjs/core';
 import { SessionDataModule } from './modules/session-data/session-data.module';
 import { GlobalStrictValidationPipe } from './common/validation-pipes/global-strict-validation-pipe';
 import { GuestModule } from './modules/guest/guest.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
-import { RolesGuard } from './modules/auth/common-guards';
+import { UserAbilityModule } from './modules/ability/user-ability.module';
 
 @Module({
   imports: [
@@ -48,6 +48,7 @@ import { RolesGuard } from './modules/auth/common-guards';
     PrismaModule,
     HelperModule,
     AuthModule,
+    UserAbilityModule,
     AddressModule,
     GuestModule,
     UserModule,

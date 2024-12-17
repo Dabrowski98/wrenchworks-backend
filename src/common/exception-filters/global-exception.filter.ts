@@ -1,8 +1,15 @@
-import { ArgumentsHost, BadRequestException, Catch, HttpException, Logger } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  BadRequestException,
+  Catch,
+  HttpException,
+  Logger,
+} from '@nestjs/common';
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 import { ValidationError } from '../custom-errors/errors.config';
+import { ForbiddenError, PureAbility } from '@casl/ability';
 
 @Catch()
 export class GlobalExceptionFilter implements GqlExceptionFilter {
@@ -18,7 +25,7 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
       this.logger.error(
         `${gqlError.extensions.status} - ${gqlError.message} - ${stackTrace}`,
       );
-    } else if (exception instanceof Prisma.PrismaClientKnownRequestError) { 
+    } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       gqlError = this.handlePrismaError(exception);
       this.logger.error(
         `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} - ${stackTrace} \n ${exception.message}`,
@@ -27,6 +34,11 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
       gqlError = this.handleValidationError(exception);
       this.logger.error(
         `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} \n ${JSON.stringify(exception.errors, null, 2)} \n ${stackTrace} \n ${exception.message} \n ${gqlError.extensions.fields} \n ${gqlError.extensions.constraint}`,
+      );
+    } else if (exception instanceof ForbiddenError) { //CASL ERROR
+      gqlError = this.handleForbiddenError(exception);
+      this.logger.error(
+        `${gqlError.extensions.status} - ${gqlError.extensions.code} - ${gqlError.message} \n ${stackTrace} \n ${exception.message} \n ${gqlError.extensions.fields} \n ${gqlError.extensions.constraint}`,
       );
     } else {
       gqlError = this.handleOtherError(exception);
@@ -62,6 +74,16 @@ export class GlobalExceptionFilter implements GqlExceptionFilter {
         code: exception.code,
         status: exception.status,
         errors: exception.errors,
+      },
+    });
+  }
+
+  private handleForbiddenError(exception: ForbiddenError<PureAbility>): GraphQLError {
+    return new GraphQLError(exception.message, {
+      extensions: {
+        code: 403,
+        status: 'FORBIDDEN',
+        constraint: exception.message,
       },
     });
   }
