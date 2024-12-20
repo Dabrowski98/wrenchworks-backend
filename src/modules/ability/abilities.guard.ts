@@ -35,7 +35,6 @@ export class AbilitiesGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req.user;
     console.log(user);
-
     const ability = await this.userAbilityFactory.defineAbility(user);
     rules.forEach((rule) => {
         ForbiddenError.from(ability).throwUnlessCan(rule.action, rule.subject);

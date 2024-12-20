@@ -22,7 +22,7 @@ import { UserAbilityModule } from './modules/ability/user-ability.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      playground: false,
+      playground: true,
       formatError: (error) => {
         let originalError = error.extensions?.originalError as
           | Error

@@ -14,6 +14,7 @@ import {
   InferSubjects,
   PureAbility,
 } from '@casl/ability';
+import { Address } from '../address/dto';
 
 export enum Action {
   Manage = 'manage',
@@ -24,12 +25,8 @@ export enum Action {
   Modify = 'modify',
 }
 
-const ResolveAction = createAliasResolver({
-  Modify: [Action.Update, Action.Delete],
-});
-
 export type UserAuthSubjects = InferSubjects<
-  typeof User | typeof Employee | WorkshopDevice | WorkshopDeviceOTP | 'all'
+  typeof User | typeof Address | typeof Employee | WorkshopDevice | WorkshopDeviceOTP | 'all'
 >;
 
 export type UserAuthAbility = PureAbility<
@@ -59,23 +56,26 @@ export class UserAbilityFactory {
         break;
 
       case UserRole.MODERATOR: //can manage user reports, reviews, comments, etc.
-        can(Action.Read, 'all');
+        can(Action.Manage, 'all')
         cannot(Action.Manage, User, { role: UserRole.SUPERADMIN });
         cannot(Action.Manage, User, { role: UserRole.ADMIN });
         cannot(Action.Manage, User, { role: UserRole.MODERATOR });
         break;
 
       case UserRole.USER:
-        can(Action.Modify, User);
+        can(Action.Update, User, { userId: user.sub });
+        can(Action.Manage, Address, { userId: user.sub });
+        
 
-        // can(Action.Update, User, { userId: user.sub, role: UserRole.USER });
         break;
 
       default:
         cannot(Action.Manage, 'all');
+        cannot(Action.Update, User, ['role']);
         break;
     }
 
+    //not sure how this would work.
     cannot(Action.Read, User, ['password']);
 
     return build({
