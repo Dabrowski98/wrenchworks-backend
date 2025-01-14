@@ -6,6 +6,8 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/modules/user/user.module';
 import { WorkshopModule } from 'src/modules/workshop/workshop.module';
 import { EmployeeModule } from 'src/modules/employee/employee.module';
+import { WorkshopDeviceOTPModule } from 'src/modules/workshop-device-otp/workshop-device-otp.module';
+import { WorkshopDeviceModule } from 'src/modules/workshop-device/workshop-device.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { EmployeeModule } from 'src/modules/employee/employee.module';
     UserModule,
     WorkshopModule,
     EmployeeModule,
+    WorkshopDeviceOTPModule,
+    WorkshopDeviceModule,
   ],
   providers: [DeviceAuthService, DeviceAuthResolver],
   exports: [DeviceAuthService, DeviceAuthResolver],

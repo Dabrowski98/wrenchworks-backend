@@ -3,17 +3,20 @@ import { BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { EmployeeService } from 'src/modules/employee/employee.service';
 import { WorkshopService } from 'src/modules/workshop/workshop.service';
-import { WorkshopDevice } from 'src/modules/workshop-device/dto/workshop-device.model'; 
+import { WorkshopDevice } from 'src/modules/workshop-device/dto/workshop-device.model';
 import * as crypto from 'crypto';
 import { AcceptWorkshopDeviceInput } from './dto/accept-workshop-device.input';
 import { RequestDeviceRegistrationInput } from './dto/request-device-registration.input';
+import { WorkshopDeviceOTPService } from 'src/modules/workshop-device-otp/workshop-device-otp.service';
+import { WorkshopDeviceService } from 'src/modules/workshop-device/workshop-device.service';
 
 @Injectable()
 export class DeviceAuthService {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly employeeService: EmployeeService,
     private readonly workshopService: WorkshopService,
+    private readonly workshopDeviceOTPService: WorkshopDeviceOTPService,
+    private readonly workshopDeviceService: WorkshopDeviceService,
   ) {}
 
   async generateDeviceOTP(employeeId: bigint): Promise<string> {
@@ -29,7 +32,7 @@ export class DeviceAuthService {
 
     if (!workshop) throw new BadRequestException('Workshop not found');
 
-    const existingOTP = await this.prisma.workshopDeviceOTP.findUnique({
+    const existingOTP = await this.workshopDeviceOTPService.findOne({
       where: {
         workshopId: employee.workshopId,
       },
@@ -44,7 +47,7 @@ export class DeviceAuthService {
     const timeInMinutes = 15 * 60 * 1000;
     const expiresAt = new Date(Date.now() + timeInMinutes);
 
-    await this.prisma.workshopDeviceOTP.create({
+    await this.workshopDeviceOTPService.create({
       data: {
         code,
         expiresAt,
@@ -62,7 +65,7 @@ export class DeviceAuthService {
     const { code, deviceSerialNumber, deviceName } =
       requestDeviceRegistrationInput;
 
-    const DeviceOTP = await this.prisma.workshopDeviceOTP.findUnique({
+    const DeviceOTP = await this.workshopDeviceOTPService.findOne({
       where: {
         code,
       },
@@ -71,7 +74,7 @@ export class DeviceAuthService {
     if (DeviceOTP.expiresAt < new Date())
       throw new BadRequestException('Code expired');
 
-    const existingDevice = await this.prisma.workshopDevice.findUnique({
+    const existingDevice = await this.workshopDeviceService.findOne({
       where: {
         workshopId_serialNumber: {
           workshopId: DeviceOTP.workshopId,
@@ -84,13 +87,14 @@ export class DeviceAuthService {
       throw new BadRequestException('This device is already registered');
     }
 
-    const workshopDevice = await this.prisma.workshopDevice.create({
-      data: {
-        workshopId: DeviceOTP.workshopId,
-        serialNumber: deviceSerialNumber,
-        deviceName: deviceName,
-      },
-    });
+    const workshopDevice =
+      await this.workshopDeviceService.create({
+        data: {
+          workshopId: DeviceOTP.workshopId,
+          serialNumber: deviceSerialNumber,
+          deviceName: deviceName,
+        },
+      });
 
     return workshopDevice;
   }
@@ -107,7 +111,7 @@ export class DeviceAuthService {
 
     if (!employee) throw new BadRequestException('Employee not found');
 
-    const workshopDevicesCount = await this.prisma.workshopDevice.count({
+    const workshopDevicesCount = await this.workshopDeviceService.count({
       where: {
         workshopId: employee.workshopId,
         acceptedBy: { not: null },
@@ -119,7 +123,7 @@ export class DeviceAuthService {
         'Workshop has reached the maximum number of devices.',
       );
 
-    const device = await this.prisma.workshopDevice.findUnique({
+    const device = await this.workshopDeviceService.findOne({
       where: {
         workshopDeviceId: deviceId,
       },
@@ -129,7 +133,7 @@ export class DeviceAuthService {
     if (device.acceptedBy)
       throw new BadRequestException('Device already accepted');
 
-    return await this.prisma.workshopDevice.update({
+    return await this.workshopDeviceService.update({
       where: { workshopDeviceId: deviceId },
       data: {
         acceptedBy: employeeId,
@@ -140,13 +144,13 @@ export class DeviceAuthService {
   }
 
   async removeDevice(deviceId: bigint): Promise<WorkshopDevice> {
-    const device = await this.prisma.workshopDevice.findUnique({
+    const device = await this.workshopDeviceService.findOne({
       where: { workshopDeviceId: deviceId },
     });
 
     if (!device) throw new BadRequestException('Device not found');
 
-    return await this.prisma.workshopDevice.delete({
+    return await this.workshopDeviceService.delete({
       where: { workshopDeviceId: deviceId },
     });
   }

@@ -94,6 +94,7 @@ export class EmployeeAuthResolver {
   }
 
   //TODO: refactor
+  @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async deleteEmployee(
     @CurrentEmployeeID() employeeId: bigint,

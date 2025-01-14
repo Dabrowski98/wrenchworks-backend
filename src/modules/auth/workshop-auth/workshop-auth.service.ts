@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/database/prisma.service';
 import { EmployeeService } from 'src/modules/employee/employee.service';
-import { WorkshopService } from 'src/modules/workshop/workshop.service'; 
+import { WorkshopService } from 'src/modules/workshop/workshop.service';
 import { RegisterWorkshopResponse } from './dto/register-workshop.response';
 import { RegisterWorkshopInput } from './dto/register-workshop.input';
 import { UserService } from 'src/modules/user/user.service';
@@ -19,13 +19,9 @@ export class WorkshopAuthService {
     input: RegisterWorkshopInput,
     userId: bigint,
   ): Promise<RegisterWorkshopResponse> {
-    const user = await this.userService.findUserById(userId, {
-      includeWorkshops: true,
-    });
+    const userWorkshops = await this.userService.workshops(userId);
 
-    if (!user) throw new BadRequestException('User not found');
-
-    if (user.workshops.length >= Number(process.env.USER_MAX_WORKSHOPS))
+    if (userWorkshops.length >= Number(process.env.USER_MAX_WORKSHOPS))
       throw new BadRequestException(
         'User has reached the maximum number of workshops he can have',
       );
@@ -44,7 +40,7 @@ export class WorkshopAuthService {
     const workshop = await this.workshopService.createWorkshop({
       ...workshopInput,
       password: workshopHashedPassword,
-      user: { connect: { userId: user.userId } },
+      user: { connect: { userId } },
     });
 
     //TODO: set all permissions to true
@@ -56,7 +52,7 @@ export class WorkshopAuthService {
 
     const updatedOwnerEmployee = await this.prisma.employee.update({
       where: { employeeId: ownerEmployee.employeeId },
-      data: { userId: user.userId },
+      data: { userId },
     });
 
     return { workshop, ownerEmployee: updatedOwnerEmployee };

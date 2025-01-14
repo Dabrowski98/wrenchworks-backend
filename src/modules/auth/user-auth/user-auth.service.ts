@@ -26,7 +26,7 @@ export class UserAuthService {
     private readonly sessionDataService: SessionDataService,
     private readonly jwtService: JwtService,
   ) {}
- 
+
   async registerUser(input: RegisterUserInput): Promise<User> {
     const hashedPassword = await bcrypt.hash(
       input.password,
@@ -49,15 +49,12 @@ export class UserAuthService {
     deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     const { accessToken, refreshToken } = await this.generateTokens(user);
-    await this.createNewSessionData(
-      refreshToken,
-      deviceData,
-    );
+    await this.createNewSessionData(refreshToken, deviceData);
     return { accessToken, refreshToken, user };
   }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findUserByEmail(email);
+    const user = await this.userService.findUser({ where: { email } });
     if (!user) return null;
     const isPasswordValid = await bcrypt.compare(password, user.password);
     const { password: _, ...result } = user;
@@ -98,18 +95,16 @@ export class UserAuthService {
       secret: process.env.USER_REFRESH_SECRET,
     });
 
-    const user = await this.userService.findUserById(decodedRefreshToken.sub, {
-      includeSessionData: true,
-    });
+    const sessions = await this.userService.sessionData(
+      decodedRefreshToken.sub,
+    );
 
-    const session = user.sessionData.find((a) => a.deviceId === deviceId);
+    const sessionData = sessions.find((a) => a.deviceId === deviceId);
 
-    if (session) {
-      await this.revokeRefreshToken(session.refreshToken);
-    } else if (
-      user.sessionData.length >= Number(process.env.USER_MAX_SESSIONS)
-    ) {
-      const oldestSession = user.sessionData.sort(
+    if (sessionData) {
+      await this.revokeRefreshToken(sessionData.refreshToken);
+    } else if (sessions.length >= Number(process.env.USER_MAX_SESSIONS)) {
+      const oldestSession = sessions.sort(
         (a, b) => a.issuedAt.getTime() - b.issuedAt.getTime(),
       )[0];
       await this.revokeRefreshToken(oldestSession.refreshToken);
@@ -152,14 +147,13 @@ export class UserAuthService {
     deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     const session = await this.getSession(currentRT);
-    const user = await this.userService.findUserById(session.userId);
+    const user = await this.userService.findUser({
+      where: { userId: session.userId },
+    });
 
     const { accessToken, refreshToken } = await this.generateTokens(user);
     await this.revokeRefreshToken(currentRT);
-    await this.createNewSessionData(
-      refreshToken,
-      deviceData,
-    );
+    await this.createNewSessionData(refreshToken, deviceData);
     return { accessToken, refreshToken, user };
   }
 
@@ -198,7 +192,7 @@ export class UserAuthService {
     userId: bigint,
     changePasswordInput: ChangePasswordInput,
   ) {
-    const user = await this.userService.findUserById(userId);
+    const user = await this.userService.findUser({ where: { userId } });
 
     if (!user) throw new UnauthorizedError('User not found');
 

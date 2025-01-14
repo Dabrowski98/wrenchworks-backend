@@ -40,7 +40,7 @@ import { UserAbilityModule } from './modules/ability/user-ability.module';
       {
         ttl: Number(process.env.THROTTLE_TTL),
         limit: Number(process.env.THROTTLE_LIMIT),
-        ignoreUserAgents: [/altair/i],
+        ignoreUserAgents: [/altair/i, /insomnia/i],
       },
     ]),
     // ScheduleModule.forRoot(),
