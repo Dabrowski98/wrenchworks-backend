@@ -48,6 +48,11 @@ export class EmployeeUncheckedCreateWithoutJoinWorkshopRequestsInput {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
+    @Field(() => Boolean, {nullable:false})
+    @Validator.IsBoolean({ message: 'Disabled must be a boolean' })
+    @Validator.IsOptional()
+    status!: boolean;
+
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()

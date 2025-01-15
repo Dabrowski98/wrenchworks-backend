@@ -27,6 +27,9 @@ export class EmployeeCountAggregateInput {
     refreshToken?: true;
 
     @Field(() => Boolean, {nullable:true})
+    status?: true;
+
+    @Field(() => Boolean, {nullable:true})
     joinedAt?: true;
 
     @Field(() => Boolean, {nullable:true})

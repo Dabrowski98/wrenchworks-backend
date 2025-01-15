@@ -25,6 +25,9 @@ export class EmployeeCountAggregate {
     refreshToken!: number;
 
     @Field(() => Int, {nullable:false})
+    status!: number;
+
+    @Field(() => Int, {nullable:false})
     joinedAt!: number;
 
     @Field(() => Int, {nullable:false})

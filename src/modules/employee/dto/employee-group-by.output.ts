@@ -29,6 +29,9 @@ export class EmployeeGroupBy {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
+    @Field(() => Boolean, {nullable:false})
+    status!: boolean;
+
     @Field(() => Date, {nullable:false})
     joinedAt!: Date | string;
 

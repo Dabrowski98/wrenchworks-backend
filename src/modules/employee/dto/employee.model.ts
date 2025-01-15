@@ -34,6 +34,9 @@ export class Employee {
     @Field(() => String, {nullable:true})
     refreshToken!: string | null;
 
+    @Field(() => Boolean, {nullable:false})
+    status!: boolean;
+
     /**
      * Note: Optional because field defaults to now()
      */

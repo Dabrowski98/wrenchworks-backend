@@ -34,6 +34,9 @@ export class EmployeeOrderByWithAggregationInput {
     refreshToken?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
+    status?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     joinedAt?: keyof typeof SortOrder;
 
     @Field(() => EmployeeCountOrderByAggregateInput, {nullable:true})

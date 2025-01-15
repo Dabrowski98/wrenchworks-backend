@@ -4,6 +4,9 @@ generator client {
 
 //TODO: ADD SCHEDULE
 //TODO: ADD REVIEW UPVOTES AND DOWNVOTES
+//TODO: ENSURE ALL INTERNAL FIELDS ARE POPULATED IN SERVICE LAYER EG. CREATEDBY, UPDATEDBY, DELETEDBY, RESOLVEDBY, etc.
+//TODO: RBAC USER AUTHORIZATION
+//TODO: ABAC EMPLOYEE AUTHORIZATION
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
     output = "../src/modules"
@@ -227,6 +230,10 @@ model Employee {
   password              String              @db.VarChar(255)
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   refreshToken          String?             @db.VarChar(1000)
+  /// @Validator.IsBoolean({ message: 'Disabled must be a boolean' })
+  /// @Validator.IsOptional()
+  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
+  status                Boolean
   // /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
   // /// @Validator.IsOptional()
   // permissionSetId       Int?              @db.UnsignedInt
@@ -1032,7 +1039,7 @@ model Workshop {
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   joinWorkshopRequests      JoinWorkshopRequest[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
-  workshopDeviceOTP         WorkshopDeviceOTP?
+  WorkshopDeviceOtp         WorkshopDeviceOtp?
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   workshopDevices           WorkshopDevice[]
 
@@ -1056,6 +1063,9 @@ model WorkshopDevice {
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   deviceName          String                    @db.VarChar(255)
+  /// @Validator.IsEnum(WorkshopDeviceStatus, { message: 'Invalid workshop device status' })
+  /// @Validator.IsOptional()
+  status              WorkshopDeviceStatus?     @default(ACTIVE)
   lastLoginAt         DateTime?                 @db.Timestamp(0)
   lastLoginBy         BigInt?                   @db.UnsignedBigInt
   updatedAt           DateTime?                 @db.Timestamp(0) @updatedAt
@@ -1069,29 +1079,29 @@ model WorkshopDevice {
   @@index([workshopId])
 }
 
-model WorkshopDeviceOTP {
+model WorkshopDeviceOtp {
   /// @FieldType('Scalars.GraphQLBigInt')
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
-  workshopDeviceOTPId                   BigInt      @id @unique(map: "workshop_device_otp_id") @default(autoincrement()) @db.UnsignedBigInt
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
+  WorkshopDeviceOtpId                   BigInt      @id @unique(map: "workshop_device_otp_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   employeeId                            BigInt      @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   workshopId                            BigInt      @db.UnsignedBigInt @unique
   /// @Validator.IsString({ message: 'Code must be a string' })
   /// @Validator.Length(7, 7, { message: 'Code must be exactly 7 characters' })
   /// @Validator.Matches(/^[0-9]{7}$/, { message: 'Invalid code format' })
   /// @Validator.IsNotEmpty()
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   code                                  String      @unique @db.Char(7)
   /// @Validator.IsDate()
   /// @Validator.IsNotEmpty()
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   expiresAt                             DateTime
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
   createdAt                             DateTime    @default(now()) @db.Timestamp(0)
-  /// @HideField({ match: '@(WorkshopDeviceOTP)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   workshop                              Workshop    @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDeviceOTP")
 
   @@index([code])
@@ -1223,19 +1233,19 @@ enum UserReportsStatus {
   PENDING
   ACTIVE
   CLOSED_CONFIRMED
-  CLOSED_DENIED
+  CLOSED_REJECTED
 }
 
 enum ReviewsStatus {
   PENDING
   ACCEPTED
-  DENIED
+  REJECTED
 }
 
 enum ReviewsResponsesStatus {
   PENDING
   ACCEPTED
-  DENIED
+  REJECTED
 }
 
 enum UsersStatus {
@@ -1289,5 +1299,11 @@ enum CustomerCreationSource {
 enum JoinWorkshopRequestStatus {
   PENDING
   ACCEPTED
-  DENIED
+  REJECTED
+}
+
+enum WorkshopDeviceStatus {
+  ACTIVE
+  INACTIVE
+  DISABLED
 }

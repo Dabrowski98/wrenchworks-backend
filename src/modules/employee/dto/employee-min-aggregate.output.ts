@@ -24,6 +24,9 @@ export class EmployeeMinAggregate {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
+    @Field(() => Boolean, {nullable:true})
+    status?: boolean;
+
     @Field(() => Date, {nullable:true})
     joinedAt?: Date | string;
 
