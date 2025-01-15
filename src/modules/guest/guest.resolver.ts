@@ -18,6 +18,7 @@ import {
 import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { ServiceRequest } from '../service-request/dto/service-request.model';
 import { Customer } from '../customer/dto/customer.model';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @Resolver(() => Guest)
 export class GuestResolver {
@@ -29,39 +30,42 @@ export class GuestResolver {
   // }
 
   @Query(() => Guest)
-  async guest(@Args() args: FindUniqueGuestArgs): Promise<Guest> {
-    return this.guestService.findGuestById(BigInt(args.where.guestId));
+  async guest(
+    @Args('guestId', { type: () => GraphQLBigInt }) guestId: bigint,
+  ): Promise<Guest> {
+    return this.guestService.findOne({ where: { guestId } });
   }
 
   @Query(() => [Guest])
   async guests(@Args() args?: FindManyGuestArgs): Promise<Guest[]> {
-    return this.guestService.findAllGuests(args);
+    return this.guestService.findMany(args);
   }
 
-  // @Mutation(() => Guest)
-  // async updateGuest(@Args() args: UpdateOneGuestArgs): Promise<Guest> {
-  //   return this.guestService.updateGuest(args);
-  // }
+  //admin only
+  @Mutation(() => Guest)
+  async updateGuest(@Args() args: UpdateOneGuestArgs): Promise<Guest> {
+    return this.guestService.updateGuest(args);
+  }
 
   @Mutation(() => Guest)
   async deleteGuest(@Args() args: DeleteOneGuestArgs): Promise<Guest> {
-    return this.guestService.deleteGuest(args);
+    return this.guestService.delete(args);
   }
 
   // RESOLVE FIELDS
 
-  @ResolveField(() => Vehicle)
-  async vehicle(@Parent() guest: Guest): Promise<Vehicle> {
+  @ResolveField(() => Vehicle, { nullable: true })
+  async vehicle(@Parent() guest: Guest): Promise<Vehicle | null> {
     return this.guestService.vehicle(guest.guestId);
   }
 
-  @ResolveField(() => ServiceRequest)
-  serviceRequest(@Parent() guest: Guest): Promise<ServiceRequest> {
+  @ResolveField(() => ServiceRequest, { nullable: true })
+  serviceRequest(@Parent() guest: Guest): Promise<ServiceRequest | null> {
     return this.guestService.serviceRequest(guest.guestId);
   }
 
-  @ResolveField(() => Customer)
-  customer(@Parent() guest: Guest): Promise<Customer> {
+  @ResolveField(() => Customer, { nullable: true })
+  customer(@Parent() guest: Guest): Promise<Customer | null> {
     return this.guestService.customer(guest.guestId);
   }
 }

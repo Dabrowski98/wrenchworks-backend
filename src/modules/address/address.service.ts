@@ -8,29 +8,34 @@ import {
   AddressWhereUniqueInput,
   CreateOneAddressArgs,
   DeleteOneAddressArgs,
+  FindManyAddressArgs,
+  FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
 import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
 
-
 @Injectable()
 export class AddressService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAddress(args: CreateOneAddressArgs): Promise<Address> {
+  async create(args: CreateOneAddressArgs): Promise<Address> {
     return this.prisma.address.create(args);
   }
- 
-  async updateAddress(args: UpdateOneAddressArgs): Promise<Address> {
+
+  async update(args: UpdateOneAddressArgs): Promise<Address> {
     return this.prisma.address.update(args);
   }
 
-  async findAllAddresses(): Promise<Address[]> {
-    return this.prisma.address.findMany();
+  async findMany(args?: FindManyAddressArgs): Promise<Address[]> {
+    return this.prisma.address.findMany(args);
   }
 
-  async findAddressById(addressId: bigint): Promise<Address> {
+  async findOne(args: FindUniqueAddressArgs): Promise<Address> {
+    return this.prisma.address.findUnique(args);
+  }
+
+  async findById(addressId: bigint): Promise<Address> {
     const record = await this.prisma.address.findUnique({
       where: { addressId },
     });
@@ -40,7 +45,7 @@ export class AddressService {
     return record;
   }
 
-  async deleteAddress(args: DeleteOneAddressArgs): Promise<DeletePayload> {
+  async delete(args: DeleteOneAddressArgs): Promise<DeletePayload> {
     const { where } = args;
 
     await this.prisma.address.delete({

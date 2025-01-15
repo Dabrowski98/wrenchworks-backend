@@ -93,20 +93,6 @@ export class EmployeeAuthResolver {
     }
   }
 
-  //TODO: refactor
-  @UseGuards(EmployeeJwtAuthGuard)
-  @Mutation(() => Boolean)
-  async deleteEmployee(
-    @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => Scalars.GraphQLBigInt })
-    employeeToDeleteId: bigint,
-  ): Promise<boolean> {
-    return this.employeeAuthService.deleteEmployee(
-      employeeId,
-      employeeToDeleteId,
-    );
-  }
-
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async changeEmployeePassword(

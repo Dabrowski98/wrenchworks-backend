@@ -1,43 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { WorkshopDeviceOTP } from './dto/workshop-device-otp.model';
-import { FindUniqueWorkshopDeviceOtpArgs } from '../prisma';
+import { WorkshopDeviceOtpCreateInput } from './dto/workshop-device-otp-create.input';
 import {
-    WorkshopDeviceOTPCreateInput,
-  WorkshopDeviceOTPWhereInput,
-  WorkshopDeviceOTPWhereUniqueInput,
+  CreateOneWorkshopDeviceOtpArgs,
+  DeleteOneWorkshopDeviceOtpArgs,
+  FindUniqueWorkshopDeviceOtpArgs,
+  UpdateOneWorkshopDeviceOtpArgs,
+  WorkshopDeviceOtp,
 } from './dto';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { Workshop } from '../workshop/dto/workshop.model';
 
 @Injectable()
 export class WorkshopDeviceOTPService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(
-    input: WorkshopDeviceOTPCreateInput,
-  ): Promise<WorkshopDeviceOTP> {
-    return this.prisma.workshopDeviceOTP.create({ data: input });
+    input: WorkshopDeviceOtpCreateInput,
+  ): Promise<WorkshopDeviceOtp> {
+    return this.prisma.workshopDeviceOtp.create({ data: input });
   }
 
   async findOne(
     where: FindUniqueWorkshopDeviceOtpArgs,
-  ): Promise<WorkshopDeviceOTP | null> {
-    return this.prisma.workshopDeviceOTP.findUnique({ where });
+  ): Promise<WorkshopDeviceOtp> {
+    const otp = await this.prisma.workshopDeviceOtp.findUnique(where);
+
+    if (!otp) throw new RecordNotFoundError(WorkshopDeviceOtp);
+
+    return otp;
   }
 
-  async update(
-    where: WorkshopDeviceOTPWhereUniqueInput,
-    data: Prisma.WorkshopDeviceOTPUpdateInput,
-  ): Promise<WorkshopDeviceOTP> {
-    return this.prisma.workshopDeviceOTP.update({ where, data });
+  async update(args: UpdateOneWorkshopDeviceOtpArgs): Promise<WorkshopDeviceOtp> {
+    return this.prisma.workshopDeviceOtp.update(args);
   }
 
-  async delete(
-    where: WorkshopDeviceOTPWhereUniqueInput,
-  ): Promise<WorkshopDeviceOTP> {
-    return this.prisma.workshopDeviceOTP.delete({ where });
+  async delete(args: DeleteOneWorkshopDeviceOtpArgs): Promise<Boolean> {
+    return !!this.prisma.workshopDeviceOtp.delete(args);
   }
 
-  async count(where: WorkshopDeviceOTPWhereInput): Promise<number> {
-    return this.prisma.workshopDeviceOTP.count({ where });
+  // RESOLVER METHODS
+
+  async workshop(workshopDeviceOtpId: bigint): Promise<Workshop> {
+    return (
+      await this.prisma.workshopDeviceOtp.findUnique({
+        where: { WorkshopDeviceOtpId: workshopDeviceOtpId },
+        include: { workshop: true },
+      })
+    ).workshop;
   }
 }

@@ -16,13 +16,13 @@ import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
 import { Vehicle } from '../vehicle/dto';
 import { ServiceRequest } from '../service-request';
-import { Customer } from '../customer';
 import { Employee } from '../employee/dto';
 import { Review } from '../review';
 import { ReviewResponse } from '../review-response';
 import { JoinWorkshopRequest } from '../join-workshop-request';
 import { UserReport } from '../user-report';
 import { UserService } from './user.service';
+import { Customer } from '../customer/dto';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -33,28 +33,28 @@ export class UserResolver {
   async findUserById(
     @Args('userId', { type: () => GraphQLBigInt }) userId: bigint,
   ): Promise<User> {
-    return this.userService.findUser({ where: { userId } });
+    return this.userService.findOne({ where: { userId } });
   }
 
   @Query(() => User)
   async findUserByEmail(@Args('email') email: string): Promise<User> {
-    return this.userService.findUser({ where: { email } });
+    return this.userService.findOne({ where: { email } });
   }
 
   @Query(() => [User])
   async findUsers(@Args() args: FindManyUserArgs): Promise<User[]> {
-    return this.userService.findUsers(args);
+    return this.userService.findMany(args);
   }
 
   // @Role(UserRole.ADMIN)
   // @UseGuards(UserJwtAuthGuard)
   @Query(() => [User])
   async findAllUsers(): Promise<User[]> {
-    return this.userService.findAllUsers();
+    return this.userService.findAll();
   }
 
   // RESOLVER METHODS
-  
+
   @ResolveField(() => Address)
   address(@Parent() user: User): Promise<Address> {
     return this.userService.address(user.userId);
@@ -74,7 +74,7 @@ export class UserResolver {
   customers(@Parent() user: User): Promise<Customer[]> {
     return this.userService.customers(user.userId);
   }
-  
+
   @ResolveField(() => [Employee])
   employees(@Parent() user: User): Promise<Employee[]> {
     return this.userService.employees(user.userId);

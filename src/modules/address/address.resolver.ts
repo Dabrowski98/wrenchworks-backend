@@ -13,6 +13,7 @@ import {
   AddressUpdateInput,
   AddressWhereUniqueInput,
   CreateOneAddressArgs,
+  FindManyAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
@@ -26,31 +27,31 @@ export class AddressResolver {
 
   @Mutation(() => Address)
   createAddress(@Args() args: CreateOneAddressArgs): Promise<Address> {
-    return this.addressService.createAddress(args);
+    return this.addressService.create(args);
   }
 
   @Mutation(() => Address)
-  async updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
-    return this.addressService.updateAddress(args);
-  }
-
-  @Query(() => [Address])
-  addresses(): Promise<Address[]> {
-    return this.addressService.findAllAddresses();
+  updateAddress(@Args() args: UpdateOneAddressArgs): Promise<Address> {
+    return this.addressService.update(args);
   }
 
   @Query(() => Address)
   address(
     @Args('addressId', { type: () => GraphQLBigInt }) addressId,
   ): Promise<Address> {
-    return this.addressService.findAddressById(addressId);
+    return this.addressService.findById(addressId);
+  }
+
+  @Query(() => [Address])
+  addresses(@Args() args?: FindManyAddressArgs): Promise<Address[]> {
+    return this.addressService.findMany(args);
   }
 
   @Mutation(() => DeletePayload)
   deleteAddress(
     @Args('addressId', { type: () => GraphQLBigInt }) addressId,
   ): Promise<DeletePayload> {
-    return this.addressService.deleteAddress(addressId);
+    return this.addressService.delete(addressId);
   }
 
   //RESOLVE FIELDS

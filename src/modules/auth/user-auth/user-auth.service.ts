@@ -41,7 +41,7 @@ export class UserAuthService {
 
     //TODO: VERIFY TELEPHONE NUMBER.
 
-    return this.userService.createUser(userData);
+    return this.userService.create(userData);
   }
 
   async loginUser(
@@ -53,8 +53,8 @@ export class UserAuthService {
     return { accessToken, refreshToken, user };
   }
 
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findUser({ where: { email } });
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.userService.findOneWithPassword({ where: { email } });
     if (!user) return null;
     const isPasswordValid = await bcrypt.compare(password, user.password);
     const { password: _, ...result } = user;
@@ -147,7 +147,7 @@ export class UserAuthService {
     deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     const session = await this.getSession(currentRT);
-    const user = await this.userService.findUser({
+    const user = await this.userService.findOne({
       where: { userId: session.userId },
     });
 
@@ -192,7 +192,7 @@ export class UserAuthService {
     userId: bigint,
     changePasswordInput: ChangePasswordInput,
   ) {
-    const user = await this.userService.findUser({ where: { userId } });
+    const user = await this.userService.findOneWithPassword({ where: { userId } });
 
     if (!user) throw new UnauthorizedError('User not found');
 
@@ -213,8 +213,9 @@ export class UserAuthService {
       10,
     );
 
-    return !!this.userService.updateUser(userId, {
-      password: hashedPassword,
+    return !!this.userService.update({
+      where: { userId },
+      data: { password: hashedPassword },
     });
   }
 
@@ -225,6 +226,6 @@ export class UserAuthService {
       password: hashedPassword,
       role: UserRole.ADMIN,
     };
-    return this.userService.createUser(userData);
+    return this.userService.create(userData);
   }
 }

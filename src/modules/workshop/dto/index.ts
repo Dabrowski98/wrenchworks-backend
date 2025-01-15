@@ -32,7 +32,7 @@ export { WorkshopCreateNestedOneWithoutReviewsInput } from './workshop-create-ne
 export { WorkshopCreateNestedOneWithoutServiceRequestsInput } from './workshop-create-nested-one-without-service-requests.input';
 export { WorkshopCreateNestedOneWithoutServicesInput } from './workshop-create-nested-one-without-services.input';
 export { WorkshopCreateNestedOneWithoutWorkshopDetailsInput } from './workshop-create-nested-one-without-workshop-details.input';
-export { WorkshopCreateNestedOneWithoutWorkshopDeviceOTPInput } from './workshop-create-nested-one-without-workshop-device-otp.input';
+export { WorkshopCreateNestedOneWithoutWorkshopDeviceOtpInput } from './workshop-create-nested-one-without-workshop-device-otp.input';
 export { WorkshopCreateNestedOneWithoutWorkshopDevicesInput } from './workshop-create-nested-one-without-workshop-devices.input';
 export { WorkshopCreateNestedOneWithoutWorkshopJobsInput } from './workshop-create-nested-one-without-workshop-jobs.input';
 export { WorkshopCreateOrConnectWithoutAddressInput } from './workshop-create-or-connect-without-address.input';
@@ -45,7 +45,7 @@ export { WorkshopCreateOrConnectWithoutServiceRequestsInput } from './workshop-c
 export { WorkshopCreateOrConnectWithoutServicesInput } from './workshop-create-or-connect-without-services.input';
 export { WorkshopCreateOrConnectWithoutUserInput } from './workshop-create-or-connect-without-user.input';
 export { WorkshopCreateOrConnectWithoutWorkshopDetailsInput } from './workshop-create-or-connect-without-workshop-details.input';
-export { WorkshopCreateOrConnectWithoutWorkshopDeviceOTPInput } from './workshop-create-or-connect-without-workshop-device-otp.input';
+export { WorkshopCreateOrConnectWithoutWorkshopDeviceOtpInput } from './workshop-create-or-connect-without-workshop-device-otp.input';
 export { WorkshopCreateOrConnectWithoutWorkshopDevicesInput } from './workshop-create-or-connect-without-workshop-devices.input';
 export { WorkshopCreateOrConnectWithoutWorkshopJobsInput } from './workshop-create-or-connect-without-workshop-jobs.input';
 export { WorkshopCreateWithoutAddressInput } from './workshop-create-without-address.input';
@@ -58,7 +58,7 @@ export { WorkshopCreateWithoutServiceRequestsInput } from './workshop-create-wit
 export { WorkshopCreateWithoutServicesInput } from './workshop-create-without-services.input';
 export { WorkshopCreateWithoutUserInput } from './workshop-create-without-user.input';
 export { WorkshopCreateWithoutWorkshopDetailsInput } from './workshop-create-without-workshop-details.input';
-export { WorkshopCreateWithoutWorkshopDeviceOTPInput } from './workshop-create-without-workshop-device-otp.input';
+export { WorkshopCreateWithoutWorkshopDeviceOtpInput } from './workshop-create-without-workshop-device-otp.input';
 export { WorkshopCreateWithoutWorkshopDevicesInput } from './workshop-create-without-workshop-devices.input';
 export { WorkshopCreateWithoutWorkshopJobsInput } from './workshop-create-without-workshop-jobs.input';
 export { WorkshopCreateInput } from './workshop-create.input';
@@ -95,7 +95,7 @@ export { WorkshopUncheckedCreateWithoutServiceRequestsInput } from './workshop-u
 export { WorkshopUncheckedCreateWithoutServicesInput } from './workshop-unchecked-create-without-services.input';
 export { WorkshopUncheckedCreateWithoutUserInput } from './workshop-unchecked-create-without-user.input';
 export { WorkshopUncheckedCreateWithoutWorkshopDetailsInput } from './workshop-unchecked-create-without-workshop-details.input';
-export { WorkshopUncheckedCreateWithoutWorkshopDeviceOTPInput } from './workshop-unchecked-create-without-workshop-device-otp.input';
+export { WorkshopUncheckedCreateWithoutWorkshopDeviceOtpInput } from './workshop-unchecked-create-without-workshop-device-otp.input';
 export { WorkshopUncheckedCreateWithoutWorkshopDevicesInput } from './workshop-unchecked-create-without-workshop-devices.input';
 export { WorkshopUncheckedCreateWithoutWorkshopJobsInput } from './workshop-unchecked-create-without-workshop-jobs.input';
 export { WorkshopUncheckedCreateInput } from './workshop-unchecked-create.input';
@@ -115,7 +115,7 @@ export { WorkshopUncheckedUpdateWithoutServiceRequestsInput } from './workshop-u
 export { WorkshopUncheckedUpdateWithoutServicesInput } from './workshop-unchecked-update-without-services.input';
 export { WorkshopUncheckedUpdateWithoutUserInput } from './workshop-unchecked-update-without-user.input';
 export { WorkshopUncheckedUpdateWithoutWorkshopDetailsInput } from './workshop-unchecked-update-without-workshop-details.input';
-export { WorkshopUncheckedUpdateWithoutWorkshopDeviceOTPInput } from './workshop-unchecked-update-without-workshop-device-otp.input';
+export { WorkshopUncheckedUpdateWithoutWorkshopDeviceOtpInput } from './workshop-unchecked-update-without-workshop-device-otp.input';
 export { WorkshopUncheckedUpdateWithoutWorkshopDevicesInput } from './workshop-unchecked-update-without-workshop-devices.input';
 export { WorkshopUncheckedUpdateWithoutWorkshopJobsInput } from './workshop-unchecked-update-without-workshop-jobs.input';
 export { WorkshopUncheckedUpdateInput } from './workshop-unchecked-update.input';
@@ -131,7 +131,7 @@ export { WorkshopUpdateOneRequiredWithoutReviewsNestedInput } from './workshop-u
 export { WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput } from './workshop-update-one-required-without-service-requests-nested.input';
 export { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from './workshop-update-one-required-without-services-nested.input';
 export { WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput } from './workshop-update-one-required-without-workshop-details-nested.input';
-export { WorkshopUpdateOneRequiredWithoutWorkshopDeviceOTPNestedInput } from './workshop-update-one-required-without-workshop-device-otp-nested.input';
+export { WorkshopUpdateOneRequiredWithoutWorkshopDeviceOtpNestedInput } from './workshop-update-one-required-without-workshop-device-otp-nested.input';
 export { WorkshopUpdateOneRequiredWithoutWorkshopDevicesNestedInput } from './workshop-update-one-required-without-workshop-devices-nested.input';
 export { WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput } from './workshop-update-one-required-without-workshop-jobs-nested.input';
 export { WorkshopUpdateOneWithoutAddressNestedInput } from './workshop-update-one-without-address-nested.input';
@@ -143,7 +143,7 @@ export { WorkshopUpdateToOneWithWhereWithoutReviewsInput } from './workshop-upda
 export { WorkshopUpdateToOneWithWhereWithoutServiceRequestsInput } from './workshop-update-to-one-with-where-without-service-requests.input';
 export { WorkshopUpdateToOneWithWhereWithoutServicesInput } from './workshop-update-to-one-with-where-without-services.input';
 export { WorkshopUpdateToOneWithWhereWithoutWorkshopDetailsInput } from './workshop-update-to-one-with-where-without-workshop-details.input';
-export { WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOTPInput } from './workshop-update-to-one-with-where-without-workshop-device-otp.input';
+export { WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOtpInput } from './workshop-update-to-one-with-where-without-workshop-device-otp.input';
 export { WorkshopUpdateToOneWithWhereWithoutWorkshopDevicesInput } from './workshop-update-to-one-with-where-without-workshop-devices.input';
 export { WorkshopUpdateToOneWithWhereWithoutWorkshopJobsInput } from './workshop-update-to-one-with-where-without-workshop-jobs.input';
 export { WorkshopUpdateWithWhereUniqueWithoutJobCategoriesInput } from './workshop-update-with-where-unique-without-job-categories.input';
@@ -158,7 +158,7 @@ export { WorkshopUpdateWithoutServiceRequestsInput } from './workshop-update-wit
 export { WorkshopUpdateWithoutServicesInput } from './workshop-update-without-services.input';
 export { WorkshopUpdateWithoutUserInput } from './workshop-update-without-user.input';
 export { WorkshopUpdateWithoutWorkshopDetailsInput } from './workshop-update-without-workshop-details.input';
-export { WorkshopUpdateWithoutWorkshopDeviceOTPInput } from './workshop-update-without-workshop-device-otp.input';
+export { WorkshopUpdateWithoutWorkshopDeviceOtpInput } from './workshop-update-without-workshop-device-otp.input';
 export { WorkshopUpdateWithoutWorkshopDevicesInput } from './workshop-update-without-workshop-devices.input';
 export { WorkshopUpdateWithoutWorkshopJobsInput } from './workshop-update-without-workshop-jobs.input';
 export { WorkshopUpdateInput } from './workshop-update.input';
@@ -172,7 +172,7 @@ export { WorkshopUpsertWithoutReviewsInput } from './workshop-upsert-without-rev
 export { WorkshopUpsertWithoutServiceRequestsInput } from './workshop-upsert-without-service-requests.input';
 export { WorkshopUpsertWithoutServicesInput } from './workshop-upsert-without-services.input';
 export { WorkshopUpsertWithoutWorkshopDetailsInput } from './workshop-upsert-without-workshop-details.input';
-export { WorkshopUpsertWithoutWorkshopDeviceOTPInput } from './workshop-upsert-without-workshop-device-otp.input';
+export { WorkshopUpsertWithoutWorkshopDeviceOtpInput } from './workshop-upsert-without-workshop-device-otp.input';
 export { WorkshopUpsertWithoutWorkshopDevicesInput } from './workshop-upsert-without-workshop-devices.input';
 export { WorkshopUpsertWithoutWorkshopJobsInput } from './workshop-upsert-without-workshop-jobs.input';
 export { WorkshopWhereUniqueInput } from './workshop-where-unique.input';

@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/modules/user/user.module';
 import { EmployeeModule } from 'src/modules/employee/employee.module';
 import { WorkshopModule } from 'src/modules/workshop/workshop.module';
+import { WorkshopDeviceModule } from 'src/modules/workshop-device';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { WorkshopModule } from 'src/modules/workshop/workshop.module';
     UserModule,
     EmployeeModule,
     WorkshopModule,
+    WorkshopDeviceModule,
   ],
   providers: [EmployeeAuthService, EmployeeAuthResolver],
   exports: [EmployeeAuthService, EmployeeAuthResolver],

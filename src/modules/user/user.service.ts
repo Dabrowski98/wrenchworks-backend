@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import {
+  DeleteOneUserArgs,
   FindFirstUserArgs,
   FindManyUserArgs,
   FindUniqueUserArgs,
+  UpdateOneUserArgs,
   User,
   UserCount,
   UserCreateInput,
@@ -22,36 +24,48 @@ import { JoinWorkshopRequest } from '../join-workshop-request';
 import { UserReport } from '../user-report';
 import { ReviewResponse } from '../review-response';
 import { Review } from '../review';
+import { DeletePayload } from 'src/common/payloads/delete.payload';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(input: UserCreateInput) {
+  async create(input: UserCreateInput): Promise<User> {
     return this.prisma.user.create({ data: input });
   }
 
-  async findUser(input: FindUniqueUserArgs) {
-    const user = await this.prisma.user.findUnique(input);
+  async findOne(args: FindUniqueUserArgs): Promise<User> {
+    const user = await this.prisma.user.findUnique(args);
 
     if (!user) throw new RecordNotFoundError(User);
 
     return user;
   }
 
-  async findUsers(args: FindManyUserArgs) {
+  async findOneWithPassword(
+    args: FindUniqueUserArgs,
+  ): Promise<User & { password: string }> {
+    const user = await this.prisma.user.findUnique(args);
+
+    if (!user) throw new RecordNotFoundError(User);
+
+    return user;
+  }
+
+  async findMany(args: FindManyUserArgs): Promise<User[]> {
     return this.prisma.user.findMany(args);
   }
 
-  async findAllUsers() {
-    return this.prisma.user.findMany({ where: { userId: { not: undefined } } });
+  async findAll(): Promise<User[]> {
+    return this.prisma.user.findMany();
   }
 
-  async updateUser(userId: bigint, data: UserUpdateInput) {
-    return this.prisma.user.update({
-      where: { userId },
-      data,
-    });
+  async update(args: UpdateOneUserArgs): Promise<User> {
+    return this.prisma.user.update(args);
+  }
+
+  async delete(args: DeleteOneUserArgs): Promise<Boolean> {
+    return !!this.prisma.user.delete(args);
   }
 
   // RESOLVE METHODS

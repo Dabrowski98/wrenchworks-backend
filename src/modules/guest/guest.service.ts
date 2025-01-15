@@ -10,37 +10,40 @@ import { Guest } from './dto/guest.model';
 import { PrismaService } from 'src/database/prisma.service';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { ServiceRequest } from '../service-request';
-import { Customer } from '../customer';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { Customer } from '../customer/dto';
 
 @Injectable()
 export class GuestService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createGuest(args: CreateOneGuestArgs): Promise<Guest> {
+  async create(args: CreateOneGuestArgs): Promise<Guest> {
     return this.prisma.guest.create({
       data: args.data,
     });
   }
 
-  async findGuestById(guestId: bigint): Promise<Guest | null> {
-    return this.prisma.guest.findUnique({
-      where: { guestId },
-    });
+  async findOne(args: FindUniqueGuestArgs): Promise<Guest> {
+    const guest = await this.prisma.guest.findUnique(args);
+
+    if (!guest) throw new RecordNotFoundError(Guest);
+
+    return guest;
   }
 
-  async findAllGuests(args?: FindManyGuestArgs): Promise<Guest[]> {
+  async findMany(args?: FindManyGuestArgs): Promise<Guest[]> {
     return this.prisma.guest.findMany();
   }
 
-  // async updateGuest(args: UpdateOneGuestArgs): Promise<Guest> {
-  //   const { where, data } = args;
-  //   return this.prisma.guest.update({
-  //     where,
-  //     data,
-  //   });
-  // }
+  async updateGuest(args: UpdateOneGuestArgs): Promise<Guest> {
+    const { where, data } = args;
+    return this.prisma.guest.update({
+      where,
+      data,
+    });
+  }
 
-  async deleteGuest(args: DeleteOneGuestArgs): Promise<Guest> {
+  async delete(args: DeleteOneGuestArgs): Promise<Guest> {
     return this.prisma.guest.delete({
       where: args.where,
     });

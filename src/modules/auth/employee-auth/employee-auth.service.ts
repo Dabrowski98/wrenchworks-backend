@@ -4,8 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
-import { Employee } from 'src/modules/employee/dto'; 
-import { PrismaService } from 'src/database/prisma.service';
+import { DeleteOneEmployeeArgs, Employee, EmployeeWhereUniqueInput, FindUniqueEmployeeArgs } from 'src/modules/employee/dto'; 
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { EmployeeService } from 'src/modules/employee/employee.service';
@@ -16,12 +15,13 @@ import { LoggedInBy } from './enums/loggedInBy.enum';
 import { ChangePasswordInput } from '../common-dto';
 import { JwtEmployeePayload } from './dto/jwt-employee-payload';
 import { EntityType } from 'src/common/enums/entity-type.enum';
+import { WorkshopDeviceService } from 'src/modules/workshop-device';
 
 @Injectable()
 export class EmployeeAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
-    private readonly prisma: PrismaService,
+    private readonly workshopDeviceService: WorkshopDeviceService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -30,7 +30,7 @@ export class EmployeeAuthService {
     registrantEmployeeId: bigint,
   ): Promise<Employee> {
     // create guard to check that
-    const registrant = await this.employeeService.findEmployee({
+    const registrant = await this.employeeService.findOne({
       where: { employeeId: registrantEmployeeId },
     });
 
@@ -41,9 +41,11 @@ export class EmployeeAuthService {
     const hashedPassword = await bcrypt.hash(input.password, 10);
     input = { ...input, password: hashedPassword };
 
-    return this.employeeService.createEmployee({
-      ...input,
-      workshop: { connect: { workshopId: registrant.workshopId } },
+    return this.employeeService.create({
+      data: {
+        ...input,
+        workshop: { connect: { workshopId: registrant.workshopId } },
+      },
     });
   }
 
@@ -61,10 +63,7 @@ export class EmployeeAuthService {
       LoggedInBy.USER,
     );
 
-    await this.prisma.employee.update({
-      where: { employeeId: employee.employeeId },
-      data: { refreshToken },
-    });
+    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
 
     return { accessToken, refreshToken, employee };
   }
@@ -74,7 +73,7 @@ export class EmployeeAuthService {
     deviceSerialNumber: string,
     workshopId: bigint,
   ): Promise<LoginEmployeeResponse> {
-    const device = await this.prisma.workshopDevice.findUnique({
+    const device = await this.workshopDeviceService.findOne({
       where: {
         workshopId_serialNumber: {
           workshopId,
@@ -95,10 +94,7 @@ export class EmployeeAuthService {
       LoggedInBy.WORKSHOP,
     );
 
-    await this.prisma.employee.update({
-      where: { employeeId: employee.employeeId },
-      data: { refreshToken },
-    });
+    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
 
     return { accessToken, refreshToken, employee };
   }
@@ -110,16 +106,13 @@ export class EmployeeAuthService {
 
     if (!decodedRefreshToken) return false;
 
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOne({
       where: { employeeId: decodedRefreshToken.sub },
     });
 
     if (!employee.refreshToken) return false;
 
-    const result = await this.prisma.employee.update({
-      where: { employeeId: decodedRefreshToken.sub },
-      data: { refreshToken: null },
-    });
+    const result = await this.employeeService.updateRefreshToken(employee.employeeId, null);
 
     return result ? true : false;
   }
@@ -132,7 +125,7 @@ export class EmployeeAuthService {
     if (!decodedRefreshToken)
       throw new UnauthorizedException('Invalid refresh token');
 
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOne({
       where: { employeeId: decodedRefreshToken.sub },
     });
 
@@ -143,10 +136,7 @@ export class EmployeeAuthService {
       LoggedInBy.USER,
     );
     await this.revokeRefreshToken(currentRT);
-    await this.prisma.employee.update({
-      where: { employeeId: employee.employeeId },
-      data: { refreshToken },
-    });
+    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
 
     return { accessToken, refreshToken, employee };
   }
@@ -155,7 +145,7 @@ export class EmployeeAuthService {
     employeeId: bigint,
     changePasswordInput: ChangePasswordInput,
   ) {
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOneWithPassword({
       where: { employeeId },
     });
 
@@ -179,7 +169,7 @@ export class EmployeeAuthService {
       10,
     );
 
-    const result = await this.prisma.employee.update({
+    const result = await this.employeeService.update({
       where: { employeeId },
       data: { password: hashedPassword },
     });
@@ -188,13 +178,13 @@ export class EmployeeAuthService {
   }
 
   async logoutAnotherEmployee(employeeId: bigint, employeeIdToLogout: bigint) {
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOne({
       where: { employeeId },
     });
 
     if (!employee) throw new UnauthorizedException('Employee not found');
 
-    const employeeToLogout = await this.employeeService.findEmployee({
+    const employeeToLogout = await this.employeeService.findOne({
       where: { employeeId: employeeIdToLogout },
     });
 
@@ -214,7 +204,7 @@ export class EmployeeAuthService {
     password: string,
     workshopId: bigint,
   ): Promise<Employee | null> {
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOneWithPassword({
       where: { login_workshopId: { login, workshopId } },
     });
     if (!employee) return null;
@@ -241,20 +231,5 @@ export class EmployeeAuthService {
       secret: process.env.EMPLOYEE_REFRESH_SECRET,
     });
     return { accessToken, refreshToken };
-  }
-
-  async deleteEmployee(employeeId: bigint, employeeToDeleteId: bigint) {
-    const employee = await this.employeeService.findEmployee({
-      where: { employeeId: employeeToDeleteId },
-    });
-
-    if (!employee) throw new UnauthorizedException('Employee not found');
-
-    if (employeeId === employeeToDeleteId)
-      throw new ForbiddenException('You are not allowed to delete yourself');
-
-    return !!(await this.prisma.employee.delete({
-      where: { employeeId: employeeToDeleteId },
-    }));
   }
 }
