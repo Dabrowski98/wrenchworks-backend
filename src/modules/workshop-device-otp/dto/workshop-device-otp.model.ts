@@ -5,10 +5,10 @@ import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
 
 @ObjectType()
-export class WorkshopDeviceOTP {
+export class WorkshopDeviceOtp {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    workshopDeviceOTPId!: bigint;
+    WorkshopDeviceOtpId!: bigint;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     employeeId!: bigint;

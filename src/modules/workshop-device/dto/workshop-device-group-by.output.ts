@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 import { WorkshopDeviceCountAggregate } from './workshop-device-count-aggregate.output';
 import { WorkshopDeviceAvgAggregate } from './workshop-device-avg-aggregate.output';
 import { WorkshopDeviceSumAggregate } from './workshop-device-sum-aggregate.output';
@@ -21,6 +22,9 @@ export class WorkshopDeviceGroupBy {
 
     @Field(() => String, {nullable:false})
     deviceName!: string;
+
+    @Field(() => WorkshopDeviceStatus, {nullable:true})
+    status?: keyof typeof WorkshopDeviceStatus;
 
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;

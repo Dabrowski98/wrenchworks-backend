@@ -1,13 +1,13 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { WorkshopDeviceOTPWhereInput } from './workshop-device-otp-where.input';
+import { WorkshopDeviceOtpWhereInput } from './workshop-device-otp-where.input';
 
 @InputType()
-export class WorkshopDeviceOTPNullableRelationFilter {
+export class WorkshopDeviceOtpNullableRelationFilter {
 
-    @Field(() => WorkshopDeviceOTPWhereInput, {nullable:true})
-    is?: WorkshopDeviceOTPWhereInput;
+    @Field(() => WorkshopDeviceOtpWhereInput, {nullable:true})
+    is?: WorkshopDeviceOtpWhereInput;
 
-    @Field(() => WorkshopDeviceOTPWhereInput, {nullable:true})
-    isNot?: WorkshopDeviceOTPWhereInput;
+    @Field(() => WorkshopDeviceOtpWhereInput, {nullable:true})
+    isNot?: WorkshopDeviceOtpWhereInput;
 }

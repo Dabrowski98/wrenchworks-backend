@@ -1,50 +1,50 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { WorkshopDeviceOTPCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
+import { WorkshopDeviceOtpCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopDeviceOTPCreateOrConnectWithoutWorkshopInput } from './workshop-device-otp-create-or-connect-without-workshop.input';
-import { WorkshopDeviceOTPUpsertWithoutWorkshopInput } from './workshop-device-otp-upsert-without-workshop.input';
-import { WorkshopDeviceOTPWhereInput } from './workshop-device-otp-where.input';
+import { WorkshopDeviceOtpCreateOrConnectWithoutWorkshopInput } from './workshop-device-otp-create-or-connect-without-workshop.input';
+import { WorkshopDeviceOtpUpsertWithoutWorkshopInput } from './workshop-device-otp-upsert-without-workshop.input';
+import { WorkshopDeviceOtpWhereInput } from './workshop-device-otp-where.input';
 import { Prisma } from '@prisma/client';
-import { WorkshopDeviceOTPWhereUniqueInput } from './workshop-device-otp-where-unique.input';
-import { WorkshopDeviceOTPUpdateToOneWithWhereWithoutWorkshopInput } from './workshop-device-otp-update-to-one-with-where-without-workshop.input';
+import { WorkshopDeviceOtpWhereUniqueInput } from './workshop-device-otp-where-unique.input';
+import { WorkshopDeviceOtpUpdateToOneWithWhereWithoutWorkshopInput } from './workshop-device-otp-update-to-one-with-where-without-workshop.input';
 
 @InputType()
-export class WorkshopDeviceOTPUpdateOneWithoutWorkshopNestedInput {
+export class WorkshopDeviceOtpUpdateOneWithoutWorkshopNestedInput {
 
-    @Field(() => WorkshopDeviceOTPCreateWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPCreateWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpCreateWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpCreateWithoutWorkshopInput)
     @ValidateNested()
-    create?: WorkshopDeviceOTPCreateWithoutWorkshopInput;
+    create?: WorkshopDeviceOtpCreateWithoutWorkshopInput;
 
-    @Field(() => WorkshopDeviceOTPCreateOrConnectWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPCreateOrConnectWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpCreateOrConnectWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpCreateOrConnectWithoutWorkshopInput)
     @ValidateNested()
-    connectOrCreate?: WorkshopDeviceOTPCreateOrConnectWithoutWorkshopInput;
+    connectOrCreate?: WorkshopDeviceOtpCreateOrConnectWithoutWorkshopInput;
 
-    @Field(() => WorkshopDeviceOTPUpsertWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPUpsertWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpUpsertWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpUpsertWithoutWorkshopInput)
     @ValidateNested()
-    upsert?: WorkshopDeviceOTPUpsertWithoutWorkshopInput;
+    upsert?: WorkshopDeviceOtpUpsertWithoutWorkshopInput;
 
-    @Field(() => WorkshopDeviceOTPWhereInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPWhereInput)
+    @Field(() => WorkshopDeviceOtpWhereInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpWhereInput)
     @ValidateNested()
-    disconnect?: WorkshopDeviceOTPWhereInput;
+    disconnect?: WorkshopDeviceOtpWhereInput;
 
-    @Field(() => WorkshopDeviceOTPWhereInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPWhereInput)
+    @Field(() => WorkshopDeviceOtpWhereInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpWhereInput)
     @ValidateNested()
-    delete?: WorkshopDeviceOTPWhereInput;
+    delete?: WorkshopDeviceOtpWhereInput;
 
-    @Field(() => WorkshopDeviceOTPWhereUniqueInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPWhereUniqueInput)
+    @Field(() => WorkshopDeviceOtpWhereUniqueInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<WorkshopDeviceOTPWhereUniqueInput, 'workshopDeviceOTPId' | 'workshopId' | 'code'>;
+    connect?: Prisma.AtLeast<WorkshopDeviceOtpWhereUniqueInput, 'WorkshopDeviceOtpId' | 'workshopId' | 'code'>;
 
-    @Field(() => WorkshopDeviceOTPUpdateToOneWithWhereWithoutWorkshopInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPUpdateToOneWithWhereWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpUpdateToOneWithWhereWithoutWorkshopInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpUpdateToOneWithWhereWithoutWorkshopInput)
     @ValidateNested()
-    update?: WorkshopDeviceOTPUpdateToOneWithWhereWithoutWorkshopInput;
+    update?: WorkshopDeviceOtpUpdateToOneWithWhereWithoutWorkshopInput;
 }

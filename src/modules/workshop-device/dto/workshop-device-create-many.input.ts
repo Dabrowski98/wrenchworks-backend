@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
+import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -24,6 +25,11 @@ export class WorkshopDeviceCreateManyInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device name is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     deviceName!: string;
+
+    @Field(() => WorkshopDeviceStatus, {nullable:true})
+    @Validator.IsEnum(WorkshopDeviceStatus, { message: 'Invalid workshop device status' })
+    @Validator.IsOptional()
+    status?: keyof typeof WorkshopDeviceStatus;
 
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;

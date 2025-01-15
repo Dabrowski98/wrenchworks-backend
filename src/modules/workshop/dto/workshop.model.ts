@@ -14,7 +14,7 @@ import { WorkshopDetails } from '../../workshop-details/dto/workshop-details.mod
 import { WorkshopJob } from '../../workshop-job/dto/workshop-job.model';
 import { JobCategory } from '../../job-category/dto/job-category.model';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
-import { WorkshopDeviceOTP } from '../../workshop-device-otp/dto/workshop-device-otp.model';
+import { WorkshopDeviceOtp } from '../../workshop-device-otp/dto/workshop-device-otp.model';
 import { WorkshopDevice } from '../../workshop-device/dto/workshop-device.model';
 import { WorkshopCount } from './workshop-count.output';
 
@@ -102,8 +102,8 @@ export class Workshop {
     @Field(() => [JoinWorkshopRequest], {nullable:true})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
 
-    @Field(() => WorkshopDeviceOTP, {nullable:true})
-    workshopDeviceOTP?: WorkshopDeviceOTP | null;
+    @Field(() => WorkshopDeviceOtp, {nullable:true})
+    WorkshopDeviceOtp?: WorkshopDeviceOtp | null;
 
     @Field(() => [WorkshopDevice], {nullable:true})
     workshopDevices?: Array<WorkshopDevice>;

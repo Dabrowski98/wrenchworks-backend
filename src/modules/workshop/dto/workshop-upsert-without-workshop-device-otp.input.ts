@@ -1,23 +1,23 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { WorkshopUpdateWithoutWorkshopDeviceOTPInput } from './workshop-update-without-workshop-device-otp.input';
+import { WorkshopUpdateWithoutWorkshopDeviceOtpInput } from './workshop-update-without-workshop-device-otp.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopCreateWithoutWorkshopDeviceOTPInput } from './workshop-create-without-workshop-device-otp.input';
+import { WorkshopCreateWithoutWorkshopDeviceOtpInput } from './workshop-create-without-workshop-device-otp.input';
 import { WorkshopWhereInput } from './workshop-where.input';
 
 @InputType()
-export class WorkshopUpsertWithoutWorkshopDeviceOTPInput {
+export class WorkshopUpsertWithoutWorkshopDeviceOtpInput {
 
-    @Field(() => WorkshopUpdateWithoutWorkshopDeviceOTPInput, {nullable:false})
-    @Type(() => WorkshopUpdateWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopUpdateWithoutWorkshopDeviceOtpInput, {nullable:false})
+    @Type(() => WorkshopUpdateWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    update!: WorkshopUpdateWithoutWorkshopDeviceOTPInput;
+    update!: WorkshopUpdateWithoutWorkshopDeviceOtpInput;
 
-    @Field(() => WorkshopCreateWithoutWorkshopDeviceOTPInput, {nullable:false})
-    @Type(() => WorkshopCreateWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopCreateWithoutWorkshopDeviceOtpInput, {nullable:false})
+    @Type(() => WorkshopCreateWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    create!: WorkshopCreateWithoutWorkshopDeviceOTPInput;
+    create!: WorkshopCreateWithoutWorkshopDeviceOtpInput;
 
     @Field(() => WorkshopWhereInput, {nullable:true})
     @Type(() => WorkshopWhereInput)

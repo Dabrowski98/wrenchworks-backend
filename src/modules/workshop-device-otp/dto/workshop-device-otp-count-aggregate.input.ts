@@ -3,10 +3,10 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 
 @InputType()
-export class WorkshopDeviceOTPCountAggregateInput {
+export class WorkshopDeviceOtpCountAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
-    workshopDeviceOTPId?: true;
+    WorkshopDeviceOtpId?: true;
 
     @Field(() => Boolean, {nullable:true})
     employeeId?: true;

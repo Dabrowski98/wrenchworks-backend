@@ -23,6 +23,9 @@ export class WorkshopDeviceOrderByWithRelationInput {
     deviceName?: keyof typeof SortOrder;
 
     @Field(() => SortOrderInput, {nullable:true})
+    status?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     lastLoginAt?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})

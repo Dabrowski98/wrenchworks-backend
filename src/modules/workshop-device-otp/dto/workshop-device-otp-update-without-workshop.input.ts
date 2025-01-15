@@ -3,6 +3,6 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 
 @InputType()
-export class WorkshopDeviceOTPUpdateWithoutWorkshopInput {
+export class WorkshopDeviceOtpUpdateWithoutWorkshopInput {
 
     }

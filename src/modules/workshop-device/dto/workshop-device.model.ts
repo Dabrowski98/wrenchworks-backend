@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
 
@@ -18,6 +19,9 @@ export class WorkshopDevice {
 
     @Field(() => String, {nullable:false})
     deviceName!: string;
+
+    @Field(() => WorkshopDeviceStatus, {nullable:true,defaultValue:'ACTIVE'})
+    status!: keyof typeof WorkshopDeviceStatus | null;
 
     @Field(() => Date, {nullable:true})
     lastLoginAt!: Date | null;

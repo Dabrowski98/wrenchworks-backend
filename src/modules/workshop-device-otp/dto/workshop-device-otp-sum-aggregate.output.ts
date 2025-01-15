@@ -3,10 +3,10 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 
 @ObjectType()
-export class WorkshopDeviceOTPSumAggregate {
+export class WorkshopDeviceOtpSumAggregate {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    workshopDeviceOTPId?: bigint | number;
+    WorkshopDeviceOtpId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     employeeId?: bigint | number;

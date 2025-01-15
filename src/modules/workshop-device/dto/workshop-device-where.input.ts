@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
+import { EnumWorkshopDeviceStatusNullableFilter } from '../../prisma/dto/enum-workshop-device-status-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -32,6 +33,9 @@ export class WorkshopDeviceWhereInput {
 
     @Field(() => StringFilter, {nullable:true})
     deviceName?: StringFilter;
+
+    @Field(() => EnumWorkshopDeviceStatusNullableFilter, {nullable:true})
+    status?: EnumWorkshopDeviceStatusNullableFilter;
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
     lastLoginAt?: DateTimeNullableFilter;

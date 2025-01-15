@@ -14,7 +14,7 @@ import { WorkshopDetailsUncheckedUpdateOneWithoutWorkshopNestedInput } from '../
 import { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-workshop-nested.input';
 import { JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-unchecked-update-many-without-workshops-nested.input';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-workshop-nested.input';
-import { WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput } from '../../workshop-device-otp/dto/workshop-device-otp-unchecked-update-one-without-workshop-nested.input';
+import { WorkshopDeviceOtpUncheckedUpdateOneWithoutWorkshopNestedInput } from '../../workshop-device-otp/dto/workshop-device-otp-unchecked-update-one-without-workshop-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -119,6 +119,6 @@ export class WorkshopUncheckedUpdateWithoutWorkshopDevicesInput {
     @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestUncheckedUpdateManyWithoutWorkshopNestedInput;
 
-    @Field(() => WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput, {nullable:true})
-    workshopDeviceOTP?: WorkshopDeviceOTPUncheckedUpdateOneWithoutWorkshopNestedInput;
+    @Field(() => WorkshopDeviceOtpUncheckedUpdateOneWithoutWorkshopNestedInput, {nullable:true})
+    WorkshopDeviceOtp?: WorkshopDeviceOtpUncheckedUpdateOneWithoutWorkshopNestedInput;
 }

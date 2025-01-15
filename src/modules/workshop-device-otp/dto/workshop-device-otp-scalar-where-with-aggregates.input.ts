@@ -6,19 +6,19 @@ import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-ag
 import { HideField } from '@nestjs/graphql';
 
 @InputType()
-export class WorkshopDeviceOTPScalarWhereWithAggregatesInput {
+export class WorkshopDeviceOtpScalarWhereWithAggregatesInput {
 
-    @Field(() => [WorkshopDeviceOTPScalarWhereWithAggregatesInput], {nullable:true})
-    AND?: Array<WorkshopDeviceOTPScalarWhereWithAggregatesInput>;
+    @Field(() => [WorkshopDeviceOtpScalarWhereWithAggregatesInput], {nullable:true})
+    AND?: Array<WorkshopDeviceOtpScalarWhereWithAggregatesInput>;
 
-    @Field(() => [WorkshopDeviceOTPScalarWhereWithAggregatesInput], {nullable:true})
-    OR?: Array<WorkshopDeviceOTPScalarWhereWithAggregatesInput>;
+    @Field(() => [WorkshopDeviceOtpScalarWhereWithAggregatesInput], {nullable:true})
+    OR?: Array<WorkshopDeviceOtpScalarWhereWithAggregatesInput>;
 
-    @Field(() => [WorkshopDeviceOTPScalarWhereWithAggregatesInput], {nullable:true})
-    NOT?: Array<WorkshopDeviceOTPScalarWhereWithAggregatesInput>;
+    @Field(() => [WorkshopDeviceOtpScalarWhereWithAggregatesInput], {nullable:true})
+    NOT?: Array<WorkshopDeviceOtpScalarWhereWithAggregatesInput>;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
-    workshopDeviceOTPId?: BigIntWithAggregatesFilter;
+    WorkshopDeviceOtpId?: BigIntWithAggregatesFilter;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     employeeId?: BigIntWithAggregatesFilter;

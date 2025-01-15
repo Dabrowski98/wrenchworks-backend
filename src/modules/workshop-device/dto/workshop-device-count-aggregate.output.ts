@@ -18,6 +18,9 @@ export class WorkshopDeviceCountAggregate {
     deviceName!: number;
 
     @Field(() => Int, {nullable:false})
+    status!: number;
+
+    @Field(() => Int, {nullable:false})
     lastLoginAt!: number;
 
     @Field(() => Int, {nullable:false})

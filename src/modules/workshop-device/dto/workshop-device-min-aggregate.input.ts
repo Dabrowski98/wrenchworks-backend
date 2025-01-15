@@ -18,6 +18,9 @@ export class WorkshopDeviceMinAggregateInput {
     deviceName?: true;
 
     @Field(() => Boolean, {nullable:true})
+    status?: true;
+
+    @Field(() => Boolean, {nullable:true})
     lastLoginAt?: true;
 
     @Field(() => Boolean, {nullable:true})

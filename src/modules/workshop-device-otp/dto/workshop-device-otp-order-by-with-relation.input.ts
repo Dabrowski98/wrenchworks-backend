@@ -7,10 +7,10 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class WorkshopDeviceOTPOrderByWithRelationInput {
+export class WorkshopDeviceOtpOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
-    workshopDeviceOTPId?: keyof typeof SortOrder;
+    WorkshopDeviceOtpId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     employeeId?: keyof typeof SortOrder;

@@ -1,25 +1,25 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { WorkshopDeviceOTPUpdateWithoutWorkshopInput } from './workshop-device-otp-update-without-workshop.input';
+import { WorkshopDeviceOtpUpdateWithoutWorkshopInput } from './workshop-device-otp-update-without-workshop.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopDeviceOTPCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
-import { WorkshopDeviceOTPWhereInput } from './workshop-device-otp-where.input';
+import { WorkshopDeviceOtpCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
+import { WorkshopDeviceOtpWhereInput } from './workshop-device-otp-where.input';
 
 @InputType()
-export class WorkshopDeviceOTPUpsertWithoutWorkshopInput {
+export class WorkshopDeviceOtpUpsertWithoutWorkshopInput {
 
-    @Field(() => WorkshopDeviceOTPUpdateWithoutWorkshopInput, {nullable:false})
-    @Type(() => WorkshopDeviceOTPUpdateWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpUpdateWithoutWorkshopInput, {nullable:false})
+    @Type(() => WorkshopDeviceOtpUpdateWithoutWorkshopInput)
     @ValidateNested()
-    update!: WorkshopDeviceOTPUpdateWithoutWorkshopInput;
+    update!: WorkshopDeviceOtpUpdateWithoutWorkshopInput;
 
-    @Field(() => WorkshopDeviceOTPCreateWithoutWorkshopInput, {nullable:false})
-    @Type(() => WorkshopDeviceOTPCreateWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpCreateWithoutWorkshopInput, {nullable:false})
+    @Type(() => WorkshopDeviceOtpCreateWithoutWorkshopInput)
     @ValidateNested()
-    create!: WorkshopDeviceOTPCreateWithoutWorkshopInput;
+    create!: WorkshopDeviceOtpCreateWithoutWorkshopInput;
 
-    @Field(() => WorkshopDeviceOTPWhereInput, {nullable:true})
-    @Type(() => WorkshopDeviceOTPWhereInput)
-    where?: WorkshopDeviceOTPWhereInput;
+    @Field(() => WorkshopDeviceOtpWhereInput, {nullable:true})
+    @Type(() => WorkshopDeviceOtpWhereInput)
+    where?: WorkshopDeviceOtpWhereInput;
 }

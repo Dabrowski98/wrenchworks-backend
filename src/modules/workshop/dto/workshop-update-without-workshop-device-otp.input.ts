@@ -20,7 +20,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
-export class WorkshopUpdateWithoutWorkshopDeviceOTPInput {
+export class WorkshopUpdateWithoutWorkshopDeviceOtpInput {
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })

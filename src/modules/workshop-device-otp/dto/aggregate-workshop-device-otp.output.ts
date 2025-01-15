@@ -1,26 +1,26 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
-import { WorkshopDeviceOTPCountAggregate } from './workshop-device-otp-count-aggregate.output';
-import { WorkshopDeviceOTPAvgAggregate } from './workshop-device-otp-avg-aggregate.output';
-import { WorkshopDeviceOTPSumAggregate } from './workshop-device-otp-sum-aggregate.output';
-import { WorkshopDeviceOTPMinAggregate } from './workshop-device-otp-min-aggregate.output';
-import { WorkshopDeviceOTPMaxAggregate } from './workshop-device-otp-max-aggregate.output';
+import { WorkshopDeviceOtpCountAggregate } from './workshop-device-otp-count-aggregate.output';
+import { WorkshopDeviceOtpAvgAggregate } from './workshop-device-otp-avg-aggregate.output';
+import { WorkshopDeviceOtpSumAggregate } from './workshop-device-otp-sum-aggregate.output';
+import { WorkshopDeviceOtpMinAggregate } from './workshop-device-otp-min-aggregate.output';
+import { WorkshopDeviceOtpMaxAggregate } from './workshop-device-otp-max-aggregate.output';
 
 @ObjectType()
-export class AggregateWorkshopDeviceOTP {
+export class AggregateWorkshopDeviceOtp {
 
-    @Field(() => WorkshopDeviceOTPCountAggregate, {nullable:true})
-    _count?: WorkshopDeviceOTPCountAggregate;
+    @Field(() => WorkshopDeviceOtpCountAggregate, {nullable:true})
+    _count?: WorkshopDeviceOtpCountAggregate;
 
-    @Field(() => WorkshopDeviceOTPAvgAggregate, {nullable:true})
-    _avg?: WorkshopDeviceOTPAvgAggregate;
+    @Field(() => WorkshopDeviceOtpAvgAggregate, {nullable:true})
+    _avg?: WorkshopDeviceOtpAvgAggregate;
 
-    @Field(() => WorkshopDeviceOTPSumAggregate, {nullable:true})
-    _sum?: WorkshopDeviceOTPSumAggregate;
+    @Field(() => WorkshopDeviceOtpSumAggregate, {nullable:true})
+    _sum?: WorkshopDeviceOtpSumAggregate;
 
-    @Field(() => WorkshopDeviceOTPMinAggregate, {nullable:true})
-    _min?: WorkshopDeviceOTPMinAggregate;
+    @Field(() => WorkshopDeviceOtpMinAggregate, {nullable:true})
+    _min?: WorkshopDeviceOtpMinAggregate;
 
-    @Field(() => WorkshopDeviceOTPMaxAggregate, {nullable:true})
-    _max?: WorkshopDeviceOTPMaxAggregate;
+    @Field(() => WorkshopDeviceOtpMaxAggregate, {nullable:true})
+    _max?: WorkshopDeviceOtpMaxAggregate;
 }

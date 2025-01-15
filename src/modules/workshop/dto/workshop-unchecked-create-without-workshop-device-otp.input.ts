@@ -19,7 +19,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
-export class WorkshopUncheckedCreateWithoutWorkshopDeviceOTPInput {
+export class WorkshopUncheckedCreateWithoutWorkshopDeviceOtpInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId?: bigint | number;

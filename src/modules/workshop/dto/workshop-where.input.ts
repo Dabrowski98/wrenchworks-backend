@@ -20,7 +20,7 @@ import { WorkshopDetailsNullableRelationFilter } from '../../workshop-details/dt
 import { WorkshopJobListRelationFilter } from '../../workshop-job/dto/workshop-job-list-relation-filter.input';
 import { JobCategoryListRelationFilter } from '../../job-category/dto/job-category-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
-import { WorkshopDeviceOTPNullableRelationFilter } from '../../workshop-device-otp/dto/workshop-device-otp-nullable-relation-filter.input';
+import { WorkshopDeviceOtpNullableRelationFilter } from '../../workshop-device-otp/dto/workshop-device-otp-nullable-relation-filter.input';
 import { WorkshopDeviceListRelationFilter } from '../../workshop-device/dto/workshop-device-list-relation-filter.input';
 
 @InputType()
@@ -123,8 +123,8 @@ export class WorkshopWhereInput {
     @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestListRelationFilter;
 
-    @Field(() => WorkshopDeviceOTPNullableRelationFilter, {nullable:true})
-    workshopDeviceOTP?: WorkshopDeviceOTPNullableRelationFilter;
+    @Field(() => WorkshopDeviceOtpNullableRelationFilter, {nullable:true})
+    WorkshopDeviceOtp?: WorkshopDeviceOtpNullableRelationFilter;
 
     @Field(() => WorkshopDeviceListRelationFilter, {nullable:true})
     workshopDevices?: WorkshopDeviceListRelationFilter;

@@ -1,7 +1,7 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-export enum WorkshopDeviceOTPScalarFieldEnum {
-    workshopDeviceOTPId = "workshopDeviceOTPId",
+export enum WorkshopDeviceOtpScalarFieldEnum {
+    WorkshopDeviceOtpId = "WorkshopDeviceOtpId",
     employeeId = "employeeId",
     workshopId = "workshopId",
     code = "code",
@@ -10,4 +10,4 @@ export enum WorkshopDeviceOTPScalarFieldEnum {
 }
 
 
-registerEnumType(WorkshopDeviceOTPScalarFieldEnum, { name: 'WorkshopDeviceOTPScalarFieldEnum', description: undefined })
+registerEnumType(WorkshopDeviceOtpScalarFieldEnum, { name: 'WorkshopDeviceOtpScalarFieldEnum', description: undefined })

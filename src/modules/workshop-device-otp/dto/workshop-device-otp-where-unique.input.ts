@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { WorkshopDeviceOTPWhereInput } from './workshop-device-otp-where.input';
+import { WorkshopDeviceOtpWhereInput } from './workshop-device-otp-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -11,10 +11,10 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class WorkshopDeviceOTPWhereUniqueInput {
+export class WorkshopDeviceOtpWhereUniqueInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    workshopDeviceOTPId?: bigint | number;
+    WorkshopDeviceOtpId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId?: bigint | number;
@@ -26,14 +26,14 @@ export class WorkshopDeviceOTPWhereUniqueInput {
     @Validator.IsNotEmpty()
     code?: string;
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    AND?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    AND?: Array<WorkshopDeviceOtpWhereInput>;
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    OR?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    OR?: Array<WorkshopDeviceOtpWhereInput>;
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    NOT?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    NOT?: Array<WorkshopDeviceOtpWhereInput>;
 
     @Field(() => BigIntFilter, {nullable:true})
     employeeId?: BigIntFilter;

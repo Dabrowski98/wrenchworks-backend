@@ -1,39 +1,39 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { WorkshopCreateWithoutWorkshopDeviceOTPInput } from './workshop-create-without-workshop-device-otp.input';
+import { WorkshopCreateWithoutWorkshopDeviceOtpInput } from './workshop-create-without-workshop-device-otp.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopCreateOrConnectWithoutWorkshopDeviceOTPInput } from './workshop-create-or-connect-without-workshop-device-otp.input';
-import { WorkshopUpsertWithoutWorkshopDeviceOTPInput } from './workshop-upsert-without-workshop-device-otp.input';
+import { WorkshopCreateOrConnectWithoutWorkshopDeviceOtpInput } from './workshop-create-or-connect-without-workshop-device-otp.input';
+import { WorkshopUpsertWithoutWorkshopDeviceOtpInput } from './workshop-upsert-without-workshop-device-otp.input';
 import { Prisma } from '@prisma/client';
 import { WorkshopWhereUniqueInput } from './workshop-where-unique.input';
-import { WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOTPInput } from './workshop-update-to-one-with-where-without-workshop-device-otp.input';
+import { WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOtpInput } from './workshop-update-to-one-with-where-without-workshop-device-otp.input';
 
 @InputType()
-export class WorkshopUpdateOneRequiredWithoutWorkshopDeviceOTPNestedInput {
+export class WorkshopUpdateOneRequiredWithoutWorkshopDeviceOtpNestedInput {
 
-    @Field(() => WorkshopCreateWithoutWorkshopDeviceOTPInput, {nullable:true})
-    @Type(() => WorkshopCreateWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopCreateWithoutWorkshopDeviceOtpInput, {nullable:true})
+    @Type(() => WorkshopCreateWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    create?: WorkshopCreateWithoutWorkshopDeviceOTPInput;
+    create?: WorkshopCreateWithoutWorkshopDeviceOtpInput;
 
-    @Field(() => WorkshopCreateOrConnectWithoutWorkshopDeviceOTPInput, {nullable:true})
-    @Type(() => WorkshopCreateOrConnectWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopCreateOrConnectWithoutWorkshopDeviceOtpInput, {nullable:true})
+    @Type(() => WorkshopCreateOrConnectWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    connectOrCreate?: WorkshopCreateOrConnectWithoutWorkshopDeviceOTPInput;
+    connectOrCreate?: WorkshopCreateOrConnectWithoutWorkshopDeviceOtpInput;
 
-    @Field(() => WorkshopUpsertWithoutWorkshopDeviceOTPInput, {nullable:true})
-    @Type(() => WorkshopUpsertWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopUpsertWithoutWorkshopDeviceOtpInput, {nullable:true})
+    @Type(() => WorkshopUpsertWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    upsert?: WorkshopUpsertWithoutWorkshopDeviceOTPInput;
+    upsert?: WorkshopUpsertWithoutWorkshopDeviceOtpInput;
 
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()
     connect?: Prisma.AtLeast<WorkshopWhereUniqueInput, 'workshopId' | 'addressId' | 'email'>;
 
-    @Field(() => WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOTPInput, {nullable:true})
-    @Type(() => WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOTPInput)
+    @Field(() => WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOtpInput, {nullable:true})
+    @Type(() => WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOtpInput)
     @ValidateNested()
-    update?: WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOTPInput;
+    update?: WorkshopUpdateToOneWithWhereWithoutWorkshopDeviceOtpInput;
 }

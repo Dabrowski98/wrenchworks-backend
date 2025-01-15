@@ -5,10 +5,10 @@ import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 
 @InputType()
-export class WorkshopDeviceOTPUncheckedCreateInput {
+export class WorkshopDeviceOtpUncheckedCreateInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    workshopDeviceOTPId?: bigint | number;
+    WorkshopDeviceOtpId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     employeeId!: bigint | number;

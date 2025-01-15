@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 
 @ObjectType()
 export class WorkshopDeviceMaxAggregate {
@@ -16,6 +17,9 @@ export class WorkshopDeviceMaxAggregate {
 
     @Field(() => String, {nullable:true})
     deviceName?: string;
+
+    @Field(() => WorkshopDeviceStatus, {nullable:true})
+    status?: keyof typeof WorkshopDeviceStatus;
 
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;

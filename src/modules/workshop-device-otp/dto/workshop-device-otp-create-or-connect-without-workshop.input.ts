@@ -1,20 +1,20 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
-import { WorkshopDeviceOTPWhereUniqueInput } from './workshop-device-otp-where-unique.input';
+import { WorkshopDeviceOtpWhereUniqueInput } from './workshop-device-otp-where-unique.input';
 import { Type } from 'class-transformer';
-import { WorkshopDeviceOTPCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
+import { WorkshopDeviceOtpCreateWithoutWorkshopInput } from './workshop-device-otp-create-without-workshop.input';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class WorkshopDeviceOTPCreateOrConnectWithoutWorkshopInput {
+export class WorkshopDeviceOtpCreateOrConnectWithoutWorkshopInput {
 
-    @Field(() => WorkshopDeviceOTPWhereUniqueInput, {nullable:false})
-    @Type(() => WorkshopDeviceOTPWhereUniqueInput)
-    where!: Prisma.AtLeast<WorkshopDeviceOTPWhereUniqueInput, 'workshopDeviceOTPId' | 'workshopId' | 'code'>;
+    @Field(() => WorkshopDeviceOtpWhereUniqueInput, {nullable:false})
+    @Type(() => WorkshopDeviceOtpWhereUniqueInput)
+    where!: Prisma.AtLeast<WorkshopDeviceOtpWhereUniqueInput, 'WorkshopDeviceOtpId' | 'workshopId' | 'code'>;
 
-    @Field(() => WorkshopDeviceOTPCreateWithoutWorkshopInput, {nullable:false})
-    @Type(() => WorkshopDeviceOTPCreateWithoutWorkshopInput)
+    @Field(() => WorkshopDeviceOtpCreateWithoutWorkshopInput, {nullable:false})
+    @Type(() => WorkshopDeviceOtpCreateWithoutWorkshopInput)
     @ValidateNested()
-    create!: WorkshopDeviceOTPCreateWithoutWorkshopInput;
+    create!: WorkshopDeviceOtpCreateWithoutWorkshopInput;
 }

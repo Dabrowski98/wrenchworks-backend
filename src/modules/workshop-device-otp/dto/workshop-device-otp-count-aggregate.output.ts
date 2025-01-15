@@ -3,10 +3,10 @@ import { ObjectType } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
 
 @ObjectType()
-export class WorkshopDeviceOTPCountAggregate {
+export class WorkshopDeviceOtpCountAggregate {
 
     @Field(() => Int, {nullable:false})
-    workshopDeviceOTPId!: number;
+    WorkshopDeviceOtpId!: number;
 
     @Field(() => Int, {nullable:false})
     employeeId!: number;

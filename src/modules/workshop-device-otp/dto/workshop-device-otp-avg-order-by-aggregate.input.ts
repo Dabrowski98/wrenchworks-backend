@@ -3,10 +3,10 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 
 @InputType()
-export class WorkshopDeviceOTPAvgOrderByAggregateInput {
+export class WorkshopDeviceOtpAvgOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
-    workshopDeviceOTPId?: keyof typeof SortOrder;
+    WorkshopDeviceOtpId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     employeeId?: keyof typeof SortOrder;

@@ -9,19 +9,19 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class WorkshopDeviceOTPWhereInput {
+export class WorkshopDeviceOtpWhereInput {
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    AND?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    AND?: Array<WorkshopDeviceOtpWhereInput>;
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    OR?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    OR?: Array<WorkshopDeviceOtpWhereInput>;
 
-    @Field(() => [WorkshopDeviceOTPWhereInput], {nullable:true})
-    NOT?: Array<WorkshopDeviceOTPWhereInput>;
+    @Field(() => [WorkshopDeviceOtpWhereInput], {nullable:true})
+    NOT?: Array<WorkshopDeviceOtpWhereInput>;
 
     @Field(() => BigIntFilter, {nullable:true})
-    workshopDeviceOTPId?: BigIntFilter;
+    WorkshopDeviceOtpId?: BigIntFilter;
 
     @Field(() => BigIntFilter, {nullable:true})
     employeeId?: BigIntFilter;

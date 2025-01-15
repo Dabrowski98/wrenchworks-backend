@@ -3,7 +3,7 @@ import { registerEnumType } from '@nestjs/graphql';
 export enum ReviewsResponsesStatus {
     PENDING = "PENDING",
     ACCEPTED = "ACCEPTED",
-    DENIED = "DENIED"
+    REJECTED = "REJECTED"
 }
 
 

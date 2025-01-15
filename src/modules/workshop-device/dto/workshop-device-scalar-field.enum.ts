@@ -5,6 +5,7 @@ export enum WorkshopDeviceScalarFieldEnum {
     workshopId = "workshopId",
     serialNumber = "serialNumber",
     deviceName = "deviceName",
+    status = "status",
     lastLoginAt = "lastLoginAt",
     lastLoginBy = "lastLoginBy",
     updatedAt = "updatedAt",

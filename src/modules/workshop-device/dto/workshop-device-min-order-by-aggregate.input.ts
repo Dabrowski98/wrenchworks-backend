@@ -19,6 +19,9 @@ export class WorkshopDeviceMinOrderByAggregateInput {
     deviceName?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    status?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     lastLoginAt?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
