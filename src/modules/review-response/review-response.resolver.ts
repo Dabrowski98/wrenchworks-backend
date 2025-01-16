@@ -81,7 +81,7 @@ export class ReviewResponseResolver {
     @Args() args: DeleteOneReviewResponseArgs,
   ): Promise<boolean> {
     return this.reviewResponseService.accept(args);
-  } 
+  }
 
   @Mutation(() => Boolean)
   rejectReviewResponse(
