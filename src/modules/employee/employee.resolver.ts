@@ -30,49 +30,44 @@ import { Service } from '../service/dto/service.model';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
 import * as Scalars from 'graphql-scalars';
-import { JoinWorkshopRequest } from '../join-workshop-request';
 import { Task } from '../task';
+import { JoinWorkshopRequest } from '../join-workshop-request/dto';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  // @Mutation(() => Employee)
-  // async createEmployee(@Args() args: CreateOneEmployeeArgs): Promise<Employee> {
-  //   return this.employeeService.create(args);
-  // }
-
   @Query(() => Employee)
-  async employee(
-    @Args('employeeId', { type: () => GraphQLBigInt }) employeeId: bigint,
-  ): Promise<Employee> {
-    return this.employeeService.findOne({ where: { employeeId } });
+  employee(@Args() args: FindUniqueEmployeeArgs): Promise<Employee> {
+    return this.employeeService.findOne(args);
   }
 
   @Query(() => [Employee])
-  async employees(@Args() args: FindManyEmployeeArgs): Promise<Employee[]> {
+  employees(@Args() args: FindManyEmployeeArgs): Promise<Employee[]> {
     return this.employeeService.findMany(args);
   }
 
   @Mutation(() => Employee)
-  async updateEmployee(@Args() args: UpdateOneEmployeeArgs): Promise<Employee> {
+  updateEmployee(@Args() args: UpdateOneEmployeeArgs): Promise<Employee> {
     return this.employeeService.update(args);
   }
 
   //@UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async disableEmployee(
+  disableEmployee(
     @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => GraphQLBigInt }) employeeToDisableId: bigint,
+    @Args('employeeId', { type: () => GraphQLBigInt })
+    employeeToDisableId: bigint,
   ): Promise<boolean> {
     return this.employeeService.disable(employeeId, employeeToDisableId);
   }
-  
+
   //@UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async enableEmployee(
+  enableEmployee(
     @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => GraphQLBigInt }) employeeToEnableId: bigint,
+    @Args('employeeId', { type: () => GraphQLBigInt })
+    employeeToEnableId: bigint,
   ): Promise<boolean> {
     return this.employeeService.enable(employeeId, employeeToEnableId);
   }
@@ -80,14 +75,11 @@ export class EmployeeResolver {
   //TODO: refactor,
   // @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async deleteEmployee(
+  deleteEmployee(
     @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => Scalars.GraphQLBigInt })
-    employeeToDeleteId: bigint,
+    @Args() args: DeleteOneEmployeeArgs,
   ): Promise<boolean> {
-    return this.employeeService.delete(employeeId, {
-      where: { employeeId: employeeToDeleteId },
-    });
+    return this.employeeService.delete(employeeId, args);
   }
 
   // RESOLVER METHODS
@@ -120,7 +112,7 @@ export class EmployeeResolver {
   }
 
   @ResolveField(() => EmployeeCount)
-  async _count(@Parent() employee: Employee): Promise<EmployeeCount> {
+  _count(@Parent() employee: Employee): Promise<EmployeeCount> {
     return this.employeeService.resolveCount(employee.employeeId);
   }
 }

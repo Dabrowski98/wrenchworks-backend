@@ -33,33 +33,31 @@ export class CustomerResolver {
   constructor(private readonly customerService: CustomerService) {}
 
   @Mutation(() => Customer)
-  async createCustomer(
+  createCustomer(
     @Args() args: CreateOneCustomerArgs,
   ): Promise<Customer> {
     return this.customerService.create(args);
   }
 
   @Query(() => Customer)
-  async customer(
-    @Args('customerId', { type: () => GraphQLBigInt }) customerId: bigint,
-  ): Promise<Customer> {
-    return this.customerService.findOne({ where: { customerId } });
+  customer(@Args() args: FindUniqueCustomerArgs): Promise<Customer> {
+    return this.customerService.findOne(args);
   }
 
   @Query(() => [Customer])
-  async customers(@Args() args: FindManyCustomerArgs): Promise<Customer[]> {
+  customers(@Args() args: FindManyCustomerArgs): Promise<Customer[]> {
     return this.customerService.findMany(args);
   }
 
   @Mutation(() => Customer)
-  async updateCustomer(
+  updateCustomer(
     @Args() args: UpdateOneCustomerArgs,
   ): Promise<Customer> {
     return this.customerService.update(args);
   }
 
   @Mutation(() => Boolean)
-  async deleteCustomer(
+  deleteCustomer(
     @Args() args: DeleteOneCustomerArgs,
   ): Promise<boolean> {
     return this.customerService.delete(args);
@@ -93,7 +91,7 @@ export class CustomerResolver {
   }
 
   @ResolveField(() => CustomerCount)
-  async _count(@Parent() customer: Customer): Promise<CustomerCount> {
+  _count(@Parent() customer: Customer): Promise<CustomerCount> {
     return this.customerService.resolveCount(customer.customerId);
   }
 }

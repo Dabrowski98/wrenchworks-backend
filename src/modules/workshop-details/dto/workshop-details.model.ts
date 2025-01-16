@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
-import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
+import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
 
@@ -28,8 +28,8 @@ export class WorkshopDetails {
     @Field(() => String, {nullable:true})
     logoURL!: string | null;
 
-    @Field(() => WorkshopsDetailsStatus, {nullable:true,defaultValue:'ACTIVE'})
-    status!: keyof typeof WorkshopsDetailsStatus | null;
+    @Field(() => WorkshopDetailsStatus, {nullable:true,defaultValue:'ACTIVE'})
+    status!: keyof typeof WorkshopDetailsStatus | null;
 
     @Field(() => String, {nullable:true})
     NIP!: string | null;

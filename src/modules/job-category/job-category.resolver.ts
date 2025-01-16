@@ -28,29 +28,37 @@ export class JobCategoryResolver {
   constructor(private readonly jobCategoryService: JobCategoryService) {}
 
   @Mutation(() => JobCategory)
-  async createJobCategory(@Args() args: CreateOneJobCategoryArgs): Promise<JobCategory> {
+  createJobCategory(
+    @Args() args: CreateOneJobCategoryArgs,
+  ): Promise<JobCategory> {
     return this.jobCategoryService.create(args);
   }
 
   @Query(() => JobCategory)
-  async jobCategory(
-    @Args('categoryId', { type: () => GraphQLBigInt }) categoryId: bigint,
+  jobCategory(
+    @Args() args: FindUniqueJobCategoryArgs,
   ): Promise<JobCategory> {
-    return this.jobCategoryService.findOne({ where: { categoryId } });
+    return this.jobCategoryService.findOne(args);
   }
 
   @Query(() => [JobCategory])
-  async jobCategories(@Args() args: FindManyJobCategoryArgs): Promise<JobCategory[]> {
+  jobCategories(
+    @Args() args: FindManyJobCategoryArgs,
+  ): Promise<JobCategory[]> {
     return this.jobCategoryService.findMany(args);
   }
 
   @Mutation(() => JobCategory)
-  async updateJobCategory(@Args() args: UpdateOneJobCategoryArgs): Promise<JobCategory> {
+  updateJobCategory(
+    @Args() args: UpdateOneJobCategoryArgs,
+  ): Promise<JobCategory> {
     return this.jobCategoryService.update(args);
   }
 
   @Mutation(() => Boolean)
-  async deleteJobCategory(@Args() args: DeleteOneJobCategoryArgs): Promise<boolean> {
+  deleteJobCategory(
+    @Args() args: DeleteOneJobCategoryArgs,
+  ): Promise<boolean> {
     return this.jobCategoryService.delete(args);
   }
 
@@ -77,7 +85,7 @@ export class JobCategoryResolver {
   }
 
   @ResolveField(() => JobCategoryCount)
-  async _count(@Parent() jobCategory: JobCategory): Promise<JobCategoryCount> {
+  _count(@Parent() jobCategory: JobCategory): Promise<JobCategoryCount> {
     return this.jobCategoryService.resolveCount(jobCategory.categoryId);
   }
-} 
+}

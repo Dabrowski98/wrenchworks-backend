@@ -39,8 +39,12 @@ export class CustomerService {
   }
 
   async delete(args: DeleteOneCustomerArgs): Promise<boolean> {
-    await this.prisma.customer.delete(args);
-    return true;
+    return this.prisma.customer
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVER METHODS
@@ -92,8 +96,10 @@ export class CustomerService {
 
   async resolveCount(customerId: bigint): Promise<CustomerCount> {
     return {
-      services: (await this.services(customerId)).length,
-      vehicles: (await this.vehicles(customerId)).length,
+      services: await this.prisma.service.count({ where: { customerId } }),
+      vehicles: await this.prisma.vehicle.count({
+        where: { customers: { some: { customerId } } },
+      }),
     };
   }
 }

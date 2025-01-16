@@ -9,11 +9,10 @@ import {
 import { AddressService } from './address.service';
 import {
   Address,
-  AddressCreateInput,
-  AddressUpdateInput,
-  AddressWhereUniqueInput,
   CreateOneAddressArgs,
+  DeleteOneAddressArgs,
   FindManyAddressArgs,
+  FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
@@ -36,10 +35,8 @@ export class AddressResolver {
   }
 
   @Query(() => Address)
-  address(
-    @Args('addressId', { type: () => GraphQLBigInt }) addressId,
-  ): Promise<Address> {
-    return this.addressService.findById(addressId);
+  address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
+    return this.addressService.findOne(args);
   }
 
   @Query(() => [Address])
@@ -47,11 +44,9 @@ export class AddressResolver {
     return this.addressService.findMany(args);
   }
 
-  @Mutation(() => DeletePayload)
-  deleteAddress(
-    @Args('addressId', { type: () => GraphQLBigInt }) addressId,
-  ): Promise<DeletePayload> {
-    return this.addressService.delete(addressId);
+  @Mutation(() => Boolean)
+  deleteAddress(@Args() args: DeleteOneAddressArgs): Promise<Boolean> {
+    return this.addressService.delete(args);
   }
 
   //RESOLVE FIELDS

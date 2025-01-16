@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { WorkshopDeviceCreateInput } from './dto/workshop-device-create.input';
-import { WorkshopDevice } from './dto/workshop-device.model'; 
+import { WorkshopDevice } from './dto/workshop-device.model';
 import { FindUniqueWorkshopDeviceArgs } from './dto/find-unique-workshop-device.args';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import {
@@ -48,7 +48,12 @@ export class WorkshopDeviceService {
   }
 
   async delete(args: DeleteOneWorkshopDeviceArgs): Promise<Boolean> {
-    return !!this.prisma.workshopDevice.delete(args);
+    return this.prisma.workshopDevice
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   async disable(deviceId: bigint): Promise<Boolean> {

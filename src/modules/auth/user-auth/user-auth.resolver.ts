@@ -31,7 +31,7 @@ export class UserAuthResolver {
 
   @Public()
   @Mutation(() => User)
-  async registerUser(
+  registerUser(
     @Args('registerUserInput') registerUserInput: RegisterUserInput,
   ): Promise<User> {
     return this.userAuthService.registerUser(registerUserInput);
@@ -40,7 +40,7 @@ export class UserAuthResolver {
   @Public()
   @UseGuards(LoginAuthGuard)
   @Mutation(() => LoginUserResponse)
-  async loginUser(
+  loginUser(
     @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context: any,
     @DeviceData() deviceData: DeviceData,
@@ -50,7 +50,7 @@ export class UserAuthResolver {
 
   @Public()
   @Mutation(() => LoginUserResponse)
-  async refreshTokens(
+  refreshTokens(
     @Args('refreshToken') refreshToken: string,
     @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
@@ -59,34 +59,30 @@ export class UserAuthResolver {
 
   @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
-  async logoutUser(
+  logoutUser(
     @Args('refreshToken') refreshToken: string,
   ): Promise<boolean> {
-    try {
-      await this.userAuthService.revokeRefreshToken(refreshToken);
-    } catch {
-      return false;
-    }
-    return true;
+
+    return this.userAuthService.revokeRefreshToken(refreshToken)
+    .then(() => true)
+    .catch(() => false);
   }
 
   @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
-  async logoutAllUserSessions(
+  logoutAllUserSessions(
     @Args('userId', { type: () => GraphQLBigInt, nullable: true })
     userId: bigint,
     @CurrentUser() currentUser: JwtUserPayload,
   ): Promise<boolean> {
-    try {
-      return await this.userAuthService.revokeAllRefreshTokens(userId);
-    } catch {
-      return false;
-    }
+    return this.userAuthService.revokeAllRefreshTokens(userId)
+    .then(() => true)
+    .catch(() => false);
   }
 
   @CheckAbilities({ action: Action.Create, subject: User })
   @Mutation(() => User)
-  async createAdmin(
+  createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
   ): Promise<User> {
     return this.userAuthService.createAdmin(createAdminInput);
@@ -94,36 +90,27 @@ export class UserAuthResolver {
 
   @CheckAbilities({ action: Action.Update, subject: User })
   @Mutation(() => Boolean)
-  async changeUserPassword(
+  changeUserPassword(
     @CurrentUserID() userId: bigint,
     @Args('changeUserPasswordInput') changePasswordInput: ChangePasswordInput,
   ): Promise<boolean> {
-    try {
-      return this.userAuthService.changeUserPassword(
-        userId,
-        changePasswordInput,
-      );
-    } catch {
-      return false;
-    }
+    return this.userAuthService.changeUserPassword(
+      userId,
+      changePasswordInput,
+    )
+    .then(() => true)
+    .catch(() => false);
   }
 
   @CheckAbilities({ action: Action.Delete, subject: User })
   @Query(() => String)
-  async UserTest(@CurrentUserID() currentUserId: bigint) {
+  UserTest(@CurrentUserID() currentUserId: bigint) {
     return 'Hello World from user';
   }
 
   @CheckAbilities({ action: Action.Read, subject: User})
   @Query(() => String)
-  async AdminTest() {
+  AdminTest() {
     return 'Hello World from admin';
   }
 }
-
-
-//       case UserRole.ADMIN: //can manage all apart from his own services etc.
-//         can(Action.Manage, 'all');
-//         cannot(Action.Manage, User, { role: UserRole.SUPERADMIN });
-//         cannot(Action.Manage, User, { role: UserRole.ADMIN });
-//         can(Action.Read, User);

@@ -30,29 +30,27 @@ export class JobResolver {
   constructor(private readonly jobService: JobService) {}
 
   @Mutation(() => Job)
-  async createJob(@Args() args: CreateOneJobArgs): Promise<Job> {
+  createJob(@Args() args: CreateOneJobArgs): Promise<Job> {
     return this.jobService.create(args);
   }
 
   @Query(() => Job)
-  async job(
-    @Args('jobId', { type: () => GraphQLBigInt }) jobId: bigint,
-  ): Promise<Job> {
-    return this.jobService.findOne({ where: { jobId } });
+  job(@Args() args: FindUniqueJobArgs): Promise<Job> {
+    return this.jobService.findOne(args);
   }
 
   @Query(() => [Job])
-  async jobs(@Args() args: FindManyJobArgs): Promise<Job[]> {
+  jobs(@Args() args: FindManyJobArgs): Promise<Job[]> {
     return this.jobService.findMany(args);
   }
 
   @Mutation(() => Job)
-  async updateJob(@Args() args: UpdateOneJobArgs): Promise<Job> {
+  updateJob(@Args() args: UpdateOneJobArgs): Promise<Job> {
     return this.jobService.update(args);
   }
 
   @Mutation(() => Boolean)
-  async deleteJob(@Args() args: DeleteOneJobArgs): Promise<boolean> {
+  deleteJob(@Args() args: DeleteOneJobArgs): Promise<boolean> {
     return this.jobService.delete(args);
   }
 
@@ -74,7 +72,7 @@ export class JobResolver {
   }
 
   @ResolveField(() => JobCount)
-  async _count(@Parent() job: Job): Promise<JobCount> {
+  _count(@Parent() job: Job): Promise<JobCount> {
     return this.jobService.resolveCount(job.jobId);
   }
 } 

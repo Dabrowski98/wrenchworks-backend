@@ -18,13 +18,13 @@ import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
 import { Vehicle } from '../vehicle';
 import { ServiceRequest } from '../service-request';
-import { Customer } from '../customer';
-import { Employee } from '../employee/dto';
-import { JoinWorkshopRequest } from '../join-workshop-request';
-import { UserReport } from '../user-report';
-import { ReviewResponse } from '../review-response';
-import { Review } from '../review';
 import { DeletePayload } from 'src/common/payloads/delete.payload';
+import { Customer } from '../customer/dto';
+import { Employee } from '../employee/dto';
+import { JoinWorkshopRequest } from '../join-workshop-request/dto';
+import { UserReport } from '../user-report';
+import { Review } from '../review/dto';
+import { ReviewResponse } from '../review-response/dto';
 
 @Injectable()
 export class UserService {
@@ -36,9 +36,7 @@ export class UserService {
 
   async findOne(args: FindUniqueUserArgs): Promise<User> {
     const user = await this.prisma.user.findUnique(args);
-
     if (!user) throw new RecordNotFoundError(User);
-
     return user;
   }
 
@@ -46,9 +44,7 @@ export class UserService {
     args: FindUniqueUserArgs,
   ): Promise<User & { password: string }> {
     const user = await this.prisma.user.findUnique(args);
-
     if (!user) throw new RecordNotFoundError(User);
-
     return user;
   }
 
@@ -65,7 +61,12 @@ export class UserService {
   }
 
   async delete(args: DeleteOneUserArgs): Promise<Boolean> {
-    return !!this.prisma.user.delete(args);
+    return this.prisma.user
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS
@@ -171,16 +172,16 @@ export class UserService {
 
   async resolveCount(userId: bigint): Promise<UserCount> {
     return {
-      vehicles: (await this.vehicles(userId)).length,
-      serviceRequests: (await this.serviceRequests(userId)).length,
-      customers: (await this.customers(userId)).length,
-      employees: (await this.employees(userId)).length,
-      joinWorkshopRequests: (await this.joinWorkshopRequests(userId)).length,
-      userReports: (await this.userReports(userId)).length,
-      workshops: (await this.workshops(userId)).length,
-      reviews: (await this.reviews(userId)).length,
-      reviewResponses: (await this.reviewResponses(userId)).length,
-      sessionData: (await this.sessionData(userId)).length,
+      vehicles: await this.prisma.vehicle.count({where: {userId}}),
+      serviceRequests: await this.prisma.serviceRequest.count({where: {userId}}),
+      customers: await this.prisma.customer.count({where: {userId}}),
+      employees: await this.prisma.employee.count({where: {userId}}),
+      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({where: {user: {userId}}}),
+      userReports: await this.prisma.userReport.count({where: {userId}}),
+      workshops: await this.prisma.workshop.count({where: {user: {userId}}}),
+      reviews: await this.prisma.review.count({where: {user: {userId}}}),
+      reviewResponses: await this.prisma.reviewResponse.count({where: {user: {userId}}}),
+      sessionData: await this.prisma.sessionData.count({where: {user: {userId}}}),
     };
   }
 }

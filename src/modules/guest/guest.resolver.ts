@@ -24,38 +24,31 @@ import { GraphQLBigInt } from 'graphql-scalars';
 export class GuestResolver {
   constructor(private readonly guestService: GuestService) {}
 
-  // @Mutation(() => Guest)
-  // async createGuest(@Args() args: CreateOneGuestArgs): Promise<Guest> {
-  //   return this.guestService.createGuest(args);
-  // }
-
   @Query(() => Guest)
-  async guest(
-    @Args('guestId', { type: () => GraphQLBigInt }) guestId: bigint,
-  ): Promise<Guest> {
-    return this.guestService.findOne({ where: { guestId } });
+  guest(@Args() args: FindUniqueGuestArgs): Promise<Guest> {
+    return this.guestService.findOne(args);
   }
 
   @Query(() => [Guest])
-  async guests(@Args() args?: FindManyGuestArgs): Promise<Guest[]> {
+  guests(@Args() args?: FindManyGuestArgs): Promise<Guest[]> {
     return this.guestService.findMany(args);
   }
 
   //admin only
   @Mutation(() => Guest)
-  async updateGuest(@Args() args: UpdateOneGuestArgs): Promise<Guest> {
+  updateGuest(@Args() args: UpdateOneGuestArgs): Promise<Guest> {
     return this.guestService.updateGuest(args);
   }
 
-  @Mutation(() => Guest)
-  async deleteGuest(@Args() args: DeleteOneGuestArgs): Promise<Guest> {
+  @Mutation(() => Boolean)
+  deleteGuest(@Args() args: DeleteOneGuestArgs): Promise<Boolean> {
     return this.guestService.delete(args);
   }
 
   // RESOLVE FIELDS
 
   @ResolveField(() => Vehicle, { nullable: true })
-  async vehicle(@Parent() guest: Guest): Promise<Vehicle | null> {
+  vehicle(@Parent() guest: Guest): Promise<Vehicle | null> {
     return this.guestService.vehicle(guest.guestId);
   }
 

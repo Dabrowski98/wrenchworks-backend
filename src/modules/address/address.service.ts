@@ -45,14 +45,13 @@ export class AddressService {
     return record;
   }
 
-  async delete(args: DeleteOneAddressArgs): Promise<DeletePayload> {
-    const { where } = args;
-
-    await this.prisma.address.delete({
-      where: { addressId: where.addressId },
-    });
-
-    return { success: true };
+  async delete(args: DeleteOneAddressArgs): Promise<Boolean> {
+    return this.prisma.address
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   //RESOLVE METHODS

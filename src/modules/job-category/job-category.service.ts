@@ -36,8 +36,12 @@ export class JobCategoryService {
   }
 
   async delete(args: DeleteOneJobCategoryArgs): Promise<boolean> {
-    await this.prisma.jobCategory.delete(args);
-    return true;
+    return this.prisma.jobCategory
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS
@@ -80,9 +84,13 @@ export class JobCategoryService {
 
   async resolveCount(categoryId: bigint): Promise<JobCategoryCount> {
     return {
-      children: (await this.children(categoryId)).length,
-      jobs: (await this.jobs(categoryId)).length,
-      workshops: (await this.workshops(categoryId)).length,
+      children: await this.prisma.jobCategory.count({ where: { categoryId } }),
+      jobs: await this.prisma.job.count({
+        where: { jobCategory: { categoryId } },
+      }),
+      workshops: await this.prisma.workshop.count({
+        where: { jobCategories: { some: { categoryId } } },
+      }),
     };
   }
 }

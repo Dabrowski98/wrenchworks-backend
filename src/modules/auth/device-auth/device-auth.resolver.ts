@@ -16,7 +16,7 @@ export class DeviceAuthResolver {
 
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => String)
-  async generateDeviceOTP(
+  generateDeviceOTP(
     @CurrentEmployeeID() employeeId: bigint,
   ): Promise<string> {
     return this.deviceAuthService.generateDeviceOTP(employeeId);
@@ -36,7 +36,7 @@ export class DeviceAuthResolver {
 
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => WorkshopDevice)
-  async acceptDeviceRegistration(
+  acceptDeviceRegistration(
     @Args('acceptWorkshopDeviceInput')
     acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput,
     @CurrentEmployeeID() employeeId: bigint,
@@ -50,7 +50,7 @@ export class DeviceAuthResolver {
   //TODO: refactor
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async removeDevice(
+  removeDevice(
     @Args('deviceId', { type: () => Scalars.GraphQLBigInt }) deviceId: bigint,
   ): Promise<WorkshopDevice> {
     return this.deviceAuthService.removeDevice(deviceId);

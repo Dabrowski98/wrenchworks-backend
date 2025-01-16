@@ -103,9 +103,12 @@ export class EmployeeService {
     if (employeeId === employeeToDelete.employeeId)
       throw new ForbiddenException('You are not allowed to delete yourself');
 
-    return !!(await this.prisma.employee.delete({
-      where: { employeeId: employeeToDelete.employeeId },
-    }));
+    return this.prisma.employee
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVER METHODS
@@ -157,10 +160,13 @@ export class EmployeeService {
 
   async resolveCount(employeeId: bigint): Promise<EmployeeCount> {
     return {
-      services: (await this.services(employeeId)).length,
-      joinWorkshopRequests: (await this.joinWorkshopRequests(employeeId))
-        .length,
-      tasks: (await this.tasks(employeeId)).length,
+      services: await this.prisma.service.count({ where: { employeeId } }),
+      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({
+        where: { employee: { employeeId } },
+      }),
+      tasks: await this.prisma.task.count({
+        where: { employees: { some: { employeeId } } },
+      }),
     };
   }
 }

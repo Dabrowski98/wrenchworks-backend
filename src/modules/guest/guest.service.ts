@@ -43,10 +43,13 @@ export class GuestService {
     });
   }
 
-  async delete(args: DeleteOneGuestArgs): Promise<Guest> {
-    return this.prisma.guest.delete({
-      where: args.where,
-    });
+  async delete(args: DeleteOneGuestArgs): Promise<Boolean> {
+    return this.prisma.guest
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   //RESOLVE METHODS

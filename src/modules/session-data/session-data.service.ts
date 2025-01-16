@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { SessionData } from './dto/session-data.model';
-import { DeleteManySessionDataArgs, SessionDataCreateInput, SessionDataUpdateInput } from './dto';
+import {
+  DeleteManySessionDataArgs,
+  SessionDataCreateInput,
+  SessionDataUpdateInput,
+} from './dto';
 
 @Injectable()
 export class SessionDataService {
@@ -48,10 +52,12 @@ export class SessionDataService {
   }
 
   async delete(id: string): Promise<boolean> {
-    const result = await this.prisma.sessionData.delete({
-      where: { sessionDataId: id },
-    });
-    return !!result;
+    return this.prisma.sessionData
+      .delete({
+        where: { sessionDataId: id },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   async deleteMany(where: DeleteManySessionDataArgs): Promise<boolean> {

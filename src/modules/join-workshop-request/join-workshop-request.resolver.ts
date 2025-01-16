@@ -29,7 +29,7 @@ export class JoinWorkshopRequestResolver {
   ) {}
 
   @Mutation(() => JoinWorkshopRequest)
-  async sendJoinWorkshopRequest(
+  sendJoinWorkshopRequest(
     @Args() args: CreateOneJoinWorkshopRequestArgs,
   ): Promise<JoinWorkshopRequest> {
     return this.joinWorkshopRequestService.create(args);
@@ -37,7 +37,7 @@ export class JoinWorkshopRequestResolver {
 
   //@UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
-  async acceptJoinWorkshopRequest(
+  acceptJoinWorkshopRequest(
     @CurrentUserID() userId: bigint,
     @Args('joinWorkshopRequestId', { type: () => GraphQLBigInt })
     joinWorkshopRequestId: bigint,
@@ -50,7 +50,7 @@ export class JoinWorkshopRequestResolver {
 
   //@UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
-  async rejectJoinWorkshopRequest(
+  rejectJoinWorkshopRequest(
     @CurrentUserID() userId: bigint,
     @Args('joinWorkshopRequestId', { type: () => GraphQLBigInt })
     joinWorkshopRequestId: bigint,
@@ -62,7 +62,7 @@ export class JoinWorkshopRequestResolver {
   }
 
   @Query(() => JoinWorkshopRequest)
-  async joinWorkshopRequest(
+  joinWorkshopRequest(
     @Args('joinWorkshopRequestId', { type: () => GraphQLBigInt })
     joinWorkshopRequestId: bigint,
   ): Promise<JoinWorkshopRequest> {
@@ -72,21 +72,21 @@ export class JoinWorkshopRequestResolver {
   }
 
   @Query(() => [JoinWorkshopRequest])
-  async joinWorkshopRequests(
+  joinWorkshopRequests(
     @Args() args: FindManyJoinWorkshopRequestArgs,
   ): Promise<JoinWorkshopRequest[]> {
     return this.joinWorkshopRequestService.findMany(args);
   }
 
   @Mutation(() => JoinWorkshopRequest)
-  async updateJoinWorkshopRequest(
+  updateJoinWorkshopRequest(
     @Args() args: UpdateOneJoinWorkshopRequestArgs,
   ): Promise<JoinWorkshopRequest> {
     return this.joinWorkshopRequestService.update(args);
   }
 
   @Mutation(() => Boolean)
-  async deleteJoinWorkshopRequest(
+  deleteJoinWorkshopRequest(
     @Args() args: DeleteOneJoinWorkshopRequestArgs,
   ): Promise<boolean> {
     return this.joinWorkshopRequestService.delete(args);

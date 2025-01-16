@@ -31,12 +31,19 @@ export class WorkshopDeviceOTPService {
     return otp;
   }
 
-  async update(args: UpdateOneWorkshopDeviceOtpArgs): Promise<WorkshopDeviceOtp> {
+  async update(
+    args: UpdateOneWorkshopDeviceOtpArgs,
+  ): Promise<WorkshopDeviceOtp> {
     return this.prisma.workshopDeviceOtp.update(args);
   }
 
   async delete(args: DeleteOneWorkshopDeviceOtpArgs): Promise<Boolean> {
-    return !!this.prisma.workshopDeviceOtp.delete(args);
+    return this.prisma.workshopDeviceOtp
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVER METHODS

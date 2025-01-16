@@ -84,8 +84,12 @@ export class JoinWorkshopRequestService {
   }
 
   async delete(args: DeleteOneJoinWorkshopRequestArgs): Promise<boolean> {
-    await this.prisma.joinWorkshopRequest.delete(args);
-    return true;
+    return this.prisma.joinWorkshopRequest
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS

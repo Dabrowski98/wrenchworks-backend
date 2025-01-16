@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ServicesStatus } from '../../prisma/dto/services-status.enum';
+import { ServiceStatus } from '../../prisma/dto/service-status.enum';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
 import { ServiceRequest } from '../../service-request/dto/service-request.model';
@@ -37,8 +37,8 @@ export class Service {
     @Field(() => String, {nullable:true})
     description!: string | null;
 
-    @Field(() => ServicesStatus, {nullable:true,defaultValue:'PENDING'})
-    status!: keyof typeof ServicesStatus | null;
+    @Field(() => ServiceStatus, {nullable:true,defaultValue:'PENDING'})
+    status!: keyof typeof ServiceStatus | null;
 
     /**
      * Note: Optional because field defaults to false

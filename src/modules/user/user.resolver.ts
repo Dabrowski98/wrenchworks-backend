@@ -19,10 +19,10 @@ import { ServiceRequest } from '../service-request';
 import { Employee } from '../employee/dto';
 import { Review } from '../review';
 import { ReviewResponse } from '../review-response';
-import { JoinWorkshopRequest } from '../join-workshop-request';
 import { UserReport } from '../user-report';
 import { UserService } from './user.service';
 import { Customer } from '../customer/dto';
+import { JoinWorkshopRequest } from '../join-workshop-request/dto';
 
 @Resolver(() => User)
 export class UserResolver {

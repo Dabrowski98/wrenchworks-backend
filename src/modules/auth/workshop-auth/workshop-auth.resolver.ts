@@ -13,7 +13,7 @@ export class WorkshopAuthResolver {
 
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => RegisterWorkshopResponse)
-  async registerWorkshop(
+  registerWorkshop(
     @Args('registerWorkshopInput') registerWorkshopInput: RegisterWorkshopInput,
     @CurrentUserID() userId: bigint,
   ) {

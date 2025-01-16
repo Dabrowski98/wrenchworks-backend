@@ -21,7 +21,7 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Employee)
-  async registerEmployee(
+  registerEmployee(
     @Args('registerEmployeeInput') registerEmployeeInput: RegisterEmployeeInput,
     @CurrentEmployeeID() registrantEmployeeId: bigint,
   ) {
@@ -33,7 +33,7 @@ export class EmployeeAuthResolver {
 
   @UseGuards(UserJwtAuthGuard, EmployeeLocalAuthGuard)
   @Mutation(() => LoginEmployeeResponse)
-  async loginEmployeeByUser(
+  loginEmployeeByUser(
     @Args('loginEmployeeInput') loginEmployeeInput: LoginEmployeeInput,
     @CurrentUserID() userId: bigint,
     @Context() context: any,
@@ -47,7 +47,7 @@ export class EmployeeAuthResolver {
   @Public()
   @UseGuards(EmployeeLocalAuthGuard)
   @Mutation(() => LoginEmployeeResponse)
-  async loginEmployeeByWorkshop(
+  loginEmployeeByWorkshop(
     @Args('loginEmployeeInput') loginEmployeeInput: LoginEmployeeInput,
     @DeviceSerialNumber() deviceSerialNumber: string,
     @Context() context: any,
@@ -64,49 +64,39 @@ export class EmployeeAuthResolver {
 
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async logoutEmployee(
+  logoutEmployee(
     @Args('refreshToken') refreshToken: string,
   ): Promise<boolean> {
-    try {
-      return this.employeeAuthService.revokeRefreshToken(refreshToken);
-    } catch {
-      return false;
-    }
+    return this.employeeAuthService
+      .revokeRefreshToken(refreshToken)
+      .then(() => true)
+      .catch(() => false);
   }
 
   //only szef can logout other peepos
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async logoutAnotherEmployee(
+  logoutAnotherEmployee(
     @CurrentEmployeeID() employeeId: bigint,
     @Args('employeeId', { type: () => Scalars.GraphQLBigInt })
     employeeIdToLogout: bigint,
   ): Promise<boolean> {
-    try {
-      await this.employeeAuthService.logoutAnotherEmployee(
-        employeeId,
-        employeeIdToLogout,
-      );
-      return true;
-    } catch {
-      return false;
-    }
+    return this.employeeAuthService
+      .logoutAnotherEmployee(employeeId, employeeIdToLogout)
+      .then(() => true)
+      .catch(() => false);
   }
 
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async changeEmployeePassword(
+  changeEmployeePassword(
     @CurrentEmployeeID() employeeId: bigint,
     @Args('changeEmployeePasswordInput')
     changePasswordInput: ChangePasswordInput,
   ): Promise<boolean> {
-    try {
-      return this.employeeAuthService.changeEmployeePassword(
-        employeeId,
-        changePasswordInput,
-      );
-    } catch {
-      return false;
-    }
+    return this.employeeAuthService
+      .changeEmployeePassword(employeeId, changePasswordInput)
+      .then(() => true)
+      .catch(() => false);
   }
 }
