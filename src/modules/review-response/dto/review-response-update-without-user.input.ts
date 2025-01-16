@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 import { ReviewResponseUpdateOneWithoutChildrenResponsesNestedInput } from './review-response-update-one-without-children-responses-nested.input';
 import { ReviewResponseUpdateManyWithoutParentResponseNestedInput } from './review-response-update-many-without-parent-response-nested.input';
 import { ReviewUpdateOneRequiredWithoutReviewResponsesNestedInput } from '../../review/dto/review-update-one-required-without-review-responses-nested.input';
@@ -19,9 +19,9 @@ export class ReviewResponseUpdateWithoutUserInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:true})
-    @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
+    @Field(() => ReviewResponseStatus, {nullable:true})
+    @Validator.IsEnum(ReviewResponseStatus, { message: 'Invalid response status' })
     @Validator.IsOptional()
-    status?: keyof typeof ReviewsResponsesStatus;
+    status?: keyof typeof ReviewResponseStatus;
 
     }

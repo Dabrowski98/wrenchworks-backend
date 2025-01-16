@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
-import { EnumServicesStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-services-status-nullable-with-aggregates-filter.input';
+import { EnumServiceStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-service-status-nullable-with-aggregates-filter.input';
 import { BoolWithAggregatesFilter } from '../../prisma/dto/bool-with-aggregates-filter.input';
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
@@ -47,8 +47,8 @@ export class ServiceScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     description?: StringNullableWithAggregatesFilter;
 
-    @Field(() => EnumServicesStatusNullableWithAggregatesFilter, {nullable:true})
-    status?: EnumServicesStatusNullableWithAggregatesFilter;
+    @Field(() => EnumServiceStatusNullableWithAggregatesFilter, {nullable:true})
+    status?: EnumServiceStatusNullableWithAggregatesFilter;
 
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     payedOff?: BoolWithAggregatesFilter;

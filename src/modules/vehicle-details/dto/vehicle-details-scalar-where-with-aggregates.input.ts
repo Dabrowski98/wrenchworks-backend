@@ -4,7 +4,7 @@ import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggreg
 import { IntNullableWithAggregatesFilter } from '../../prisma/dto/int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { EnumFuelTypeNullableWithAggregatesFilter } from '../../prisma/dto/enum-fuel-type-nullable-with-aggregates-filter.input';
-import { EnumBodyColorsNullableWithAggregatesFilter } from '../../prisma/dto/enum-body-colors-nullable-with-aggregates-filter.input';
+import { EnumBodyColorNullableWithAggregatesFilter } from '../../prisma/dto/enum-body-color-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 
@@ -47,7 +47,7 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     engineNo?: StringNullableWithAggregatesFilter;
 
-    @Field(() => EnumBodyColorsNullableWithAggregatesFilter, {nullable:true})
-    bodyColor?: EnumBodyColorsNullableWithAggregatesFilter;
+    @Field(() => EnumBodyColorNullableWithAggregatesFilter, {nullable:true})
+    bodyColor?: EnumBodyColorNullableWithAggregatesFilter;
 
     }

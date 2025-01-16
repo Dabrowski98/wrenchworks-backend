@@ -9,7 +9,7 @@ import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.in
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { EnumReviewsResponsesStatusFilter } from '../../prisma/dto/enum-reviews-responses-status-filter.input';
+import { EnumReviewResponseStatusFilter } from '../../prisma/dto/enum-review-response-status-filter.input';
 import { ReviewResponseNullableRelationFilter } from './review-response-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ReviewResponseListRelationFilter } from './review-response-list-relation-filter.input';
@@ -47,8 +47,8 @@ export class ReviewResponseWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     originalResponseText?: StringNullableFilter;
 
-    @Field(() => EnumReviewsResponsesStatusFilter, {nullable:true})
-    status?: EnumReviewsResponsesStatusFilter;
+    @Field(() => EnumReviewResponseStatusFilter, {nullable:true})
+    status?: EnumReviewResponseStatusFilter;
 
     @Field(() => ReviewResponseNullableRelationFilter, {nullable:true})
     @Type(() => ReviewResponseNullableRelationFilter)

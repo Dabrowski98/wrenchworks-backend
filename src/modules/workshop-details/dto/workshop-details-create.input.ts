@@ -6,7 +6,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
-import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
+import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { WorkshopCreateNestedOneWithoutWorkshopDetailsInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-details.input';
 import { ValidateNested } from 'class-validator';

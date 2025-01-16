@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 
 @ObjectType()
 export class ReviewResponseMinAggregate {
@@ -30,6 +30,6 @@ export class ReviewResponseMinAggregate {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:true})
-    status?: keyof typeof ReviewsResponsesStatus;
+    @Field(() => ReviewResponseStatus, {nullable:true})
+    status?: keyof typeof ReviewResponseStatus;
 }

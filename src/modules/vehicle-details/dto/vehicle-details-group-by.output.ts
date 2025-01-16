@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Int } from '@nestjs/graphql';
 import { FuelType } from '../../prisma/dto/fuel-type.enum';
-import { BodyColors } from '../../prisma/dto/body-colors.enum';
+import { BodyColor } from '../../prisma/dto/body-color.enum';
 import { VehicleDetailsCountAggregate } from './vehicle-details-count-aggregate.output';
 import { VehicleDetailsAvgAggregate } from './vehicle-details-avg-aggregate.output';
 import { VehicleDetailsSumAggregate } from './vehicle-details-sum-aggregate.output';
@@ -40,8 +40,8 @@ export class VehicleDetailsGroupBy {
     @Field(() => String, {nullable:true})
     engineNo?: string;
 
-    @Field(() => BodyColors, {nullable:true})
-    bodyColor?: keyof typeof BodyColors;
+    @Field(() => BodyColor, {nullable:true})
+    bodyColor?: keyof typeof BodyColor;
 
     @Field(() => Date, {nullable:true})
     deletedAt?: Date | string;

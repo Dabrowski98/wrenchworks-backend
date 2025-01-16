@@ -6,7 +6,7 @@ import { ServiceWhereInput } from './service-where.input';
 import { Type } from 'class-transformer';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
-import { EnumServicesStatusNullableFilter } from '../../prisma/dto/enum-services-status-nullable-filter.input';
+import { EnumServiceStatusNullableFilter } from '../../prisma/dto/enum-service-status-nullable-filter.input';
 import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
@@ -58,8 +58,8 @@ export class ServiceWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
-    @Field(() => EnumServicesStatusNullableFilter, {nullable:true})
-    status?: EnumServicesStatusNullableFilter;
+    @Field(() => EnumServiceStatusNullableFilter, {nullable:true})
+    status?: EnumServiceStatusNullableFilter;
 
     @Field(() => BoolFilter, {nullable:true})
     payedOff?: BoolFilter;

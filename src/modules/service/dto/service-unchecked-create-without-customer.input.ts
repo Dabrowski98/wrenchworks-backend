@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { ServicesStatus } from '../../prisma/dto/services-status.enum';
+import { ServiceStatus } from '../../prisma/dto/service-status.enum';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
@@ -38,10 +38,10 @@ export class ServiceUncheckedCreateWithoutCustomerInput {
     @Validator.IsOptional()
     description?: string;
 
-    @Field(() => ServicesStatus, {nullable:true})
-    @Validator.IsEnum(ServicesStatus, { message: 'Invalid service status' })
+    @Field(() => ServiceStatus, {nullable:true})
+    @Validator.IsEnum(ServiceStatus, { message: 'Invalid service status' })
     @Validator.IsOptional()
-    status?: keyof typeof ServicesStatus;
+    status?: keyof typeof ServiceStatus;
 
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Payed off must be a boolean' })

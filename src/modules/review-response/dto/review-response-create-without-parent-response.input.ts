@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 import { ReviewResponseCreateNestedManyWithoutParentResponseInput } from './review-response-create-nested-many-without-parent-response.input';
 import { ReviewCreateNestedOneWithoutReviewResponsesInput } from '../../review/dto/review-create-nested-one-without-review-responses.input';
 import { Type } from 'class-transformer';

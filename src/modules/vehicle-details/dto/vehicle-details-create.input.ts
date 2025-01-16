@@ -4,7 +4,7 @@ import * as Scalars from 'graphql-scalars';
 import { Int } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { FuelType } from '../../prisma/dto/fuel-type.enum';
-import { BodyColors } from '../../prisma/dto/body-colors.enum';
+import { BodyColor } from '../../prisma/dto/body-color.enum';
 import { HideField } from '@nestjs/graphql';
 import { VehicleCreateNestedOneWithoutVehicleDetailsInput } from '../../vehicle/dto/vehicle-create-nested-one-without-vehicle-details.input';
 import { Type } from 'class-transformer';
@@ -61,10 +61,10 @@ export class VehicleDetailsCreateInput {
     @Validator.IsOptional()
     engineNo?: string;
 
-    @Field(() => BodyColors, {nullable:true})
-    @Validator.IsEnum(BodyColors, { message: 'Invalid body color' })
+    @Field(() => BodyColor, {nullable:true})
+    @Validator.IsEnum(BodyColor, { message: 'Invalid body color' })
     @Validator.IsOptional()
-    bodyColor?: keyof typeof BodyColors;
+    bodyColor?: keyof typeof BodyColor;
 
     @Field(() => VehicleCreateNestedOneWithoutVehicleDetailsInput, {nullable:false})
     @Type(() => VehicleCreateNestedOneWithoutVehicleDetailsInput)

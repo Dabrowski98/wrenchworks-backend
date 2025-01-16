@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
 import { AddressUpdateOneWithoutUserNestedInput } from '../../address/dto/address-update-one-without-user-nested.input';
 import { ValidateNested } from 'class-validator';
@@ -61,10 +61,10 @@ export class UserUpdateWithoutUserReportsInput {
     @Validator.IsOptional()
     isVerified?: boolean;
 
-    @Field(() => UsersStatus, {nullable:true})
-    @Validator.IsEnum(UsersStatus, { message: 'Invalid user status' })
+    @Field(() => UserStatus, {nullable:true})
+    @Validator.IsEnum(UserStatus, { message: 'Invalid user status' })
     @Validator.IsOptional()
-    status?: keyof typeof UsersStatus;
+    status?: keyof typeof UserStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })

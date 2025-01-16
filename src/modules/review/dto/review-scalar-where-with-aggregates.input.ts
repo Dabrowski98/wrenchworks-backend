@@ -9,7 +9,7 @@ import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-null
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
-import { EnumReviewsStatusWithAggregatesFilter } from '../../prisma/dto/enum-reviews-status-with-aggregates-filter.input';
+import { EnumReviewStatusWithAggregatesFilter } from '../../prisma/dto/enum-review-status-with-aggregates-filter.input';
 
 @InputType()
 export class ReviewScalarWhereWithAggregatesInput {
@@ -49,6 +49,6 @@ export class ReviewScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     originalReviewText?: StringNullableWithAggregatesFilter;
 
-    @Field(() => EnumReviewsStatusWithAggregatesFilter, {nullable:true})
-    status?: EnumReviewsStatusWithAggregatesFilter;
+    @Field(() => EnumReviewStatusWithAggregatesFilter, {nullable:true})
+    status?: EnumReviewStatusWithAggregatesFilter;
 }

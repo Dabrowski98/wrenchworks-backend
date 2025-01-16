@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
-import { EnumTasksStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-tasks-status-nullable-with-aggregates-filter.input';
+import { EnumTaskStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-task-status-nullable-with-aggregates-filter.input';
 import { FloatWithAggregatesFilter } from '../../prisma/dto/float-with-aggregates-filter.input';
 import { DecimalWithAggregatesFilter } from '../../prisma/dto/decimal-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
@@ -42,8 +42,8 @@ export class TaskScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     description?: StringWithAggregatesFilter;
 
-    @Field(() => EnumTasksStatusNullableWithAggregatesFilter, {nullable:true})
-    status?: EnumTasksStatusNullableWithAggregatesFilter;
+    @Field(() => EnumTaskStatusNullableWithAggregatesFilter, {nullable:true})
+    status?: EnumTaskStatusNullableWithAggregatesFilter;
 
     @Field(() => FloatWithAggregatesFilter, {nullable:true})
     executionTime?: FloatWithAggregatesFilter;

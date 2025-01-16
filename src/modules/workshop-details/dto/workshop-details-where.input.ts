@@ -5,7 +5,7 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { DecimalNullableFilter } from '../../prisma/dto/decimal-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
-import { EnumWorkshopsDetailsStatusNullableFilter } from '../../prisma/dto/enum-workshops-details-status-nullable-filter.input';
+import { EnumWorkshopDetailsStatusNullableFilter } from '../../prisma/dto/enum-workshop-details-status-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
@@ -43,8 +43,8 @@ export class WorkshopDetailsWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     logoURL?: StringNullableFilter;
 
-    @Field(() => EnumWorkshopsDetailsStatusNullableFilter, {nullable:true})
-    status?: EnumWorkshopsDetailsStatusNullableFilter;
+    @Field(() => EnumWorkshopDetailsStatusNullableFilter, {nullable:true})
+    status?: EnumWorkshopDetailsStatusNullableFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
     NIP?: StringNullableFilter;

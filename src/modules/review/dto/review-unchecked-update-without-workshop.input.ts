@@ -8,7 +8,7 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
-import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
+import { ReviewStatus } from '../../prisma/dto/review-status.enum';
 import { ReviewResponseUncheckedUpdateManyWithoutReviewNestedInput } from '../../review-response/dto/review-response-unchecked-update-many-without-review-nested.input';
 import { ValidateNested } from 'class-validator';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
@@ -49,10 +49,10 @@ export class ReviewUncheckedUpdateWithoutWorkshopInput {
     @Validator.IsOptional()
     originalReviewText?: string;
 
-    @Field(() => ReviewsStatus, {nullable:true})
-    @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
+    @Field(() => ReviewStatus, {nullable:true})
+    @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })
     @Validator.IsOptional()
-    status?: keyof typeof ReviewsStatus;
+    status?: keyof typeof ReviewStatus;
 
     @Field(() => ReviewResponseUncheckedUpdateManyWithoutReviewNestedInput, {nullable:true})
     @Type(() => ReviewResponseUncheckedUpdateManyWithoutReviewNestedInput)

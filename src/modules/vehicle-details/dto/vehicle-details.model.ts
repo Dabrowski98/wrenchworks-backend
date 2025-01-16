@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Int } from '@nestjs/graphql';
 import { FuelType } from '../../prisma/dto/fuel-type.enum';
-import { BodyColors } from '../../prisma/dto/body-colors.enum';
+import { BodyColor } from '../../prisma/dto/body-color.enum';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
 import { Type } from 'class-transformer';
 
@@ -37,8 +37,8 @@ export class VehicleDetails {
     @Field(() => String, {nullable:true})
     engineNo!: string | null;
 
-    @Field(() => BodyColors, {nullable:true})
-    bodyColor!: keyof typeof BodyColors | null;
+    @Field(() => BodyColor, {nullable:true})
+    bodyColor!: keyof typeof BodyColor | null;
 
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;

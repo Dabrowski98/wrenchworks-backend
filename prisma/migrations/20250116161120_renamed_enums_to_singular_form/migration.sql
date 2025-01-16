@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `reviewresponse` MODIFY `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED', 'HIDDEN') NOT NULL DEFAULT 'PENDING';

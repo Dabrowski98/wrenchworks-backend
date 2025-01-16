@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
+import { TaskStatus } from '../../prisma/dto/task-status.enum';
 import { Float } from '@nestjs/graphql';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
@@ -32,8 +32,8 @@ export class Task {
     /**
      * Note: Optional because field defaults to pending
      */
-    @Field(() => TasksStatus, {nullable:true,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
-    status!: keyof typeof TasksStatus | null;
+    @Field(() => TaskStatus, {nullable:true,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
+    status!: keyof typeof TaskStatus | null;
 
     /**
      * Note: Optional because field defaults to 0.00

@@ -6,7 +6,7 @@ import { Type } from 'class-transformer';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
-import { EnumTasksStatusNullableFilter } from '../../prisma/dto/enum-tasks-status-nullable-filter.input';
+import { EnumTaskStatusNullableFilter } from '../../prisma/dto/enum-task-status-nullable-filter.input';
 import { FloatFilter } from '../../prisma/dto/float-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
@@ -48,8 +48,8 @@ export class TaskWhereUniqueInput {
     @Field(() => StringFilter, {nullable:true})
     description?: StringFilter;
 
-    @Field(() => EnumTasksStatusNullableFilter, {nullable:true})
-    status?: EnumTasksStatusNullableFilter;
+    @Field(() => EnumTaskStatusNullableFilter, {nullable:true})
+    status?: EnumTaskStatusNullableFilter;
 
     @Field(() => FloatFilter, {nullable:true})
     executionTime?: FloatFilter;

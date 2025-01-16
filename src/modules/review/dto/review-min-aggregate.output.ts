@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
-import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
+import { ReviewStatus } from '../../prisma/dto/review-status.enum';
 
 @ObjectType()
 export class ReviewMinAggregate {
@@ -35,6 +35,6 @@ export class ReviewMinAggregate {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ReviewsStatus, {nullable:true})
-    status?: keyof typeof ReviewsStatus;
+    @Field(() => ReviewStatus, {nullable:true})
+    status?: keyof typeof ReviewStatus;
 }

@@ -6,7 +6,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
-import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
+import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-details-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
@@ -44,10 +44,10 @@ export class WorkshopDetailsUpdateInput {
     @Validator.IsOptional()
     logoURL?: string;
 
-    @Field(() => WorkshopsDetailsStatus, {nullable:true})
-    @Validator.IsEnum(WorkshopsDetailsStatus, { message: 'Invalid workshop status' })
+    @Field(() => WorkshopDetailsStatus, {nullable:true})
+    @Validator.IsEnum(WorkshopDetailsStatus, { message: 'Invalid workshop status' })
     @Validator.IsOptional()
-    status?: keyof typeof WorkshopsDetailsStatus;
+    status?: keyof typeof WorkshopDetailsStatus;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'NIP must be a string' })

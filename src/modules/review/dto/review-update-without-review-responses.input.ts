@@ -7,7 +7,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
-import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
+import { ReviewStatus } from '../../prisma/dto/review-status.enum';
 import { UserUpdateOneRequiredWithoutReviewsNestedInput } from '../../user/dto/user-update-one-required-without-reviews-nested.input';
 import { WorkshopUpdateOneRequiredWithoutReviewsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-reviews-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
@@ -32,9 +32,9 @@ export class ReviewUpdateWithoutReviewResponsesInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     reviewText?: string;
 
-    @Field(() => ReviewsStatus, {nullable:true})
-    @Validator.IsEnum(ReviewsStatus, { message: 'Invalid review status' })
+    @Field(() => ReviewStatus, {nullable:true})
+    @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })
     @Validator.IsOptional()
-    status?: keyof typeof ReviewsStatus;
+    status?: keyof typeof ReviewStatus;
 
     }

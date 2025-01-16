@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Decimal } from '@prisma/client/runtime/library';
-import { ReviewsStatus } from '../../prisma/dto/reviews-status.enum';
+import { ReviewStatus } from '../../prisma/dto/review-status.enum';
 import { User } from '../../user/dto/user.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
@@ -46,8 +46,8 @@ export class Review {
     /**
      * Note: Optional because field defaults to PENDING
      */
-    @Field(() => ReviewsStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to PENDING'})
-    status!: keyof typeof ReviewsStatus;
+    @Field(() => ReviewStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to PENDING'})
+    status!: keyof typeof ReviewStatus;
 
     @Field(() => User, {nullable:false})
     user?: User;

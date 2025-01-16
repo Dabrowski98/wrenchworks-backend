@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ServicesStatus } from '../../prisma/dto/services-status.enum';
+import { ServiceStatus } from '../../prisma/dto/service-status.enum';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { ServiceCountAggregate } from './service-count-aggregate.output';
@@ -34,8 +34,8 @@ export class ServiceGroupBy {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => ServicesStatus, {nullable:true})
-    status?: keyof typeof ServicesStatus;
+    @Field(() => ServiceStatus, {nullable:true})
+    status?: keyof typeof ServiceStatus;
 
     @Field(() => Boolean, {nullable:false})
     payedOff!: boolean;

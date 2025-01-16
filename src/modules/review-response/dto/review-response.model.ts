@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 import { Review } from '../../review/dto/review.model';
 import { Type } from 'class-transformer';
 import { User } from '../../user/dto/user.model';
@@ -37,8 +37,8 @@ export class ReviewResponse {
     /**
      * Note: Optional because field defaults to pending
      */
-    @Field(() => ReviewsResponsesStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
-    status!: keyof typeof ReviewsResponsesStatus;
+    @Field(() => ReviewResponseStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
+    status!: keyof typeof ReviewResponseStatus;
 
     @Field(() => ReviewResponse, {nullable:true})
     parentResponse?: ReviewResponse | null;

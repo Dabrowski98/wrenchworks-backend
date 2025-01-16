@@ -5,7 +5,7 @@ import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggreg
 import { DecimalNullableWithAggregatesFilter } from '../../prisma/dto/decimal-nullable-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
-import { EnumWorkshopsDetailsStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-workshops-details-status-nullable-with-aggregates-filter.input';
+import { EnumWorkshopDetailsStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-workshop-details-status-nullable-with-aggregates-filter.input';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
@@ -41,8 +41,8 @@ export class WorkshopDetailsScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     logoURL?: StringNullableWithAggregatesFilter;
 
-    @Field(() => EnumWorkshopsDetailsStatusNullableWithAggregatesFilter, {nullable:true})
-    status?: EnumWorkshopsDetailsStatusNullableWithAggregatesFilter;
+    @Field(() => EnumWorkshopDetailsStatusNullableWithAggregatesFilter, {nullable:true})
+    status?: EnumWorkshopDetailsStatusNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     NIP?: StringNullableWithAggregatesFilter;

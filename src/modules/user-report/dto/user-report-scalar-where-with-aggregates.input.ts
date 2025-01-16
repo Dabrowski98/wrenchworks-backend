@@ -3,8 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { EnumUserReportTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-report-type-with-aggregates-filter.input';
-import { EnumUserReportsReportedEntityTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-with-aggregates-filter.input';
-import { EnumUserReportsStatusWithAggregatesFilter } from '../../prisma/dto/enum-user-reports-status-with-aggregates-filter.input';
+import { EnumUserReportReportedEntityTypeWithAggregatesFilter } from '../../prisma/dto/enum-user-report-reported-entity-type-with-aggregates-filter.input';
+import { EnumUserReportStatusWithAggregatesFilter } from '../../prisma/dto/enum-user-report-status-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
@@ -33,13 +33,13 @@ export class UserReportScalarWhereWithAggregatesInput {
     @Field(() => EnumUserReportTypeWithAggregatesFilter, {nullable:true})
     reportType?: EnumUserReportTypeWithAggregatesFilter;
 
-    @Field(() => EnumUserReportsReportedEntityTypeWithAggregatesFilter, {nullable:true})
-    reportedEntityType?: EnumUserReportsReportedEntityTypeWithAggregatesFilter;
+    @Field(() => EnumUserReportReportedEntityTypeWithAggregatesFilter, {nullable:true})
+    reportedEntityType?: EnumUserReportReportedEntityTypeWithAggregatesFilter;
 
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     reportedId?: BigIntWithAggregatesFilter;
 
-    @Field(() => EnumUserReportsStatusWithAggregatesFilter, {nullable:true})
-    status?: EnumUserReportsStatusWithAggregatesFilter;
+    @Field(() => EnumUserReportStatusWithAggregatesFilter, {nullable:true})
+    status?: EnumUserReportStatusWithAggregatesFilter;
 
     }

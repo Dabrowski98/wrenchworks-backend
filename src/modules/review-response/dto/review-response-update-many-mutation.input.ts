@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -16,8 +16,8 @@ export class ReviewResponseUpdateManyMutationInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:true})
-    @Validator.IsEnum(ReviewsResponsesStatus, { message: 'Invalid response status' })
+    @Field(() => ReviewResponseStatus, {nullable:true})
+    @Validator.IsEnum(ReviewResponseStatus, { message: 'Invalid response status' })
     @Validator.IsOptional()
-    status?: keyof typeof ReviewsResponsesStatus;
+    status?: keyof typeof ReviewResponseStatus;
 }

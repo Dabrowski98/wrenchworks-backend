@@ -4,7 +4,7 @@ import { BigIntWithAggregatesFilter } from '../../prisma/dto/big-int-with-aggreg
 import { StringWithAggregatesFilter } from '../../prisma/dto/string-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-nullable-with-aggregates-filter.input';
 import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable-with-aggregates-filter.input';
-import { EnumUsersStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-users-status-nullable-with-aggregates-filter.input';
+import { EnumUserStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-user-status-nullable-with-aggregates-filter.input';
 import { EnumUserRoleWithAggregatesFilter } from '../../prisma/dto/enum-user-role-with-aggregates-filter.input';
 import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
@@ -44,8 +44,8 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => BoolNullableWithAggregatesFilter, {nullable:true})
     isVerified?: BoolNullableWithAggregatesFilter;
 
-    @Field(() => EnumUsersStatusNullableWithAggregatesFilter, {nullable:true})
-    status?: EnumUsersStatusNullableWithAggregatesFilter;
+    @Field(() => EnumUserStatusNullableWithAggregatesFilter, {nullable:true})
+    status?: EnumUserStatusNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     firstName?: StringNullableWithAggregatesFilter;

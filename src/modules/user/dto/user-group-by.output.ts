@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
-import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
 import { UserCountAggregate } from './user-count-aggregate.output';
 import { UserAvgAggregate } from './user-avg-aggregate.output';
@@ -31,8 +31,8 @@ export class UserGroupBy {
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
 
-    @Field(() => UsersStatus, {nullable:true})
-    status?: keyof typeof UsersStatus;
+    @Field(() => UserStatus, {nullable:true})
+    status?: keyof typeof UserStatus;
 
     @Field(() => String, {nullable:true})
     firstName?: string;

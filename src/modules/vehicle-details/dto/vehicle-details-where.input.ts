@@ -4,7 +4,7 @@ import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { IntNullableFilter } from '../../prisma/dto/int-nullable-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
 import { EnumFuelTypeNullableFilter } from '../../prisma/dto/enum-fuel-type-nullable-filter.input';
-import { EnumBodyColorsNullableFilter } from '../../prisma/dto/enum-body-colors-nullable-filter.input';
+import { EnumBodyColorNullableFilter } from '../../prisma/dto/enum-body-color-nullable-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { VehicleRelationFilter } from '../../vehicle/dto/vehicle-relation-filter.input';
@@ -50,8 +50,8 @@ export class VehicleDetailsWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     engineNo?: StringNullableFilter;
 
-    @Field(() => EnumBodyColorsNullableFilter, {nullable:true})
-    bodyColor?: EnumBodyColorsNullableFilter;
+    @Field(() => EnumBodyColorNullableFilter, {nullable:true})
+    bodyColor?: EnumBodyColorNullableFilter;
 
     @Field(() => VehicleRelationFilter, {nullable:true})
     @Type(() => VehicleRelationFilter)

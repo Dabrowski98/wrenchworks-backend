@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
-import { UsersStatus } from '../../prisma/dto/users-status.enum';
+import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
 import { Address } from '../../address/dto/address.model';
 import { Type } from 'class-transformer';
@@ -45,8 +45,8 @@ export class User {
     @Field(() => Boolean, {nullable:true,defaultValue:false})
     isVerified!: boolean | null;
 
-    @Field(() => UsersStatus, {nullable:true,defaultValue:'INACTIVE'})
-    status!: keyof typeof UsersStatus | null;
+    @Field(() => UserStatus, {nullable:true,defaultValue:'INACTIVE'})
+    status!: keyof typeof UserStatus | null;
 
     @Field(() => String, {nullable:true})
     firstName!: string | null;

@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
+import { TaskStatus } from '../../prisma/dto/task-status.enum';
 import { Float } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
@@ -24,8 +24,8 @@ export class TaskMinAggregate {
     @Field(() => String, {nullable:true})
     description?: string;
 
-    @Field(() => TasksStatus, {nullable:true})
-    status?: keyof typeof TasksStatus;
+    @Field(() => TaskStatus, {nullable:true})
+    status?: keyof typeof TaskStatus;
 
     @Field(() => Float, {nullable:true})
     executionTime?: number;

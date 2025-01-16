@@ -3,8 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UserReportType } from '../../prisma/dto/user-report-type.enum';
-import { UserReportsReportedEntityType } from '../../prisma/dto/user-reports-reported-entity-type.enum';
-import { UserReportsStatus } from '../../prisma/dto/user-reports-status.enum';
+import { UserReportReportedEntityType } from '../../prisma/dto/user-report-reported-entity-type.enum';
+import { UserReportStatus } from '../../prisma/dto/user-report-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
@@ -22,9 +22,9 @@ export class UserReportUpdateWithoutUserInput {
     @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
     reportType?: keyof typeof UserReportType;
 
-    @Field(() => UserReportsStatus, {nullable:true})
-    @Validator.IsEnum(UserReportsStatus, { message: 'Invalid report status' })
+    @Field(() => UserReportStatus, {nullable:true})
+    @Validator.IsEnum(UserReportStatus, { message: 'Invalid report status' })
     @Validator.IsOptional()
-    status?: keyof typeof UserReportsStatus;
+    status?: keyof typeof UserReportStatus;
 
     }

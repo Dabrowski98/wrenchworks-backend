@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { TasksStatus } from '../../prisma/dto/tasks-status.enum';
+import { TaskStatus } from '../../prisma/dto/task-status.enum';
 import { Float } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
@@ -37,10 +37,10 @@ export class TaskUncheckedCreateWithoutServiceInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     description!: string;
 
-    @Field(() => TasksStatus, {nullable:true})
-    @Validator.IsEnum(TasksStatus, { message: 'Invalid task status' })
+    @Field(() => TaskStatus, {nullable:true})
+    @Validator.IsEnum(TaskStatus, { message: 'Invalid task status' })
     @Validator.IsOptional()
-    status?: keyof typeof TasksStatus;
+    status?: keyof typeof TaskStatus;
 
     @Field(() => Float, {nullable:true})
     @Validator.IsNumber({}, { message: 'Execution time must be a number' })

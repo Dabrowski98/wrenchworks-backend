@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { Decimal } from '@prisma/client/runtime/library';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
-import { WorkshopsDetailsStatus } from '../../prisma/dto/workshops-details-status.enum';
+import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 
 @ObjectType()
 export class WorkshopDetailsMinAggregate {
@@ -23,8 +23,8 @@ export class WorkshopDetailsMinAggregate {
     @Field(() => String, {nullable:true})
     logoURL?: string;
 
-    @Field(() => WorkshopsDetailsStatus, {nullable:true})
-    status?: keyof typeof WorkshopsDetailsStatus;
+    @Field(() => WorkshopDetailsStatus, {nullable:true})
+    status?: keyof typeof WorkshopDetailsStatus;
 
     @Field(() => String, {nullable:true})
     NIP?: string;

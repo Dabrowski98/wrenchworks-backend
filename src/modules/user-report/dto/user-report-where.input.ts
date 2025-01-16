@@ -3,8 +3,8 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { EnumUserReportTypeFilter } from '../../prisma/dto/enum-user-report-type-filter.input';
-import { EnumUserReportsReportedEntityTypeFilter } from '../../prisma/dto/enum-user-reports-reported-entity-type-filter.input';
-import { EnumUserReportsStatusFilter } from '../../prisma/dto/enum-user-reports-status-filter.input';
+import { EnumUserReportReportedEntityTypeFilter } from '../../prisma/dto/enum-user-report-reported-entity-type-filter.input';
+import { EnumUserReportStatusFilter } from '../../prisma/dto/enum-user-report-status-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
@@ -36,14 +36,14 @@ export class UserReportWhereInput {
     @Field(() => EnumUserReportTypeFilter, {nullable:true})
     reportType?: EnumUserReportTypeFilter;
 
-    @Field(() => EnumUserReportsReportedEntityTypeFilter, {nullable:true})
-    reportedEntityType?: EnumUserReportsReportedEntityTypeFilter;
+    @Field(() => EnumUserReportReportedEntityTypeFilter, {nullable:true})
+    reportedEntityType?: EnumUserReportReportedEntityTypeFilter;
 
     @Field(() => BigIntFilter, {nullable:true})
     reportedId?: BigIntFilter;
 
-    @Field(() => EnumUserReportsStatusFilter, {nullable:true})
-    status?: EnumUserReportsStatusFilter;
+    @Field(() => EnumUserReportStatusFilter, {nullable:true})
+    status?: EnumUserReportStatusFilter;
 
     @Field(() => UserRelationFilter, {nullable:true})
     @Type(() => UserRelationFilter)

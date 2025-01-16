@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { ReviewsResponsesStatus } from '../../prisma/dto/reviews-responses-status.enum';
+import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
 import { ReviewResponseCountAggregate } from './review-response-count-aggregate.output';
 import { ReviewResponseAvgAggregate } from './review-response-avg-aggregate.output';
 import { ReviewResponseSumAggregate } from './review-response-sum-aggregate.output';
@@ -35,8 +35,8 @@ export class ReviewResponseGroupBy {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ReviewsResponsesStatus, {nullable:false})
-    status!: keyof typeof ReviewsResponsesStatus;
+    @Field(() => ReviewResponseStatus, {nullable:false})
+    status!: keyof typeof ReviewResponseStatus;
 
     @Field(() => ReviewResponseCountAggregate, {nullable:true})
     _count?: ReviewResponseCountAggregate;
