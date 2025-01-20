@@ -25,14 +25,18 @@ import { ServiceRequest } from '../service-request/dto/service-request.model';
 import { Employee } from '../employee/dto/employee.model';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { Customer } from '../customer/dto/customer.model';
+import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
 
 @Resolver(() => Service)
 export class ServiceResolver {
   constructor(private readonly serviceService: ServiceService) {}
 
   @Mutation(() => Service)
-  async createService(@Args() args: CreateOneServiceArgs): Promise<Service> {
-    return this.serviceService.create(args);
+  async createService(
+    @Args() args: CreateOneServiceArgs,
+    @CurrentEmployeeID() employeeId: bigint,
+  ): Promise<Service> {
+    return this.serviceService.create(args, employeeId);
   }
 
   @Query(() => Service)
@@ -66,7 +70,9 @@ export class ServiceResolver {
   // RESOLVE FIELDS
 
   @ResolveField(() => ServiceRequest, { nullable: true })
-  async serviceRequest(@Parent() service: Service): Promise<ServiceRequest | null> {
+  async serviceRequest(
+    @Parent() service: Service,
+  ): Promise<ServiceRequest | null> {
     return this.serviceService.serviceRequest(service.serviceId);
   }
 

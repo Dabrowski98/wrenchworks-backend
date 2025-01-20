@@ -633,6 +633,7 @@ model Service {
   tasks               Task[]
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   customer            Customer         @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_customerOrdersService")
+  /// @HideField({ match: '@(Service)@(Update)*Input' })
   employee            Employee         @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeResponsibleForService")
   vehicle             Vehicle          @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_serviceAssignedToVehicle")
   /// @HideField({ match: '@(Service)@(Update)*Input' })

@@ -17,14 +17,18 @@ import { Task } from '../task/dto/task.model';
 import { Customer } from '../customer/dto/customer.model';
 import { Employee } from '../employee/dto/employee.model';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ServiceService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(args: CreateOneServiceArgs): Promise<Service> {
+  async create(
+    args: CreateOneServiceArgs,
+    employeeId: bigint,
+  ): Promise<Service> {
     return this.prisma.service.create({
-      data: args.data,
+      data: { ...args.data, addedAt: new Date(), addedBy: employeeId },
     });
   }
 
@@ -39,9 +43,16 @@ export class ServiceService {
   }
 
   async update(args: UpdateOneServiceArgs): Promise<Service> {
+    return this.prisma.service.update(args);
+  }
+
+  async changeEmployee(
+    serviceId: bigint,
+    employeeId: bigint,
+  ): Promise<Service> {
     return this.prisma.service.update({
-      where: args.where,
-      data: args.data,
+      where: { serviceId },
+      data: { employeeId },
     });
   }
 

@@ -12,8 +12,8 @@ import { Type } from 'class-transformer';
 import { TaskUpdateManyWithoutServiceNestedInput } from '../../task/dto/task-update-many-without-service-nested.input';
 import { CustomerUpdateOneRequiredWithoutServicesNestedInput } from '../../customer/dto/customer-update-one-required-without-services-nested.input';
 import { EmployeeUpdateOneRequiredWithoutServicesNestedInput } from '../../employee/dto/employee-update-one-required-without-services-nested.input';
-import { ValidateNested } from 'class-validator';
 import { VehicleUpdateOneRequiredWithoutServicesNestedInput } from '../../vehicle/dto/vehicle-update-one-required-without-services-nested.input';
+import { ValidateNested } from 'class-validator';
 import { WorkshopUpdateOneRequiredWithoutServicesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-services-nested.input';
 
 @InputType()
@@ -63,12 +63,6 @@ export class ServiceUpdateWithoutServiceRequestInput {
 
     @Field(() => String, {nullable:true})
     addedBy?: bigint | number;
-
-    @Field(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
-    @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)
-    @ValidateNested()
-    @Type(() => EmployeeUpdateOneRequiredWithoutServicesNestedInput)
-    employee?: EmployeeUpdateOneRequiredWithoutServicesNestedInput;
 
     @Field(() => VehicleUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
     @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)
