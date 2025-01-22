@@ -20,7 +20,7 @@ export class DeviceAuthService {
   ) {}
 
   async generateDeviceOTP(employeeId: bigint): Promise<string> {
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOne({
       where: { employeeId },
     });
 
@@ -48,12 +48,10 @@ export class DeviceAuthService {
     const expiresAt = new Date(Date.now() + timeInMinutes);
 
     await this.workshopDeviceOTPService.create({
-      data: {
-        code,
-        expiresAt,
-        employeeId: employee.employeeId,
-        workshopId: employee.workshopId,
-      },
+      code,
+      expiresAt,
+      employeeId: employee.employeeId,
+      workshop: { connect: { workshopId: employee.workshopId } },
     });
 
     return code;
@@ -87,15 +85,13 @@ export class DeviceAuthService {
       throw new BadRequestException('This device is already registered');
     }
 
-    const workshopDevice =
-      await this.workshopDeviceService.create({
-        data: {
-          workshopId: DeviceOTP.workshopId,
-          serialNumber: deviceSerialNumber,
-          deviceName: deviceName,
-        },
-      });
-
+    const workshopDevice = await this.workshopDeviceService.create(
+      {
+        serialNumber: deviceSerialNumber,
+        deviceName: deviceName,
+      },
+      DeviceOTP.workshopId,
+    );
     return workshopDevice;
   }
 
@@ -105,18 +101,16 @@ export class DeviceAuthService {
   ): Promise<WorkshopDevice> {
     const { deviceId, deviceName } = acceptWorkshopDeviceInput;
 
-    const employee = await this.employeeService.findEmployee({
+    const employee = await this.employeeService.findOne({
       where: { employeeId },
     });
 
     if (!employee) throw new BadRequestException('Employee not found');
 
-    const workshopDevicesCount = await this.workshopDeviceService.count({
-      where: {
-        workshopId: employee.workshopId,
-        acceptedBy: { not: null },
-      },
-    });
+    // refactor resolve count usage as it is very demanding
+    const workshopDevicesCount = (
+      await this.workshopService.resolveCount(employee.workshopId)
+    ).workshopDevices;
 
     if (workshopDevicesCount >= Number(process.env.WORKSHOP_MAX_DEVICES))
       throw new BadRequestException(
@@ -143,7 +137,7 @@ export class DeviceAuthService {
     });
   }
 
-  async removeDevice(deviceId: bigint): Promise<WorkshopDevice> {
+  async removeDevice(deviceId: bigint): Promise<Boolean> {
     const device = await this.workshopDeviceService.findOne({
       where: { workshopDeviceId: deviceId },
     });

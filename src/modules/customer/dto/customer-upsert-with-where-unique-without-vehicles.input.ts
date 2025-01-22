@@ -12,7 +12,7 @@ export class CustomerUpsertWithWhereUniqueWithoutVehiclesInput {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:false})
     @Type(() => CustomerWhereUniqueInput)
-    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
+    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>;
 
     @Field(() => CustomerUpdateWithoutVehiclesInput, {nullable:false})
     @Type(() => CustomerUpdateWithoutVehiclesInput)

@@ -9,12 +9,21 @@ import {
   ServiceRequestCount,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
-import { Employee } from '../employee/dto/employee.model';
-import { Service } from '../service/dto/service.model';
+import { Employee } from '../employee/dto';
+import { Service } from '../service/dto';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { CreateServiceRequestAsGuestInput } from './custom-dto/create-service-request-as-guest.input';
 import { GuestService } from '../guest/guest.service';
 import { ServiceService } from '../service/service.service';
+import { CustomerCreationSource } from '../prisma/dto/customer-creation-source.enum';
+import { ServiceCreateInput } from '../service/dto/service-create.input';
+import { CreateOneServiceArgs } from '../service/dto';
+import { AcceptServiceRequestInput } from './custom-dto/accept-service-request.input';
+import { Job } from '../job/dto';
+import { Vehicle } from '../vehicle/dto';
+import { Workshop } from '../workshop/dto';
+import { Guest } from '../guest/dto';
+import { User } from '../user/dto';
 
 @Injectable()
 export class ServiceRequestService {
@@ -50,33 +59,76 @@ export class ServiceRequestService {
   }
 
   async accept(
-    serviceRequestId: bigint,
+    args: AcceptServiceRequestInput,
     employeeId: bigint,
   ): Promise<ServiceRequest> {
+    const {
+      serviceRequestId,
+      customer,
+      tasks,
+      serviceDescription,
+      serviceStartDate,
+      employeeId: responsibleEmployeeId,
+    } = args;
+
     return this.prisma.$transaction(async (tx) => {
       const serviceRequest = await this.findOne({
         where: { serviceRequestId },
       });
-
-      serviceRequest.user;
-
       if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
 
-      const service = await this.serviceService.create(
-        {
-          data: {
-            serviceRequestId,
-            customer: {
+      const requestFromUser = !!serviceRequest.userId;
+
+      const customerData: CreateOneServiceArgs['data']['customer'] =
+        requestFromUser
+          ? {
               connectOrCreate: {
-                where: { userId: { equals: serviceRequest.userId } },
+                where: {
+                  userId_workshopId: {
+                    userId: serviceRequest.userId,
+                    workshopId: serviceRequest.workshopId,
+                  },
+                },
                 create: {
+                  email: customer.email,
                   user: { connect: { userId: serviceRequest.userId } },
+                  workshop: {
+                    connect: { workshopId: serviceRequest.workshopId },
+                  },
+                  creationSource: CustomerCreationSource.USER,
+                  vehicles: {
+                    connect: [{ vehicleId: serviceRequest.vehicleId }],
+                  },
                 },
               },
-            },
-            employee: { connect: { employeeId } },
+            }
+          : {
+              create: {
+                ...customer,
+                guest: { connect: { guestId: serviceRequest.guestId } },
+                workshop: {
+                  connect: { workshopId: serviceRequest.workshopId },
+                },
+                creationSource: CustomerCreationSource.GUEST,
+                vehicles: {
+                  connect: [{ vehicleId: serviceRequest.vehicleId }],
+                },
+              },
+            };
+
+      const approvedService = await this.serviceService.create(
+        {
+          data: {
+            serviceRequestId: serviceRequest.serviceRequestId,
+            customer: customerData,
+            employee: { connect: { employeeId: responsibleEmployeeId } },
+            description: serviceDescription,
+            serviceStartDate: serviceStartDate
+              ? new Date(serviceStartDate)
+              : undefined,
             vehicle: { connect: { vehicleId: serviceRequest.vehicleId } },
             workshop: { connect: { workshopId: serviceRequest.workshopId } },
+            tasks: { create: tasks },
           },
         },
         employeeId,
@@ -85,6 +137,9 @@ export class ServiceRequestService {
       return await tx.serviceRequest.update({
         where: { serviceRequestId },
         data: {
+          approvedService: {
+            connect: { serviceId: approvedService.serviceId },
+          },
           status: 'ACCEPTED',
           resolvedAt: new Date(),
           resolvedBy: employeeId,
@@ -97,7 +152,14 @@ export class ServiceRequestService {
     serviceRequestId: bigint,
     employeeId: bigint,
   ): Promise<ServiceRequest> {
-    return this.prisma.serviceRequest.update({});
+    return this.prisma.serviceRequest.update({
+      where: { serviceRequestId },
+      data: {
+        status: 'REJECTED',
+        resolvedAt: new Date(),
+        resolvedBy: employeeId,
+      },
+    });
   }
 
   async findOne(args: FindUniqueServiceRequestArgs): Promise<ServiceRequest> {
@@ -111,47 +173,79 @@ export class ServiceRequestService {
   }
 
   async update(args: UpdateOneServiceRequestArgs): Promise<ServiceRequest> {
-    return this.prisma.serviceRequest.update({
-      where: args.where,
-      data: args.data,
-    });
+    return this.prisma.serviceRequest.update(args);
   }
 
   async delete(args: DeleteOneServiceRequestArgs): Promise<boolean> {
-    await this.prisma.serviceRequest.delete({
-      where: args.where,
-    });
-    return true;
+    return this.prisma.serviceRequest
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS
 
-  async employee(serviceRequestId: bigint): Promise<Employee | null> {
-    const serviceRequest = await this.prisma.serviceRequest.findUnique({
-      where: { serviceRequestId },
-      include: { employee: true },
-    });
-    return serviceRequest?.employee || null;
+  async jobs(serviceRequestId: bigint): Promise<Job[]> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { jobs: true },
+      })
+    ).jobs;
   }
 
-  async service(serviceId: bigint): Promise<Service | null> {
-    const serviceRequest = await this.prisma.serviceRequest.findUnique({
-      where: { serviceId },
-      include: { service: true },
-    });
-    return serviceRequest?.service || null;
+  async approvedService(serviceRequestId: bigint): Promise<Service | null> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { approvedService: true },
+      })
+    ).approvedService;
+  }
+
+  async vehicle(serviceRequestId: bigint): Promise<Vehicle> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { vehicle: true },
+      })
+    ).vehicle;
+  }
+
+  async workshop(serviceRequestId: bigint): Promise<Workshop> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { workshop: true },
+      })
+    ).workshop;
+  }
+
+  async user(serviceRequestId: bigint): Promise<User | null> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { user: true },
+      })
+    ).user;
+  }
+
+  async guest(serviceRequestId: bigint): Promise<Guest | null> {
+    return (
+      await this.prisma.serviceRequest.findUnique({
+        where: { serviceRequestId },
+        include: { guest: true },
+      })
+    ).guest;
   }
 
   async resolveCount(serviceRequestId: bigint): Promise<ServiceRequestCount> {
-    // Example count fields; adjust based on actual relations
-    const tasksCount = await this.prisma.task.count({
-      where: { serviceRequestId },
-    });
-    // Add other count fields if necessary
-
     return {
-      tasks: tasksCount,
-      // Add additional counts here
+      jobs: await this.prisma.job.count({
+        where: { serviceRequests: { some: { serviceRequestId } } },
+      }),
     };
   }
 }

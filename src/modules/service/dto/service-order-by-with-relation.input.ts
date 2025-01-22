@@ -37,6 +37,9 @@ export class ServiceOrderByWithRelationInput {
     description?: SortOrderInput;
 
     @Field(() => SortOrderInput, {nullable:true})
+    serviceDescription?: SortOrderInput;
+
+    @Field(() => SortOrderInput, {nullable:true})
     status?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
@@ -50,12 +53,6 @@ export class ServiceOrderByWithRelationInput {
 
     @Field(() => SortOrderInput, {nullable:true})
     serviceEndDate?: SortOrderInput;
-
-    @Field(() => SortOrder, {nullable:true})
-    addedAt?: keyof typeof SortOrder;
-
-    @Field(() => SortOrderInput, {nullable:true})
-    addedBy?: SortOrderInput;
 
     @Field(() => ServiceRequestOrderByWithRelationInput, {nullable:true})
     @Type(() => ServiceRequestOrderByWithRelationInput)

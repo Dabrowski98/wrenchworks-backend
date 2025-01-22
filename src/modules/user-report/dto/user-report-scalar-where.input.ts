@@ -8,6 +8,7 @@ import { EnumUserReportStatusFilter } from '../../prisma/dto/enum-user-report-st
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 
 @InputType()
 export class UserReportScalarWhereInput {

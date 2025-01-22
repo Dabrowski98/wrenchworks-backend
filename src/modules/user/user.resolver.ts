@@ -15,14 +15,14 @@ import { Workshop } from '../workshop/dto';
 import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
 import { Vehicle } from '../vehicle/dto';
-import { ServiceRequest } from '../service-request';
 import { Employee } from '../employee/dto';
-import { Review } from '../review';
-import { ReviewResponse } from '../review-response';
+import { Review } from '../review/dto';
+import { ReviewResponse } from '../review-response/dto';
 import { UserReport } from '../user-report';
 import { UserService } from './user.service';
 import { Customer } from '../customer/dto';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';
+import { ServiceRequest } from '../service-request/dto';
 
 @Resolver(() => User)
 export class UserResolver {

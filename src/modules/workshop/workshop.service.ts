@@ -13,14 +13,14 @@ import {
 import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { Address } from '../address/dto';
 import { WorkshopDetails } from '../workshop-details';
-import { ServiceRequest } from '../service-request';
-import { Review } from '../review';
-import { WorkshopJob } from '../workshop-job';
+import { ServiceRequest } from '../service-request/dto';
+import { Review } from '../review/dto';
+import { WorkshopJob } from '../workshop-job/dto';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
-import { Service } from '../service';
-import { JobCategory } from '../job-category';
+import { Service } from '../service/dto';
+import { JobCategory } from '../job-category/dto';
 import { User } from '../user/dto';
 
 @Injectable()

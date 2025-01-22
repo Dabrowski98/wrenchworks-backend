@@ -28,7 +28,7 @@ export class WorkshopDetails {
     @Field(() => String, {nullable:true})
     logoURL!: string | null;
 
-    @Field(() => WorkshopDetailsStatus, {nullable:true,defaultValue:'ACTIVE'})
+    @Field(() => WorkshopDetailsStatus, {nullable:true,defaultValue:'INACTIVE'})
     status!: keyof typeof WorkshopDetailsStatus | null;
 
     @Field(() => String, {nullable:true})

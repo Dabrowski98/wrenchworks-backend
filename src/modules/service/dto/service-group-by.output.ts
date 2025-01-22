@@ -34,6 +34,9 @@ export class ServiceGroupBy {
     @Field(() => String, {nullable:true})
     description?: string;
 
+    @Field(() => String, {nullable:true})
+    serviceDescription?: string;
+
     @Field(() => ServiceStatus, {nullable:true})
     status?: keyof typeof ServiceStatus;
 

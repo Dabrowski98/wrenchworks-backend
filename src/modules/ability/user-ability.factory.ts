@@ -4,8 +4,8 @@ import { PrismaService } from 'src/database/prisma.service';
 import { UserRole } from '../prisma/dto/user-role.enum';
 import { User } from '../user/dto';
 import { Employee } from '../employee/dto';
-import { WorkshopDevice } from '../workshop-device';
-import { WorkshopDeviceOTP } from '../workshop-device-otp';
+import { WorkshopDevice } from '../workshop-device/dto/workshop-device.model';
+import { WorkshopDeviceOtp } from '../workshop-device-otp/dto/workshop-device-otp.model';
 import { JwtUserPayload } from '../auth/user-auth/dto';
 import {
   AbilityBuilder,
@@ -15,6 +15,8 @@ import {
   PureAbility,
 } from '@casl/ability';
 import { Address } from '../address/dto';
+import { SessionData } from '../session-data/dto';
+import { UserReport } from '../user-report';
 
 export enum Action {
   Manage = 'manage',
@@ -26,7 +28,14 @@ export enum Action {
 }
 
 export type UserAuthSubjects = InferSubjects<
-  typeof User | typeof Address | typeof Employee | WorkshopDevice | WorkshopDeviceOTP | 'all'
+  | typeof User
+  | typeof Address
+  | typeof Employee
+  | typeof WorkshopDevice
+  | typeof WorkshopDeviceOtp
+  | typeof SessionData
+  | typeof UserReport
+  | 'all'
 >;
 
 export type UserAuthAbility = PureAbility<
@@ -56,7 +65,7 @@ export class UserAbilityFactory {
         break;
 
       case UserRole.MODERATOR: //can manage user reports, reviews, comments, etc.
-        can(Action.Manage, 'all')
+        can(Action.Manage, 'all');
         cannot(Action.Manage, User, { role: UserRole.SUPERADMIN });
         cannot(Action.Manage, User, { role: UserRole.ADMIN });
         cannot(Action.Manage, User, { role: UserRole.MODERATOR });
@@ -65,7 +74,6 @@ export class UserAbilityFactory {
       case UserRole.USER:
         can(Action.Update, User, { userId: user.sub });
         can(Action.Manage, Address, { userId: user.sub });
-        
 
         break;
 

@@ -27,6 +27,9 @@ export class ServiceCountAggregateInput {
     description?: true;
 
     @Field(() => Boolean, {nullable:true})
+    serviceDescription?: true;
+
+    @Field(() => Boolean, {nullable:true})
     status?: true;
 
     @Field(() => Boolean, {nullable:true})
@@ -40,12 +43,6 @@ export class ServiceCountAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     serviceEndDate?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    addedAt?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    addedBy?: true;
 
     @Field(() => Boolean, {nullable:true})
     _all?: true;

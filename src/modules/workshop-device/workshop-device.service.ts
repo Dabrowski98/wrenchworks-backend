@@ -11,6 +11,7 @@ import {
 } from './dto';
 import { Workshop } from '../workshop/dto/workshop.model';
 import { WorkshopDeviceStatus } from '@prisma/client';
+import { ServiceRequestCount } from '../service-request/dto';
 
 @Injectable()
 export class WorkshopDeviceService {

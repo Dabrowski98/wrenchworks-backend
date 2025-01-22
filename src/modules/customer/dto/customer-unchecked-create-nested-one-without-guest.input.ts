@@ -23,5 +23,5 @@ export class CustomerUncheckedCreateNestedOneWithoutGuestInput {
     @Field(() => CustomerWhereUniqueInput, {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
+    connect?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>;
 }

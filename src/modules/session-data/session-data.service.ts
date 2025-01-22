@@ -6,6 +6,7 @@ import {
   SessionDataCreateInput,
   SessionDataUpdateInput,
 } from './dto';
+import { User } from '../user/dto';
 
 @Injectable()
 export class SessionDataService {
@@ -23,7 +24,7 @@ export class SessionDataService {
     return this.prisma.sessionData.findMany();
   }
 
-  async findSessionById(
+  async findOne(
     id: string,
     options?: {
       includeUser?: boolean;
@@ -63,5 +64,18 @@ export class SessionDataService {
   async deleteMany(where: DeleteManySessionDataArgs): Promise<boolean> {
     const result = await this.prisma.sessionData.deleteMany(where);
     return !!result;
+  }
+
+  // RESOLVE METHODS
+
+  async user(sessionDataId: string): Promise<User> {
+    return (
+      await this.prisma.sessionData.findUnique({
+        where: { sessionDataId: sessionDataId },
+        include: {
+          user: true,
+        },
+      })
+    ).user;
   }
 }

@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 
 @ObjectType()
 export class EmployeeMaxAggregate {
@@ -24,8 +25,8 @@ export class EmployeeMaxAggregate {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
-    @Field(() => Boolean, {nullable:true})
-    status?: boolean;
+    @Field(() => EmployeeStatus, {nullable:true})
+    status?: keyof typeof EmployeeStatus;
 
     @Field(() => Date, {nullable:true})
     joinedAt?: Date | string;

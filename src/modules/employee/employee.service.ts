@@ -20,9 +20,9 @@ import { Address } from '../address/dto/address.model';
 import { SessionData } from '../session-data/dto/session-data.model';
 import { Review } from '../review/dto/review.model';
 import { ReviewResponse } from '../review-response/dto/review-response.model';
-import { Service } from '../service';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto/join-workshop-request.model';
 import { Task } from '../task/dto/task.model';
+import { Service } from '../service/dto';
 
 @Injectable()
 export class EmployeeService {

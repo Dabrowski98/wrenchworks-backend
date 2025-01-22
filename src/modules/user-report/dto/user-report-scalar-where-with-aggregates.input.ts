@@ -8,6 +8,7 @@ import { EnumUserReportStatusWithAggregatesFilter } from '../../prisma/dto/enum-
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
+import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 
 @InputType()
 export class UserReportScalarWhereWithAggregatesInput {

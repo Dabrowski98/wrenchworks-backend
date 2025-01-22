@@ -11,13 +11,13 @@ import {
   UserCreateInput,
   UserUpdateInput,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, ServiceRequest } from '@prisma/client';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Workshop } from '../workshop/dto';
 import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
 import { Vehicle } from '../vehicle';
-import { ServiceRequest } from '../service-request';
+
 import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';

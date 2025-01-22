@@ -52,7 +52,7 @@ export class DeviceAuthResolver {
   @Mutation(() => Boolean)
   removeDevice(
     @Args('deviceId', { type: () => Scalars.GraphQLBigInt }) deviceId: bigint,
-  ): Promise<WorkshopDevice> {
+  ): Promise<Boolean> {
     return this.deviceAuthService.removeDevice(deviceId);
   }
 }

@@ -30,7 +30,7 @@ import { Service } from '../service/dto/service.model';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
 import * as Scalars from 'graphql-scalars';
-import { Task } from '../task';
+import { Task } from '../task/dto/task.model';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';
 
 @Resolver(() => Employee)

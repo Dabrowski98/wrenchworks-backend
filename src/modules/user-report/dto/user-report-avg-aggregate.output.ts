@@ -13,4 +13,7 @@ export class UserReportAvgAggregate {
 
     @Field(() => Float, {nullable:true})
     reportedId?: number;
+
+    @Field(() => Float, {nullable:true})
+    updatedBy?: number;
 }

@@ -29,7 +29,7 @@ generator nestgraphql {
 
     //Hide implicitly managed fields.
     decorate_1_type = "*Input"
-    decorate_1_field = [deletedAt, createdAt, createdBy, updatedAt, updatedBy, resolvedAt, resolvedBy]
+    decorate_1_field = [deletedAt, createdAt, createdBy, updatedAt, updatedBy, resolvedAt, resolvedBy, addedAt, addedBy]
     decorate_1_name = "HideField"
     decorate_1_from = "@nestjs/graphql"
     decorate_1_arguments = "[]"
@@ -185,7 +185,7 @@ model Customer {
   deletedAt    DateTime?    @db.Timestamp(0)
   createdAt    DateTime     @default(now()) @db.Timestamp(0)
   createdBy    BigInt?      @db.UnsignedBigInt
-  updatedAt          DateTime?     @db.Timestamp(0) @updatedAt
+  updatedAt    DateTime?     @db.Timestamp(0) @updatedAt
   updatedBy    BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
@@ -198,6 +198,7 @@ model Customer {
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   workshop     Workshop       @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
 
+  @@unique([userId, workshopId])
   @@index([workshopId])
 } 
 
@@ -235,7 +236,7 @@ model Employee {
   /// @Validator.IsBoolean({ message: 'Disabled must be a boolean' })
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
-  status                Boolean
+  status                EmployeeStatus      @default(INACTIVE)
   // /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
   // /// @Validator.IsOptional()
   // permissionSetId       Int?              @db.UnsignedInt
@@ -596,6 +597,10 @@ model Service {
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   description         String?           @db.Text
+  /// @Validator.IsString({ message: 'Description must be a string' })
+  /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+  /// @Validator.IsOptional()
+  serviceDescription  String?           @db.Text
   /// @Validator.IsEnum(ServiceStatus, { message: 'Invalid service status' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
@@ -861,7 +866,8 @@ model UserReport {
   status             UserReportStatus          @default(PENDING)
   createdAt          DateTime                   @default(now()) @db.DateTime(0)
   updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
-  /// @HideField({ match: '@(UserReport)@(Update)*Input' })
+  updatedBy          BigInt?                     @db.UnsignedBigInt
+  /// @HideField({ match: '@(UserReport)@(Create|Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
   @@index([userId])
@@ -1068,7 +1074,7 @@ model WorkshopDevice {
   deviceName          String                    @db.VarChar(255)
   /// @Validator.IsEnum(WorkshopDeviceStatus, { message: 'Invalid workshop device status' })
   /// @Validator.IsOptional()
-  status              WorkshopDeviceStatus?     @default(ACTIVE)
+  status              WorkshopDeviceStatus?     @default(INACTIVE)
   lastLoginAt         DateTime?                 @db.Timestamp(0)
   lastLoginBy         BigInt?                   @db.UnsignedBigInt
   updatedAt           DateTime?                 @db.Timestamp(0) @updatedAt
@@ -1105,7 +1111,7 @@ model WorkshopDeviceOtp {
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
   createdAt                             DateTime    @default(now()) @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
-  workshop                              Workshop    @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDeviceOTP")
+  workshop                              Workshop    @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDeviceOtp")
 
   @@index([code])
   @@index([workshopId])
@@ -1137,7 +1143,7 @@ model WorkshopDetails {
   /// @Validator.IsEnum(WorkshopDetailsStatus, { message: 'Invalid workshop status' })
   /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   /// @Validator.IsOptional()
-  status           WorkshopDetailsStatus?   @default(ACTIVE)
+  status           WorkshopDetailsStatus?   @default(INACTIVE)
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
@@ -1212,64 +1218,6 @@ enum UserReportType {
   OTHER
 }
 
-enum UserRole {
-  USER
-  MODERATOR
-  ADMIN
-  SUPERADMIN
-}
-
-enum ServiceRequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  CANCELLED
-}
-
-enum TaskStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
-}
-
-enum UserReportStatus {
-  PENDING
-  ACTIVE
-  CLOSED_CONFIRMED
-  CLOSED_REJECTED
-}
-
-enum ReviewStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
-enum ReviewResponseStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  HIDDEN
-}
-
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-}
-
-enum WorkshopDetailsStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-}
-
-enum ServiceStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
-}
-
 enum FuelType {
   PETROL
   DIESEL
@@ -1294,6 +1242,59 @@ enum BodyColor {
   OTHER
 }
 
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+  SUPERADMIN
+}
+
+enum ServiceRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum TaskStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum UserReportStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum ReviewStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  HIDDEN
+}
+
+enum ReviewResponseStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  HIDDEN
+}
+
+enum WorkshopDetailsStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ServiceStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+
 enum CustomerCreationSource {
   GUEST
   WORKSHOP
@@ -1310,4 +1311,16 @@ enum WorkshopDeviceStatus {
   ACTIVE
   INACTIVE
   DISABLED
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
 }

@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 

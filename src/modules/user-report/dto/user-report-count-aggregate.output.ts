@@ -33,5 +33,8 @@ export class UserReportCountAggregate {
     updatedAt!: number;
 
     @Field(() => Int, {nullable:false})
+    updatedBy!: number;
+
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }

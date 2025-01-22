@@ -28,6 +28,9 @@ export class ServiceMinOrderByAggregateInput {
     description?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    serviceDescription?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
@@ -41,11 +44,5 @@ export class ServiceMinOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     serviceEndDate?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    addedAt?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    addedBy?: keyof typeof SortOrder;
 
     }

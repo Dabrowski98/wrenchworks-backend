@@ -27,16 +27,16 @@ export class ServiceCreateWithoutEmployeeInput {
     @Validator.IsOptional()
     description?: string;
 
+    @Field(() => String, {nullable:true})
+    @Validator.IsString({ message: 'Description must be a string' })
+    @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+    @Validator.IsOptional()
+    serviceDescription?: string;
+
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Service start date must be a valid date' })
     @Validator.IsOptional()
     serviceStartDate?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    addedAt?: Date | string;
-
-    @Field(() => String, {nullable:true})
-    addedBy?: bigint | number;
 
     @Field(() => TaskCreateNestedManyWithoutServiceInput, {nullable:true})
     @Type(() => TaskCreateNestedManyWithoutServiceInput)

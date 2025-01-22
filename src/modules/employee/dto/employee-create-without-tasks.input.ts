@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { ServiceCreateNestedManyWithoutEmployeeInput } from '../../service/dto/service-create-nested-many-without-employee.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-employee.input';
 import { ValidateNested } from 'class-validator';

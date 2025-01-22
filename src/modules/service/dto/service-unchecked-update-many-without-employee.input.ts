@@ -35,6 +35,12 @@ export class ServiceUncheckedUpdateManyWithoutEmployeeInput {
     @Validator.IsOptional()
     description?: string;
 
+    @Field(() => String, {nullable:true})
+    @Validator.IsString({ message: 'Description must be a string' })
+    @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
+    @Validator.IsOptional()
+    serviceDescription?: string;
+
     @Field(() => ServiceStatus, {nullable:true})
     @Validator.IsEnum(ServiceStatus, { message: 'Invalid service status' })
     @Validator.IsOptional()
@@ -63,11 +69,5 @@ export class ServiceUncheckedUpdateManyWithoutEmployeeInput {
     @Validator.IsDate({ message: 'Service end date must be a valid date' })
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
-
-    @Field(() => Date, {nullable:true})
-    addedAt?: Date | string;
-
-    @Field(() => String, {nullable:true})
-    addedBy?: bigint | number;
 
     }

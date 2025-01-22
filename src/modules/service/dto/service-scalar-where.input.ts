@@ -47,6 +47,9 @@ export class ServiceScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    serviceDescription?: StringNullableFilter;
+
     @Field(() => EnumServiceStatusNullableFilter, {nullable:true})
     status?: EnumServiceStatusNullableFilter;
 
@@ -62,11 +65,5 @@ export class ServiceScalarWhereInput {
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
     serviceEndDate?: DateTimeNullableFilter;
-
-    @Field(() => DateTimeFilter, {nullable:true})
-    addedAt?: DateTimeFilter;
-
-    @Field(() => BigIntNullableFilter, {nullable:true})
-    addedBy?: BigIntNullableFilter;
 
     }

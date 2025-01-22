@@ -27,7 +27,4 @@ export class ServiceAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     paymentAmount?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    addedBy?: keyof typeof SortOrder;
-
     }

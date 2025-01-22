@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { ServiceUncheckedUpdateManyWithoutEmployeeNestedInput } from '../../service/dto/service-unchecked-update-many-without-employee-nested.input';
 import { Type } from 'class-transformer';
@@ -48,10 +49,10 @@ export class EmployeeUncheckedUpdateWithoutJoinWorkshopRequestsInput {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
-    @Field(() => Boolean, {nullable:true})
+    @Field(() => EmployeeStatus, {nullable:true})
     @Validator.IsBoolean({ message: 'Disabled must be a boolean' })
     @Validator.IsOptional()
-    status?: boolean;
+    status?: keyof typeof EmployeeStatus;
 
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })

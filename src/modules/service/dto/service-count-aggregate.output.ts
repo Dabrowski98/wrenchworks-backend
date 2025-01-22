@@ -27,6 +27,9 @@ export class ServiceCountAggregate {
     description!: number;
 
     @Field(() => Int, {nullable:false})
+    serviceDescription!: number;
+
+    @Field(() => Int, {nullable:false})
     status!: number;
 
     @Field(() => Int, {nullable:false})

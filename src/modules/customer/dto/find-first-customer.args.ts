@@ -21,7 +21,7 @@ export class FindFirstCustomerArgs {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
-    cursor?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
+    cursor?: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

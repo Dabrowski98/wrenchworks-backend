@@ -21,6 +21,13 @@ import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-
 import { ServiceRequestService } from './service-request.service';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
 import { CreateServiceRequestAsGuestInput } from './custom-dto/create-service-request-as-guest.input';
+import { CreateOneServiceArgs, Service, ServiceCreateInput } from '../service/dto';
+import { AcceptServiceRequestInput } from './custom-dto/accept-service-request.input';
+import { Job } from '../job/dto/job.model';
+import { Vehicle } from '../vehicle/dto/vehicle.model';
+import { Workshop } from '../workshop/dto/workshop.model';
+import { User } from '../user/dto/user.model';
+import { Guest } from '../guest/dto/guest.model';
 
 @Resolver(() => ServiceRequest)
 export class ServiceRequestResolver {
@@ -43,11 +50,10 @@ export class ServiceRequestResolver {
 
   @Mutation(() => ServiceRequest)
   async acceptServiceRequest(
-    @Args('serviceRequestId', { type: () => GraphQLBigInt })
-    serviceRequestId: bigint,
+    @Args() args: AcceptServiceRequestInput,
     @CurrentEmployeeID() employeeId: bigint,
   ): Promise<ServiceRequest> {
-    return this.serviceRequestService.accept(serviceRequestId, employeeId);
+    return this.serviceRequestService.accept(args, employeeId);
   }
 
   @Mutation(() => ServiceRequest)
@@ -89,18 +95,34 @@ export class ServiceRequestResolver {
 
   // RESOLVE FIELDS
 
-  @ResolveField(() => Employee, { nullable: true })
-  async employee(
-    @Parent() serviceRequest: ServiceRequest,
-  ): Promise<Employee | null> {
-    return this.serviceRequestService.employee(serviceRequest.serviceRequestId);
+  @ResolveField(() => [Job])
+  async jobs(@Parent() serviceRequest: ServiceRequest): Promise<Job[]> {
+    return this.serviceRequestService.jobs(serviceRequest.serviceRequestId);
   }
 
-  @ResolveField(() => Service, { nullable: true })
-  async service(
-    @Parent() serviceRequest: ServiceRequest,
-  ): Promise<Service | null> {
-    return this.serviceRequestService.service(serviceRequest.serviceId);
+  @ResolveField(() => Service)
+  async approvedService(@Parent() serviceRequest: ServiceRequest): Promise<Service> {
+    return this.serviceRequestService.approvedService(serviceRequest.serviceRequestId);
+  }
+
+  @ResolveField(() => Vehicle)
+  async vehicle(@Parent() serviceRequest: ServiceRequest): Promise<Vehicle> {
+    return this.serviceRequestService.vehicle(serviceRequest.serviceRequestId);
+  }
+
+  @ResolveField(() => Workshop)
+  async workshop(@Parent() serviceRequest: ServiceRequest): Promise<Workshop> {
+    return this.serviceRequestService.workshop(serviceRequest.serviceRequestId);
+  }
+
+  @ResolveField(() => User)
+  async user(@Parent() serviceRequest: ServiceRequest): Promise<User> {
+    return this.serviceRequestService.user(serviceRequest.serviceRequestId);
+  }
+
+  @ResolveField(() => Guest)
+  async guest(@Parent() serviceRequest: ServiceRequest): Promise<Guest> {
+    return this.serviceRequestService.guest(serviceRequest.serviceRequestId);
   }
 
   @ResolveField(() => ServiceRequestCount)

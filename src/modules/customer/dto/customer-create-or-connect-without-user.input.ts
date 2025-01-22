@@ -11,7 +11,7 @@ export class CustomerCreateOrConnectWithoutUserInput {
 
     @Field(() => CustomerWhereUniqueInput, {nullable:false})
     @Type(() => CustomerWhereUniqueInput)
-    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>;
+    where!: Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>;
 
     @Field(() => CustomerCreateWithoutUserInput, {nullable:false})
     @Type(() => CustomerCreateWithoutUserInput)

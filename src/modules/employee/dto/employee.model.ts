@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { Service } from '../../service/dto/service.model';
 import { Type } from 'class-transformer';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
@@ -34,8 +35,8 @@ export class Employee {
     @Field(() => String, {nullable:true})
     refreshToken!: string | null;
 
-    @Field(() => Boolean, {nullable:false})
-    status!: boolean;
+    @Field(() => EmployeeStatus, {nullable:false,defaultValue:'INACTIVE'})
+    status!: keyof typeof EmployeeStatus;
 
     /**
      * Note: Optional because field defaults to now()

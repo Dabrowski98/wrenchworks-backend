@@ -54,7 +54,9 @@ export class UserAuthService {
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {
-    const user = await this.userService.findOneWithPassword({ where: { email } });
+    const user = await this.userService.findOneWithPassword({
+      where: { email },
+    });
     if (!user) return null;
     const isPasswordValid = await bcrypt.compare(password, user.password);
     const { password: _, ...result } = user;
@@ -165,7 +167,7 @@ export class UserAuthService {
         throw new UnauthorizedError('Invalid refresh token');
       }
 
-      const session = await this.sessionDataService.findSessionById(
+      const session = await this.sessionDataService.findOne(
         decodedRefreshToken.jti,
       );
 
@@ -192,7 +194,9 @@ export class UserAuthService {
     userId: bigint,
     changePasswordInput: ChangePasswordInput,
   ) {
-    const user = await this.userService.findOneWithPassword({ where: { userId } });
+    const user = await this.userService.findOneWithPassword({
+      where: { userId },
+    });
 
     if (!user) throw new UnauthorizedError('User not found');
 

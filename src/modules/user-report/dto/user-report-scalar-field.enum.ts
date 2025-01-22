@@ -9,7 +9,8 @@ export enum UserReportScalarFieldEnum {
     reportedId = "reportedId",
     status = "status",
     createdAt = "createdAt",
-    updatedAt = "updatedAt"
+    updatedAt = "updatedAt",
+    updatedBy = "updatedBy"
 }
 
 

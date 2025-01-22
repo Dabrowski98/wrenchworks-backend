@@ -11,8 +11,8 @@ import { BoolFilter } from '../../prisma/dto/bool-filter.input';
 import { DecimalFilter } from '../../prisma/dto/decimal-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { ServiceRequestNullableRelationFilter } from '../../service-request/dto/service-request-nullable-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { TaskListRelationFilter } from '../../task/dto/task-list-relation-filter.input';
@@ -58,6 +58,9 @@ export class ServiceWhereUniqueInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    serviceDescription?: StringNullableFilter;
+
     @Field(() => EnumServiceStatusNullableFilter, {nullable:true})
     status?: EnumServiceStatusNullableFilter;
 
@@ -73,12 +76,6 @@ export class ServiceWhereUniqueInput {
 
     @Field(() => DateTimeNullableFilter, {nullable:true})
     serviceEndDate?: DateTimeNullableFilter;
-
-    @Field(() => DateTimeFilter, {nullable:true})
-    addedAt?: DateTimeFilter;
-
-    @Field(() => BigIntNullableFilter, {nullable:true})
-    addedBy?: BigIntNullableFilter;
 
     @Field(() => ServiceRequestNullableRelationFilter, {nullable:true})
     @Type(() => ServiceRequestNullableRelationFilter)

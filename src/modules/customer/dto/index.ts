@@ -99,6 +99,7 @@ export { CustomerUpsertWithWhereUniqueWithoutVehiclesInput } from './customer-up
 export { CustomerUpsertWithWhereUniqueWithoutWorkshopInput } from './customer-upsert-with-where-unique-without-workshop.input';
 export { CustomerUpsertWithoutGuestInput } from './customer-upsert-without-guest.input';
 export { CustomerUpsertWithoutServicesInput } from './customer-upsert-without-services.input';
+export { CustomerUserIdWorkshopIdCompoundUniqueInput } from './customer-user-id-workshop-id-compound-unique.input';
 export { CustomerWhereUniqueInput } from './customer-where-unique.input';
 export { CustomerWhereInput } from './customer-where.input';
 export { Customer } from './customer.model';

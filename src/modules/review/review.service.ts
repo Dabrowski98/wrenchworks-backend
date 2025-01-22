@@ -13,7 +13,7 @@ import { User } from '../user/dto/user.model';
 import { Workshop } from '../workshop/dto/workshop.model';
 import { ReviewResponse } from '../review-response/dto/review-response.model';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { ReviewsStatus } from '../prisma';
+import { ReviewStatus } from '../prisma';
 
 @Injectable()
 export class ReviewService {
@@ -21,7 +21,7 @@ export class ReviewService {
 
   async create(args: CreateOneReviewArgs): Promise<Review> {
     return this.prisma.review.create({
-      data: { ...args.data, status: ReviewsStatus.PENDING },
+      data: { ...args.data, status: ReviewStatus.PENDING },
     });
   }
 
@@ -61,14 +61,14 @@ export class ReviewService {
   async accept(reviewId: bigint): Promise<Review> {
     return this.prisma.review.update({
       where: { reviewId },
-      data: { status: ReviewsStatus.ACCEPTED },
+      data: { status: ReviewStatus.ACCEPTED },
     });
   }
 
   async reject(reviewId: bigint): Promise<Review> {
     return this.prisma.review.update({
       where: { reviewId },
-      data: { status: ReviewsStatus.REJECTED },
+      data: { status: ReviewStatus.REJECTED },
     });
   }
 

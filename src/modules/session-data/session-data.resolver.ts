@@ -1,39 +1,59 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql';
 import { SessionDataService } from './session-data.service';
 import { SessionData } from './dto/session-data.model';
 import { SessionDataCreateInput, SessionDataUpdateInput } from './dto';
- 
+import { Action, CheckAbilities } from '../ability';
+import { User } from '../user/dto';
+
+@CheckAbilities({
+  action: Action.Manage,
+  subject: SessionData,
+})
 @Resolver(() => SessionData)
 export class SessionDataResolver {
   constructor(private readonly sessionDataService: SessionDataService) {}
 
-//   @Mutation(() => SessionData)
-//   async createSessionData(
-//     @Args('sessionDataCreateInput') sessionDataCreateInput: SessionDataCreateInput,
-//   ): Promise<SessionData> {
-//     return this.sessionDataService.create(sessionDataCreateInput);
-//   }
+  @Mutation(() => SessionData)
+  async createSessionData(
+    @Args('sessionDataCreateInput')
+    sessionDataCreateInput: SessionDataCreateInput,
+  ): Promise<SessionData> {
+    return this.sessionDataService.create(sessionDataCreateInput);
+  }
 
-//   @Query(() => [SessionData], { name: 'getAllSessionData' })
-//   async findAll(): Promise<SessionData[]> {
-//     return this.sessionDataService.findAll();
-//   }
+  @Query(() => [SessionData], { name: 'getAllSessionData' })
+  async findAll(): Promise<SessionData[]> {
+    return this.sessionDataService.findAll();
+  }
 
-//   @Query(() => SessionData, { name: 'getSessionData' })
-//   async findOne(@Args('id') id: string): Promise<SessionData> {
-//     return this.sessionDataService.findOne(id);
-//   }
+  @Query(() => SessionData, { name: 'getSessionData' })
+  async findOne(@Args('id') id: string): Promise<SessionData> {
+    return this.sessionDataService.findOne(id);
+  }
 
-//   @Mutation(() => SessionData)
-//   async updateSessionData(
-//     @Args('id') id: string,
-//     @Args('sessionDataUpdateInput') sessionDataUpdateInput: SessionDataUpdateInput,
-//   ): Promise<SessionData> {
-//     return this.sessionDataService.update(id, sessionDataUpdateInput);
-//   }
+  @Mutation(() => SessionData)
+  async updateSessionData(
+    @Args('sessionDataId') sessionDataId: string,
+    @Args('sessionDataUpdateInput')
+    sessionDataUpdateInput: SessionDataUpdateInput,
+  ): Promise<SessionData> {
+    return this.sessionDataService.update(
+      sessionDataId,
+      sessionDataUpdateInput,
+    );
+  }
 
-//   @Mutation(() => SessionData)
-//   async deleteSessionData(@Args('id') id: string): Promise<SessionData> {
-//     return this.sessionDataService.remove(id);
-//   }
-} 
+  @Mutation(() => Boolean)
+  async deleteSessionData(
+    @Args('sessionDataId') sessionDataId: string,
+  ): Promise<boolean> {
+    return this.sessionDataService.delete(sessionDataId);
+  }
+
+  // RESOLVE METHODS
+
+  @ResolveField(() => User)
+  async user(@Parent() sessionData: SessionData): Promise<User> {
+    return this.sessionDataService.user(sessionData.sessionDataId);
+  }
+}

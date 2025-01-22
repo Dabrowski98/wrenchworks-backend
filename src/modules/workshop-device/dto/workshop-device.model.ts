@@ -20,7 +20,7 @@ export class WorkshopDevice {
     @Field(() => String, {nullable:false})
     deviceName!: string;
 
-    @Field(() => WorkshopDeviceStatus, {nullable:true,defaultValue:'ACTIVE'})
+    @Field(() => WorkshopDeviceStatus, {nullable:true,defaultValue:'INACTIVE'})
     status!: keyof typeof WorkshopDeviceStatus | null;
 
     @Field(() => Date, {nullable:true})

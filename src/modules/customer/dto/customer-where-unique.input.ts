@@ -1,8 +1,9 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { CustomerWhereInput } from './customer-where.input';
+import { CustomerUserIdWorkshopIdCompoundUniqueInput } from './customer-user-id-workshop-id-compound-unique.input';
 import { Type } from 'class-transformer';
+import { CustomerWhereInput } from './customer-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
@@ -27,6 +28,10 @@ export class CustomerWhereUniqueInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId?: bigint | number;
+
+    @Field(() => CustomerUserIdWorkshopIdCompoundUniqueInput, {nullable:true})
+    @Type(() => CustomerUserIdWorkshopIdCompoundUniqueInput)
+    userId_workshopId?: CustomerUserIdWorkshopIdCompoundUniqueInput;
 
     @Field(() => [CustomerWhereInput], {nullable:true})
     @Type(() => CustomerWhereInput)

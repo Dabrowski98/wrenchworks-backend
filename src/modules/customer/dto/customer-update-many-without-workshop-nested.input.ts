@@ -38,22 +38,22 @@ export class CustomerUpdateManyWithoutWorkshopNestedInput {
     @Field(() => [CustomerWhereUniqueInput], {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    set?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>>;
+    set?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>>;
 
     @Field(() => [CustomerWhereUniqueInput], {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    disconnect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>>;
+    disconnect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>>;
 
     @Field(() => [CustomerWhereUniqueInput], {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    delete?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>>;
+    delete?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>>;
 
     @Field(() => [CustomerWhereUniqueInput], {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>>;
+    connect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>>;
 
     @Field(() => [CustomerUpdateWithWhereUniqueWithoutWorkshopInput], {nullable:true})
     @Type(() => CustomerUpdateWithWhereUniqueWithoutWorkshopInput)

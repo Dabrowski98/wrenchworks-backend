@@ -29,5 +29,5 @@ export class CustomerUncheckedCreateNestedManyWithoutUserInput {
     @Field(() => [CustomerWhereUniqueInput], {nullable:true})
     @Type(() => CustomerWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId'>>;
+    connect?: Array<Prisma.AtLeast<CustomerWhereUniqueInput, 'customerId' | 'guestId' | 'userId_workshopId'>>;
 }

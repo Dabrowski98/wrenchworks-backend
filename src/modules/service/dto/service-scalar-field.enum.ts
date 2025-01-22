@@ -8,6 +8,7 @@ export enum ServiceScalarFieldEnum {
     customerId = "customerId",
     employeeId = "employeeId",
     description = "description",
+    serviceDescription = "serviceDescription",
     status = "status",
     payedOff = "payedOff",
     paymentAmount = "paymentAmount",

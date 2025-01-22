@@ -47,6 +47,9 @@ export class ServiceScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     description?: StringNullableWithAggregatesFilter;
 
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    serviceDescription?: StringNullableWithAggregatesFilter;
+
     @Field(() => EnumServiceStatusNullableWithAggregatesFilter, {nullable:true})
     status?: EnumServiceStatusNullableWithAggregatesFilter;
 
@@ -62,11 +65,5 @@ export class ServiceScalarWhereWithAggregatesInput {
 
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     serviceEndDate?: DateTimeNullableWithAggregatesFilter;
-
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    addedAt?: DateTimeWithAggregatesFilter;
-
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
-    addedBy?: BigIntNullableWithAggregatesFilter;
 
     }

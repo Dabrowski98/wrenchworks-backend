@@ -20,7 +20,7 @@ import { UseGuards } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Workshop } from '../workshop/dto/workshop.model';
 import { Review } from '../review/dto/review.model';
-import { CreateOneTaskArgs, Task } from '../task';
+import { Task } from '../task/dto/task.model';
 import { ServiceRequest } from '../service-request/dto/service-request.model';
 import { Employee } from '../employee/dto/employee.model';
 import { Vehicle } from '../vehicle/dto/vehicle.model';

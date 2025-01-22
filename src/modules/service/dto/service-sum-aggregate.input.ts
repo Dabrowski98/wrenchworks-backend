@@ -26,7 +26,4 @@ export class ServiceSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     paymentAmount?: true;
 
-    @Field(() => Boolean, {nullable:true})
-    addedBy?: true;
-
     }

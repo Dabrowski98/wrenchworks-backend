@@ -39,6 +39,9 @@ export class UserReport {
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
 
+    @Field(() => String, {nullable:true})
+    updatedBy!: bigint | null;
+
     @Field(() => User, {nullable:false})
     user?: User;
 }

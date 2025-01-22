@@ -44,10 +44,12 @@ export class WorkshopAuthService {
     });
 
     //TODO: set all permissions to true
-    const ownerEmployee = await this.employeeService.createEmployee({
-      ...ownerEmployeeInput,
-      password: employeeHashedPassword,
-      workshop: { connect: { workshopId: workshop.workshopId } },
+    const ownerEmployee = await this.employeeService.create({
+      data: {
+        ...ownerEmployeeInput,
+        password: employeeHashedPassword,
+        workshop: { connect: { workshopId: workshop.workshopId } },
+      },
     });
 
     const updatedOwnerEmployee = await this.prisma.employee.update({

@@ -40,6 +40,9 @@ export class UserReportGroupBy {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
+    @Field(() => String, {nullable:true})
+    updatedBy?: bigint | number;
+
     @Field(() => UserReportCountAggregate, {nullable:true})
     _count?: UserReportCountAggregate;
 

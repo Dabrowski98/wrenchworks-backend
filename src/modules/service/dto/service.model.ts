@@ -37,6 +37,9 @@ export class Service {
     @Field(() => String, {nullable:true})
     description!: string | null;
 
+    @Field(() => String, {nullable:true})
+    serviceDescription!: string | null;
+
     @Field(() => ServiceStatus, {nullable:true,defaultValue:'PENDING'})
     status!: keyof typeof ServiceStatus | null;
 

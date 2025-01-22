@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
+import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { EmployeeCountAggregate } from './employee-count-aggregate.output';
 import { EmployeeAvgAggregate } from './employee-avg-aggregate.output';
 import { EmployeeSumAggregate } from './employee-sum-aggregate.output';
@@ -29,8 +30,8 @@ export class EmployeeGroupBy {
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
-    @Field(() => Boolean, {nullable:false})
-    status!: boolean;
+    @Field(() => EmployeeStatus, {nullable:false})
+    status!: keyof typeof EmployeeStatus;
 
     @Field(() => Date, {nullable:false})
     joinedAt!: Date | string;

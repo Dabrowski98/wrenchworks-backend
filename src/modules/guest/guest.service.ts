@@ -9,9 +9,9 @@ import {
 import { Guest } from './dto/guest.model';
 import { PrismaService } from 'src/database/prisma.service';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
-import { ServiceRequest } from '../service-request';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Customer } from '../customer/dto';
+import { ServiceRequest } from '../service-request/dto';
 
 @Injectable()
 export class GuestService {
