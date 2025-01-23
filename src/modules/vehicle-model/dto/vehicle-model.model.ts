@@ -30,7 +30,7 @@ export class VehicleModel {
 
     @Field(() => VehicleBrand, {nullable:false})
     @Type(() => VehicleBrand)
-    vehiclesBrand?: VehicleBrand;
+    vehicleBrand?: VehicleBrand;
 
     @Field(() => VehicleModelCount, {nullable:false})
     _count?: VehicleModelCount;

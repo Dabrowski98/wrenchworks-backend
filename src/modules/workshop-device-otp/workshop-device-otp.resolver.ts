@@ -14,26 +14,6 @@ import { Workshop } from '../workshop/dto/workshop.model';
 export class WorkshopDeviceOtpResolver {
   constructor(private readonly workshopDeviceOTPService: WorkshopDeviceOTPService) {}
 
-//Not for public use
-
-//   @UseGuards(EmployeeJwtAuthGuard)
-//   @Query(() => WorkshopDeviceOtp, { name: 'workshopDeviceOtp' })
-//   findOneWorkshopDeviceOtp(@Args() args: FindUniqueWorkshopDeviceOtpArgs) {
-//     return this.workshopDeviceOTPService.findOne(args);
-//   }
-
-//   @UseGuards(EmployeeJwtAuthGuard)
-//   @Mutation(() => WorkshopDeviceOtp)
-//   updateWorkshopDeviceOtp(@Args() args: UpdateOneWorkshopDeviceOtpArgs) {
-//     return this.workshopDeviceOTPService.update(args);
-//   }
-
-//   @UseGuards(EmployeeJwtAuthGuard)
-//   @Mutation(() => Boolean)
-//   deleteWorkshopDeviceOtp(@Args() args: DeleteOneWorkshopDeviceOtpArgs) {
-//     return this.workshopDeviceOTPService.delete(args);
-//   }
-
   @ResolveField(() => Workshop)
   workshop(@Parent() workshopDeviceOtp: WorkshopDeviceOtp) {
     return this.workshopDeviceOTPService.workshop(workshopDeviceOtp.WorkshopDeviceOtpId);

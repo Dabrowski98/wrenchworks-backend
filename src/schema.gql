@@ -280,7 +280,9 @@ type Customer {
   createdAt: DateTime!
   createdBy: String
 
-  """Note: Fill this field in Service layer."""
+  """
+  Note: Fill this field in Service layer.
+  """
   creationSource: CustomerCreationSource!
   customerId: BigInt!
   deletedAt: DateTime
@@ -293,7 +295,9 @@ type Customer {
   services: [Service!]
   telephoneNumber: String
 
-  """Note: Optional because it defaults to 0.00"""
+  """
+  Note: Optional because it defaults to 0.00
+  """
   totalDue: Decimal!
   updatedAt: DateTime
   updatedBy: String
@@ -491,7 +495,9 @@ input DateTimeNullableFilter {
   notIn: [DateTime!]
 }
 
-"""An arbitrary-precision Decimal type"""
+"""
+An arbitrary-precision Decimal type
+"""
 scalar Decimal
 
 input DecimalFilter {
@@ -528,20 +534,26 @@ type Employee {
   employeeId: BigInt!
   joinWorkshopRequests: [JoinWorkshopRequest!]
 
-  """Note: Optional because field defaults to now()"""
+  """
+  Note: Optional because field defaults to now()
+  """
   joinedAt: DateTime!
   login: String!
   nickname: BigInt
   refreshToken: String
 
-  """Note: Connect or Create only allowed"""
+  """
+  Note: Connect or Create only allowed
+  """
   services: [Service!]
   status: Boolean!
   tasks: [Task!]
   updatedAt: DateTime
   updatedBy: String
 
-  """Note: Depends solely on join workshop request status."""
+  """
+  Note: Depends solely on join workshop request status.
+  """
   user: User
   userId: BigInt
   workshop: Workshop!
@@ -986,7 +998,9 @@ type Job {
   categoryId: BigInt!
   description: String
 
-  """Note: Optional because field defaults to false"""
+  """
+  Note: Optional because field defaults to false
+  """
   isPopular: Boolean!
   jobCategory: JobCategory!
   jobId: BigInt!
@@ -1001,7 +1015,9 @@ type JobCategory {
   children: [JobCategory!]
   description: String
 
-  """Note: Optional because field defaults to false"""
+  """
+  Note: Optional because field defaults to false
+  """
   isPopular: Boolean!
   jobs: [Job!]
   name: String!
@@ -1157,7 +1173,9 @@ input JobWhereUniqueInput {
   serviceRequests: ServiceRequestListRelationFilter
 }
 
-"""Note: Do not allow receiver to update this model apart from status."""
+"""
+Note: Do not allow receiver to update this model apart from status.
+"""
 type JoinWorkshopRequest {
   createdAt: DateTime!
   createdBy: String
@@ -1168,7 +1186,9 @@ type JoinWorkshopRequest {
   receiverId: BigInt!
   resolvedAt: DateTime
 
-  """Note: Optional because field defaults to PENDING"""
+  """
+  Note: Optional because field defaults to PENDING
+  """
   status: JoinWorkshopRequestStatus!
   updatedAt: DateTime
   updatedBy: String
@@ -1391,12 +1411,18 @@ type LoginUserResponse {
 }
 
 type Mutation {
-  acceptDeviceRegistration(acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput!): WorkshopDevice!
-  changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
+  acceptDeviceRegistration(
+    acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput!
+  ): WorkshopDevice!
+  changeEmployeePassword(
+    changeEmployeePasswordInput: ChangePasswordInput!
+  ): Boolean!
   changeUserPassword(changeUserPasswordInput: ChangePasswordInput!): Boolean!
   createAddress(data: AddressCreateInput!): Address!
   createAdmin(createAdminInput: CreateAdminInput!): User!
-  createSessionData(sessionDataCreateInput: SessionDataCreateInput!): SessionData!
+  createSessionData(
+    sessionDataCreateInput: SessionDataCreateInput!
+  ): SessionData!
   deleteAddress(where: AddressWhereUniqueInput!): Boolean!
   deleteEmployee(where: EmployeeWhereUniqueInput!): Boolean!
   deleteGuest(where: GuestWhereUniqueInput!): Boolean!
@@ -1405,8 +1431,12 @@ type Mutation {
   disableEmployee(employeeId: BigInt!): Boolean!
   enableEmployee(employeeId: BigInt!): Boolean!
   generateDeviceOTP: String!
-  loginEmployeeByUser(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
-  loginEmployeeByWorkshop(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
+  loginEmployeeByUser(
+    loginEmployeeInput: LoginEmployeeInput!
+  ): LoginEmployeeResponse!
+  loginEmployeeByWorkshop(
+    loginEmployeeInput: LoginEmployeeInput!
+  ): LoginEmployeeResponse!
   loginUser(loginUserInput: LoginUserInput!): LoginUserResponse!
   logoutAllUserSessions(userId: BigInt): Boolean!
   logoutAnotherEmployee(employeeId: BigInt!): Boolean!
@@ -1415,13 +1445,26 @@ type Mutation {
   refreshTokens(refreshToken: String!): LoginUserResponse!
   registerEmployee(registerEmployeeInput: RegisterEmployeeInput!): Employee!
   registerUser(registerUserInput: RegisterUserInput!): User!
-  registerWorkshop(registerWorkshopInput: RegisterWorkshopInput!): RegisterWorkshopResponse!
+  registerWorkshop(
+    registerWorkshopInput: RegisterWorkshopInput!
+  ): RegisterWorkshopResponse!
   removeDevice(deviceId: BigInt!): Boolean!
-  requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
-  updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
-  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee!
+  requestDeviceRegistration(
+    requestDeviceRegistrationInput: RequestDeviceRegistrationInput!
+  ): Boolean!
+  updateAddress(
+    data: AddressUpdateInput!
+    where: AddressWhereUniqueInput!
+  ): Address!
+  updateEmployee(
+    data: EmployeeUpdateInput!
+    where: EmployeeWhereUniqueInput!
+  ): Employee!
   updateGuest(data: GuestUpdateInput!, where: GuestWhereUniqueInput!): Guest!
-  updateSessionData(sessionDataId: String!, sessionDataUpdateInput: SessionDataUpdateInput!): SessionData!
+  updateSessionData(
+    sessionDataId: String!
+    sessionDataUpdateInput: SessionDataUpdateInput!
+  ): SessionData!
 }
 
 input NestedBigIntFilter {
@@ -1671,19 +1714,54 @@ type Query {
   AdminTest: String!
   UserTest: String!
   address(where: AddressWhereUniqueInput!): Address!
-  addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
+  addresses(
+    cursor: AddressWhereUniqueInput
+    distinct: [AddressScalarFieldEnum!]
+    orderBy: [AddressOrderByWithRelationInput!]
+    skip: Int
+    take: Int
+    where: AddressWhereInput
+  ): [Address!]!
   employee(where: EmployeeWhereUniqueInput!): Employee!
-  employees(cursor: EmployeeWhereUniqueInput, distinct: [EmployeeScalarFieldEnum!], orderBy: [EmployeeOrderByWithRelationInput!], skip: Int, take: Int, where: EmployeeWhereInput): [Employee!]!
+  employees(
+    cursor: EmployeeWhereUniqueInput
+    distinct: [EmployeeScalarFieldEnum!]
+    orderBy: [EmployeeOrderByWithRelationInput!]
+    skip: Int
+    take: Int
+    where: EmployeeWhereInput
+  ): [Employee!]!
   findAllUsers: [User!]!
   findUserByEmail(email: String!): User!
   findUserById(userId: BigInt!): User!
-  findUsers(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
+  findUsers(
+    cursor: UserWhereUniqueInput
+    distinct: [UserScalarFieldEnum!]
+    orderBy: [UserOrderByWithRelationInput!]
+    skip: Int
+    take: Int
+    where: UserWhereInput
+  ): [User!]!
   getAllSessionData: [SessionData!]!
   getSessionData(id: String!): SessionData!
   guest(where: GuestWhereUniqueInput!): Guest!
-  guests(cursor: GuestWhereUniqueInput, distinct: [GuestScalarFieldEnum!], orderBy: [GuestOrderByWithRelationInput!], skip: Int, take: Int, where: GuestWhereInput): [Guest!]!
+  guests(
+    cursor: GuestWhereUniqueInput
+    distinct: [GuestScalarFieldEnum!]
+    orderBy: [GuestOrderByWithRelationInput!]
+    skip: Int
+    take: Int
+    where: GuestWhereInput
+  ): [Guest!]!
   workshop(workshopId: BigInt!): Workshop!
-  workshops(cursor: WorkshopWhereUniqueInput, distinct: [WorkshopScalarFieldEnum!], orderBy: [WorkshopOrderByWithRelationInput!], skip: Int, take: Int, where: WorkshopWhereInput): [Workshop!]!
+  workshops(
+    cursor: WorkshopWhereUniqueInput
+    distinct: [WorkshopScalarFieldEnum!]
+    orderBy: [WorkshopOrderByWithRelationInput!]
+    skip: Int
+    take: Int
+    where: WorkshopWhereInput
+  ): [Workshop!]!
 }
 
 input RegisterEmployeeInput {
@@ -1735,13 +1813,17 @@ type Review {
   originalRating: Decimal
   originalReviewText: String
 
-  """Note: Optional because field defaults to 0.00"""
+  """
+  Note: Optional because field defaults to 0.00
+  """
   rating: Decimal!
   reviewId: BigInt!
   reviewResponses: [ReviewResponse!]
   reviewText: String!
 
-  """Note: Optional because field defaults to PENDING"""
+  """
+  Note: Optional because field defaults to PENDING
+  """
   status: ReviewStatus!
   updatedAt: DateTime
   user: User!
@@ -1829,7 +1911,9 @@ type ReviewResponse {
   reviewId: BigInt!
   reviewResponseId: BigInt!
 
-  """Note: Optional because field defaults to pending"""
+  """
+  Note: Optional because field defaults to pending
+  """
   status: ReviewResponseStatus!
   updatedAt: DateTime
   user: User!
@@ -1972,10 +2056,14 @@ type Service {
   employee: Employee!
   employeeId: BigInt!
 
-  """Note: Optional because field defaults to false"""
+  """
+  Note: Optional because field defaults to false
+  """
   payedOff: Boolean!
 
-  """Note: Optional because field defaults to 0.00"""
+  """
+  Note: Optional because field defaults to 0.00
+  """
   paymentAmount: Decimal!
   resolvedAt: DateTime
   resolvedBy: String
@@ -1985,7 +2073,9 @@ type Service {
   serviceRequest: ServiceRequest
   serviceRequestId: BigInt
 
-  """Note: Optional because field defaults to now()"""
+  """
+  Note: Optional because field defaults to now()
+  """
   serviceStartDate: DateTime!
   status: ServiceStatus
   tasks: [Task!]
@@ -2144,7 +2234,9 @@ type ServiceRequest {
   resolvedBy: String
   serviceRequestId: BigInt!
 
-  """Note: Optional because field defaults to pending"""
+  """
+  Note: Optional because field defaults to pending
+  """
   status: ServiceRequestStatus
   user: User
   userId: BigInt
@@ -2487,17 +2579,23 @@ type Task {
   description: String!
   employees: [Employee!]
 
-  """Note: Optional because field defaults to 0.00"""
+  """
+  Note: Optional because field defaults to 0.00
+  """
   executionTime: Float!
 
-  """Note: Optional because field defaults to 0.00"""
+  """
+  Note: Optional because field defaults to 0.00
+  """
   partsCost: Decimal!
   resolvedAt: DateTime
   resolvedBy: String
   service: Service!
   serviceId: BigInt!
 
-  """Note: Optional because field defaults to pending"""
+  """
+  Note: Optional because field defaults to pending
+  """
   status: TaskStatus
   taskId: BigInt!
   updatedAt: DateTime
@@ -2617,7 +2715,9 @@ input TaskWhereInput {
   workshopJobId: BigIntFilter
 }
 
-"""Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED."""
+"""
+Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED.
+"""
 type User {
   _count: UserCount!
   address: Address
@@ -2785,7 +2885,9 @@ type UserReport {
   reportedEntityType: UserReportReportedEntityType!
   reportedId: BigInt!
 
-  """Note: Optional because field defaults to pending"""
+  """
+  Note: Optional because field defaults to pending
+  """
   status: UserReportStatus!
   updatedAt: DateTime
   user: User!
@@ -3336,7 +3438,9 @@ type WorkshopDetails {
   description: String
   logoURL: String
 
-  """Note: Optional because it is set to 0.00 by default"""
+  """
+  Note: Optional because it is set to 0.00 by default
+  """
   rating: Decimal
   status: WorkshopDetailsStatus
   updatedAt: DateTime
@@ -3631,7 +3735,9 @@ input WorkshopDeviceWhereInput {
 type WorkshopJob {
   _count: WorkshopJobCount!
 
-  """Note: Optional because field defaults to true"""
+  """
+  Note: Optional because field defaults to true
+  """
   availability: Boolean!
   createdAt: DateTime!
   createdBy: String

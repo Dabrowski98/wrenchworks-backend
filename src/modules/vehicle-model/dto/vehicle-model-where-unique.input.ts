@@ -45,5 +45,5 @@ export class VehicleModelWhereUniqueInput {
     @Field(() => VehicleBrandRelationFilter, {nullable:true})
     @ValidateNested()
     @Type(() => VehicleBrandRelationFilter)
-    vehiclesBrand?: VehicleBrandRelationFilter;
+    vehicleBrand?: VehicleBrandRelationFilter;
 }

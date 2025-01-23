@@ -21,5 +21,5 @@ export class VehicleModelCreateWithoutVehiclesInput {
     @Field(() => VehicleBrandCreateNestedOneWithoutVehicleModelsInput, {nullable:false})
     @ValidateNested()
     @Type(() => VehicleBrandCreateNestedOneWithoutVehicleModelsInput)
-    vehiclesBrand!: VehicleBrandCreateNestedOneWithoutVehicleModelsInput;
+    vehicleBrand!: VehicleBrandCreateNestedOneWithoutVehicleModelsInput;
 }

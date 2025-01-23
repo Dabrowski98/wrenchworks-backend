@@ -37,7 +37,7 @@ export class WorkshopAuthService {
       Number(process.env.SALT_ROUNDS),
     );
 
-    const workshop = await this.workshopService.createWorkshop({
+    const workshop = await this.workshopService.create({
       ...workshopInput,
       password: workshopHashedPassword,
       user: { connect: { userId } },

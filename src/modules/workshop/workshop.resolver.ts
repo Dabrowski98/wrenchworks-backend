@@ -14,6 +14,7 @@ import {
   FindManyWorkshopArgs,
   FindUniqueWorkshopArgs,
   WorkshopCount,
+  DeleteOneWorkshopArgs,
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { WorkshopDetails } from '../workshop-details/dto';
@@ -21,14 +22,12 @@ import { Address } from '../address/dto';
 import { WorkshopJob } from '../workshop-job/dto';
 import { Review } from '../review/dto';
 import { ServiceRequest } from '../service-request/dto';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { JobCategory } from '../job-category/dto';
 import { Service } from '../service/dto';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { User } from '../user/dto';
-import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
 
 @Resolver(() => Workshop)
 export class WorkshopResolver {
@@ -42,32 +41,24 @@ export class WorkshopResolver {
   //   return this.workshopService.createWorkshop(args, userId);
   // }
 
-  // @Mutation(() => Workshop)
-  // updateWorkshop(@Args() args: UpdateOneWorkshopArgs): Promise<Workshop> {
-  //   if (Object.keys(args.data).length === 0) {
-  //     throw new NoDataProvidedForUpdate(Workshop);
-  //   }
+  @Mutation(() => Workshop)
+  updateWorkshop(@Args() args: UpdateOneWorkshopArgs): Promise<Workshop> {
+    return this.workshopService.update(args);
+  }
 
-  //   return this.workshopService.updateWorkshop(args);
-  // }
-
-  @Mutation(() => DeletePayload)
-  deleteWorkshop(
-    @Args('workshopId', { type: () => GraphQLBigInt }) workshopId: bigint,
-  ): Promise<DeletePayload> {
-    return this.workshopService.deleteWorkshop(workshopId);
+  @Mutation(() => Boolean)
+  deleteWorkshop(@Args() args: DeleteOneWorkshopArgs): Promise<Boolean> {
+    return this.workshopService.delete(args);
   }
 
   @Query(() => Workshop)
-  workshop(
-    @Args('workshopId', { type: () => GraphQLBigInt }) workshopId: bigint,
-  ): Promise<Workshop> {
-    return this.workshopService.findWorkshop({ where: { workshopId } });
+  workshop(@Args() args: FindUniqueWorkshopArgs): Promise<Workshop> {
+    return this.workshopService.findOne(args);
   }
 
   @Query(() => [Workshop])
   workshops(@Args() args: FindManyWorkshopArgs): Promise<Workshop[]> {
-    return this.workshopService.findAllWorkshops(args);
+    return this.workshopService.findMany(args);
   }
 
   //RESOLVE FIELDS

@@ -36,7 +36,7 @@ generator nestgraphql {
 
     //Validate nested relation fields
     decorate_2_type = "*Input"
-    decorate_2_field = [task, workshop, workshops, address, vehicle, user, vehicleDetails, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports, joinWorkshopRequests, sessionData]
+    decorate_2_field = [task, workshop, workshops, address, vehicle, user, vehicleDetails, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehicleBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports, joinWorkshopRequests, sessionData]
     decorate_2_name = ValidateNested
     decorate_2_from = "class-validator"
     decorate_2_arguments = "[]"
@@ -57,7 +57,7 @@ generator nestgraphql {
 
     //TODO: Type decorator duplicates in many models.
     decorate_5_type = "*"
-    decorate_5_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehiclesBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
+    decorate_5_field = [task, workshop, workshops, address, vehicle, vehicles, serviceRequest, serviceRequests, service, services, employeeTask, employeeTasks, employee, employees, customer, customers, job, jobs, permissionSet, permissionSets, review, reviews, reviewResponse, reviewResponses, parent, children, jobCategory, jobWorkshops, approvedService, vehicleServiceRequests, vehicleModel, vehiclesDetails, vehicleModels, vehicleBrand, workshopJob, workshopDetails, workshopJobs, jobCategories, tasks, taskEmployees, userReports]
     decorate_5_from = "class-transformer"
     decorate_5_arguments = "['() => {propertyType.0}']"
     decorate_5_name = Type
@@ -980,7 +980,7 @@ model VehicleModel {
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   vehicles       Vehicle[]
   /// @HideField({ match: '@(VehicleModel)@(Update)*Input' })
-  vehiclesBrand  VehicleBrand @relation(fields: [brand], references: [brandName], onDelete: NoAction, onUpdate: Cascade, map: "fk_modelMadeByBrand")
+  vehicleBrand  VehicleBrand @relation(fields: [brand], references: [brandName], onDelete: NoAction, onUpdate: Cascade, map: "fk_modelMadeByBrand")
 
   @@unique([modelName, brand], map: "model_name")
   @@index([brand])

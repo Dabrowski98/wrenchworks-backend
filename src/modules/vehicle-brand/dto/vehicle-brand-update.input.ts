@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
-import { VehicleModelUpdateManyWithoutVehiclesBrandNestedInput } from '../../vehicle-model/dto/vehicle-model-update-many-without-vehicles-brand-nested.input';
+import { VehicleModelUpdateManyWithoutVehicleBrandNestedInput } from '../../vehicle-model/dto/vehicle-model-update-many-without-vehicle-brand-nested.input';
 import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 

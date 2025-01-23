@@ -10,7 +10,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
-export class VehicleModelUncheckedCreateWithoutVehiclesBrandInput {
+export class VehicleModelUncheckedCreateWithoutVehicleBrandInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;

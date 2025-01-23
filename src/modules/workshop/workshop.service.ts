@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
 import {
   CreateOneWorkshopArgs,
   UpdateOneWorkshopArgs,
@@ -9,6 +8,7 @@ import {
   WorkshopCount,
   WorkshopCreateInput,
   FindUniqueWorkshopArgs,
+  DeleteOneWorkshopArgs,
 } from './dto';
 import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { Address } from '../address/dto';
@@ -27,8 +27,12 @@ import { User } from '../user/dto';
 export class WorkshopService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createWorkshop(input: WorkshopCreateInput): Promise<Workshop> {
-    return this.prisma.workshop.create({ data: input });
+  async create(args: CreateOneWorkshopArgs): Promise<Workshop> {
+    return this.prisma.workshop.create(args);
+  }
+
+  async update(args: UpdateOneWorkshopArgs): Promise<Workshop> {
+    return this.prisma.workshop.update(args);
   }
 
   // async updateWorkshop(args: UpdateOneWorkshopArgs): Promise<Workshop> {
@@ -48,11 +52,11 @@ export class WorkshopService {
   //   });
   // }
 
-  async findAllWorkshops(args: FindManyWorkshopArgs): Promise<Workshop[]> {
+  async findMany(args: FindManyWorkshopArgs): Promise<Workshop[]> {
     return this.prisma.workshop.findMany(args);
   }
 
-  async findWorkshop(args: FindUniqueWorkshopArgs) {
+  async findOne(args: FindUniqueWorkshopArgs) {
     const workshop = await this.prisma.workshop.findUnique(args);
 
     if (!workshop) throw new RecordNotFoundError(Workshop);
@@ -60,16 +64,13 @@ export class WorkshopService {
     return workshop;
   }
 
-  async deleteWorkshop(workshopId: bigint): Promise<DeletePayload> {
-    await this.prisma.workshop.existsOrThrow({
-      where: { workshopId },
-    });
-
-    await this.prisma.workshop.delete({
-      where: { workshopId },
-    });
-
-    return { success: true };
+  async delete(args: DeleteOneWorkshopArgs): Promise<Boolean> {
+    return await this.prisma.workshop
+      .delete({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   //RESOLVE FIELDS
@@ -166,13 +167,27 @@ export class WorkshopService {
 
   async resolveCount(workshopId: bigint): Promise<WorkshopCount> {
     return {
-      customers: (await this.customers(workshopId)).length,
-      employees: (await this.employees(workshopId)).length,
-      reviews: (await this.reviews(workshopId)).length,
-      serviceRequests: (await this.serviceRequests(workshopId)).length,
-      services: (await this.services(workshopId)).length,
-      workshopJobs: (await this.workshopJobs(workshopId)).length,
-      jobCategories: (await this.jobCategories(workshopId)).length,
+      customers: await this.prisma.customer.count({
+        where: { workshopId },
+      }),
+      employees: await this.prisma.employee.count({
+        where: { workshopId },
+      }),
+      reviews: await this.prisma.review.count({
+        where: { workshopId },
+      }),
+      serviceRequests: await this.prisma.serviceRequest.count({
+        where: { workshopId },
+      }),
+      services: await this.prisma.service.count({
+        where: { workshopId },
+      }),
+      workshopJobs: await this.prisma.workshopJob.count({
+        where: { workshopId },
+      }),
+      jobCategories: await this.prisma.jobCategory.count({
+        where: { workshops: { some: { workshopId } } },
+      }),
     };
   }
 }

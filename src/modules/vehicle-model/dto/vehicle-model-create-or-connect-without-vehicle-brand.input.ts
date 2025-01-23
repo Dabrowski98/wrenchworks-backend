@@ -3,16 +3,18 @@ import { InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { VehicleModelWhereUniqueInput } from './vehicle-model-where-unique.input';
 import { Type } from 'class-transformer';
-import { VehicleModelUpdateWithoutVehiclesBrandInput } from './vehicle-model-update-without-vehicles-brand.input';
+import { VehicleModelCreateWithoutVehicleBrandInput } from './vehicle-model-create-without-vehicle-brand.input';
+import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class VehicleModelUpdateWithWhereUniqueWithoutVehiclesBrandInput {
+export class VehicleModelCreateOrConnectWithoutVehicleBrandInput {
 
     @Field(() => VehicleModelWhereUniqueInput, {nullable:false})
     @Type(() => VehicleModelWhereUniqueInput)
     where!: Prisma.AtLeast<VehicleModelWhereUniqueInput, 'modelId' | 'modelName_brand'>;
 
-    @Field(() => VehicleModelUpdateWithoutVehiclesBrandInput, {nullable:false})
-    @Type(() => VehicleModelUpdateWithoutVehiclesBrandInput)
-    data!: VehicleModelUpdateWithoutVehiclesBrandInput;
+    @Field(() => VehicleModelCreateWithoutVehicleBrandInput, {nullable:false})
+    @Type(() => VehicleModelCreateWithoutVehicleBrandInput)
+    @ValidateNested()
+    create!: VehicleModelCreateWithoutVehicleBrandInput;
 }

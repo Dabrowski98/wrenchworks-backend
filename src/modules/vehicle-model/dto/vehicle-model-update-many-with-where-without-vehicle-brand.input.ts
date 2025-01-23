@@ -5,7 +5,7 @@ import { Type } from 'class-transformer';
 import { VehicleModelUpdateManyMutationInput } from './vehicle-model-update-many-mutation.input';
 
 @InputType()
-export class VehicleModelUpdateManyWithWhereWithoutVehiclesBrandInput {
+export class VehicleModelUpdateManyWithWhereWithoutVehicleBrandInput {
 
     @Field(() => VehicleModelScalarWhereInput, {nullable:false})
     @Type(() => VehicleModelScalarWhereInput)

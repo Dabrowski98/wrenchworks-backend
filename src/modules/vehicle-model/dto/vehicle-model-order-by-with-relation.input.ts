@@ -29,5 +29,5 @@ export class VehicleModelOrderByWithRelationInput {
     @Field(() => VehicleBrandOrderByWithRelationInput, {nullable:true})
     @ValidateNested()
     @Type(() => VehicleBrandOrderByWithRelationInput)
-    vehiclesBrand?: VehicleBrandOrderByWithRelationInput;
+    vehicleBrand?: VehicleBrandOrderByWithRelationInput;
 }

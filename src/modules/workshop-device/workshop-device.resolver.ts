@@ -64,6 +64,8 @@ export class WorkshopDeviceResolver {
     return this.workshopDeviceService.enable(deviceId);
   }
 
+  // RESOLVE FIELDS
+
   @ResolveField(() => Workshop)
   workshop(@Parent() workshopDevice: WorkshopDevice) {
     return this.workshopDeviceService.workshop(workshopDevice.workshopDeviceId);

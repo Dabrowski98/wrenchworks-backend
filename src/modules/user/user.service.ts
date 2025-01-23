@@ -18,7 +18,6 @@ import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
 import { Vehicle } from '../vehicle';
 
-import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';

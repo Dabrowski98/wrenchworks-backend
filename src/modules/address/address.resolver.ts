@@ -16,7 +16,6 @@ import {
   UpdateOneAddressArgs,
 } from './dto';
 import { GraphQLBigInt } from 'graphql-scalars';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
 import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
 

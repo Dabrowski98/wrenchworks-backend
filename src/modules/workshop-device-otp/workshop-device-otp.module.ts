@@ -1,10 +1,10 @@
 import { PrismaModule } from 'src/database/prisma.module';
 import { WorkshopDeviceOTPService } from './workshop-device-otp.service';
 import { Module } from '@nestjs/common';
+import { WorkshopDeviceOtpResolver } from './workshop-device-otp.resolver';
 
 @Module({
-  imports: [PrismaModule],
-  providers: [WorkshopDeviceOTPService],
+  providers: [WorkshopDeviceOTPService, WorkshopDeviceOtpResolver],
   exports: [WorkshopDeviceOTPService],
 })
 export class WorkshopDeviceOTPModule {}

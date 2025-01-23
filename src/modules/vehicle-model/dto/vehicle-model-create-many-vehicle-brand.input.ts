@@ -6,7 +6,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 
 
 @InputType()
-export class VehicleModelCreateManyVehiclesBrandInput {
+export class VehicleModelCreateManyVehicleBrandInput {
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Model name must be a string' })

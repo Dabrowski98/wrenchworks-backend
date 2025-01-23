@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { DeletePayload } from 'src/common/payloads/delete.payload';
 import {
   Address,
   AddressUpdateInput,
