@@ -18,9 +18,9 @@ import {
 } from './dto';
 import { Guest } from '../guest/dto';
 import { ServiceRequest } from '../service-request/dto';
-import { VehicleModel } from '../vehicle-model';
+import { VehicleModel } from '../vehicle-model/dto';
 import { Customer } from '../customer/dto';
-import { VehicleDetails } from '../vehicle-details';
+import { VehicleDetails } from '../vehicle-details/dto';
 
 @Injectable()
 export class VehicleService {

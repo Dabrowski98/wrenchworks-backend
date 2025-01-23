@@ -16,12 +16,12 @@ import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Workshop } from '../workshop/dto';
 import { SessionData } from '../session-data/dto';
 import { Address } from '../address/dto';
-import { Vehicle } from '../vehicle';
+import { Vehicle } from '../vehicle/dto';
 
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';
-import { UserReport } from '../user-report';
+import { UserReport } from '../user-report/dto';
 import { Review } from '../review/dto';
 import { ReviewResponse } from '../review-response/dto';
 

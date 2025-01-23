@@ -13,7 +13,7 @@ import {
   VehicleBrand,
   VehicleBrandCount,
 } from './dto';
-import { VehicleModel } from '../vehicle-model';
+import { VehicleModel } from '../vehicle-model/dto';
 
 @Injectable()
 export class VehicleBrandService {
@@ -67,7 +67,7 @@ export class VehicleBrandService {
   async resolveCount(brandName: string): Promise<VehicleBrandCount> {
     return {
       vehicleModels: await this.prisma.vehicleModel.count({
-        where: { vehiclesBrand: { brandName } },
+        where: { vehicleBrand: { brandName } },
       }),
     };
   }

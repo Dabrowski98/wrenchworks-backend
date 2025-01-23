@@ -16,7 +16,7 @@ import {
 } from '@casl/ability';
 import { Address } from '../address/dto';
 import { SessionData } from '../session-data/dto';
-import { UserReport } from '../user-report';
+import { UserReport } from '../user-report/dto';
 
 export enum Action {
   Manage = 'manage',

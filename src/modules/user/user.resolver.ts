@@ -18,7 +18,7 @@ import { Vehicle } from '../vehicle/dto';
 import { Employee } from '../employee/dto';
 import { Review } from '../review/dto';
 import { ReviewResponse } from '../review-response/dto';
-import { UserReport } from '../user-report';
+import { UserReport } from '../user-report/dto';
 import { UserService } from './user.service';
 import { Customer } from '../customer/dto';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';

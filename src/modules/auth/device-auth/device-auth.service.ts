@@ -26,7 +26,7 @@ export class DeviceAuthService {
 
     if (!employee) throw new BadRequestException('Employee not found');
 
-    const workshop = await this.workshopService.findWorkshop({
+    const workshop = await this.workshopService.findOne({
       where: { workshopId: employee.workshopId },
     });
 

@@ -38,9 +38,11 @@ export class WorkshopAuthService {
     );
 
     const workshop = await this.workshopService.create({
-      ...workshopInput,
-      password: workshopHashedPassword,
-      user: { connect: { userId } },
+      data: {
+        ...workshopInput,
+        password: workshopHashedPassword,
+        user: { connect: { userId } },
+      },
     });
 
     //TODO: set all permissions to true

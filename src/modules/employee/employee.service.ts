@@ -23,6 +23,7 @@ import { ReviewResponse } from '../review-response/dto/review-response.model';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto/join-workshop-request.model';
 import { Task } from '../task/dto/task.model';
 import { Service } from '../service/dto';
+import { EmployeeStatus } from '../prisma';
 
 @Injectable()
 export class EmployeeService {
@@ -30,7 +31,7 @@ export class EmployeeService {
 
   async create(args: CreateOneEmployeeArgs): Promise<Employee> {
     return this.prisma.employee.create({
-      data: { ...args.data, status: true },
+      data: { ...args.data, status: EmployeeStatus.ACTIVE },
     });
   }
 
@@ -77,7 +78,7 @@ export class EmployeeService {
 
     return !!(await this.prisma.employee.update({
       where: { employeeId: employeeToEnableId },
-      data: { status: true },
+      data: { status: EmployeeStatus.ACTIVE },
     }));
   }
 
@@ -90,7 +91,7 @@ export class EmployeeService {
 
     return !!(await this.prisma.employee.update({
       where: { employeeId: employeeToDisableId },
-      data: { status: false },
+      data: { status: EmployeeStatus.INACTIVE },
     }));
   }
 
