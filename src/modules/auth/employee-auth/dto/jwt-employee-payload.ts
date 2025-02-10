@@ -4,5 +4,6 @@ import { EntityType } from 'src/common/enums/entity-type.enum';
 import { JwtAuthBasePayload } from '../../common-dto/jwt-auth-base.payload';
 
 export class JwtEmployeePayload extends JwtAuthBasePayload {
+  employeeId: bigint;
   loggedInBy: keyof typeof LoggedInBy;
 }

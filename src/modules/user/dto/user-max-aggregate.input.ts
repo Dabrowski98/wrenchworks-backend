@@ -41,4 +41,12 @@ export class UserMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     addressId?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    deletedAt?: true;
+}

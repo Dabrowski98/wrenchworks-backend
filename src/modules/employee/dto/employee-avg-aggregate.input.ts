@@ -14,4 +14,9 @@ export class EmployeeAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     userId?: true;
 
-    }
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

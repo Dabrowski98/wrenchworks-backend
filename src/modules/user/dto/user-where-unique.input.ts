@@ -24,8 +24,6 @@ import { ReviewResponseListRelationFilter } from '../../review-response/dto/revi
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { SessionDataListRelationFilter } from '../../session-data/dto/session-data-list-relation-filter.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserWhereUniqueInput {
@@ -82,6 +80,15 @@ export class UserWhereUniqueInput {
 
     @Field(() => EnumUserRoleFilter, {nullable:true})
     role?: EnumUserRoleFilter;
+
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
 
     @Field(() => AddressNullableRelationFilter, {nullable:true})
     @ValidateNested()

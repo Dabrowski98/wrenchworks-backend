@@ -16,8 +16,6 @@ import { ReviewUncheckedCreateNestedManyWithoutUserInput } from '../../review/dt
 import { UserReportUncheckedCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-unchecked-create-nested-many-without-user.input';
 import { JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-create-nested-many-without-user.input';
 import { SessionDataUncheckedCreateNestedManyWithoutUserInput } from '../../session-data/dto/session-data-unchecked-create-nested-many-without-user.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserUncheckedCreateWithoutReviewResponsesInput {
@@ -89,6 +87,15 @@ export class UserUncheckedCreateWithoutReviewResponsesInput {
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     addressId?: bigint | number;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
 
     @Field(() => VehicleUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
     @Type(() => VehicleUncheckedCreateNestedManyWithoutUserInput)

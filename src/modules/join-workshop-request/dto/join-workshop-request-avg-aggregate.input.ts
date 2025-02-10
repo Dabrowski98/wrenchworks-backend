@@ -17,4 +17,9 @@ export class JoinWorkshopRequestAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     employeeId?: true;
 
-    }
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

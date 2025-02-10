@@ -29,4 +29,15 @@ export class ServiceRequestMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     description?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    resolvedAt?: true;
+
+    @HideField()
+    resolvedBy?: true;
+
+    @HideField()
+    deletedAt?: true;
+}

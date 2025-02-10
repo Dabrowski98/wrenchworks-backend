@@ -13,6 +13,18 @@ import { GuestCreateNestedOneWithoutVehicleInput } from '../../guest/dto/guest-c
 @InputType()
 export class VehicleCreateWithoutVehicleDetailsInput {
 
+    @HideField()
+    vehicleId?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutVehicleInput;
+
+    @HideField()
+    services?: ServiceCreateNestedManyWithoutVehicleInput;
+
     @Field(() => VehicleModelCreateNestedOneWithoutVehiclesInput, {nullable:false})
     @ValidateNested()
     @Type(() => VehicleModelCreateNestedOneWithoutVehiclesInput)
@@ -29,4 +41,6 @@ export class VehicleCreateWithoutVehicleDetailsInput {
     @Type(() => CustomerCreateNestedManyWithoutVehiclesInput)
     customers?: CustomerCreateNestedManyWithoutVehiclesInput;
 
-    }
+    @HideField()
+    guest?: GuestCreateNestedOneWithoutVehicleInput;
+}

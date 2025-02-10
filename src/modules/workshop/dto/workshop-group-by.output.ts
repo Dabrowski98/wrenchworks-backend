@@ -26,6 +26,9 @@ export class WorkshopGroupBy {
     @Field(() => String, {nullable:false})
     telephoneNumber!: string;
 
+    @HideField()
+    password!: string;
+
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
 

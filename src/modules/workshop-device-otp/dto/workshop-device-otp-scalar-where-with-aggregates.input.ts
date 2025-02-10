@@ -32,4 +32,6 @@ export class WorkshopDeviceOtpScalarWhereWithAggregatesInput {
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     expiresAt?: DateTimeWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+}

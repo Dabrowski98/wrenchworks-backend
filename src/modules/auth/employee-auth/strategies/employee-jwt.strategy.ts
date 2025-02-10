@@ -18,6 +18,6 @@ export class EmployeeJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    return { employeeId: payload.sub, entityType: EntityType.EMPLOYEE };
+    return { employeeId: payload.employeeId, entityType: EntityType.EMPLOYEE };
   }
 }

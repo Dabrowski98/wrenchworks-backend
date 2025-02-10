@@ -6,8 +6,6 @@ import { JobUncheckedCreateNestedManyWithoutJobCategoryInput } from '../../job/d
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { WorkshopUncheckedCreateNestedManyWithoutJobCategoriesInput } from '../../workshop/dto/workshop-unchecked-create-nested-many-without-job-categories.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class JobCategoryUncheckedCreateWithoutChildrenInput {

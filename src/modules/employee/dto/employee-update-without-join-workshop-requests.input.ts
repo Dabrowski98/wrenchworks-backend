@@ -4,15 +4,17 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
+import { EmployeePermissionUpdateManyWithoutEmployeesNestedInput } from '../../employee-permission/dto/employee-permission-update-many-without-employees-nested.input';
 import { ServiceUpdateManyWithoutEmployeeNestedInput } from '../../service/dto/service-update-many-without-employee-nested.input';
 import { TaskUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-update-many-without-employees-nested.input';
 import { UserUpdateOneWithoutEmployeesNestedInput } from '../../user/dto/user-update-one-without-employees-nested.input';
 import { WorkshopUpdateOneRequiredWithoutEmployeesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-employees-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeeUpdateWithoutJoinWorkshopRequestsInput {
+
+    @HideField()
+    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
@@ -37,9 +39,44 @@ export class EmployeeUpdateWithoutJoinWorkshopRequestsInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password?: string;
 
+    @HideField()
+    refreshToken?: string;
+
+    @HideField()
+    status?: keyof typeof EmployeeStatus;
+
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => EmployeePermissionUpdateManyWithoutEmployeesNestedInput, {nullable:true})
+    permissions?: EmployeePermissionUpdateManyWithoutEmployeesNestedInput;
+
+    @HideField()
+    services?: ServiceUpdateManyWithoutEmployeeNestedInput;
+
+    @HideField()
+    tasks?: TaskUpdateManyWithoutEmployeesNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutEmployeesNestedInput;
+
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutEmployeesNestedInput;
+}

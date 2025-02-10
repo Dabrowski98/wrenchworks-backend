@@ -58,6 +58,24 @@ export class TaskWhereUniqueInput {
     @Type(() => DecimalFilter)
     partsCost?: DecimalFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
+    @HideField()
+    resolvedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    resolvedBy?: BigIntNullableFilter;
+
     @Field(() => WorkshopJobRelationFilter, {nullable:true})
     @Type(() => WorkshopJobRelationFilter)
     @ValidateNested()

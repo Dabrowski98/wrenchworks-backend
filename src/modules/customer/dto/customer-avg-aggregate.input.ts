@@ -20,4 +20,9 @@ export class CustomerAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     totalDue?: true;
 
-    }
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

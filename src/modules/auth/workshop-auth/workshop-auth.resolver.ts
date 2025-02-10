@@ -16,7 +16,7 @@ export class WorkshopAuthResolver {
   registerWorkshop(
     @Args('registerWorkshopInput') registerWorkshopInput: RegisterWorkshopInput,
     @CurrentUserID() userId: bigint,
-  ) {
+  ): Promise<RegisterWorkshopResponse> {
     return this.workshopAuthService.registerWorkshop(
       registerWorkshopInput,
       userId,

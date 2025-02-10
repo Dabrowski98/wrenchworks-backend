@@ -56,6 +56,15 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     addressId?: SortOrderInput;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @HideField()
+    deletedAt?: SortOrderInput;
+
     @Field(() => AddressOrderByWithRelationInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressOrderByWithRelationInput)

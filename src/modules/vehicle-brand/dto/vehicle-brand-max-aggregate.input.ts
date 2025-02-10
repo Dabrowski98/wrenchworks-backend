@@ -8,4 +8,9 @@ export class VehicleBrandMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     brandName?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+}

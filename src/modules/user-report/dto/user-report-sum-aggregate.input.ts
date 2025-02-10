@@ -14,4 +14,6 @@ export class UserReportSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     reportedId?: true;
 
-    }
+    @HideField()
+    updatedBy?: true;
+}

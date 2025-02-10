@@ -11,6 +11,12 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class ServiceCreateNestedOneWithoutServiceRequestInput {
 
+    @HideField()
+    create?: ServiceCreateWithoutServiceRequestInput;
+
+    @HideField()
+    connectOrCreate?: ServiceCreateOrConnectWithoutServiceRequestInput;
+
     @Field(() => ServiceWhereUniqueInput, {nullable:true})
     @Type(() => ServiceWhereUniqueInput)
     @ValidateNested()

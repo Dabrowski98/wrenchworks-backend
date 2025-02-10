@@ -3,5 +3,6 @@ import { UserRole } from 'src/modules/prisma';
 import { JwtAuthBasePayload } from '../../common-dto/jwt-auth-base.payload';
 
 export class JwtUserPayload extends JwtAuthBasePayload {
+  userId: bigint;
   role: UserRole;
 }

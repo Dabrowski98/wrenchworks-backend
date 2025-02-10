@@ -35,4 +35,6 @@ export class VehicleDetailsMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     bodyColor?: true;
 
-    }
+    @HideField()
+    deletedAt?: true;
+}

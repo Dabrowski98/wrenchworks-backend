@@ -8,8 +8,6 @@ import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateNestedOneWithoutGuestInput } from '../../service-request/dto/service-request-create-nested-one-without-guest.input';
 import { CustomerCreateNestedOneWithoutGuestInput } from '../../customer/dto/customer-create-nested-one-without-guest.input';
 import { HideField } from '@nestjs/graphql';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class GuestCreateInput {
@@ -60,4 +58,6 @@ export class GuestCreateInput {
     @Type(() => ServiceRequestCreateNestedOneWithoutGuestInput)
     serviceRequest?: ServiceRequestCreateNestedOneWithoutGuestInput;
 
-    }
+    @HideField()
+    customer?: CustomerCreateNestedOneWithoutGuestInput;
+}

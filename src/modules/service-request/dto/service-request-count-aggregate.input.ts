@@ -29,6 +29,18 @@ export class ServiceRequestCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     description?: true;
 
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    resolvedAt?: true;
+
+    @HideField()
+    resolvedBy?: true;
+
+    @HideField()
+    deletedAt?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

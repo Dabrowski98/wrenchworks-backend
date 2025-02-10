@@ -12,6 +12,15 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class ReviewCreateNestedManyWithoutWorkshopInput {
 
+    @HideField()
+    create?: Array<ReviewCreateWithoutWorkshopInput>;
+
+    @HideField()
+    connectOrCreate?: Array<ReviewCreateOrConnectWithoutWorkshopInput>;
+
+    @HideField()
+    createMany?: ReviewCreateManyWorkshopInputEnvelope;
+
     @Field(() => [ReviewWhereUniqueInput], {nullable:true})
     @Type(() => ReviewWhereUniqueInput)
     @ValidateNested()

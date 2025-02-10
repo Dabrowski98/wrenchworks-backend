@@ -35,6 +35,9 @@ export class WorkshopDeviceOtpWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     expiresAt?: DateTimeFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
     @Field(() => WorkshopRelationFilter, {nullable:true})
     @Type(() => WorkshopRelationFilter)
     @ValidateNested()

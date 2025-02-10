@@ -251,6 +251,7 @@ model Employee {
   updatedBy             BigInt?           @db.UnsignedBigInt
   /// Note: Connect or Create only allowed
   // role                  EmployeeRole?     @relation(fields: [roleId], references: [roleId], onDelete: NoAction, map: "fk_employeeCanHaveRoleAssigned")
+  permissions           EmployeePermission[]
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
   services              Service[]
   joinWorkshopRequests  JoinWorkshopRequest[]
@@ -283,15 +284,38 @@ model Employee {
 
 // }
 
-// model EmployeePermission {
-//   /// @FieldType('Scalars.GraphQLBigInt')
-//   permissionId         BigInt @id @unique(map: "permission_id") @default(autoincrement()) @db.UnsignedBigInt
-//   /// @Validator.IsString({ message: 'Name must be a string' })
-//   /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
-//   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
-//   name                 String @db.VarChar(30)
-//   employeeRoles        EmployeeRole[]
-// }
+model EmployeePermission {
+  /// @FieldType('Scalars.GraphQLBigInt')
+  permissionId    BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  /// @Validator.IsString({ message: 'Name must be a string' })
+  /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  name            String    @db.VarChar(30) @unique
+  /// @Validator.IsString({ message: 'Description must be a string' })
+  /// @Validator.Length(0, 255, { message: 'Description cannot exceed 255 characters' })
+  /// @Validator.IsOptional()
+  description     String?   @db.VarChar(255)
+  /// @Validator.IsString({ message: 'Action must be a string' })
+  /// @Validator.Length(2, 30, { message: 'Action must be between 2 and 30 characters' })
+  /// @Validator.Matches(/^[a-zA-Z]+$/, { message: 'Action must only contain letters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Action is required' })
+  action          String    @db.VarChar(30)
+  /// @Validator.IsString({ message: 'Subject must be a string' })
+  /// @Validator.Length(2, 30, { message: 'Subject must be between 2 and 30 characters' })
+  /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Subject is required' })
+  /// @Validator.IsOptional({ groups: [UPDATE]})
+  subject         String    @db.VarChar(30)
+  /// @Validator.IsOptional()
+  conditions      Json?
+  /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
+  employees       Employee[]
+  /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
+  createdAt       DateTime  @default(now()) @db.DateTime(0)
+  /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
+  updatedAt       DateTime  @updatedAt @db.DateTime(0)
+
+}
 
 // TODO: PHONE NUMBER OR EMAIL IS REQUIRED.
 /// Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.
@@ -818,7 +842,7 @@ model User {
   createdAt        DateTime             @default(now()) @db.Timestamp(0)
   updatedAt          DateTime?             @db.Timestamp(0) @updatedAt
   deletedAt        DateTime?            @db.Timestamp(0)
-  address          Address?             @relation(fields: [addressId], references: [addressId], onDelete: NoAction)
+  address          Address?             @relation(fields: [addressId], references: [addressId], onDelete: SetNull)
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   vehicles         Vehicle[]
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
@@ -1027,7 +1051,7 @@ model Workshop {
   updatedAt                 DateTime?                   @db.Timestamp(0) @updatedAt
   updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
-  address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: NoAction, map: "fk_workshopHasAddress")
+  address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: SetNull, map: "fk_workshopHasAddress")
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   customers                 Customer[]
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })

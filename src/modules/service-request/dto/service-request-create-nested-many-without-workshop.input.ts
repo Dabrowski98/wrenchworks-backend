@@ -17,9 +17,14 @@ export class ServiceRequestCreateNestedManyWithoutWorkshopInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutWorkshopInput>;
 
+    @HideField()
+    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutWorkshopInput>;
+
     @Field(() => ServiceRequestCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyWorkshopInputEnvelope)
     @ValidateNested()
     createMany?: ServiceRequestCreateManyWorkshopInputEnvelope;
 
-    }
+    @HideField()
+    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
+}

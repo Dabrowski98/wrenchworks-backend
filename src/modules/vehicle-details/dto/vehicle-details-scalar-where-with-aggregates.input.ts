@@ -50,4 +50,6 @@ export class VehicleDetailsScalarWhereWithAggregatesInput {
     @Field(() => EnumBodyColorNullableWithAggregatesFilter, {nullable:true})
     bodyColor?: EnumBodyColorNullableWithAggregatesFilter;
 
-    }
+    @HideField()
+    deletedAt?: DateTimeNullableWithAggregatesFilter;
+}

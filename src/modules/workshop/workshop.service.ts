@@ -12,7 +12,7 @@ import {
 } from './dto';
 import { NoDataProvidedForUpdateError } from 'src/common/custom-errors/errors.config';
 import { Address } from '../address/dto';
-import { WorkshopDetails } from '../workshop-details';
+import { WorkshopDetails } from '../workshop-details/dto';
 import { ServiceRequest } from '../service-request/dto';
 import { Review } from '../review/dto';
 import { WorkshopJob } from '../workshop-job/dto';

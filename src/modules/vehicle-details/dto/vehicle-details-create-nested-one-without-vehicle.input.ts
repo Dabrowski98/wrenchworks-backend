@@ -16,4 +16,9 @@ export class VehicleDetailsCreateNestedOneWithoutVehicleInput {
     @ValidateNested()
     create?: VehicleDetailsCreateWithoutVehicleInput;
 
-    }
+    @HideField()
+    connectOrCreate?: VehicleDetailsCreateOrConnectWithoutVehicleInput;
+
+    @HideField()
+    connect?: Prisma.AtLeast<VehicleDetailsWhereUniqueInput, 'vehicleDetailsId' | 'vehicleId'>;
+}

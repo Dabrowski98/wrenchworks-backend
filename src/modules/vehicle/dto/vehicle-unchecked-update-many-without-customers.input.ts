@@ -18,4 +18,6 @@ export class VehicleUncheckedUpdateManyWithoutCustomersInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+}

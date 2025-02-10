@@ -17,4 +17,6 @@ export class VehicleMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
-    }
+    @HideField()
+    deletedAt?: true;
+}

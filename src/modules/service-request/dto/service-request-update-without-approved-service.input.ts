@@ -14,6 +14,9 @@ import { GuestUpdateOneWithoutServiceRequestNestedInput } from '../../guest/dto/
 @InputType()
 export class ServiceRequestUpdateWithoutApprovedServiceInput {
 
+    @HideField()
+    serviceRequestId?: bigint | number;
+
     @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
     @Validator.IsOptional()
@@ -24,6 +27,18 @@ export class ServiceRequestUpdateWithoutApprovedServiceInput {
     @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
     @Validator.IsOptional()
     description?: string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
 
     @Field(() => JobUpdateManyWithoutServiceRequestsNestedInput, {nullable:true})
     @Type(() => JobUpdateManyWithoutServiceRequestsNestedInput)
@@ -37,4 +52,12 @@ export class ServiceRequestUpdateWithoutApprovedServiceInput {
     @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
     vehicle?: VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput;
 
-    }
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutServiceRequestNestedInput;
+}

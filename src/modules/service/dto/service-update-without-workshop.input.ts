@@ -19,6 +19,9 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class ServiceUpdateWithoutWorkshopInput {
 
+    @HideField()
+    serviceId?: bigint | number;
+
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     serviceRequestId?: bigint | number;
@@ -63,6 +66,39 @@ export class ServiceUpdateWithoutWorkshopInput {
     @Validator.IsDate({ message: 'Service end date must be a valid date' })
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
+
+    @HideField()
+    addedAt?: Date | string;
+
+    @HideField()
+    addedBy?: bigint | number;
+
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    serviceRequest?: ServiceRequestUpdateOneWithoutApprovedServiceNestedInput;
+
+    @HideField()
+    tasks?: TaskUpdateManyWithoutServiceNestedInput;
+
+    @HideField()
+    customer?: CustomerUpdateOneRequiredWithoutServicesNestedInput;
+
+    @HideField()
+    employee?: EmployeeUpdateOneRequiredWithoutServicesNestedInput;
 
     @Field(() => VehicleUpdateOneRequiredWithoutServicesNestedInput, {nullable:true})
     @Type(() => VehicleUpdateOneRequiredWithoutServicesNestedInput)

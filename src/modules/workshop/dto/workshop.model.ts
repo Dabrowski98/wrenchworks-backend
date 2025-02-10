@@ -39,6 +39,9 @@ export class Workshop {
     /**
      * Note: Password will be hashed before storage
      */
+    @HideField()
+    password!: string;
+
     @Field(() => Boolean, {nullable:true,defaultValue:false})
     isVerified!: boolean | null;
 

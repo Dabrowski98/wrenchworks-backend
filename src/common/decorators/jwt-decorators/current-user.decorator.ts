@@ -7,7 +7,7 @@ export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req?.user;
-    if (!user) throw new UnauthorizedError('You need to be logged in');
-    return user;
+    return user || null;
   },
+
 );

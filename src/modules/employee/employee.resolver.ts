@@ -32,63 +32,91 @@ import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-
 import * as Scalars from 'graphql-scalars';
 import { Task } from '../task/dto/task.model';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';
+import { Action, CheckAbilities } from '../ability';
+import { AbilitiesGuard } from '../ability/abilities.guard';
+import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
 
+@UseGuards(EmployeeJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @Query(() => Employee)
-  employee(@Args() args: FindUniqueEmployeeArgs): Promise<Employee> {
-    return this.employeeService.findOne(args);
-  }
+  // @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+  // @Query(() => Employee)
+  // employee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args() args: FindUniqueEmployeeArgs,
+  // ): Promise<Employee> {
+  //   return this.employeeService.findOne(args, currentEmployee);
+  // }
 
-  @Query(() => [Employee])
-  employees(@Args() args: FindManyEmployeeArgs): Promise<Employee[]> {
-    return this.employeeService.findMany(args);
-  }
+  // @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+  // @Query(() => [Employee])
+  // employees(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args() args: FindManyEmployeeArgs,
+  // ): Promise<Employee[]> {
+  //   return this.employeeService.findMany(args, currentEmployee);
+  // }
 
-  @Mutation(() => Employee)
-  updateEmployee(@Args() args: UpdateOneEmployeeArgs): Promise<Employee> {
-    return this.employeeService.update(args);
-  }
+  // @CheckAbilities({ action: Action.Create, subject: 'Employee' })
+  // @Mutation(() => Employee)
+  // createEmployee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args() args: CreateOneEmployeeArgs,
+  // ): Promise<Employee> {
+  //   return this.employeeService.create(args, currentEmployee);
+  // }
 
-  //@UseGuards(EmployeeJwtAuthGuard)
-  @Mutation(() => Boolean)
-  disableEmployee(
-    @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => GraphQLBigInt })
-    employeeToDisableId: bigint,
-  ): Promise<boolean> {
-    return this.employeeService.disable(employeeId, employeeToDisableId);
-  }
+  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  // @Mutation(() => Employee)
+  // updateEmployee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args() args: UpdateOneEmployeeArgs,
+  // ): Promise<Employee> {
+  //   return this.employeeService.update(args, currentEmployee);
+  // }
 
-  //@UseGuards(EmployeeJwtAuthGuard)
-  @Mutation(() => Boolean)
-  enableEmployee(
-    @CurrentEmployeeID() employeeId: bigint,
-    @Args('employeeId', { type: () => GraphQLBigInt })
-    employeeToEnableId: bigint,
-  ): Promise<boolean> {
-    return this.employeeService.enable(employeeId, employeeToEnableId);
-  }
+  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  // @Mutation(() => Boolean)
+  // disableEmployee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args('employeeId', { type: () => GraphQLBigInt })
+  //   employeeToDisableId: bigint,
+  // ): Promise<boolean> {
+  //   return this.employeeService.disable(employeeToDisableId, currentEmployee);
+  // }
 
-  //TODO: refactor,
-  // @UseGuards(EmployeeJwtAuthGuard)
-  @Mutation(() => Boolean)
-  deleteEmployee(
-    @CurrentEmployeeID() employeeId: bigint,
-    @Args() args: DeleteOneEmployeeArgs,
-  ): Promise<boolean> {
-    return this.employeeService.delete(employeeId, args);
-  }
+  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  // @Mutation(() => Boolean)
+  // enableEmployee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args('employeeId', { type: () => GraphQLBigInt })
+  //   employeeToEnableId: bigint,
+  // ): Promise<boolean> {
+  //   return this.employeeService.enable(employeeToEnableId, currentEmployee);
+  // }
+
+  // @CheckAbilities({ action: Action.Delete, subject: 'Employee' })
+  // @Mutation(() => Boolean)
+  // deleteEmployee(
+  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+  //   @Args() args: DeleteOneEmployeeArgs,
+  // ): Promise<boolean> {
+  //   return this.employeeService.delete(args, currentEmployee);
+  // }
 
   // RESOLVER METHODS
 
+  @CheckAbilities({ action: Action.Read, subject: 'Service' })
   @ResolveField(() => [Service], { nullable: true })
   services(@Parent() employee: Employee): Promise<Service[]> {
     return this.employeeService.services(employee.employeeId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'JoinWorkshopRequest' })
   @ResolveField(() => [JoinWorkshopRequest], { nullable: true })
   joinWorkshopRequests(
     @Parent() employee: Employee,
@@ -96,21 +124,25 @@ export class EmployeeResolver {
     return this.employeeService.joinWorkshopRequests(employee.employeeId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'Task' })
   @ResolveField(() => [Task], { nullable: true })
   tasks(@Parent() employee: Employee): Promise<Task[]> {
     return this.employeeService.tasks(employee.employeeId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @ResolveField(() => User, { nullable: true })
   user(@Parent() employee: Employee): Promise<User | null> {
     return this.employeeService.user(employee.employeeId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @ResolveField(() => Workshop, { nullable: true })
   workshop(@Parent() employee: Employee): Promise<Workshop | null> {
     return this.employeeService.workshop(employee.workshopId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @ResolveField(() => EmployeeCount)
   _count(@Parent() employee: Employee): Promise<EmployeeCount> {
     return this.employeeService.resolveCount(employee.employeeId);

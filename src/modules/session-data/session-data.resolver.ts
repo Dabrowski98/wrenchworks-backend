@@ -4,14 +4,15 @@ import { SessionData } from './dto/session-data.model';
 import { SessionDataCreateInput, SessionDataUpdateInput } from './dto';
 import { Action, CheckAbilities } from '../ability';
 import { User } from '../user/dto';
+import { AbilitiesGuard } from '../ability/abilities.guard';
+import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { UseGuards } from '@nestjs/common';
 
-@CheckAbilities({
-  action: Action.Manage,
-  subject: SessionData,
-})
+@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => SessionData)
 export class SessionDataResolver {
   constructor(private readonly sessionDataService: SessionDataService) {}
+
 
   @Mutation(() => SessionData)
   async createSessionData(

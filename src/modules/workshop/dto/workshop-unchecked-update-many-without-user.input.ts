@@ -3,8 +3,6 @@ import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopUncheckedUpdateManyWithoutUserInput {
@@ -53,4 +51,15 @@ export class WorkshopUncheckedUpdateManyWithoutUserInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

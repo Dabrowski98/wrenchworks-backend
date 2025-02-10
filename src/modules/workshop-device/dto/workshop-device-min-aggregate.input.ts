@@ -26,6 +26,12 @@ export class WorkshopDeviceMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     lastLoginBy?: true;
 
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
     @Field(() => Boolean, {nullable:true})
     acceptedAt?: true;
 

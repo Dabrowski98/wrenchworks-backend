@@ -617,11 +617,6 @@ input EmployeeListRelationFilter {
   some: EmployeeWhereInput
 }
 
-input EmployeeLoginWorkshopIdCompoundUniqueInput {
-  login: String!
-  workshopId: BigInt!
-}
-
 type EmployeeMaxAggregate {
   createdAt: DateTime
   createdBy: String
@@ -680,23 +675,6 @@ input EmployeeRelationFilter {
   isNot: EmployeeWhereInput
 }
 
-enum EmployeeScalarFieldEnum {
-  createdAt
-  createdBy
-  deletedAt
-  employeeId
-  joinedAt
-  login
-  nickname
-  password
-  refreshToken
-  status
-  updatedAt
-  updatedBy
-  userId
-  workshopId
-}
-
 enum EmployeeStatus {
   ACTIVE
   INACTIVE
@@ -711,14 +689,6 @@ type EmployeeSumAggregate {
   workshopId: BigInt
 }
 
-input EmployeeUpdateInput {
-  joinWorkshopRequests: JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput
-  joinedAt: DateTime
-  login: String
-  nickname: BigInt
-  password: String
-}
-
 input EmployeeWhereInput {
   AND: [EmployeeWhereInput!]
   NOT: [EmployeeWhereInput!]
@@ -727,27 +697,6 @@ input EmployeeWhereInput {
   joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
   joinedAt: DateTimeFilter
   login: StringFilter
-  nickname: StringNullableFilter
-  password: StringFilter
-  refreshToken: StringNullableFilter
-  services: ServiceListRelationFilter
-  status: EnumEmployeeStatusFilter
-  tasks: TaskListRelationFilter
-  user: UserNullableRelationFilter
-  userId: BigIntNullableFilter
-  workshop: WorkshopRelationFilter
-  workshopId: BigIntFilter
-}
-
-input EmployeeWhereUniqueInput {
-  AND: [EmployeeWhereInput!]
-  NOT: [EmployeeWhereInput!]
-  OR: [EmployeeWhereInput!]
-  employeeId: BigInt
-  joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
-  joinedAt: DateTimeFilter
-  login: StringFilter
-  login_workshopId: EmployeeLoginWorkshopIdCompoundUniqueInput
   nickname: StringNullableFilter
   password: StringFilter
   refreshToken: StringNullableFilter
@@ -1263,11 +1212,6 @@ input JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput {
   createMany: JoinWorkshopRequestCreateManyEmployeeInputEnvelope
 }
 
-input JoinWorkshopRequestCreateOrConnectWithoutEmployeeInput {
-  create: JoinWorkshopRequestCreateWithoutEmployeeInput!
-  where: JoinWorkshopRequestWhereUniqueInput!
-}
-
 input JoinWorkshopRequestCreateWithoutEmployeeInput {
   joinWorkshopRequestId: BigInt
   message: String
@@ -1313,18 +1257,6 @@ input JoinWorkshopRequestOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
-input JoinWorkshopRequestScalarWhereInput {
-  AND: [JoinWorkshopRequestScalarWhereInput!]
-  NOT: [JoinWorkshopRequestScalarWhereInput!]
-  OR: [JoinWorkshopRequestScalarWhereInput!]
-  employeeId: BigIntFilter
-  joinWorkshopRequestId: BigIntFilter
-  message: StringNullableFilter
-  receiverId: BigIntFilter
-  status: EnumJoinWorkshopRequestStatusFilter
-  workshopId: BigIntFilter
-}
-
 enum JoinWorkshopRequestStatus {
   ACCEPTED
   PENDING
@@ -1340,48 +1272,6 @@ type JoinWorkshopRequestSumAggregate {
   workshopId: BigInt
 }
 
-input JoinWorkshopRequestUpdateManyMutationInput {
-  joinWorkshopRequestId: BigInt
-  message: String
-  status: JoinWorkshopRequestStatus
-}
-
-input JoinWorkshopRequestUpdateManyWithWhereWithoutEmployeeInput {
-  data: JoinWorkshopRequestUpdateManyMutationInput!
-  where: JoinWorkshopRequestScalarWhereInput!
-}
-
-input JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput {
-  connect: [JoinWorkshopRequestWhereUniqueInput!]
-  connectOrCreate: [JoinWorkshopRequestCreateOrConnectWithoutEmployeeInput!]
-  create: [JoinWorkshopRequestCreateWithoutEmployeeInput!]
-  createMany: JoinWorkshopRequestCreateManyEmployeeInputEnvelope
-  delete: [JoinWorkshopRequestWhereUniqueInput!]
-  deleteMany: [JoinWorkshopRequestScalarWhereInput!]
-  disconnect: [JoinWorkshopRequestWhereUniqueInput!]
-  set: [JoinWorkshopRequestWhereUniqueInput!]
-  update: [JoinWorkshopRequestUpdateWithWhereUniqueWithoutEmployeeInput!]
-  updateMany: [JoinWorkshopRequestUpdateManyWithWhereWithoutEmployeeInput!]
-  upsert: [JoinWorkshopRequestUpsertWithWhereUniqueWithoutEmployeeInput!]
-}
-
-input JoinWorkshopRequestUpdateWithWhereUniqueWithoutEmployeeInput {
-  data: JoinWorkshopRequestUpdateWithoutEmployeeInput!
-  where: JoinWorkshopRequestWhereUniqueInput!
-}
-
-input JoinWorkshopRequestUpdateWithoutEmployeeInput {
-  joinWorkshopRequestId: BigInt
-  message: String
-  status: JoinWorkshopRequestStatus
-}
-
-input JoinWorkshopRequestUpsertWithWhereUniqueWithoutEmployeeInput {
-  create: JoinWorkshopRequestCreateWithoutEmployeeInput!
-  update: JoinWorkshopRequestUpdateWithoutEmployeeInput!
-  where: JoinWorkshopRequestWhereUniqueInput!
-}
-
 input JoinWorkshopRequestWhereInput {
   AND: [JoinWorkshopRequestWhereInput!]
   NOT: [JoinWorkshopRequestWhereInput!]
@@ -1389,21 +1279,6 @@ input JoinWorkshopRequestWhereInput {
   employee: EmployeeRelationFilter
   employeeId: BigIntFilter
   joinWorkshopRequestId: BigIntFilter
-  message: StringNullableFilter
-  receiverId: BigIntFilter
-  status: EnumJoinWorkshopRequestStatusFilter
-  user: UserRelationFilter
-  workshop: WorkshopRelationFilter
-  workshopId: BigIntFilter
-}
-
-input JoinWorkshopRequestWhereUniqueInput {
-  AND: [JoinWorkshopRequestWhereInput!]
-  NOT: [JoinWorkshopRequestWhereInput!]
-  OR: [JoinWorkshopRequestWhereInput!]
-  employee: EmployeeRelationFilter
-  employeeId: BigIntFilter
-  joinWorkshopRequestId: BigInt
   message: StringNullableFilter
   receiverId: BigIntFilter
   status: EnumJoinWorkshopRequestStatusFilter
@@ -1439,16 +1314,14 @@ type Mutation {
   acceptDeviceRegistration(acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput!): WorkshopDevice!
   changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
   changeUserPassword(changeUserPasswordInput: ChangePasswordInput!): Boolean!
-  createAddress(data: AddressCreateInput!): Address!
+  createAddressForUser(data: AddressCreateInput!, userId: BigInt!): Address!
+  createAddressForWorkshop(data: AddressCreateInput!, workshopId: BigInt!): Address!
   createAdmin(createAdminInput: CreateAdminInput!): User!
   createSessionData(sessionDataCreateInput: SessionDataCreateInput!): SessionData!
   deleteAddress(where: AddressWhereUniqueInput!): Boolean!
-  deleteEmployee(where: EmployeeWhereUniqueInput!): Boolean!
   deleteGuest(where: GuestWhereUniqueInput!): Boolean!
   deleteSessionData(sessionDataId: String!): Boolean!
   deleteWorkshop(where: WorkshopWhereUniqueInput!): Boolean!
-  disableEmployee(employeeId: BigInt!): Boolean!
-  enableEmployee(employeeId: BigInt!): Boolean!
   generateDeviceOTP: String!
   loginEmployeeByUser(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
   loginEmployeeByWorkshop(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
@@ -1464,7 +1337,6 @@ type Mutation {
   removeDevice(deviceId: BigInt!): Boolean!
   requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
-  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee!
   updateGuest(data: GuestUpdateInput!, where: GuestWhereUniqueInput!): Guest!
   updateSessionData(sessionDataId: String!, sessionDataUpdateInput: SessionDataUpdateInput!): SessionData!
   updateWorkshop(data: WorkshopUpdateInput!, where: WorkshopWhereUniqueInput!): Workshop!
@@ -1722,11 +1594,9 @@ enum NullsOrder {
 
 type Query {
   AdminTest: String!
-  UserTest: String!
+  EmpTest: String!
   address(where: AddressWhereUniqueInput!): Address!
   addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
-  employee(where: EmployeeWhereUniqueInput!): Employee!
-  employees(cursor: EmployeeWhereUniqueInput, distinct: [EmployeeScalarFieldEnum!], orderBy: [EmployeeOrderByWithRelationInput!], skip: Int, take: Int, where: EmployeeWhereInput): [Employee!]!
   findAllUsers: [User!]!
   findUserByEmail(email: String!): User!
   findUserById(userId: BigInt!): User!

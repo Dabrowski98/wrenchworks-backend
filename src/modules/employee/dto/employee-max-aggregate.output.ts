@@ -22,6 +22,9 @@ export class EmployeeMaxAggregate {
     @Field(() => String, {nullable:true})
     login?: string;
 
+    @HideField()
+    password?: string;
+
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 

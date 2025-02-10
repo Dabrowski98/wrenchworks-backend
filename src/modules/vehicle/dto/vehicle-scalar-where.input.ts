@@ -29,4 +29,6 @@ export class VehicleScalarWhereInput {
     @Field(() => BigIntFilter, {nullable:true})
     modelId?: BigIntFilter;
 
-    }
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
+}

@@ -16,11 +16,12 @@ import { ReviewUpdateManyWithoutUserNestedInput } from '../../review/dto/review-
 import { UserReportUpdateManyWithoutUserNestedInput } from '../../user-report/dto/user-report-update-many-without-user-nested.input';
 import { JoinWorkshopRequestUpdateManyWithoutUserNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-user-nested.input';
 import { SessionDataUpdateManyWithoutUserNestedInput } from '../../session-data/dto/session-data-update-many-without-user-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserUpdateWithoutReviewResponsesInput {
+
+    @HideField()
+    userId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -78,9 +79,47 @@ export class UserUpdateWithoutReviewResponsesInput {
     @Validator.IsOptional()
     lastName?: string;
 
+    @HideField()
+    role?: keyof typeof UserRole;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+
     @Field(() => AddressUpdateOneWithoutUserNestedInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressUpdateOneWithoutUserNestedInput)
     address?: AddressUpdateOneWithoutUserNestedInput;
 
-    }
+    @HideField()
+    vehicles?: VehicleUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    serviceRequests?: ServiceRequestUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    customers?: CustomerUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    employees?: EmployeeUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    workshops?: WorkshopUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    reviews?: ReviewUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    userReports?: UserReportUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    joinWorkshopRequests?: JoinWorkshopRequestUpdateManyWithoutUserNestedInput;
+
+    @HideField()
+    sessionData?: SessionDataUpdateManyWithoutUserNestedInput;
+}

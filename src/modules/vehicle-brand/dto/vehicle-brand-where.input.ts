@@ -23,6 +23,12 @@ export class VehicleBrandWhereInput {
     @Field(() => StringFilter, {nullable:true})
     brandName?: StringFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
     @Field(() => VehicleModelListRelationFilter, {nullable:true})
     @ValidateNested()
     @Type(() => VehicleModelListRelationFilter)

@@ -8,8 +8,6 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { HideField } from '@nestjs/graphql';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopDetailsUncheckedCreateWithoutWorkshopInput {
@@ -55,4 +53,12 @@ export class WorkshopDetailsUncheckedCreateWithoutWorkshopInput {
     @Validator.IsOptional()
     NIP?: string;
 
-    }
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

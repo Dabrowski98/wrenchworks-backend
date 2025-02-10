@@ -21,6 +21,9 @@ export class WorkshopCountAggregate {
     @Field(() => Int, {nullable:false})
     telephoneNumber!: number;
 
+    @HideField()
+    password!: number;
+
     @Field(() => Int, {nullable:false})
     isVerified!: number;
 

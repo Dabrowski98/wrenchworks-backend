@@ -4,17 +4,19 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
+import { EmployeePermissionCreateNestedManyWithoutEmployeesInput } from '../../employee-permission/dto/employee-permission-create-nested-many-without-employees.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-employee.input';
 import { ValidateNested } from 'class-validator';
 import { TaskCreateNestedManyWithoutEmployeesInput } from '../../task/dto/task-create-nested-many-without-employees.input';
 import { UserCreateNestedOneWithoutEmployeesInput } from '../../user/dto/user-create-nested-one-without-employees.input';
 import { WorkshopCreateNestedOneWithoutEmployeesInput } from '../../workshop/dto/workshop-create-nested-one-without-employees.input';
 import { Type } from 'class-transformer';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeeCreateWithoutServicesInput {
+
+    @HideField()
+    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
@@ -39,14 +41,44 @@ export class EmployeeCreateWithoutServicesInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
+    @HideField()
+    refreshToken?: string;
+
+    @HideField()
+    status?: keyof typeof EmployeeStatus;
+
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => EmployeePermissionCreateNestedManyWithoutEmployeesInput, {nullable:true})
+    permissions?: EmployeePermissionCreateNestedManyWithoutEmployeesInput;
+
     @Field(() => JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput, {nullable:true})
     @ValidateNested()
     joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput;
+
+    @HideField()
+    tasks?: TaskCreateNestedManyWithoutEmployeesInput;
+
+    @HideField()
+    user?: UserCreateNestedOneWithoutEmployeesInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutEmployeesInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutEmployeesInput)

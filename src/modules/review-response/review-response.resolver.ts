@@ -21,11 +21,16 @@ import { ReviewResponseService } from './review-response.service';
 import { User } from '../user/dto/user.model';
 import { Review } from '../review/dto/review.model';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
+import { Action, CheckAbilities } from '../ability';
+import { AbilitiesGuard } from '../ability/abilities.guard';
+import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 
+@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => ReviewResponse)
 export class ReviewResponseResolver {
   constructor(private readonly reviewResponseService: ReviewResponseService) {}
 
+  @CheckAbilities({ action: Action.Create, subject: 'ReviewResponse' })
   @Mutation(() => ReviewResponse)
   createReviewResponse(
     @Args() args: CreateOneReviewResponseArgs,
@@ -34,6 +39,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.create(args, userId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @Query(() => ReviewResponse)
   reviewResponse(
     @Args() args: FindUniqueReviewResponseArgs,
@@ -41,6 +47,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.findOne(args);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @Query(() => [ReviewResponse])
   reviewResponses(
     @Args() args: FindManyReviewResponseArgs,
@@ -48,6 +55,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.findMany(args);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
   @Mutation(() => ReviewResponse)
   updateReviewResponse(
     @Args() args: UpdateOneReviewResponseArgs,
@@ -55,6 +63,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.update(args);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
   @Mutation(() => ReviewResponse)
   editReviewResponse(
     @Args() args: UpdateOneReviewResponseArgs,
@@ -62,6 +71,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.edit(args);
   }
 
+  @CheckAbilities({ action: Action.Delete, subject: 'ReviewResponse' })
   @Mutation(() => Boolean)
   deleteReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
@@ -69,6 +79,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.delete(args);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
   @Mutation(() => Boolean)
   hideReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
@@ -76,6 +87,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.hide(args);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
   @Mutation(() => Boolean)
   acceptReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
@@ -83,6 +95,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.accept(args);
   }
 
+  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
   @Mutation(() => Boolean)
   rejectReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
@@ -92,6 +105,7 @@ export class ReviewResponseResolver {
 
   // RESOLVE FIELDS
 
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => ReviewResponse, { nullable: true })
   parentResponse(
     @Parent() reviewResponse: ReviewResponse,
@@ -101,6 +115,7 @@ export class ReviewResponseResolver {
     );
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => [ReviewResponse], { nullable: true })
   childrenResponses(
     @Parent() reviewResponse: ReviewResponse,
@@ -110,16 +125,19 @@ export class ReviewResponseResolver {
     );
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'Review' })
   @ResolveField(() => Review, { nullable: true })
   review(@Parent() reviewResponse: ReviewResponse): Promise<Review | null> {
     return this.reviewResponseService.review(reviewResponse.reviewResponseId);
   }
 
-  @ResolveField(() => User, { nullable: true })
-  user(@Parent() reviewResponse: ReviewResponse): Promise<User | null> {
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
+  @ResolveField(() => User)
+  user(@Parent() reviewResponse: ReviewResponse): Promise<User> {
     return this.reviewResponseService.user(reviewResponse.reviewResponseId);
   }
 
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => ReviewResponseCount)
   _count(
     @Parent() reviewResponse: ReviewResponse,

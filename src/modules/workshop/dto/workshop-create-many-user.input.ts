@@ -3,11 +3,12 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopCreateManyUserInput {
+
+    @HideField()
+    workshopId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
@@ -35,6 +36,9 @@ export class WorkshopCreateManyUserInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
+    @HideField()
+    isVerified?: boolean;
+
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
@@ -45,4 +49,15 @@ export class WorkshopCreateManyUserInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

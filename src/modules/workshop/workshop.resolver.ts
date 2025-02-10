@@ -28,7 +28,18 @@ import { Service } from '../service/dto';
 import { Customer } from '../customer/dto';
 import { Employee } from '../employee/dto';
 import { User } from '../user/dto';
+import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
+import { CheckAbilities, Action, AbilitiesGuard } from '../ability';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { JwtUserPayload } from '../auth/user-auth/dto';
 
+@OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
 @Resolver(() => Workshop)
 export class WorkshopResolver {
   constructor(private readonly workshopService: WorkshopService) {}
@@ -59,6 +70,23 @@ export class WorkshopResolver {
   @Query(() => [Workshop])
   workshops(@Args() args: FindManyWorkshopArgs): Promise<Workshop[]> {
     return this.workshopService.findMany(args);
+  }
+
+  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
+  @UseGuards(AbilitiesGuard)
+  @Query(() => String)
+  EmpTest(
+    @CurrentEmployee() currentEmployee: JwtEmployeePayload,
+    @CurrentUser() currentUser: JwtUserPayload,
+  ) {
+    console.log('--------------------');
+    console.log(currentEmployee);
+    console.log(currentUser);
+    console.log('--------------------');
+
+    return 'xd';
+    // return `Hello World from ${currentEmployee.employeeId}, ${currentEmployee.entityType}, ${currentEmployee.loggedInBy}`;
+
   }
 
   //RESOLVE FIELDS

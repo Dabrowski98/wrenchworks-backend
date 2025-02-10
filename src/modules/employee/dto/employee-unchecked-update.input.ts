@@ -4,13 +4,12 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { HideField } from '@nestjs/graphql';
+import { EmployeePermissionUncheckedUpdateManyWithoutEmployeesNestedInput } from '../../employee-permission/dto/employee-permission-unchecked-update-many-without-employees-nested.input';
 import { ServiceUncheckedUpdateManyWithoutEmployeeNestedInput } from '../../service/dto/service-unchecked-update-many-without-employee-nested.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutEmployeeNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-employee-nested.input';
 import { TaskUncheckedUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-unchecked-update-many-without-employees-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeeUncheckedUpdateInput {
@@ -59,6 +58,24 @@ export class EmployeeUncheckedUpdateInput {
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => EmployeePermissionUncheckedUpdateManyWithoutEmployeesNestedInput, {nullable:true})
+    permissions?: EmployeePermissionUncheckedUpdateManyWithoutEmployeesNestedInput;
 
     @Field(() => ServiceUncheckedUpdateManyWithoutEmployeeNestedInput, {nullable:true})
     @Type(() => ServiceUncheckedUpdateManyWithoutEmployeeNestedInput)

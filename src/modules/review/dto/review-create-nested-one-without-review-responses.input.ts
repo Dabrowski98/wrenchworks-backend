@@ -11,6 +11,12 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class ReviewCreateNestedOneWithoutReviewResponsesInput {
 
+    @HideField()
+    create?: ReviewCreateWithoutReviewResponsesInput;
+
+    @HideField()
+    connectOrCreate?: ReviewCreateOrConnectWithoutReviewResponsesInput;
+
     @Field(() => ReviewWhereUniqueInput, {nullable:true})
     @Type(() => ReviewWhereUniqueInput)
     @ValidateNested()

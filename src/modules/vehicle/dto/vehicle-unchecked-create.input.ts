@@ -24,6 +24,9 @@ export class VehicleUncheckedCreateInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;
 
+    @HideField()
+    deletedAt?: Date | string;
+
     @Field(() => ServiceRequestUncheckedCreateNestedManyWithoutVehicleInput, {nullable:true})
     @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutVehicleInput)
     @ValidateNested()

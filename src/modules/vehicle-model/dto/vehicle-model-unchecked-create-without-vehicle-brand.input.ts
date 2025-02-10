@@ -6,8 +6,6 @@ import { HideField } from '@nestjs/graphql';
 import { VehicleUncheckedCreateNestedManyWithoutVehicleModelInput } from '../../vehicle/dto/vehicle-unchecked-create-nested-many-without-vehicle-model.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class VehicleModelUncheckedCreateWithoutVehicleBrandInput {
@@ -21,6 +19,12 @@ export class VehicleModelUncheckedCreateWithoutVehicleBrandInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Model name is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     modelName!: string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
 
     @Field(() => VehicleUncheckedCreateNestedManyWithoutVehicleModelInput, {nullable:true})
     @Type(() => VehicleUncheckedCreateNestedManyWithoutVehicleModelInput)

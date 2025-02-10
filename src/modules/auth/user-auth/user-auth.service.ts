@@ -68,13 +68,13 @@ export class UserAuthService {
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload: JwtUserPayload = {
-      sub: user.userId,
+      userId: user.userId,
       entityType: EntityType.USER,
       role: user.role as UserRole,
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
+      expiresIn: '1d',
       secret: process.env.USER_ACCESS_SECRET,
     });
 
@@ -96,9 +96,8 @@ export class UserAuthService {
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.USER_REFRESH_SECRET,
     });
-
     const sessions = await this.userService.sessionData(
-      decodedRefreshToken.sub,
+      decodedRefreshToken.userId,
     );
 
     const sessionData = sessions.find((a) => a.deviceId === deviceId);
@@ -114,7 +113,7 @@ export class UserAuthService {
 
     await this.sessionDataService.create({
       sessionDataId: decodedRefreshToken.jti,
-      user: { connect: { userId: decodedRefreshToken.sub } },
+      user: { connect: { userId: decodedRefreshToken.userId } },
       deviceId,
       ipAddress,
       deviceInfo,

@@ -13,6 +13,12 @@ export class GuestUpdateInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId?: bigint | number;
 
+    @HideField()
+    firstName?: string;
+
+    @HideField()
+    telephoneNumber?: string;
+
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
@@ -31,4 +37,12 @@ export class GuestUpdateInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    }
+    @HideField()
+    vehicle?: VehicleUpdateOneWithoutGuestNestedInput;
+
+    @HideField()
+    serviceRequest?: ServiceRequestUpdateOneWithoutGuestNestedInput;
+
+    @HideField()
+    customer?: CustomerUpdateOneWithoutGuestNestedInput;
+}

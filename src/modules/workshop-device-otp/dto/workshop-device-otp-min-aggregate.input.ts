@@ -20,4 +20,6 @@ export class WorkshopDeviceOtpMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     expiresAt?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+}

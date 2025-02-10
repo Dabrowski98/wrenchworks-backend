@@ -14,6 +14,9 @@ import { GuestUpdateOneWithoutServiceRequestNestedInput } from '../../guest/dto/
 @InputType()
 export class ServiceRequestUpdateWithoutJobsInput {
 
+    @HideField()
+    serviceRequestId?: bigint | number;
+
     @Field(() => ServiceRequestStatus, {nullable:true})
     @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
     @Validator.IsOptional()
@@ -25,10 +28,33 @@ export class ServiceRequestUpdateWithoutJobsInput {
     @Validator.IsOptional()
     description?: string;
 
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    approvedService?: ServiceUpdateOneWithoutServiceRequestNestedInput;
+
     @Field(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput, {nullable:true})
     @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
     @ValidateNested()
     @Type(() => VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput)
     vehicle?: VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput;
 
-    }
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutServiceRequestsNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutServiceRequestNestedInput;
+}

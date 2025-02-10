@@ -107,7 +107,7 @@ export class EmployeeAuthService {
     if (!decodedRefreshToken) return false;
 
     const employee = await this.employeeService.findOne({
-      where: { employeeId: decodedRefreshToken.sub },
+      where: { employeeId: decodedRefreshToken.employeeId },
     });
 
     if (!employee.refreshToken) return false;
@@ -126,7 +126,7 @@ export class EmployeeAuthService {
       throw new UnauthorizedException('Invalid refresh token');
 
     const employee = await this.employeeService.findOne({
-      where: { employeeId: decodedRefreshToken.sub },
+      where: { employeeId: decodedRefreshToken.employeeId },
     });
 
     if (!employee) throw new UnauthorizedException('Employee not found');
@@ -217,7 +217,7 @@ export class EmployeeAuthService {
     loggedInBy: keyof typeof LoggedInBy,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload: JwtEmployeePayload = {
-      sub: employee.employeeId,
+      employeeId: employee.employeeId,
       entityType: EntityType.EMPLOYEE,
       loggedInBy,
     };

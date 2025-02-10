@@ -3,6 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
+import { EmployeePermission } from '../../employee-permission/dto/employee-permission.model';
 import { Service } from '../../service/dto/service.model';
 import { Type } from 'class-transformer';
 import { JoinWorkshopRequest } from '../../join-workshop-request/dto/join-workshop-request.model';
@@ -32,6 +33,9 @@ export class Employee {
     /**
      * Note: Password will be hashed before storage
      */
+    @HideField()
+    password!: string;
+
     @Field(() => String, {nullable:true})
     refreshToken!: string | null;
 
@@ -62,7 +66,10 @@ export class Employee {
     /**
      * Note: Connect or Create only allowed
      */
-    @Field(() => [Service], {nullable:true,description:'Note: Connect or Create only allowed'})
+    @Field(() => [EmployeePermission], {nullable:true,description:'Note: Connect or Create only allowed'})
+    permissions?: Array<EmployeePermission>;
+
+    @Field(() => [Service], {nullable:true})
     @Type(() => Service)
     services?: Array<Service>;
 

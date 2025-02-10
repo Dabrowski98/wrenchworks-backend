@@ -24,4 +24,6 @@ export class ServiceRequestSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     approvedServiceId?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    resolvedBy?: keyof typeof SortOrder;
+}

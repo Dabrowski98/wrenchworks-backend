@@ -4,8 +4,12 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from 'src/common/decorators/guard-decorators/public.decorator';
+import { UserRole } from '@prisma/client';
+import { EntityType } from 'src/common/enums/entity-type.enum';
+import { UnauthorizedError } from 'src/common/custom-errors/errors.config';
 
 @Injectable()
+
 export class EmployeeJwtAuthGuard extends AuthGuard('employee-jwt') {
   constructor(private reflector: Reflector) {
     super({ property: 'employee' });
@@ -30,6 +34,10 @@ export class EmployeeJwtAuthGuard extends AuthGuard('employee-jwt') {
     }
     if (isPublic) {
       return employee;
+    }
+
+    if (!employee) {
+      throw new UnauthorizedError('You need to be logged in as an employee');
     }
 
     return employee;

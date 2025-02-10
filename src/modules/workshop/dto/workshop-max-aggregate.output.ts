@@ -21,6 +21,9 @@ export class WorkshopMaxAggregate {
     @Field(() => String, {nullable:true})
     telephoneNumber?: string;
 
+    @HideField()
+    password?: string;
+
     @Field(() => Boolean, {nullable:true})
     isVerified?: boolean;
 

@@ -59,6 +59,18 @@ export class WorkshopJobWhereUniqueInput {
     @Field(() => BoolFilter, {nullable:true})
     availability?: BoolFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
     @Field(() => TaskListRelationFilter, {nullable:true})
     @Type(() => TaskListRelationFilter)
     @ValidateNested()

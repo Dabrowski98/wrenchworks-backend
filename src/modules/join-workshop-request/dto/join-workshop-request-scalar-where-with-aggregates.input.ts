@@ -38,4 +38,18 @@ export class JoinWorkshopRequestScalarWhereWithAggregatesInput {
     @Field(() => EnumJoinWorkshopRequestStatusWithAggregatesFilter, {nullable:true})
     status?: EnumJoinWorkshopRequestStatusWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    resolvedAt?: DateTimeNullableWithAggregatesFilter;
+}

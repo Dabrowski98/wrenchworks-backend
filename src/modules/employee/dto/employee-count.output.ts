@@ -6,6 +6,9 @@ import { Int } from '@nestjs/graphql';
 export class EmployeeCount {
 
     @Field(() => Int, {nullable:false})
+    permissions?: number;
+
+    @Field(() => Int, {nullable:false})
     services?: number;
 
     @Field(() => Int, {nullable:false})

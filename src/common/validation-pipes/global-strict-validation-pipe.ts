@@ -8,7 +8,9 @@ export class GlobalStrictValidationPipe extends ValidationPipe {
       transform: true,
       whitelist: false,
       forbidNonWhitelisted: false,
+      skipMissingProperties: true,
       exceptionFactory: (errors) => {
+        console.log(errors);
         const validationErrors = errors.map((error) => ({
           property: error.property,
           constraints: error.constraints

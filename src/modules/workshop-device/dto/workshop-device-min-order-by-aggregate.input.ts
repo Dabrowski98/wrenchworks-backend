@@ -27,6 +27,12 @@ export class WorkshopDeviceMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     lastLoginBy?: keyof typeof SortOrder;
 
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+
     @Field(() => SortOrder, {nullable:true})
     acceptedAt?: keyof typeof SortOrder;
 

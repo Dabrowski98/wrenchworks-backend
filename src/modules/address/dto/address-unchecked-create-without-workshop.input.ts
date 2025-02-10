@@ -5,8 +5,6 @@ import * as Validator from 'class-validator';
 import { UserUncheckedCreateNestedOneWithoutAddressInput } from '../../user/dto/user-unchecked-create-nested-one-without-address.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class AddressUncheckedCreateWithoutWorkshopInput {

@@ -4,11 +4,12 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserCreateManyInput {
+
+    @HideField()
+    userId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -44,6 +45,12 @@ export class UserCreateManyInput {
     @Validator.IsOptional()
     avatarURL?: string;
 
+    @HideField()
+    isVerified?: boolean;
+
+    @HideField()
+    status?: keyof typeof UserStatus;
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
@@ -56,8 +63,19 @@ export class UserCreateManyInput {
     @Validator.IsOptional()
     lastName?: string;
 
+    @HideField()
+    role?: keyof typeof UserRole;
+
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     addressId?: bigint | number;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

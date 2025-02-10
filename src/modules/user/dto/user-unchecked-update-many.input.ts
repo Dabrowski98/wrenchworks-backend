@@ -5,8 +5,6 @@ import * as Validator from 'class-validator';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
 import { HideField } from '@nestjs/graphql';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserUncheckedUpdateManyInput {
@@ -79,4 +77,12 @@ export class UserUncheckedUpdateManyInput {
     @Validator.IsOptional()
     addressId?: bigint | number;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

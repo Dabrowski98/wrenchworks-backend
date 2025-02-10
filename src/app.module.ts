@@ -14,7 +14,7 @@ import { GlobalStrictValidationPipe } from './common/validation-pipes/global-str
 import { GuestModule } from './modules/guest/guest.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
-import { UserAbilityModule } from './modules/ability/user-ability.module';
+import { AbilityModule } from './modules/ability/ability.module';
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { UserAbilityModule } from './modules/ability/user-ability.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
+      fieldResolverEnhancers: ['guards'],
       formatError: (error) => {
         let originalError = error.extensions?.originalError as
           | Error
@@ -48,7 +49,7 @@ import { UserAbilityModule } from './modules/ability/user-ability.module';
     PrismaModule,
     HelperModule,
     AuthModule,
-    UserAbilityModule,
+    AbilityModule,
     AddressModule,
     GuestModule,
     UserModule,
@@ -58,7 +59,6 @@ import { UserAbilityModule } from './modules/ability/user-ability.module';
     Logger,
     Reflector,
     { provide: APP_GUARD, useClass: GqlThrottlerGuard },
-    { provide: APP_PIPE, useClass: GlobalStrictValidationPipe },
   ],
   controllers: [AppController],
 })

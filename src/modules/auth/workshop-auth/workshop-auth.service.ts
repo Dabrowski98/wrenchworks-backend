@@ -6,6 +6,7 @@ import { WorkshopService } from 'src/modules/workshop/workshop.service';
 import { RegisterWorkshopResponse } from './dto/register-workshop.response';
 import { RegisterWorkshopInput } from './dto/register-workshop.input';
 import { UserService } from 'src/modules/user/user.service';
+import { BadRequestError } from 'src/common/custom-errors/errors.config';
 @Injectable()
 export class WorkshopAuthService {
   constructor(
@@ -19,6 +20,7 @@ export class WorkshopAuthService {
     input: RegisterWorkshopInput,
     userId: bigint,
   ): Promise<RegisterWorkshopResponse> {
+    if (!userId) throw new BadRequestError('UserId not found');
     const userWorkshops = await this.userService.workshops(userId);
 
     if (userWorkshops.length >= Number(process.env.USER_MAX_WORKSHOPS))

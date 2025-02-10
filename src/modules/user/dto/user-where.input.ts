@@ -72,6 +72,15 @@ export class UserWhereInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     addressId?: BigIntNullableFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
+
     @Field(() => AddressNullableRelationFilter, {nullable:true})
     @ValidateNested()
     @Type(() => AddressNullableRelationFilter)

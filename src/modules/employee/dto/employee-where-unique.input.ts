@@ -11,6 +11,7 @@ import { EnumEmployeeStatusFilter } from '../../prisma/dto/enum-employee-status-
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { EmployeePermissionListRelationFilter } from '../../employee-permission/dto/employee-permission-list-relation-filter.input';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
@@ -60,6 +61,24 @@ export class EmployeeWhereUniqueInput {
 
     @Field(() => DateTimeFilter, {nullable:true})
     joinedAt?: DateTimeFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
+    @Field(() => EmployeePermissionListRelationFilter, {nullable:true})
+    permissions?: EmployeePermissionListRelationFilter;
 
     @Field(() => ServiceListRelationFilter, {nullable:true})
     @Type(() => ServiceListRelationFilter)

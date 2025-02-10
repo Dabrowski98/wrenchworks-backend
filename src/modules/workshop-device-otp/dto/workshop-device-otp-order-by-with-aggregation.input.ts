@@ -26,6 +26,9 @@ export class WorkshopDeviceOtpOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
     @Field(() => WorkshopDeviceOtpCountOrderByAggregateInput, {nullable:true})
     _count?: WorkshopDeviceOtpCountOrderByAggregateInput;
 

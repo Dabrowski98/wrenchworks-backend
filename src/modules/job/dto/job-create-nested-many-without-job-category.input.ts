@@ -12,6 +12,15 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class JobCreateNestedManyWithoutJobCategoryInput {
 
+    @HideField()
+    create?: Array<JobCreateWithoutJobCategoryInput>;
+
+    @HideField()
+    connectOrCreate?: Array<JobCreateOrConnectWithoutJobCategoryInput>;
+
+    @HideField()
+    createMany?: JobCreateManyJobCategoryInputEnvelope;
+
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()

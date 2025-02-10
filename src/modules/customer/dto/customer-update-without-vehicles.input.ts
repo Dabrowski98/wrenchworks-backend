@@ -16,6 +16,9 @@ import { WorkshopUpdateOneRequiredWithoutCustomersNestedInput } from '../../work
 @InputType()
 export class CustomerUpdateWithoutVehiclesInput {
 
+    @HideField()
+    customerId?: bigint | number;
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
@@ -70,4 +73,30 @@ export class CustomerUpdateWithoutVehiclesInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    services?: ServiceUpdateManyWithoutCustomerNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutCustomerNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutCustomersNestedInput;
+
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutCustomersNestedInput;
+}

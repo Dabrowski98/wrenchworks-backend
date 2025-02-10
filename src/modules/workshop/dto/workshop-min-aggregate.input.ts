@@ -32,4 +32,15 @@ export class WorkshopMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     isOfferingService?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    deletedAt?: true;
+}

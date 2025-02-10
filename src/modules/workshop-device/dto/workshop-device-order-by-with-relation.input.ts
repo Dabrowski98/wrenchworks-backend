@@ -31,6 +31,12 @@ export class WorkshopDeviceOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     lastLoginBy?: SortOrderInput;
 
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @HideField()
+    updatedBy?: SortOrderInput;
+
     @Field(() => SortOrderInput, {nullable:true})
     acceptedAt?: SortOrderInput;
 

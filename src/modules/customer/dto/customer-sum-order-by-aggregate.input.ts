@@ -21,4 +21,9 @@ export class CustomerSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     totalDue?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    createdBy?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+}

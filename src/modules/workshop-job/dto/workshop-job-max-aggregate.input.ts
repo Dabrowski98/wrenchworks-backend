@@ -26,4 +26,15 @@ export class WorkshopJobMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     availability?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

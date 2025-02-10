@@ -21,4 +21,6 @@ export class WorkshopDeviceOtpMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+}

@@ -32,6 +32,21 @@ export class EmployeeCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     joinedAt?: true;
 
+    @HideField()
+    deletedAt?: true;
+
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

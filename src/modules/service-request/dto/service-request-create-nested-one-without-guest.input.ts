@@ -16,4 +16,9 @@ export class ServiceRequestCreateNestedOneWithoutGuestInput {
     @ValidateNested()
     create?: ServiceRequestCreateWithoutGuestInput;
 
-    }
+    @HideField()
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutGuestInput;
+
+    @HideField()
+    connect?: Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>;
+}

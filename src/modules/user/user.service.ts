@@ -163,7 +163,7 @@ export class UserService {
   async sessionData(userId: bigint): Promise<SessionData[]> {
     return (
       await this.prisma.user.findUnique({
-        where: { userId },
+        where: {userId},
         include: { sessionData: true },
       })
     ).sessionData;
@@ -171,16 +171,26 @@ export class UserService {
 
   async resolveCount(userId: bigint): Promise<UserCount> {
     return {
-      vehicles: await this.prisma.vehicle.count({where: {userId}}),
-      serviceRequests: await this.prisma.serviceRequest.count({where: {userId}}),
-      customers: await this.prisma.customer.count({where: {userId}}),
-      employees: await this.prisma.employee.count({where: {userId}}),
-      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({where: {user: {userId}}}),
-      userReports: await this.prisma.userReport.count({where: {userId}}),
-      workshops: await this.prisma.workshop.count({where: {user: {userId}}}),
-      reviews: await this.prisma.review.count({where: {user: {userId}}}),
-      reviewResponses: await this.prisma.reviewResponse.count({where: {user: {userId}}}),
-      sessionData: await this.prisma.sessionData.count({where: {user: {userId}}}),
+      vehicles: await this.prisma.vehicle.count({ where: { userId } }),
+      serviceRequests: await this.prisma.serviceRequest.count({
+        where: { userId },
+      }),
+      customers: await this.prisma.customer.count({ where: { userId } }),
+      employees: await this.prisma.employee.count({ where: { userId } }),
+      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({
+        where: { user: { userId } },
+      }),
+      userReports: await this.prisma.userReport.count({ where: { userId } }),
+      workshops: await this.prisma.workshop.count({
+        where: { user: { userId } },
+      }),
+      reviews: await this.prisma.review.count({ where: { user: { userId } } }),
+      reviewResponses: await this.prisma.reviewResponse.count({
+        where: { user: { userId } },
+      }),
+      sessionData: await this.prisma.sessionData.count({
+        where: { user: { userId } },
+      }),
     };
   }
 }

@@ -30,6 +30,12 @@ export class ReviewResponseOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     originalResponseText?: SortOrderInput;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedAt?: SortOrderInput;
+
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
