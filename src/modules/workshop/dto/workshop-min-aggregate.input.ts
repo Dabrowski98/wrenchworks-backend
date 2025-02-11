@@ -21,9 +21,6 @@ export class WorkshopMinAggregateInput {
     telephoneNumber?: true;
 
     @Field(() => Boolean, {nullable:true})
-    password?: true;
-
-    @Field(() => Boolean, {nullable:true})
     isVerified?: true;
 
     @Field(() => Boolean, {nullable:true})

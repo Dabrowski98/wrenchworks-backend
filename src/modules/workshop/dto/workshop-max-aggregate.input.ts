@@ -21,9 +21,6 @@ export class WorkshopMaxAggregateInput {
     telephoneNumber?: true;
 
     @Field(() => Boolean, {nullable:true})
-    password?: true;
-
-    @Field(() => Boolean, {nullable:true})
     isVerified?: true;
 
     @Field(() => Boolean, {nullable:true})

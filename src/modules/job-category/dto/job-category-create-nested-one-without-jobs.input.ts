@@ -20,5 +20,5 @@ export class JobCategoryCreateNestedOneWithoutJobsInput {
     @Field(() => JobCategoryWhereUniqueInput, {nullable:true})
     @Type(() => JobCategoryWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
+    connect?: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId' | 'name'>;
 }

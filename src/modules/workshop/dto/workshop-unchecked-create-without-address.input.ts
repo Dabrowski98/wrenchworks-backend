@@ -40,14 +40,6 @@ export class WorkshopUncheckedCreateWithoutAddressInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber!: string;
 
-    @Field(() => String, {nullable:false})
-    @Validator.IsString({ message: 'Password must be a string' })
-    @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
-    @Validator.Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, { message: 'Password must contain at least one letter, one number and one special character' })
-    @Validator.IsNotEmpty({groups: [CREATE], message: 'Password is required' })
-    @Validator.IsOptional({groups: [UPDATE]})
-    password!: string;
-
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
     @Validator.IsOptional()

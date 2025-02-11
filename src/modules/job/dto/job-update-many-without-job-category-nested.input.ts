@@ -38,22 +38,22 @@ export class JobUpdateManyWithoutJobCategoryNestedInput {
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    set?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;
+    set?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>>;
 
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    disconnect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;
+    disconnect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>>;
 
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    delete?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;
+    delete?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>>;
 
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;
+    connect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>>;
 
     @Field(() => [JobUpdateWithWhereUniqueWithoutJobCategoryInput], {nullable:true})
     @Type(() => JobUpdateWithWhereUniqueWithoutJobCategoryInput)

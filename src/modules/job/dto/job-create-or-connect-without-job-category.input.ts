@@ -11,7 +11,7 @@ export class JobCreateOrConnectWithoutJobCategoryInput {
 
     @Field(() => JobWhereUniqueInput, {nullable:false})
     @Type(() => JobWhereUniqueInput)
-    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>;
+    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>;
 
     @Field(() => JobCreateWithoutJobCategoryInput, {nullable:false})
     @Type(() => JobCreateWithoutJobCategoryInput)

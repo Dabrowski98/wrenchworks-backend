@@ -18,6 +18,11 @@ export class EmployeeJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    return { employeeId: payload.employeeId, entityType: EntityType.EMPLOYEE };
+    return {
+      employeeId: payload.employeeId,
+      entityType: EntityType.EMPLOYEE,
+      workshopId: payload.workshopId,
+      loggedInBy: payload.loggedInBy,
+    };
   }
 }

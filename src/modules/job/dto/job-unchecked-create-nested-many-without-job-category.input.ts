@@ -29,5 +29,5 @@ export class JobUncheckedCreateNestedManyWithoutJobCategoryInput {
     @Field(() => [JobWhereUniqueInput], {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    connect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>>;
+    connect?: Array<Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>>;
 }

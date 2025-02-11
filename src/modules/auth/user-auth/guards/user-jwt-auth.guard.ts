@@ -25,10 +25,11 @@ export class UserJwtAuthGuard extends AuthGuard('user-jwt') {
 
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
-  
+
     if (err) {
-        throw err;
+      throw err;
     }
+
     if (isPublic) {
       return user;
     }

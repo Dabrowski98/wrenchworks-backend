@@ -9,5 +9,5 @@ export class FindUniqueJobCategoryOrThrowArgs {
 
     @Field(() => JobCategoryWhereUniqueInput, {nullable:false})
     @Type(() => JobCategoryWhereUniqueInput)
-    where!: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
+    where!: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId' | 'name'>;
 }

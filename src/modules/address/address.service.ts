@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import {
+  BadRequestError,
   ForbiddenError as MyForbiddenError,
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
@@ -28,6 +29,8 @@ import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.d
 import { ForbiddenError, subject } from '@casl/ability';
 import { CheckAbilities } from '../ability';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { EntityType } from 'src/common/enums/entity-type.enum';
 
 @Injectable()
 export class AddressService {
@@ -54,21 +57,22 @@ export class AddressService {
     args: CreateAddressForUserArgs,
     currentUser: JwtUserPayload,
   ): Promise<Address> {
-    const user = await this.prisma.user.findUniqueOrThrow({
+    const userWithAddress = await this.prisma.user.findUniqueOrThrow({
       where: { userId: args.userId },
       include: { address: true },
     });
+
+    if (userWithAddress?.address)
+      throw new BadRequestError(
+        'User already has an address, please update it instead',
+      );
+
     const ability = await this.userAbilityFactory.defineAbility(currentUser);
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Address', { user } as any as Address),
+      subject('Address', { user: userWithAddress } as any as Address),
     );
-
-    if (user?.address)
-      throw new MyForbiddenError(
-        'User already has an address, please update it instead',
-      );
 
     return this.prisma.address.create({
       data: { ...args.data, user: { connect: { userId: args.userId } } },
@@ -77,23 +81,18 @@ export class AddressService {
 
   async createAddressForWorkshop(
     args: CreateAddressForWorkshopArgs,
-    currentUser: JwtUserPayload,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
   ): Promise<Address> {
-    const workshop = await this.prisma.workshop.findUniqueOrThrow({
+    const workshopWithAddress = await this.prisma.workshop.findUniqueOrThrow({
       where: { workshopId: args.workshopId },
       include: { address: true },
     });
 
-    if (workshop?.address)
-      throw new MyForbiddenError(
-        'Workshop already has an address, please update it instead',
-      );
-
-    const ability = await this.userAbilityFactory.defineAbility(currentUser);
+    const ability = await this.userAbilityFactory.defineAbility(currentEntity);
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Address', { workshop } as any as Address),
+      subject('Address', { workshop: workshopWithAddress } as any as Address),
     );
 
     return this.prisma.address.create({
@@ -106,31 +105,45 @@ export class AddressService {
 
   async update(
     args: UpdateOneAddressArgs,
-    currentUser: JwtUserPayload,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
   ): Promise<Address> {
-    const ability = await this.userAbilityFactory.defineAbility(currentUser);
+    const ability = await this.userAbilityFactory.defineAbility(currentEntity);
+    const addressWithUserAndWorkshop =
+      await this.prisma.address.findUniqueOrThrow({
+        where: args.where,
+        include: {
+          user: true,
+          workshop: true,
+        },
+      });
 
-    const address = await this.prisma.address.findUniqueOrThrow({
-      where: args.where,
-      include: {
-        user: true,
-        workshop: true,
-      },
-    });
+    //wlasciciel lub pracownik warsztatu z uprawnieniami do edycji
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
-      subject('Address', address),
+      subject('Address', addressWithUserAndWorkshop),
     );
 
     return this.prisma.address.update(args);
   }
 
+  async findOne(
+    args: FindUniqueAddressArgs,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+  ): Promise<Address> {
+    const ability = this.userAbilityFactory.defineAbility(currentEntity);
+    const record = await this.prisma.address.findFirst({
+      where: { AND: [accessibleBy(ability).Address, args.where] },
+    });
+    if (!record) throw new RecordNotFoundError(Address);
+    return record;
+  }
+
   async findMany(
     args: FindManyAddressArgs,
-    currentUser: JwtUserPayload,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
   ): Promise<Address[]> {
-    const ability = this.userAbilityFactory.defineAbility(currentUser);
+    const ability = this.userAbilityFactory.defineAbility(currentEntity);
     try {
       return this.prisma.address.findMany({
         where: { AND: [accessibleBy(ability).Address, args.where || {}] },
@@ -140,58 +153,35 @@ export class AddressService {
     }
   }
 
-  async findOne(
-    args: FindUniqueAddressArgs,
-    currentUser: JwtUserPayload,
-  ): Promise<Address> {
-    const ability = this.userAbilityFactory.defineAbility(currentUser);
-    const record = await this.prisma.address.findFirst({
-      where: { AND: [accessibleBy(ability).Address, args.where] },
-      include: {
-        user: true,
-        workshop: true,
-      },
-    });
+  // async findById(
+  //   addressId: bigint,
+  //   currentUser: JwtUserPayload,
+  // ): Promise<Address> {
+  //   const ability = this.userAbilityFactory.defineAbility(currentUser);
 
-    if (!record) throw new RecordNotFoundError(Address);
+  //   const record = await this.prisma.address.findUnique({
+  //     where: { addressId },
+  //   });
 
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Address', record),
-    );
+  //   if (!record) throw new RecordNotFoundError(Address);
 
-    return record;
-  }
+  //   ForbiddenError.from(ability).throwUnlessCan(
+  //     Action.Read,
+  //     subject('Address', record),
+  //   );
 
-  async findById(
-    addressId: bigint,
-    currentUser: JwtUserPayload,
-  ): Promise<Address> {
-    const ability = this.userAbilityFactory.defineAbility(currentUser);
-
-    const record = await this.prisma.address.findUnique({
-      where: { addressId },
-    });
-
-    if (!record) throw new RecordNotFoundError(Address);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Address', record),
-    );
-
-    return record;
-  }
+  //   return record;
+  // }
 
   async delete(
     args: DeleteOneAddressArgs,
-    currentUser: JwtUserPayload,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
   ): Promise<Boolean> {
     const address = await this.prisma.address.findUniqueOrThrow({
       where: args.where,
     });
 
-    const ability = await this.userAbilityFactory.defineAbility(currentUser);
+    const ability = await this.userAbilityFactory.defineAbility(currentEntity);
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Delete,
       subject('Address', address),

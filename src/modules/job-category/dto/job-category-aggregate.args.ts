@@ -23,7 +23,7 @@ export class JobCategoryAggregateArgs {
     orderBy?: Array<JobCategoryOrderByWithRelationInput>;
 
     @Field(() => JobCategoryWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
+    cursor?: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId' | 'name'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

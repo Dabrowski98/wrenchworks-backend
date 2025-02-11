@@ -30,7 +30,7 @@ export class JobUpdateOneRequiredWithoutJobWorkshopsNestedInput {
     @Field(() => JobWhereUniqueInput, {nullable:true})
     @Type(() => JobWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>;
+    connect?: Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>;
 
     @Field(() => JobUpdateToOneWithWhereWithoutJobWorkshopsInput, {nullable:true})
     @Type(() => JobUpdateToOneWithWhereWithoutJobWorkshopsInput)

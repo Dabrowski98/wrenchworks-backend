@@ -42,9 +42,6 @@ export class AbilitiesGuard implements CanActivate {
     const user = req.user;
     const employee = req.employee;
 
-    console.log(user);
-    console.log(employee);
-
     if (!user && !employee) {
       throw new UnauthorizedException('User or employee not authenticated');
     }

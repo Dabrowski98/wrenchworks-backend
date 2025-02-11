@@ -218,13 +218,17 @@ export class EmployeeAuthService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload: JwtEmployeePayload = {
       employeeId: employee.employeeId,
+      workshopId: employee.workshopId,
       entityType: EntityType.EMPLOYEE,
       loggedInBy,
+      permissions: employee.permissions || [],
     };
+
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '12h',
       secret: process.env.EMPLOYEE_ACCESS_SECRET,
     });
+
     const refreshToken = this.jwtService.sign(payload, {
       jwtid: uuidv4(),
       expiresIn: '7d',

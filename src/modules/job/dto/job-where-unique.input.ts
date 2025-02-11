@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
+import * as Validator from 'class-validator';
 import { JobWhereInput } from './job-where.input';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
@@ -17,6 +18,12 @@ export class JobWhereUniqueInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     jobId?: bigint | number;
 
+    @Field(() => String, {nullable:true})
+    @Validator.IsString({ message: 'Name must be a string' })
+    @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+    @Validator.IsOptional()
+    name?: string;
+
     @Field(() => [JobWhereInput], {nullable:true})
     AND?: Array<JobWhereInput>;
 
@@ -28,9 +35,6 @@ export class JobWhereUniqueInput {
 
     @Field(() => BigIntFilter, {nullable:true})
     categoryId?: BigIntFilter;
-
-    @Field(() => StringNullableFilter, {nullable:true})
-    name?: StringNullableFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;

@@ -12,7 +12,7 @@ export class JobCategoryUpsertWithWhereUniqueWithoutParentInput {
 
     @Field(() => JobCategoryWhereUniqueInput, {nullable:false})
     @Type(() => JobCategoryWhereUniqueInput)
-    where!: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId'>;
+    where!: Prisma.AtLeast<JobCategoryWhereUniqueInput, 'categoryId' | 'name'>;
 
     @Field(() => JobCategoryUpdateWithoutParentInput, {nullable:false})
     @Type(() => JobCategoryUpdateWithoutParentInput)

@@ -564,9 +564,10 @@ type Employee {
   joinedAt: DateTime!
   login: String!
   nickname: BigInt
-  refreshToken: String
 
   """Note: Connect or Create only allowed"""
+  permissions: [EmployeePermission!]
+  refreshToken: String
   services: [Service!]
   status: EmployeeStatus!
   tasks: [Task!]
@@ -590,6 +591,7 @@ type EmployeeAvgAggregate {
 
 type EmployeeCount {
   joinWorkshopRequests: Int!
+  permissions: Int!
   services: Int!
   tasks: Int!
 }
@@ -660,6 +662,7 @@ input EmployeeOrderByWithRelationInput {
   login: SortOrder
   nickname: SortOrderInput
   password: SortOrder
+  permissions: EmployeePermissionOrderByRelationAggregateInput
   refreshToken: SortOrderInput
   services: ServiceOrderByRelationAggregateInput
   status: SortOrder
@@ -668,6 +671,158 @@ input EmployeeOrderByWithRelationInput {
   userId: SortOrderInput
   workshop: WorkshopOrderByWithRelationInput
   workshopId: SortOrder
+}
+
+type EmployeePermission {
+  _count: EmployeePermissionCount!
+  action: String!
+  conditions: JSON
+  createdAt: DateTime!
+  description: String
+  employees: [Employee!]
+  name: String!
+  permissionId: BigInt!
+  subject: String!
+  updatedAt: DateTime!
+}
+
+type EmployeePermissionAvgAggregate {
+  permissionId: Float
+}
+
+type EmployeePermissionCount {
+  employees: Int!
+}
+
+type EmployeePermissionCountAggregate {
+  _all: Int!
+  action: Int!
+  conditions: Int!
+  createdAt: Int!
+  description: Int!
+  name: Int!
+  permissionId: Int!
+  subject: Int!
+  updatedAt: Int!
+}
+
+input EmployeePermissionCreateInput {
+  action: String!
+  conditions: JSON
+  description: String
+  name: String!
+  permissionId: BigInt
+  subject: String!
+}
+
+input EmployeePermissionCreateNestedManyWithoutEmployeesInput {
+  connect: [EmployeePermissionWhereUniqueInput!]
+  connectOrCreate: [EmployeePermissionCreateOrConnectWithoutEmployeesInput!]
+  create: [EmployeePermissionCreateWithoutEmployeesInput!]
+}
+
+input EmployeePermissionCreateOrConnectWithoutEmployeesInput {
+  create: EmployeePermissionCreateWithoutEmployeesInput!
+  where: EmployeePermissionWhereUniqueInput!
+}
+
+input EmployeePermissionCreateWithoutEmployeesInput {
+  action: String!
+  conditions: JSON
+  description: String
+  name: String!
+  permissionId: BigInt
+  subject: String!
+}
+
+input EmployeePermissionListRelationFilter {
+  every: EmployeePermissionWhereInput
+  none: EmployeePermissionWhereInput
+  some: EmployeePermissionWhereInput
+}
+
+type EmployeePermissionMaxAggregate {
+  action: String
+  createdAt: DateTime
+  description: String
+  name: String
+  permissionId: BigInt
+  subject: String
+  updatedAt: DateTime
+}
+
+type EmployeePermissionMinAggregate {
+  action: String
+  createdAt: DateTime
+  description: String
+  name: String
+  permissionId: BigInt
+  subject: String
+  updatedAt: DateTime
+}
+
+input EmployeePermissionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input EmployeePermissionOrderByWithRelationInput {
+  action: SortOrder
+  conditions: SortOrderInput
+  description: SortOrderInput
+  employees: EmployeeOrderByRelationAggregateInput
+  name: SortOrder
+  permissionId: SortOrder
+  subject: SortOrder
+}
+
+enum EmployeePermissionScalarFieldEnum {
+  action
+  conditions
+  createdAt
+  description
+  name
+  permissionId
+  subject
+  updatedAt
+}
+
+type EmployeePermissionSumAggregate {
+  permissionId: BigInt
+}
+
+input EmployeePermissionUpdateInput {
+  action: String
+  conditions: JSON
+  description: String
+  name: String
+  permissionId: BigInt
+  subject: String
+}
+
+input EmployeePermissionWhereInput {
+  AND: [EmployeePermissionWhereInput!]
+  NOT: [EmployeePermissionWhereInput!]
+  OR: [EmployeePermissionWhereInput!]
+  action: StringFilter
+  conditions: JsonNullableFilter
+  description: StringNullableFilter
+  employees: EmployeeListRelationFilter
+  name: StringFilter
+  permissionId: BigIntFilter
+  subject: StringFilter
+}
+
+input EmployeePermissionWhereUniqueInput {
+  AND: [EmployeePermissionWhereInput!]
+  NOT: [EmployeePermissionWhereInput!]
+  OR: [EmployeePermissionWhereInput!]
+  action: StringFilter
+  conditions: JsonNullableFilter
+  description: StringNullableFilter
+  employees: EmployeeListRelationFilter
+  name: String
+  permissionId: BigInt
+  subject: StringFilter
 }
 
 input EmployeeRelationFilter {
@@ -699,6 +854,7 @@ input EmployeeWhereInput {
   login: StringFilter
   nickname: StringNullableFilter
   password: StringFilter
+  permissions: EmployeePermissionListRelationFilter
   refreshToken: StringNullableFilter
   services: ServiceListRelationFilter
   status: EnumEmployeeStatusFilter
@@ -974,6 +1130,11 @@ input IntNullableFilter {
   not: NestedIntNullableFilter
   notIn: [Int!]
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type Job {
   _count: JobCount!
@@ -1287,6 +1448,22 @@ input JoinWorkshopRequestWhereInput {
   workshopId: BigIntFilter
 }
 
+input JsonNullableFilter {
+  array_contains: JSON
+  array_ends_with: JSON
+  array_starts_with: JSON
+  equals: JSON
+  gt: JSON
+  gte: JSON
+  lt: JSON
+  lte: JSON
+  not: JSON
+  path: String
+  string_contains: String
+  string_ends_with: String
+  string_starts_with: String
+}
+
 input LoginEmployeeInput {
   login: String!
   password: String!
@@ -1312,13 +1489,16 @@ type LoginUserResponse {
 
 type Mutation {
   acceptDeviceRegistration(acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput!): WorkshopDevice!
+  assignPermissionsToEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
   changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
   changeUserPassword(changeUserPasswordInput: ChangePasswordInput!): Boolean!
   createAddressForUser(data: AddressCreateInput!, userId: BigInt!): Address!
   createAddressForWorkshop(data: AddressCreateInput!, workshopId: BigInt!): Address!
   createAdmin(createAdminInput: CreateAdminInput!): User!
+  createEmployeePermission(data: EmployeePermissionCreateInput!): EmployeePermission!
   createSessionData(sessionDataCreateInput: SessionDataCreateInput!): SessionData!
   deleteAddress(where: AddressWhereUniqueInput!): Boolean!
+  deleteEmployeePermission(employeePermissionId: BigInt!): Boolean!
   deleteGuest(where: GuestWhereUniqueInput!): Boolean!
   deleteSessionData(sessionDataId: String!): Boolean!
   deleteWorkshop(where: WorkshopWhereUniqueInput!): Boolean!
@@ -1335,8 +1515,10 @@ type Mutation {
   registerUser(registerUserInput: RegisterUserInput!): User!
   registerWorkshop(registerWorkshopInput: RegisterWorkshopInput!): RegisterWorkshopResponse!
   removeDevice(deviceId: BigInt!): Boolean!
+  removePermissionsFromEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
   requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
+  updateEmployeePermission(data: EmployeePermissionUpdateInput!, where: EmployeePermissionWhereUniqueInput!): EmployeePermission!
   updateGuest(data: GuestUpdateInput!, where: GuestWhereUniqueInput!): Guest!
   updateSessionData(sessionDataId: String!, sessionDataUpdateInput: SessionDataUpdateInput!): SessionData!
   updateWorkshop(data: WorkshopUpdateInput!, where: WorkshopWhereUniqueInput!): Workshop!
@@ -1594,9 +1776,10 @@ enum NullsOrder {
 
 type Query {
   AdminTest: String!
-  EmpTest: String!
   address(where: AddressWhereUniqueInput!): Address!
   addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
+  employeePermission(where: EmployeePermissionWhereUniqueInput!): EmployeePermission!
+  employeePermissions(cursor: EmployeePermissionWhereUniqueInput, distinct: [EmployeePermissionScalarFieldEnum!], orderBy: [EmployeePermissionOrderByWithRelationInput!], skip: Int, take: Int, where: EmployeePermissionWhereInput): [EmployeePermission!]!
   findAllUsers: [User!]!
   findUserByEmail(email: String!): User!
   findUserById(userId: BigInt!): User!
@@ -1605,6 +1788,7 @@ type Query {
   getSessionData(id: String!): SessionData!
   guest(where: GuestWhereUniqueInput!): Guest!
   guests(cursor: GuestWhereUniqueInput, distinct: [GuestScalarFieldEnum!], orderBy: [GuestOrderByWithRelationInput!], skip: Int, take: Int, where: GuestWhereInput): [Guest!]!
+  testtest: String!
   workshop(where: WorkshopWhereUniqueInput!): Workshop!
   workshops(cursor: WorkshopWhereUniqueInput, distinct: [WorkshopScalarFieldEnum!], orderBy: [WorkshopOrderByWithRelationInput!], skip: Int, take: Int, where: WorkshopWhereInput): [Workshop!]!
 }
@@ -1615,6 +1799,7 @@ input RegisterEmployeeInput {
   login: String!
   nickname: BigInt
   password: String!
+  permissions: EmployeePermissionCreateNestedManyWithoutEmployeesInput
 }
 
 input RegisterUserInput {

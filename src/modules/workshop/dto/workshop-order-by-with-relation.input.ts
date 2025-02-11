@@ -37,9 +37,6 @@ export class WorkshopOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     telephoneNumber?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    password?: keyof typeof SortOrder;
-
     @Field(() => SortOrderInput, {nullable:true})
     isVerified?: SortOrderInput;
 

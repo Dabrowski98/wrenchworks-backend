@@ -25,13 +25,19 @@ import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UseGuards } from '@nestjs/common';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { JwtUserPayload } from '../auth/user-auth/dto';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => Address)
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
+  // GOOD
   @CheckAbilities({ action: Action.Create, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard)
   @Mutation(() => Address)
   async createAddressForUser(
     @CurrentUser() currentUser: JwtUserPayload,
@@ -40,50 +46,59 @@ export class AddressResolver {
     return this.addressService.createAddressForUser(args, currentUser);
   }
 
+
   @CheckAbilities({ action: Action.Create, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Address)
   async createAddressForWorkshop(
-    @CurrentUser() currentUser: JwtUserPayload,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: CreateAddressForWorkshopArgs,
   ): Promise<Address> {
-    return this.addressService.createAddressForWorkshop(args, currentUser);
+    return this.addressService.createAddressForWorkshop(args, currentEntity);
   }
 
   @CheckAbilities({ action: Action.Update, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Address)
   async updateAddress(
-    @CurrentUser() currentUser: JwtUserPayload,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: UpdateOneAddressArgs,
   ): Promise<Address> {
-    return this.addressService.update(args, currentUser);
+    return this.addressService.update(args, currentEntity);
   }
 
   @CheckAbilities({ action: Action.Read, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Address)
   async address(
-    @CurrentUser() currentUser: JwtUserPayload,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: FindUniqueAddressArgs,
   ): Promise<Address> {
-    return this.addressService.findOne(args, currentUser);
+    return this.addressService.findOne(args, currentEntity);
   }
 
+  //RECONSIDER
   @CheckAbilities({ action: Action.Read, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Address])
   addresses(
-    @CurrentUser() currentUser: JwtUserPayload,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args?: FindManyAddressArgs,
   ): Promise<Address[]> {
-    return this.addressService.findMany(args ?? {}, currentUser);
+    return this.addressService.findMany(args ?? {}, currentEntity);
   }
 
+
   @CheckAbilities({ action: Action.Delete, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async deleteAddress(
-    @CurrentUser() currentUser: JwtUserPayload,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: DeleteOneAddressArgs,
   ): Promise<Boolean> {
-    return this.addressService.delete(args, currentUser);
+    return this.addressService.delete(args, currentEntity);
   }
+
 
   //RESOLVE FIELDS
 

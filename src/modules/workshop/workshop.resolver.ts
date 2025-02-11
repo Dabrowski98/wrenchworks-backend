@@ -72,23 +72,6 @@ export class WorkshopResolver {
     return this.workshopService.findMany(args);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
-  @UseGuards(AbilitiesGuard)
-  @Query(() => String)
-  EmpTest(
-    @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-    @CurrentUser() currentUser: JwtUserPayload,
-  ) {
-    console.log('--------------------');
-    console.log(currentEmployee);
-    console.log(currentUser);
-    console.log('--------------------');
-
-    return 'xd';
-    // return `Hello World from ${currentEmployee.employeeId}, ${currentEmployee.entityType}, ${currentEmployee.loggedInBy}`;
-
-  }
-
   //RESOLVE FIELDS
 
   @ResolveField(() => [Employee])

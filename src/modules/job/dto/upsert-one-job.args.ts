@@ -11,7 +11,7 @@ export class UpsertOneJobArgs {
 
     @Field(() => JobWhereUniqueInput, {nullable:false})
     @Type(() => JobWhereUniqueInput)
-    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>;
+    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>;
 
     @Field(() => JobCreateInput, {nullable:false})
     @Type(() => JobCreateInput)

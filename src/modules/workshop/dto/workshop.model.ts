@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
-import { HideField } from '@nestjs/graphql';
 import { Address } from '../../address/dto/address.model';
 import { Type } from 'class-transformer';
 import { Customer } from '../../customer/dto/customer.model';
@@ -35,12 +34,6 @@ export class Workshop {
 
     @Field(() => String, {nullable:false})
     telephoneNumber!: string;
-
-    /**
-     * Note: Password will be hashed before storage
-     */
-    @HideField()
-    password!: string;
 
     @Field(() => Boolean, {nullable:true,defaultValue:false})
     isVerified!: boolean | null;

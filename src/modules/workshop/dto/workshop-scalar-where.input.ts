@@ -35,9 +35,6 @@ export class WorkshopScalarWhereInput {
     @Field(() => StringFilter, {nullable:true})
     telephoneNumber?: StringFilter;
 
-    @Field(() => StringFilter, {nullable:true})
-    password?: StringFilter;
-
     @Field(() => BoolNullableFilter, {nullable:true})
     isVerified?: BoolNullableFilter;
 

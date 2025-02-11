@@ -33,7 +33,7 @@ export class EmployeeJwtAuthGuard extends AuthGuard('employee-jwt') {
       throw err;
     }
     if (isPublic) {
-      return employee;
+      return employee; 
     }
 
     if (!employee) {

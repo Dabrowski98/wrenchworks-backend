@@ -19,7 +19,7 @@ export class FindFirstJobOrThrowArgs {
     orderBy?: Array<JobOrderByWithRelationInput>;
 
     @Field(() => JobWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>;
+    cursor?: Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

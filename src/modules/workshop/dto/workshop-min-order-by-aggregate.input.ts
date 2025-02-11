@@ -22,9 +22,6 @@ export class WorkshopMinOrderByAggregateInput {
     telephoneNumber?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
-    password?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
     isVerified?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

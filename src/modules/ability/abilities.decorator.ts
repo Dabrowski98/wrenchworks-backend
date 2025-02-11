@@ -1,6 +1,7 @@
-import { SetMetadata } from '@nestjs/common';
+import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
 import { Action } from './ability.factory';
 import { AppSubjects } from './ability.factory';
+import { AbilitiesGuard } from './abilities.guard';
 
 export interface RequiredRole {
   action: Action;
@@ -10,5 +11,8 @@ export interface RequiredRole {
 export const CHECK_ABILITY = 'check_ability';
 
 export const CheckAbilities = (...requirements: RequiredRole[]) => {
-  return SetMetadata(CHECK_ABILITY, requirements);
+  return applyDecorators(
+    SetMetadata(CHECK_ABILITY, requirements),
+    UseGuards(AbilitiesGuard),
+  );
 };

@@ -35,9 +35,6 @@ export class WorkshopScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     telephoneNumber?: StringWithAggregatesFilter;
 
-    @Field(() => StringWithAggregatesFilter, {nullable:true})
-    password?: StringWithAggregatesFilter;
-
     @Field(() => BoolNullableWithAggregatesFilter, {nullable:true})
     isVerified?: BoolNullableWithAggregatesFilter;
 

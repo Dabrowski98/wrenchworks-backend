@@ -9,5 +9,5 @@ export class FindUniqueJobOrThrowArgs {
 
     @Field(() => JobWhereUniqueInput, {nullable:false})
     @Type(() => JobWhereUniqueInput)
-    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId'>;
+    where!: Prisma.AtLeast<JobWhereUniqueInput, 'jobId' | 'name'>;
 }

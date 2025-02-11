@@ -15,6 +15,7 @@ import { GuestModule } from './modules/guest/guest.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
 import { AbilityModule } from './modules/ability/ability.module';
+import { EmployeePermissionModule } from './modules/employee-permission/employee-permission.module';
 
 @Module({
   imports: [
@@ -54,6 +55,8 @@ import { AbilityModule } from './modules/ability/ability.module';
     GuestModule,
     UserModule,
     SessionDataModule,
+    EmployeePermissionModule,
+
   ],
   providers: [
     Logger,
