@@ -40,25 +40,6 @@ export async function seedReviews() {
     let count = 0;
 
     for (const review of reviews) {
-      const existingReview = await prisma.review.findFirst({
-        where: {
-          AND: [{ workshopId: review.workshopId }, { userId: review.userId }],
-        },
-      });
-
-      if (existingReview) continue;
-
-      // Verify if user had a service in this workshop
-      const userService = await prisma.service.findFirst({
-        where: {
-          workshop: { workshopId: review.workshopId },
-          customer: { userId: review.userId },
-          status: 'COMPLETED',
-        },
-      });
-
-      if (!userService) continue;
-
       await prisma.review.create({
         data: {
           user: { connect: { userId: review.userId } },

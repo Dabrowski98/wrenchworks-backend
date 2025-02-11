@@ -3,7 +3,7 @@ import { PrismaClient, ServiceRequestStatus } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const serviceRequests = [
-  // User service requests
+  // Pending service requests
   {
     workshopId: 1n,
     vehicleId: 1n,
@@ -13,6 +13,8 @@ const serviceRequests = [
     jobs: {
       connect: [{ jobId: 1n }, { jobId: 2n }],
     },
+    resolvedAt: null,
+    resolvedBy: null,
   },
   {
     workshopId: 2n,
@@ -23,27 +25,33 @@ const serviceRequests = [
     jobs: {
       connect: [{ jobId: 3n }, { jobId: 4n }],
     },
+    resolvedAt: null,
+    resolvedBy: null,
   },
-  // Guest service requests
+  // Accepted service requests
   {
     workshopId: 1n,
     vehicleId: 5n,
     guestId: 1n,
     description: 'Brake inspection needed',
-    status: ServiceRequestStatus.PENDING,
+    status: ServiceRequestStatus.ACCEPTED,
     jobs: {
       connect: [{ jobId: 2n }],
     },
+    resolvedAt: new Date(),
+    resolvedBy: 1n, // Assuming this employee ID exists
   },
   {
     workshopId: 2n,
     vehicleId: 6n,
     guestId: 2n,
     description: 'Oil change and filter replacement',
-    status: ServiceRequestStatus.PENDING,
+    status: ServiceRequestStatus.ACCEPTED,
     jobs: {
       connect: [{ jobId: 1n }],
     },
+    resolvedAt: new Date(),
+    resolvedBy: 2n, // Assuming this employee ID exists
   },
 ];
 
@@ -78,6 +86,8 @@ export async function seedServiceRequests() {
           description: request.description,
           status: request.status,
           jobs: request.jobs,
+          resolvedAt: request.resolvedAt,
+          resolvedBy: request.resolvedBy,
         },
       });
       count++;

@@ -23,7 +23,7 @@ const reviewResponses = [
   },
   // Response to the third review
   {
-    reviewId: 2n,
+    reviewId: 3n,
     userId: 11n,
     responseText: 'Thank you for your feedback. We will work on our pricing.',
     originalResponseText: null,

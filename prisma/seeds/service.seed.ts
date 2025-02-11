@@ -103,7 +103,6 @@ const services = [
   },
   // Completed service for user 7 in workshop 1
   {
-    serviceRequestId: 1n,
     workshopId: 1n,
     vehicleId: 1n,
     customerId: 1n, // Assuming customerId 1 corresponds to userId 7
@@ -121,7 +120,6 @@ const services = [
   },
   // Completed service for user 7 in workshop 2
   {
-    serviceRequestId: 2n,
     workshopId: 2n,
     vehicleId: 2n,
     customerId: 2n, // Assuming customerId 2 corresponds to userId 7
@@ -139,7 +137,6 @@ const services = [
   },
   // Completed service for user 8 in workshop 2
   {
-    serviceRequestId: 3n,
     workshopId: 2n,
     vehicleId: 2n,
     customerId: 3n, // Assuming customerId 3 corresponds to userId 8
@@ -178,6 +175,7 @@ export async function seedServices() {
           serviceRequest: service.serviceRequestId
             ? { connect: { serviceRequestId: service.serviceRequestId } }
             : undefined,
+          serviceRequestId: service.serviceRequestId ?? undefined,
           workshop: { connect: { workshopId: service.workshopId } },
           vehicle: { connect: { vehicleId: service.vehicleId } },
           customer: { connect: { customerId: service.customerId } },

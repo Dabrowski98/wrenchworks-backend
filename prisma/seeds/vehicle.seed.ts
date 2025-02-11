@@ -15,6 +15,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'N55B30A123456',
       bodyColor: BodyColor.BLACK,
+      countryOfRegistration: 'PL',
     },
   },
   // Admin's vehicle
@@ -29,6 +30,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'M177E40123456',
       bodyColor: BodyColor.SILVER,
+      countryOfRegistration: 'PL',
     },
   },
   // Moderator's vehicle
@@ -43,6 +45,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'DJPB123456',
       bodyColor: BodyColor.BLUE,
+      countryOfRegistration: 'PL',
     },
   },
   // Workshop Owner 1's vehicles
@@ -57,6 +60,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'B58B30123456',
       bodyColor: BodyColor.RED,
+      countryOfRegistration: 'PL',
     },
   },
   // Workshop Owner 2's vehicles
@@ -71,6 +75,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'MA1123456',
       bodyColor: BodyColor.YELLOW,
+      countryOfRegistration: 'PL',
     },
   },
   // Workshop Owner 3's vehicles
@@ -85,6 +90,7 @@ const vehicles = [
       fuelType: FuelType.ELECTRIC,
       engineNo: '1234567',
       bodyColor: BodyColor.WHITE,
+      countryOfRegistration: 'PL',
     },
   },
   // Customer vehicles
@@ -99,6 +105,7 @@ const vehicles = [
       fuelType: FuelType.DIESEL,
       engineNo: 'DFGA123456',
       bodyColor: BodyColor.GREEN,
+      countryOfRegistration: 'PL',
     },
   },
   {
@@ -112,6 +119,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'CJSA123456',
       bodyColor: BodyColor.GRAY,
+      countryOfRegistration: 'PL',
     },
   },
   // Guest vehicles (no userId)
@@ -125,6 +133,7 @@ const vehicles = [
       fuelType: FuelType.PETROL,
       engineNo: 'CJSA123456',
       bodyColor: BodyColor.GRAY,
+      countryOfRegistration: 'PL',
     },
   },
   {
@@ -137,6 +146,7 @@ const vehicles = [
       fuelType: FuelType.DIESEL,
       engineNo: 'CUPA123456',
       bodyColor: BodyColor.BLACK,
+      countryOfRegistration: 'PL',
     },
   },
 ];

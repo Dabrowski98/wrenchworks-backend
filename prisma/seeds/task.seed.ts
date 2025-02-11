@@ -9,6 +9,8 @@ const tasks = [
     workshopJobId: 1n, // Oil change job
     employeeId: 1n,
     description: 'Oil change',
+    executionTime: 2,
+    partsCost: 48999,
     status: TaskStatus.COMPLETED,
     createdBy: 1n,
   },
@@ -18,6 +20,8 @@ const tasks = [
     employeeId: 1n,
     description: 'Brake inspection',
     status: TaskStatus.COMPLETED,
+    executionTime: 0.5,
+    partsCost: 0,
     createdBy: 1n,
   },
   {
@@ -26,6 +30,8 @@ const tasks = [
     employeeId: 2n,
     description: 'Engine diagnostic',
     status: TaskStatus.COMPLETED,
+    executionTime: 2,
+    partsCost: 0,
     createdBy: 2n,
   },
   {
@@ -34,6 +40,8 @@ const tasks = [
     employeeId: 2n,
     description: 'Performance tuning',
     status: TaskStatus.COMPLETED,
+    executionTime: 2,
+    partsCost: 0,
     createdBy: 2n,
   },
   // Tasks for services in progress
@@ -43,6 +51,8 @@ const tasks = [
     employeeId: 2n,
     description: 'Engine diagnostic',
     status: TaskStatus.PENDING,
+    executionTime: 2,
+    partsCost: 0,
     createdBy: 2n,
   },
   {
@@ -51,6 +61,8 @@ const tasks = [
     employeeId: 2n,
     description: 'Performance tuning',
     status: TaskStatus.PENDING,
+    executionTime: 2,
+    partsCost: 0,
     createdBy: 2n,
   },
   // Additional tasks for variety
@@ -60,6 +72,8 @@ const tasks = [
     employeeId: 3n,
     description: 'Luxury vehicle detailing',
     status: TaskStatus.COMPLETED,
+    executionTime: 2,
+    partsCost: 15000,
     createdBy: 3n,
   },
   {
@@ -68,6 +82,8 @@ const tasks = [
     employeeId: 3n,
     description: 'Ceramic coating application',
     status: TaskStatus.COMPLETED,
+    executionTime: 2,
+    partsCost: 15000,
     createdBy: 3n,
   },
 ];

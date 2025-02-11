@@ -132,6 +132,7 @@ export async function seedWorkshopJobs() {
           minPrice: workshopJob.minPrice,
           maxPrice: workshopJob.maxPrice,
           availability: workshopJob.availability,
+          createdBy: 1n,
         },
       });
       count++;
