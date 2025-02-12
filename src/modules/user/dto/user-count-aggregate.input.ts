@@ -39,17 +39,5 @@ export class UserCountAggregateInput {
     role?: true;
 
     @Field(() => Boolean, {nullable:true})
-    addressId?: true;
-
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    deletedAt?: true;
-
-    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

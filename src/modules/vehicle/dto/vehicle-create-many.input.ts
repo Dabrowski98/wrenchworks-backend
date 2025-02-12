@@ -6,9 +6,6 @@ import * as Scalars from 'graphql-scalars';
 @InputType()
 export class VehicleCreateManyInput {
 
-    @HideField()
-    vehicleId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
@@ -18,6 +15,4 @@ export class VehicleCreateManyInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint | number;
 
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

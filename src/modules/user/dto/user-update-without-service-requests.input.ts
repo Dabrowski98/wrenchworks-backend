@@ -4,9 +4,6 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
-import { AddressUpdateOneWithoutUserNestedInput } from '../../address/dto/address-update-one-without-user-nested.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { VehicleUpdateManyWithoutUserNestedInput } from '../../vehicle/dto/vehicle-update-many-without-user-nested.input';
 import { CustomerUpdateManyWithoutUserNestedInput } from '../../customer/dto/customer-update-many-without-user-nested.input';
 import { EmployeeUpdateManyWithoutUserNestedInput } from '../../employee/dto/employee-update-many-without-user-nested.input';
@@ -16,12 +13,11 @@ import { ReviewResponseUpdateManyWithoutUserNestedInput } from '../../review-res
 import { UserReportUpdateManyWithoutUserNestedInput } from '../../user-report/dto/user-report-update-many-without-user-nested.input';
 import { JoinWorkshopRequestUpdateManyWithoutUserNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-user-nested.input';
 import { SessionDataUpdateManyWithoutUserNestedInput } from '../../session-data/dto/session-data-update-many-without-user-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserUpdateWithoutServiceRequestsInput {
-
-    @HideField()
-    userId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -79,47 +75,4 @@ export class UserUpdateWithoutServiceRequestsInput {
     @Validator.IsOptional()
     lastName?: string;
 
-    @HideField()
-    role?: keyof typeof UserRole;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @Field(() => AddressUpdateOneWithoutUserNestedInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => AddressUpdateOneWithoutUserNestedInput)
-    address?: AddressUpdateOneWithoutUserNestedInput;
-
-    @HideField()
-    vehicles?: VehicleUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    customers?: CustomerUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    employees?: EmployeeUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    workshops?: WorkshopUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    reviews?: ReviewUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    reviewResponses?: ReviewResponseUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    userReports?: UserReportUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    joinWorkshopRequests?: JoinWorkshopRequestUpdateManyWithoutUserNestedInput;
-
-    @HideField()
-    sessionData?: SessionDataUpdateManyWithoutUserNestedInput;
-}
+    }

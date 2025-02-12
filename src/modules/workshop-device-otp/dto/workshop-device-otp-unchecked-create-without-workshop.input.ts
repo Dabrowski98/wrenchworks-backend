@@ -10,8 +10,9 @@ export class WorkshopDeviceOtpUncheckedCreateWithoutWorkshopInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     WorkshopDeviceOtpId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    employeeId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    employeeId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Code must be a string' })
@@ -25,6 +26,4 @@ export class WorkshopDeviceOtpUncheckedCreateWithoutWorkshopInput {
     @Validator.IsNotEmpty()
     expiresAt!: Date | string;
 
-    @HideField()
-    createdAt?: Date | string;
-}
+    }

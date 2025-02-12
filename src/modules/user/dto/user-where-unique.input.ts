@@ -11,10 +11,9 @@ import { EnumUserRoleFilter } from '../../prisma/dto/enum-user-role-filter.input
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { AddressNullableRelationFilter } from '../../address/dto/address-nullable-relation-filter.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { VehicleListRelationFilter } from '../../vehicle/dto/vehicle-list-relation-filter.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceRequestListRelationFilter } from '../../service-request/dto/service-request-list-relation-filter.input';
 import { CustomerListRelationFilter } from '../../customer/dto/customer-list-relation-filter.input';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
@@ -24,6 +23,8 @@ import { ReviewResponseListRelationFilter } from '../../review-response/dto/revi
 import { UserReportListRelationFilter } from '../../user-report/dto/user-report-list-relation-filter.input';
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { SessionDataListRelationFilter } from '../../session-data/dto/session-data-list-relation-filter.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserWhereUniqueInput {
@@ -43,10 +44,6 @@ export class UserWhereUniqueInput {
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;
-
-    @Field(() => String, {nullable:true})
-    @Validator.IsOptional()
-    addressId?: bigint | number;
 
     @Field(() => [UserWhereInput], {nullable:true})
     AND?: Array<UserWhereInput>;
@@ -80,20 +77,6 @@ export class UserWhereUniqueInput {
 
     @Field(() => EnumUserRoleFilter, {nullable:true})
     role?: EnumUserRoleFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @Field(() => AddressNullableRelationFilter, {nullable:true})
-    @ValidateNested()
-    @Type(() => AddressNullableRelationFilter)
-    address?: AddressNullableRelationFilter;
 
     @Field(() => VehicleListRelationFilter, {nullable:true})
     @Type(() => VehicleListRelationFilter)

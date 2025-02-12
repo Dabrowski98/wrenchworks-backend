@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import {
   BadRequestError,
-  ForbiddenError as MyForbiddenError,
+  CustomForbiddenError as MyForbiddenError,
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
 import {
@@ -41,47 +41,19 @@ export class AddressService {
 
   async create(
     input: AddressCreateInput,
-    userId?: bigint,
     workshopId?: bigint,
   ): Promise<Address> {
     return this.prisma.address.create({
       data: {
         ...input,
-        user: userId ? { connect: { userId } } : undefined,
         workshop: workshopId ? { connect: { workshopId } } : undefined,
       },
     });
   }
 
-  async createAddressForUser(
-    args: CreateAddressForUserArgs,
-    currentUser: JwtUserPayload,
-  ): Promise<Address> {
-    const userWithAddress = await this.prisma.user.findUniqueOrThrow({
-      where: { userId: args.userId },
-      include: { address: true },
-    });
-
-    if (userWithAddress?.address)
-      throw new BadRequestError(
-        'User already has an address, please update it instead',
-      );
-
-    const ability = await this.userAbilityFactory.defineAbility(currentUser);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Create,
-      subject('Address', { user: userWithAddress } as any as Address),
-    );
-
-    return this.prisma.address.create({
-      data: { ...args.data, user: { connect: { userId: args.userId } } },
-    });
-  }
-
   async createAddressForWorkshop(
-    args: CreateAddressForWorkshopArgs,
     currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: CreateAddressForWorkshopArgs,
   ): Promise<Address> {
     const workshopWithAddress = await this.prisma.workshop.findUniqueOrThrow({
       where: { workshopId: args.workshopId },
@@ -104,20 +76,17 @@ export class AddressService {
   }
 
   async update(
-    args: UpdateOneAddressArgs,
     currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: UpdateOneAddressArgs,
   ): Promise<Address> {
     const ability = await this.userAbilityFactory.defineAbility(currentEntity);
     const addressWithUserAndWorkshop =
       await this.prisma.address.findUniqueOrThrow({
         where: args.where,
         include: {
-          user: true,
           workshop: true,
         },
       });
-
-    //wlasciciel lub pracownik warsztatu z uprawnieniami do edycji
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
@@ -127,55 +96,23 @@ export class AddressService {
     return this.prisma.address.update(args);
   }
 
-  async findOne(
-    args: FindUniqueAddressArgs,
-    currentEntity: JwtUserPayload | JwtEmployeePayload,
-  ): Promise<Address> {
-    const ability = this.userAbilityFactory.defineAbility(currentEntity);
+  async findOne(args: FindUniqueAddressArgs): Promise<Address> {
     const record = await this.prisma.address.findFirst({
-      where: { AND: [accessibleBy(ability).Address, args.where] },
+      where: args.where,
     });
     if (!record) throw new RecordNotFoundError(Address);
     return record;
   }
 
-  async findMany(
-    args: FindManyAddressArgs,
-    currentEntity: JwtUserPayload | JwtEmployeePayload,
-  ): Promise<Address[]> {
-    const ability = this.userAbilityFactory.defineAbility(currentEntity);
-    try {
-      return this.prisma.address.findMany({
-        where: { AND: [accessibleBy(ability).Address, args.where || {}] },
-      });
-    } catch {
-      return [];
-    }
+  async findMany(args: FindManyAddressArgs): Promise<Address[]> {
+    return this.prisma.address.findMany({
+      where: args.where || {},
+    });
   }
 
-  // async findById(
-  //   addressId: bigint,
-  //   currentUser: JwtUserPayload,
-  // ): Promise<Address> {
-  //   const ability = this.userAbilityFactory.defineAbility(currentUser);
-
-  //   const record = await this.prisma.address.findUnique({
-  //     where: { addressId },
-  //   });
-
-  //   if (!record) throw new RecordNotFoundError(Address);
-
-  //   ForbiddenError.from(ability).throwUnlessCan(
-  //     Action.Read,
-  //     subject('Address', record),
-  //   );
-
-  //   return record;
-  // }
-
   async delete(
-    args: DeleteOneAddressArgs,
     currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteOneAddressArgs,
   ): Promise<Boolean> {
     const address = await this.prisma.address.findUniqueOrThrow({
       where: args.where,
@@ -198,15 +135,6 @@ export class AddressService {
   }
 
   //RESOLVE METHODS
-
-  async user(addressId: bigint): Promise<User> {
-    return (
-      await this.prisma.address.findUnique({
-        where: { addressId },
-        include: { user: true },
-      })
-    ).user;
-  }
 
   async workshop(addressId: bigint): Promise<Workshop> {
     return (

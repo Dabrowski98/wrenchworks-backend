@@ -7,12 +7,11 @@ import { UserReportReportedEntityType } from '../../prisma/dto/user-report-repor
 import * as Scalars from 'graphql-scalars';
 import { UserReportStatus } from '../../prisma/dto/user-report-status.enum';
 import { UserCreateNestedOneWithoutUserReportsInput } from '../../user/dto/user-create-nested-one-without-user-reports.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserReportCreateInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Report text must be a string' })
@@ -37,15 +36,4 @@ export class UserReportCreateInput {
     @Validator.IsOptional()
     status?: keyof typeof UserReportStatus;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    user!: UserCreateNestedOneWithoutUserReportsInput;
-}
+    }

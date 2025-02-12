@@ -25,7 +25,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   await require('./seeds/employee-permissions.seed');
-    await seedAddresses();
+  await seedAddresses();
   await seedVehicleBrands();
   await seedVehicleModels();
   await seedJobCategories();
@@ -34,8 +34,8 @@ async function main() {
   await seedWorkshops();
   await seedVehicles();
   await seedGuests();
-     await seedEmployees();
-     await seedCustomers();
+  await seedEmployees();
+  await seedCustomers();
   await seedServiceRequests();
   await seedWorkshopJobs();
   await seedWorkshopDevices();

@@ -23,6 +23,4 @@ export class ServiceRequestAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     approvedServiceId?: true;
 
-    @HideField()
-    resolvedBy?: true;
-}
+    }

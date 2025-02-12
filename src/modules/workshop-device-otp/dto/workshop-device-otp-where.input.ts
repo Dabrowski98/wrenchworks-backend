@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
+import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
@@ -23,8 +24,8 @@ export class WorkshopDeviceOtpWhereInput {
     @Field(() => BigIntFilter, {nullable:true})
     WorkshopDeviceOtpId?: BigIntFilter;
 
-    @Field(() => BigIntFilter, {nullable:true})
-    employeeId?: BigIntFilter;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    employeeId?: BigIntNullableFilter;
 
     @Field(() => BigIntFilter, {nullable:true})
     workshopId?: BigIntFilter;
@@ -34,9 +35,6 @@ export class WorkshopDeviceOtpWhereInput {
 
     @Field(() => DateTimeFilter, {nullable:true})
     expiresAt?: DateTimeFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
 
     @Field(() => WorkshopRelationFilter, {nullable:true})
     @Type(() => WorkshopRelationFilter)

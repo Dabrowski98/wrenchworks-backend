@@ -3,10 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../../prisma/dto/sort-order.enum';
 import { SortOrderInput } from '../../prisma/dto/sort-order.input';
 import { HideField } from '@nestjs/graphql';
-import { AddressOrderByWithRelationInput } from '../../address/dto/address-order-by-with-relation.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { VehicleOrderByRelationAggregateInput } from '../../vehicle/dto/vehicle-order-by-relation-aggregate.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceRequestOrderByRelationAggregateInput } from '../../service-request/dto/service-request-order-by-relation-aggregate.input';
 import { CustomerOrderByRelationAggregateInput } from '../../customer/dto/customer-order-by-relation-aggregate.input';
 import { EmployeeOrderByRelationAggregateInput } from '../../employee/dto/employee-order-by-relation-aggregate.input';
@@ -52,23 +51,6 @@ export class UserOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     role?: keyof typeof SortOrder;
-
-    @Field(() => SortOrderInput, {nullable:true})
-    addressId?: SortOrderInput;
-
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
-    @Field(() => AddressOrderByWithRelationInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => AddressOrderByWithRelationInput)
-    address?: AddressOrderByWithRelationInput;
 
     @Field(() => VehicleOrderByRelationAggregateInput, {nullable:true})
     @Type(() => VehicleOrderByRelationAggregateInput)

@@ -7,32 +7,28 @@ import { RegisterWorkshopResponse } from './dto/register-workshop.response';
 import { RegisterWorkshopInput } from './dto/register-workshop.input';
 import { UserService } from 'src/modules/user/user.service';
 import { BadRequestError } from 'src/common/custom-errors/errors.config';
+import { JwtUserPayload } from '../user-auth/dto/jwt-user-payload';
 @Injectable()
 export class WorkshopAuthService {
   constructor(
-    private readonly employeeService: EmployeeService,
     private readonly userService: UserService,
     private readonly workshopService: WorkshopService,
     private readonly prisma: PrismaService,
   ) {}
 
   async registerWorkshop(
+    currentUser: JwtUserPayload,
     input: RegisterWorkshopInput,
-    userId: bigint,
   ): Promise<RegisterWorkshopResponse> {
-    if (!userId) throw new BadRequestError('UserId not found');
-    const userWorkshops = await this.userService.workshops(userId);
+    if (!currentUser) throw new BadRequestError('User not found');
+    const userWorkshops = await this.userService.workshops(currentUser.userId);
 
     if (userWorkshops.length >= Number(process.env.USER_MAX_WORKSHOPS))
       throw new BadRequestException(
         'User has reached the maximum number of workshops he can have',
       );
-    const { ownerEmployee: ownerEmployeeInput, ...workshopInput } = input;
 
-    const workshopHashedPassword = await bcrypt.hash(
-      input.password,
-      Number(process.env.SALT_ROUNDS),
-    );
+    const { ownerEmployee: ownerEmployeeInput, ...workshopInput } = input;
 
     const employeeHashedPassword = await bcrypt.hash(
       ownerEmployeeInput.password,
@@ -42,25 +38,26 @@ export class WorkshopAuthService {
     const workshop = await this.workshopService.create({
       data: {
         ...workshopInput,
-        password: workshopHashedPassword,
-        user: { connect: { userId } },
+        user: { connect: { userId: currentUser.userId } },
       },
     });
 
-    //TODO: set all permissions to true
-    const ownerEmployee = await this.employeeService.create({
+    const allPermissions = await this.prisma.employeePermission.findMany();
+
+    const ownerEmployee = await this.prisma.employee.create({
       data: {
         ...ownerEmployeeInput,
         password: employeeHashedPassword,
         workshop: { connect: { workshopId: workshop.workshopId } },
+        permissions: {
+          connect: allPermissions.map((permission) => ({
+            permissionId: permission.permissionId,
+          })),
+        },
+        user: { connect: { userId: currentUser.userId } },
       },
     });
 
-    const updatedOwnerEmployee = await this.prisma.employee.update({
-      where: { employeeId: ownerEmployee.employeeId },
-      data: { userId },
-    });
-
-    return { workshop, ownerEmployee: updatedOwnerEmployee };
+    return { workshop, ownerEmployee };
   }
 }

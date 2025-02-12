@@ -39,12 +39,6 @@ export class ReviewResponseScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     originalResponseText?: StringNullableFilter;
 
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
     @Field(() => EnumReviewResponseStatusFilter, {nullable:true})
     status?: EnumReviewResponseStatusFilter;
 }

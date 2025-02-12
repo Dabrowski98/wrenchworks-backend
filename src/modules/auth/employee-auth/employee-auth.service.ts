@@ -4,7 +4,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
-import { DeleteOneEmployeeArgs, Employee, EmployeeWhereUniqueInput, FindUniqueEmployeeArgs } from 'src/modules/employee/dto'; 
+import {
+  CreateOneEmployeeArgs,
+  DeleteOneEmployeeArgs,
+  Employee,
+  EmployeeCreateInput,
+  EmployeeWhereUniqueInput,
+  FindUniqueEmployeeArgs,
+} from 'src/modules/employee/dto';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { EmployeeService } from 'src/modules/employee/employee.service';
@@ -16,37 +23,45 @@ import { ChangePasswordInput } from '../common-dto';
 import { JwtEmployeePayload } from './dto/jwt-employee-payload';
 import { EntityType } from 'src/common/enums/entity-type.enum';
 import { WorkshopDeviceService } from 'src/modules/workshop-device';
-
+import { JwtUserPayload } from '../user-auth/dto';
+import { UserService } from 'src/modules/user/user.service';
+import { User } from 'src/modules/user/dto';
+import { isEmployeePayload, isUserPayload } from 'src/common/utils/type-guards';
+import { ForbiddenError, subject } from '@casl/ability';
+import { Action } from 'src/modules/ability';
+import { AbilityFactory } from 'src/modules/ability/ability.factory';
+import { PrismaService } from 'src/database/prisma.service';
 @Injectable()
 export class EmployeeAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
+    private readonly userService: UserService,
     private readonly workshopDeviceService: WorkshopDeviceService,
     private readonly jwtService: JwtService,
+    private readonly userAbilityFactory: AbilityFactory,
+    private readonly prisma: PrismaService,
   ) {}
 
-  async registerEmployee(
-    input: RegisterEmployeeInput,
-    registrantEmployeeId: bigint,
+  async createEmployee(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: CreateOneEmployeeArgs,
   ): Promise<Employee> {
-    // create guard to check that
-    const registrant = await this.employeeService.findOne({
-      where: { employeeId: registrantEmployeeId },
-    });
-
-    if (!registrant) {
-      throw new ForbiddenException();
+    if (!currentEntity) {
+      throw new ForbiddenException('You have to be logged in.');
     }
+    let data = args.data;
 
-    const hashedPassword = await bcrypt.hash(input.password, 10);
-    input = { ...input, password: hashedPassword };
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data = { ...data, password: hashedPassword };
 
-    return this.employeeService.create({
-      data: {
-        ...input,
-        workshop: { connect: { workshopId: registrant.workshopId } },
-      },
-    });
+    const workshopId = data.workshop.connect.workshopId;
+    const ability = await this.userAbilityFactory.defineAbility(currentEntity);
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('Employee', { workshopId } as any),
+    );
+
+    return this.employeeService.create(currentEntity, args);
   }
 
   async loginEmployeeByUser(
@@ -63,7 +78,10 @@ export class EmployeeAuthService {
       LoggedInBy.USER,
     );
 
-    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
+    await this.employeeService.updateRefreshToken(
+      employee.employeeId,
+      refreshToken,
+    );
 
     return { accessToken, refreshToken, employee };
   }
@@ -94,25 +112,33 @@ export class EmployeeAuthService {
       LoggedInBy.WORKSHOP,
     );
 
-    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
+    await this.employeeService.updateRefreshToken(
+      employee.employeeId,
+      refreshToken,
+    );
 
     return { accessToken, refreshToken, employee };
   }
 
-  async revokeRefreshToken(refreshToken: string) {
+  async revokeRefreshToken(
+    refreshToken: string,
+  ) {
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.EMPLOYEE_REFRESH_SECRET,
     });
 
     if (!decodedRefreshToken) return false;
 
-    const employee = await this.employeeService.findOne({
+    const employee = await this.prisma.employee.findUnique({
       where: { employeeId: decodedRefreshToken.employeeId },
     });
 
     if (!employee.refreshToken) return false;
 
-    const result = await this.employeeService.updateRefreshToken(employee.employeeId, null);
+    const result = await this.employeeService.updateRefreshToken(
+      employee.employeeId,
+      null,
+    );
 
     return result ? true : false;
   }
@@ -125,7 +151,7 @@ export class EmployeeAuthService {
     if (!decodedRefreshToken)
       throw new UnauthorizedException('Invalid refresh token');
 
-    const employee = await this.employeeService.findOne({
+    const employee = await this.prisma.employee.findUnique({
       where: { employeeId: decodedRefreshToken.employeeId },
     });
 
@@ -136,7 +162,10 @@ export class EmployeeAuthService {
       LoggedInBy.USER,
     );
     await this.revokeRefreshToken(currentRT);
-    await this.employeeService.updateRefreshToken(employee.employeeId, refreshToken);
+    await this.employeeService.updateRefreshToken(
+      employee.employeeId,
+      refreshToken,
+    );
 
     return { accessToken, refreshToken, employee };
   }
@@ -145,7 +174,7 @@ export class EmployeeAuthService {
     employeeId: bigint,
     changePasswordInput: ChangePasswordInput,
   ) {
-    const employee = await this.employeeService.findOneWithPassword({
+    const employee = await this.prisma.employee.findUnique({
       where: { employeeId },
     });
 
@@ -169,7 +198,7 @@ export class EmployeeAuthService {
       10,
     );
 
-    const result = await this.employeeService.update({
+    const result = await this.prisma.employee.update({
       where: { employeeId },
       data: { password: hashedPassword },
     });
@@ -177,24 +206,37 @@ export class EmployeeAuthService {
     return result ? true : false;
   }
 
-  async logoutAnotherEmployee(employeeId: bigint, employeeIdToLogout: bigint) {
-    const employee = await this.employeeService.findOne({
-      where: { employeeId },
-    });
+  async logoutAnotherEmployee(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    employeeIdToLogout: bigint,
+  ) {
+    let employee: Employee;
+    let user: User;
 
-    if (!employee) throw new UnauthorizedException('Employee not found');
+    if (isEmployeePayload(currentEntity)) {
+      employee = await this.prisma.employee.findUnique({
+        where: { employeeId: currentEntity.employeeId },
+      });
+    } else if (isUserPayload(currentEntity)) {
+      user = await this.userService.findOne({
+        where: { userId: currentEntity.userId },
+      });
+    }
 
-    const employeeToLogout = await this.employeeService.findOne({
+    if (!employee && !user) throw new UnauthorizedException('Entity not found');
+
+    const employeeToLogout: Employee = await this.prisma.employee.findUnique({
       where: { employeeId: employeeIdToLogout },
     });
 
+    const ability = await this.userAbilityFactory.defineAbility(currentEntity);
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Employee', { ...employeeToLogout, password: undefined }),
+    );
+
     if (!employeeToLogout)
       throw new UnauthorizedException('Employee not found');
-
-    if (employee.workshopId !== employeeToLogout.workshopId)
-      throw new ForbiddenException(
-        'You are not allowed to logout this employee',
-      );
 
     await this.revokeRefreshToken(employeeToLogout.refreshToken);
   }
@@ -204,7 +246,7 @@ export class EmployeeAuthService {
     password: string,
     workshopId: bigint,
   ): Promise<Employee | null> {
-    const employee = await this.employeeService.findOneWithPassword({
+    const employee = await this.prisma.employee.findUnique({
       where: { login_workshopId: { login, workshopId } },
     });
     if (!employee) return null;

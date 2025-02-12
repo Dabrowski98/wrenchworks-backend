@@ -47,7 +47,6 @@ const users = [
     telephoneNumber: '+48123456794',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 1n,
   },
   {
     email: 'userowner2@wrenchworks.com',
@@ -57,7 +56,6 @@ const users = [
     telephoneNumber: '+48123456795',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 2n,
   },
   {
     email: 'userowner3@wrenchworks.com',
@@ -67,7 +65,6 @@ const users = [
     telephoneNumber: '+48123456796',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 3n,
   },
   // Regular Users (Customers/Employees)
   {
@@ -78,7 +75,6 @@ const users = [
     telephoneNumber: '+48123456797',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 4n,
   },
   {
     email: 'usercustomer2@wrenchworks.com',
@@ -88,7 +84,6 @@ const users = [
     telephoneNumber: '+48123456798',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 5n,
   },
   {
     email: 'usercustomer3@wrenchworks.com',
@@ -98,7 +93,6 @@ const users = [
     telephoneNumber: '+48123456799',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 6n,
   },
   {
     email: 'useremployee1@wrenchworks.com',
@@ -108,7 +102,6 @@ const users = [
     telephoneNumber: '+48123456797',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 7n,
   },
   {
     email: 'useremployee2@wrenchworks.com',
@@ -118,7 +111,6 @@ const users = [
     telephoneNumber: '+48123456798',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 8n,
   },
   {
     email: 'useremployee3@wrenchworks.com',
@@ -128,7 +120,6 @@ const users = [
     telephoneNumber: '+48123456799',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 9n,
   },
   {
     email: 'useremployee4@wrenchworks.com',
@@ -138,7 +129,6 @@ const users = [
     telephoneNumber: '+48123456799',
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
-    addressId: 10n,
   },
 
   // Inactive/Suspended Users for testing
@@ -150,7 +140,6 @@ const users = [
     telephoneNumber: '+48123456797',
     role: UserRole.USER,
     status: UserStatus.INACTIVE,
-    addressId: 10n,
   },
   {
     email: 'suspended@wrenchworks.com',
@@ -160,7 +149,6 @@ const users = [
     telephoneNumber: '+48123456798',
     role: UserRole.USER,
     status: UserStatus.SUSPENDED,
-    addressId: 11n,
   },
 ];
 

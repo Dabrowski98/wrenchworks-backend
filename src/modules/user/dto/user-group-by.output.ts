@@ -19,9 +19,6 @@ export class UserGroupBy {
     @Field(() => String, {nullable:false})
     username!: string;
 
-    @HideField()
-    password!: string;
-
     @Field(() => String, {nullable:false})
     email!: string;
 
@@ -45,9 +42,6 @@ export class UserGroupBy {
 
     @Field(() => UserRole, {nullable:false})
     role!: keyof typeof UserRole;
-
-    @Field(() => String, {nullable:true})
-    addressId?: bigint | number;
 
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;

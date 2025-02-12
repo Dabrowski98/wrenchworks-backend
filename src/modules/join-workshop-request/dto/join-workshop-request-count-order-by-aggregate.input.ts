@@ -24,18 +24,4 @@ export class JoinWorkshopRequestCountOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    createdBy?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedAt?: keyof typeof SortOrder;
-}
+    }

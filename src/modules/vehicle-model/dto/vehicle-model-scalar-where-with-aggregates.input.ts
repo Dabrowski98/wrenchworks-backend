@@ -27,9 +27,4 @@ export class VehicleModelScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     brand?: StringWithAggregatesFilter;
 
-    @HideField()
-    createdAt?: DateTimeWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

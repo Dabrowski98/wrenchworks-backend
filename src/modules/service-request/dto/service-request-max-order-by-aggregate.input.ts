@@ -30,15 +30,4 @@ export class ServiceRequestMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     description?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedAt?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedBy?: keyof typeof SortOrder;
-
-    @HideField()
-    deletedAt?: keyof typeof SortOrder;
-}
+    }

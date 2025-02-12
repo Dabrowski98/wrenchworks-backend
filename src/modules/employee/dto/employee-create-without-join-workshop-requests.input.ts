@@ -11,12 +11,11 @@ import { UserCreateNestedOneWithoutEmployeesInput } from '../../user/dto/user-cr
 import { WorkshopCreateNestedOneWithoutEmployeesInput } from '../../workshop/dto/workshop-create-nested-one-without-employees.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class EmployeeCreateWithoutJoinWorkshopRequestsInput {
-
-    @HideField()
-    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
@@ -41,43 +40,13 @@ export class EmployeeCreateWithoutJoinWorkshopRequestsInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
-    @HideField()
-    refreshToken?: string;
-
-    @HideField()
-    status?: keyof typeof EmployeeStatus;
-
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
     @Field(() => EmployeePermissionCreateNestedManyWithoutEmployeesInput, {nullable:true})
     permissions?: EmployeePermissionCreateNestedManyWithoutEmployeesInput;
-
-    @HideField()
-    services?: ServiceCreateNestedManyWithoutEmployeeInput;
-
-    @HideField()
-    tasks?: TaskCreateNestedManyWithoutEmployeesInput;
-
-    @HideField()
-    user?: UserCreateNestedOneWithoutEmployeesInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutEmployeesInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutEmployeesInput)

@@ -39,21 +39,6 @@ export class EmployeeOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     joinedAt?: keyof typeof SortOrder;
 
-    @HideField()
-    deletedAt?: SortOrderInput;
-
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => EmployeeCountOrderByAggregateInput, {nullable:true})
     _count?: EmployeeCountOrderByAggregateInput;
 

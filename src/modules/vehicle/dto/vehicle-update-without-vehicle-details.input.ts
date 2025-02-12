@@ -11,27 +11,4 @@ import { GuestUpdateOneWithoutVehicleNestedInput } from '../../guest/dto/guest-u
 @InputType()
 export class VehicleUpdateWithoutVehicleDetailsInput {
 
-    @HideField()
-    vehicleId?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    serviceRequests?: ServiceRequestUpdateManyWithoutVehicleNestedInput;
-
-    @HideField()
-    services?: ServiceUpdateManyWithoutVehicleNestedInput;
-
-    @HideField()
-    vehicleModel?: VehicleModelUpdateOneRequiredWithoutVehiclesNestedInput;
-
-    @HideField()
-    user?: UserUpdateOneWithoutVehiclesNestedInput;
-
-    @HideField()
-    customers?: CustomerUpdateManyWithoutVehiclesNestedInput;
-
-    @HideField()
-    guest?: GuestUpdateOneWithoutVehicleNestedInput;
-}
+    }

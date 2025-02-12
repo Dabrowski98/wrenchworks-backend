@@ -8,12 +8,11 @@ import { Type } from 'class-transformer';
 import { ReviewCreateNestedOneWithoutReviewResponsesInput } from '../../review/dto/review-create-nested-one-without-review-responses.input';
 import { ValidateNested } from 'class-validator';
 import { UserCreateNestedOneWithoutReviewResponsesInput } from '../../user/dto/user-create-nested-one-without-review-responses.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseCreateWithoutChildrenResponsesInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Response text must be a string' })
@@ -21,18 +20,6 @@ export class ReviewResponseCreateWithoutChildrenResponsesInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText!: string;
-
-    @HideField()
-    originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    status?: keyof typeof ReviewResponseStatus;
 
     @Field(() => ReviewResponseCreateNestedOneWithoutChildrenResponsesInput, {nullable:true})
     @Type(() => ReviewResponseCreateNestedOneWithoutChildrenResponsesInput)
@@ -44,6 +31,8 @@ export class ReviewResponseCreateWithoutChildrenResponsesInput {
     @Type(() => ReviewCreateNestedOneWithoutReviewResponsesInput)
     review!: ReviewCreateNestedOneWithoutReviewResponsesInput;
 
-    @HideField()
+    @Field(() => UserCreateNestedOneWithoutReviewResponsesInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutReviewResponsesInput)
+    @ValidateNested()
     user!: UserCreateNestedOneWithoutReviewResponsesInput;
 }

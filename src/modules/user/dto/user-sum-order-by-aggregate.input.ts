@@ -7,7 +7,4 @@ export class UserSumOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     userId?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    addressId?: keyof typeof SortOrder;
 }

@@ -66,9 +66,6 @@ export class VehicleDetailsCreateInput {
     @Validator.IsOptional()
     bodyColor?: keyof typeof BodyColor;
 
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => VehicleCreateNestedOneWithoutVehicleDetailsInput, {nullable:false})
     @Type(() => VehicleCreateNestedOneWithoutVehicleDetailsInput)
     @ValidateNested()

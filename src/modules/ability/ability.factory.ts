@@ -48,7 +48,8 @@ export enum Action {
   Read = 'read',
   Update = 'update',
   Delete = 'delete',
-  Modify = 'modify',
+  Resolve = 'resolve',
+  Moderate = 'moderate',
 }
 
 export type AppSubjects =
@@ -79,6 +80,13 @@ export type AppSubjects =
       WorkshopDevice: WorkshopDevice;
       WorkshopJob: WorkshopJob;
     }>;
+
+//EMPLOYEE PERMISSION MANAGE means CREATE, READ, UPDATE, DELETE
+//EMPLOYEE PERMISSION UPDATE means Assign/Remove permissions to/from employee
+
+//REVIEW CREATE conditional compare userId's
+//REVIEW RESPONSE SAME
+
 
 export type UserAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
 

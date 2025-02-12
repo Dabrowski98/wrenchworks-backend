@@ -7,12 +7,11 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { JobCategoryCreateNestedManyWithoutParentInput } from './job-category-create-nested-many-without-parent.input';
 import { JobCreateNestedManyWithoutJobCategoryInput } from '../../job/dto/job-create-nested-many-without-job-category.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class JobCategoryCreateWithoutWorkshopsInput {
-
-    @HideField()
-    categoryId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -42,6 +41,4 @@ export class JobCategoryCreateWithoutWorkshopsInput {
     @Type(() => JobCategoryCreateNestedManyWithoutParentInput)
     children?: JobCategoryCreateNestedManyWithoutParentInput;
 
-    @HideField()
-    jobs?: JobCreateNestedManyWithoutJobCategoryInput;
-}
+    }

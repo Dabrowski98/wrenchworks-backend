@@ -8,6 +8,8 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { HideField } from '@nestjs/graphql';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopDetailsCreateWithoutWorkshopInput {
@@ -41,9 +43,6 @@ export class WorkshopDetailsCreateWithoutWorkshopInput {
     @Validator.IsOptional()
     logoURL?: string;
 
-    @HideField()
-    status?: keyof typeof WorkshopDetailsStatus;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'NIP must be a string' })
     @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
@@ -51,12 +50,4 @@ export class WorkshopDetailsCreateWithoutWorkshopInput {
     @Validator.IsOptional()
     NIP?: string;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-}
+    }

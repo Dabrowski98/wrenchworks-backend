@@ -12,56 +12,58 @@ import { JwtUserPayload } from '../auth/user-auth/dto';
 import { Employee } from '../employee/dto';
 import { ForbiddenException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
+import { AbilityFactory } from '../ability';
+import { ForbiddenError, subject } from '@casl/ability';
+import { Action } from '../ability';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class EmployeePermissionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
+
+  async create(
+    args: CreateOneEmployeePermissionArgs,
+  ): Promise<EmployeePermission> {
+    return this.prisma.employeePermission.create(args);
+  }
 
   async findOne(
     args: FindUniqueEmployeePermissionArgs,
-    currentEmployee: JwtEmployeePayload,
   ): Promise<EmployeePermission> {
     return this.prisma.employeePermission.findUniqueOrThrow(args);
   }
 
   async findMany(
     args: FindManyEmployeePermissionArgs,
-    currentEmployee: JwtEmployeePayload,
   ): Promise<EmployeePermission[]> {
     return this.prisma.employeePermission.findMany(args);
   }
 
-  async create(
-    args: CreateOneEmployeePermissionArgs,
-    currentEmployee: JwtEmployeePayload,
-  ): Promise<EmployeePermission> {
-    return this.prisma.employeePermission.create(args);
-  }
-
   async update(
     args: UpdateOneEmployeePermissionArgs,
-    currentEmployee: JwtEmployeePayload,
   ): Promise<EmployeePermission> {
     return this.prisma.employeePermission.update(args);
   }
 
-  async delete(
-    permissionId: bigint,
-    currentUser: JwtUserPayload,
-  ): Promise<boolean> {
-    await this.prisma.employeePermission.delete({
-      where: { permissionId },
-    });
-    return true;
+  async delete(permissionId: bigint): Promise<boolean> {
+    return this.prisma.employeePermission
+      .delete({
+        where: { permissionId },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   async assignPermissionsToEmployee(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
     employeeId: bigint,
     permissionIds: bigint[],
-    currentEmployee: JwtEmployeePayload,
-    currentUser: JwtUserPayload,
   ): Promise<boolean> {
-    // Verify employee exists
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
     const employee = await this.prisma.employee.findUnique({
       where: { employeeId },
     });
@@ -70,7 +72,11 @@ export class EmployeePermissionService {
       throw new ForbiddenException('Employee not found');
     }
 
-    // Connect permissions to employee
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('EmployeePermission', { employee } as any),
+    );
+
     await this.prisma.employee.update({
       where: { employeeId },
       data: {
@@ -84,12 +90,12 @@ export class EmployeePermissionService {
   }
 
   async removePermissionsFromEmployee(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
     employeeId: bigint,
     permissionIds: bigint[],
-    currentEmployee: JwtEmployeePayload,
-    currentUser: JwtUserPayload,
   ): Promise<boolean> {
-    // Verify employee exists
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
     const employee = await this.prisma.employee.findUnique({
       where: { employeeId },
     });
@@ -98,7 +104,11 @@ export class EmployeePermissionService {
       throw new ForbiddenException('Employee not found');
     }
 
-    // Disconnect permissions from employee
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('EmployeePermission', { employee } as any),
+    );
+
     await this.prisma.employee.update({
       where: { employeeId },
       data: {
@@ -114,7 +124,9 @@ export class EmployeePermissionService {
   // Resolver field methods
   async employees(permissionId: bigint): Promise<Employee[]> {
     const permission = await this.prisma.employeePermission.findUnique({
-      where: { permissionId },
+      where: {
+        permissionId,
+      },
       include: { employees: true },
     });
     return permission.employees;

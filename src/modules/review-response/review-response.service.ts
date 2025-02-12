@@ -16,20 +16,35 @@ import {
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
 import { ReviewResponseStatus } from '@prisma/client';
+import { JwtUserPayload } from '../auth/user-auth/dto';
+import { ForbiddenError, subject } from '@casl/ability';
+import { Action, AbilityFactory } from '../ability/ability.factory';
+import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
 
 @Injectable()
 export class ReviewResponseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
   async create(
+    currentUser: JwtUserPayload,
     args: CreateOneReviewResponseArgs,
-    userId: bigint,
   ): Promise<ReviewResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { userId: args.data.user.connect.userId },
+    });
+    if (!user) throw new RecordNotFoundError(User);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('ReviewResponse', { userId: user.userId } as any),
+    );
     return this.prisma.reviewResponse.create({
       data: {
         ...args.data,
         status: ReviewResponseStatus.PENDING,
-        user: { connect: { userId } },
       },
     });
   }
@@ -40,8 +55,8 @@ export class ReviewResponseService {
     return reviewResponse;
   }
 
-  async findMany(args: FindManyReviewResponseArgs): Promise<ReviewResponse[]> {
-    return this.prisma.reviewResponse.findMany(args);
+  async findMany(args?: FindManyReviewResponseArgs): Promise<ReviewResponse[]> {
+    return this.prisma.reviewResponse.findMany(args || {});
   }
 
   async update(args: UpdateOneReviewResponseArgs): Promise<ReviewResponse> {
@@ -51,7 +66,21 @@ export class ReviewResponseService {
     });
   }
 
-  async edit(args: UpdateOneReviewResponseArgs): Promise<ReviewResponse> {
+  async edit(
+    currentUser: JwtUserPayload,
+    args: EditReviewResponseArgs,
+  ): Promise<ReviewResponse> {
+    const ability = await this.abilityFactory.defineAbility(currentUser);
+    const reviewResponse = await this.prisma.reviewResponse.findUnique({
+      where: { reviewResponseId: args.where.reviewResponseId },
+    });
+    if (!reviewResponse) throw new RecordNotFoundError(ReviewResponse);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('ReviewResponse', reviewResponse),
+    );
+
     const reviewResponseId = args.where.reviewResponseId;
 
     const reviewResponseBeforeEdit = await this.findOne({
@@ -67,20 +96,24 @@ export class ReviewResponseService {
     });
   }
 
-  async delete(args: DeleteOneReviewResponseArgs): Promise<boolean> {
+  async delete(
+    currentUser: JwtUserPayload,
+    args: DeleteOneReviewResponseArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentUser);
+    const reviewResponse = await this.prisma.reviewResponse.findUnique({
+      where: args.where,
+    });
+    if (!reviewResponse) throw new RecordNotFoundError(ReviewResponse);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('ReviewResponse', reviewResponse),
+    );
+
     return this.prisma.reviewResponse
       .delete({
         where: args.where,
-      })
-      .then(() => true)
-      .catch(() => false);
-  }
-
-  async hide(args: DeleteOneReviewResponseArgs): Promise<boolean> {
-    return this.prisma.reviewResponse
-      .update({
-        where: args.where,
-        data: { status: ReviewResponseStatus.HIDDEN },
       })
       .then(() => true)
       .catch(() => false);
@@ -91,6 +124,10 @@ export class ReviewResponseService {
     if (reviewResponse.status === ReviewResponseStatus.REJECTED) {
       throw new BadRequestError(
         'Review response is already rejected, cannot accept',
+      );
+    } else if (reviewResponse.status === ReviewResponseStatus.ACCEPTED) {
+      throw new BadRequestError(
+        'Review response is already accepted, cannot accept',
       );
     }
 
@@ -109,12 +146,32 @@ export class ReviewResponseService {
       throw new BadRequestError(
         'Review response is already accepted, cannot reject',
       );
+    } else if (reviewResponse.status === ReviewResponseStatus.REJECTED) {
+      throw new BadRequestError(
+        'Review response is already rejected, cannot reject',
+      );
     }
 
     return this.prisma.reviewResponse
       .update({
         where: args.where,
         data: { status: ReviewResponseStatus.REJECTED },
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async hide(args: DeleteOneReviewResponseArgs): Promise<boolean> {
+    const reviewResponse = await this.findOne(args);
+    if (reviewResponse.status === ReviewResponseStatus.HIDDEN) {
+      throw new BadRequestError(
+        'Review response is already hidden, cannot hide',
+      );
+    }
+    return this.prisma.reviewResponse
+      .update({
+        where: args.where,
+        data: { status: ReviewResponseStatus.HIDDEN },
       })
       .then(() => true)
       .catch(() => false);

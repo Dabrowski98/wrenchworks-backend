@@ -9,12 +9,11 @@ import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { ReviewStatus } from '../../prisma/dto/review-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class ReviewCreateManyInput {
-
-    @HideField()
-    reviewId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint | number;
@@ -31,24 +30,12 @@ export class ReviewCreateManyInput {
     @Validator.IsOptional()
     rating?: Decimal;
 
-    @HideField()
-    originalRating?: Decimal;
-
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Review text must be a string' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     reviewText!: string;
-
-    @HideField()
-    originalReviewText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewStatus, {nullable:true})
     @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })

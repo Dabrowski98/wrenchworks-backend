@@ -7,9 +7,6 @@ import * as Validator from 'class-validator';
 @InputType()
 export class JobCreateManyInput {
 
-    @HideField()
-    jobId?: bigint | number;
-
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     categoryId!: bigint | number;
 

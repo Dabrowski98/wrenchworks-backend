@@ -48,18 +48,4 @@ export class EmployeeScalarWhereWithAggregatesInput {
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     joinedAt?: DateTimeWithAggregatesFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    createdAt?: DateTimeWithAggregatesFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableWithAggregatesFilter;
-}
+    }

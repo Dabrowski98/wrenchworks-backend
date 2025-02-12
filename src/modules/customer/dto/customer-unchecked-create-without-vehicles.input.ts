@@ -81,21 +81,6 @@ export class CustomerUncheckedCreateWithoutVehiclesInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
     @Field(() => ServiceUncheckedCreateNestedManyWithoutCustomerInput, {nullable:true})
     @Type(() => ServiceUncheckedCreateNestedManyWithoutCustomerInput)
     @ValidateNested()

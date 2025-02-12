@@ -12,27 +12,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class VehicleUpdateWithoutVehicleModelInput {
 
-    @HideField()
-    vehicleId?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    serviceRequests?: ServiceRequestUpdateManyWithoutVehicleNestedInput;
-
-    @HideField()
-    services?: ServiceUpdateManyWithoutVehicleNestedInput;
-
-    @HideField()
-    user?: UserUpdateOneWithoutVehiclesNestedInput;
-
-    @HideField()
-    customers?: CustomerUpdateManyWithoutVehiclesNestedInput;
-
-    @HideField()
-    guest?: GuestUpdateOneWithoutVehicleNestedInput;
-
     @Field(() => VehicleDetailsUpdateOneWithoutVehicleNestedInput, {nullable:true})
     @ValidateNested()
     vehicleDetails?: VehicleDetailsUpdateOneWithoutVehicleNestedInput;

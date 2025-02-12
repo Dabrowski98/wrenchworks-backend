@@ -17,14 +17,9 @@ export class JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput {
     @ValidateNested()
     create?: Array<JoinWorkshopRequestCreateWithoutWorkshopInput>;
 
-    @HideField()
-    connectOrCreate?: Array<JoinWorkshopRequestCreateOrConnectWithoutWorkshopInput>;
-
     @Field(() => JoinWorkshopRequestCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => JoinWorkshopRequestCreateManyWorkshopInputEnvelope)
     @ValidateNested()
     createMany?: JoinWorkshopRequestCreateManyWorkshopInputEnvelope;
 
-    @HideField()
-    connect?: Array<Prisma.AtLeast<JoinWorkshopRequestWhereUniqueInput, 'joinWorkshopRequestId'>>;
-}
+    }

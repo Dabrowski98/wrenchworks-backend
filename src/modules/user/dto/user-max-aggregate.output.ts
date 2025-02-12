@@ -14,9 +14,6 @@ export class UserMaxAggregate {
     @Field(() => String, {nullable:true})
     username?: string;
 
-    @HideField()
-    password?: string;
-
     @Field(() => String, {nullable:true})
     email?: string;
 
@@ -40,9 +37,6 @@ export class UserMaxAggregate {
 
     @Field(() => UserRole, {nullable:true})
     role?: keyof typeof UserRole;
-
-    @Field(() => String, {nullable:true})
-    addressId?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;

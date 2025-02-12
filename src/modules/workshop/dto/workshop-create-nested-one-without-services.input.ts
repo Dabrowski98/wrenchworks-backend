@@ -11,12 +11,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class WorkshopCreateNestedOneWithoutServicesInput {
 
-    @HideField()
-    create?: WorkshopCreateWithoutServicesInput;
-
-    @HideField()
-    connectOrCreate?: WorkshopCreateOrConnectWithoutServicesInput;
-
     @Field(() => WorkshopWhereUniqueInput, {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()

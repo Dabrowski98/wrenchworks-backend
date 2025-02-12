@@ -17,9 +17,6 @@ import { WorkshopCreateNestedOneWithoutCustomersInput } from '../../workshop/dto
 @InputType()
 export class CustomerCreateWithoutVehiclesInput {
 
-    @HideField()
-    customerId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
@@ -40,9 +37,6 @@ export class CustomerCreateWithoutVehiclesInput {
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;
-
-    @HideField()
-    isVerified?: boolean;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -71,21 +65,6 @@ export class CustomerCreateWithoutVehiclesInput {
     @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
     @Validator.IsOptional()
     companyName?: string;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
 
     @Field(() => ServiceCreateNestedManyWithoutCustomerInput, {nullable:true})
     @Type(() => ServiceCreateNestedManyWithoutCustomerInput)

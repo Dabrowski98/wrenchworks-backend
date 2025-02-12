@@ -4,9 +4,8 @@ import * as Scalars from 'graphql-scalars';
 import { HideField } from '@nestjs/graphql';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
-import { Address } from '../../address/dto/address.model';
-import { Type } from 'class-transformer';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
+import { Type } from 'class-transformer';
 import { ServiceRequest } from '../../service-request/dto/service-request.model';
 import { Customer } from '../../customer/dto/customer.model';
 import { Employee } from '../../employee/dto/employee.model';
@@ -33,9 +32,6 @@ export class User {
     /**
      * Note: Password will be hashed before storage
      */
-    @HideField()
-    password!: string;
-
     @Field(() => String, {nullable:false})
     email!: string;
 
@@ -60,9 +56,6 @@ export class User {
     @Field(() => UserRole, {nullable:false,defaultValue:'USER'})
     role!: keyof typeof UserRole;
 
-    @Field(() => String, {nullable:true})
-    addressId!: bigint | null;
-
     @Field(() => Date, {nullable:false})
     createdAt!: Date;
 
@@ -71,10 +64,6 @@ export class User {
 
     @Field(() => Date, {nullable:true})
     deletedAt!: Date | null;
-
-    @Field(() => Address, {nullable:true})
-    @Type(() => Address)
-    address?: Address | null;
 
     @Field(() => [Vehicle], {nullable:true})
     @Type(() => Vehicle)

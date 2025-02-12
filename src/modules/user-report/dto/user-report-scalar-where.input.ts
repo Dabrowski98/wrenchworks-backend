@@ -43,12 +43,4 @@ export class UserReportScalarWhereInput {
     @Field(() => EnumUserReportStatusFilter, {nullable:true})
     status?: EnumUserReportStatusFilter;
 
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-}
+    }

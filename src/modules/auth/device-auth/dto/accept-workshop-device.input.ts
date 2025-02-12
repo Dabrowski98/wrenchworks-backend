@@ -15,4 +15,8 @@ export class AcceptWorkshopDeviceInput {
     message: 'Device name must be between 1 and 255 characters',
   })
   deviceName!: string;
+
+  @Field(() => Scalars.GraphQLBigInt)
+  @Validator.IsNotEmpty()
+  workshopId!: bigint;
 }

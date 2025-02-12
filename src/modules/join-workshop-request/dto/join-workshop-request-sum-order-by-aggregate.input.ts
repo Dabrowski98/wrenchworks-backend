@@ -18,9 +18,4 @@ export class JoinWorkshopRequestSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     employeeId?: keyof typeof SortOrder;
 
-    @HideField()
-    createdBy?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

@@ -13,8 +13,8 @@ export class WorkshopDeviceOtpGroupBy {
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     WorkshopDeviceOtpId!: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    employeeId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;

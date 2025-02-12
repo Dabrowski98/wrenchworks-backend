@@ -31,15 +31,6 @@ export class UserReportOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
     @ValidateNested()

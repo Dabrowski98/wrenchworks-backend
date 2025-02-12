@@ -30,7 +30,7 @@ export class UserUpdateOneRequiredWithoutUserReportsNestedInput {
     @Field(() => UserWhereUniqueInput, {nullable:true})
     @Type(() => UserWhereUniqueInput)
     @ValidateNested()
-    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'username' | 'email' | 'addressId'>;
+    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'username' | 'email'>;
 
     @Field(() => UserUpdateToOneWithWhereWithoutUserReportsInput, {nullable:true})
     @Type(() => UserUpdateToOneWithWhereWithoutUserReportsInput)

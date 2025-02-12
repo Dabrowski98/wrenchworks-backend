@@ -11,6 +11,7 @@ export class WorkshopDeviceOtpUncheckedUpdateWithoutWorkshopInput {
     WorkshopDeviceOtpId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
     employeeId?: bigint | number;
 
     @Field(() => String, {nullable:true})
@@ -25,6 +26,4 @@ export class WorkshopDeviceOtpUncheckedUpdateWithoutWorkshopInput {
     @Validator.IsNotEmpty()
     expiresAt?: Date | string;
 
-    @HideField()
-    createdAt?: Date | string;
-}
+    }

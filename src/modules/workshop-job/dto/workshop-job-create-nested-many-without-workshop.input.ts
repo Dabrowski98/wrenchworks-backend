@@ -17,14 +17,9 @@ export class WorkshopJobCreateNestedManyWithoutWorkshopInput {
     @ValidateNested()
     create?: Array<WorkshopJobCreateWithoutWorkshopInput>;
 
-    @HideField()
-    connectOrCreate?: Array<WorkshopJobCreateOrConnectWithoutWorkshopInput>;
-
     @Field(() => WorkshopJobCreateManyWorkshopInputEnvelope, {nullable:true})
     @Type(() => WorkshopJobCreateManyWorkshopInputEnvelope)
     @ValidateNested()
     createMany?: WorkshopJobCreateManyWorkshopInputEnvelope;
 
-    @HideField()
-    connect?: Array<Prisma.AtLeast<WorkshopJobWhereUniqueInput, 'workshopJobId' | 'workshopId_jobId'>>;
-}
+    }

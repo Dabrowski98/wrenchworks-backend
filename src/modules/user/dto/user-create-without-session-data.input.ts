@@ -4,9 +4,6 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
-import { AddressCreateNestedOneWithoutUserInput } from '../../address/dto/address-create-nested-one-without-user.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { VehicleCreateNestedManyWithoutUserInput } from '../../vehicle/dto/vehicle-create-nested-many-without-user.input';
 import { ServiceRequestCreateNestedManyWithoutUserInput } from '../../service-request/dto/service-request-create-nested-many-without-user.input';
 import { CustomerCreateNestedManyWithoutUserInput } from '../../customer/dto/customer-create-nested-many-without-user.input';
@@ -16,12 +13,11 @@ import { ReviewCreateNestedManyWithoutUserInput } from '../../review/dto/review-
 import { ReviewResponseCreateNestedManyWithoutUserInput } from '../../review-response/dto/review-response-create-nested-many-without-user.input';
 import { UserReportCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-create-nested-many-without-user.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutUserInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-user.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserCreateWithoutSessionDataInput {
-
-    @HideField()
-    userId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -57,12 +53,6 @@ export class UserCreateWithoutSessionDataInput {
     @Validator.IsOptional()
     avatarURL?: string;
 
-    @HideField()
-    isVerified?: boolean;
-
-    @HideField()
-    status?: keyof typeof UserStatus;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
@@ -75,47 +65,4 @@ export class UserCreateWithoutSessionDataInput {
     @Validator.IsOptional()
     lastName?: string;
 
-    @HideField()
-    role?: keyof typeof UserRole;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @Field(() => AddressCreateNestedOneWithoutUserInput, {nullable:true})
-    @ValidateNested()
-    @Type(() => AddressCreateNestedOneWithoutUserInput)
-    address?: AddressCreateNestedOneWithoutUserInput;
-
-    @HideField()
-    vehicles?: VehicleCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    customers?: CustomerCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    employees?: EmployeeCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    workshops?: WorkshopCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    reviews?: ReviewCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    reviewResponses?: ReviewResponseCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    userReports?: UserReportCreateNestedManyWithoutUserInput;
-
-    @HideField()
-    joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutUserInput;
-}
+    }

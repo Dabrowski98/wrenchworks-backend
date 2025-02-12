@@ -11,12 +11,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class GuestCreateNestedOneWithoutVehicleInput {
 
-    @HideField()
-    create?: GuestCreateWithoutVehicleInput;
-
-    @HideField()
-    connectOrCreate?: GuestCreateOrConnectWithoutVehicleInput;
-
     @Field(() => GuestWhereUniqueInput, {nullable:true})
     @Type(() => GuestWhereUniqueInput)
     @ValidateNested()

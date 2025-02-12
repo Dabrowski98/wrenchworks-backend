@@ -66,18 +66,4 @@ export class CustomerScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     companyName?: StringNullableFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-}
+    }

@@ -11,7 +11,7 @@ export class UserCreateOrConnectWithoutWorkshopsInput {
 
     @Field(() => UserWhereUniqueInput, {nullable:false})
     @Type(() => UserWhereUniqueInput)
-    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'username' | 'email' | 'addressId'>;
+    where!: Prisma.AtLeast<UserWhereUniqueInput, 'userId' | 'username' | 'email'>;
 
     @Field(() => UserCreateWithoutWorkshopsInput, {nullable:false})
     @Type(() => UserCreateWithoutWorkshopsInput)

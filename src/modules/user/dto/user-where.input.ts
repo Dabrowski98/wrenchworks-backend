@@ -6,14 +6,12 @@ import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.in
 import { BoolNullableFilter } from '../../prisma/dto/bool-nullable-filter.input';
 import { EnumUserStatusNullableFilter } from '../../prisma/dto/enum-user-status-nullable-filter.input';
 import { EnumUserRoleFilter } from '../../prisma/dto/enum-user-role-filter.input';
-import { BigIntNullableFilter } from '../../prisma/dto/big-int-nullable-filter.input';
 import { DateTimeFilter } from '../../prisma/dto/date-time-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filter.input';
-import { AddressNullableRelationFilter } from '../../address/dto/address-nullable-relation-filter.input';
-import { ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { VehicleListRelationFilter } from '../../vehicle/dto/vehicle-list-relation-filter.input';
+import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { ServiceRequestListRelationFilter } from '../../service-request/dto/service-request-list-relation-filter.input';
 import { CustomerListRelationFilter } from '../../customer/dto/customer-list-relation-filter.input';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
@@ -68,23 +66,6 @@ export class UserWhereInput {
 
     @Field(() => EnumUserRoleFilter, {nullable:true})
     role?: EnumUserRoleFilter;
-
-    @Field(() => BigIntNullableFilter, {nullable:true})
-    addressId?: BigIntNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @Field(() => AddressNullableRelationFilter, {nullable:true})
-    @ValidateNested()
-    @Type(() => AddressNullableRelationFilter)
-    address?: AddressNullableRelationFilter;
 
     @Field(() => VehicleListRelationFilter, {nullable:true})
     @Type(() => VehicleListRelationFilter)

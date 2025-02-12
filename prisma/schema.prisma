@@ -8,6 +8,7 @@ generator client {
 //TODO: RBAC USER AUTHORIZATION
 //TODO: ABAC EMPLOYEE AUTHORIZATION
 //TODO: REMOVE DANGEROUSLY DEMANDING OBJECTS FROM COUNT RESOLVERS
+//TODO: ADD SKIP, PAGINATION, SORTING TO ALL RESOLVERS
 
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
@@ -128,8 +129,6 @@ model Address{
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Post code is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   postCode         String           @db.VarChar(10)
-  /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
-  user             User?
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   workshop         Workshop?
 }
@@ -594,7 +593,7 @@ model ReviewResponse {
   childrenResponses      ReviewResponse[]         @relation("reviews_responsesToreviews_responses")
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   review                 Review                   @relation(fields: [reviewId], references: [reviewId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseUnderReview")
-  /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   user                   User                     @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userResponses")
 
   @@index([parentResponseId])
@@ -837,12 +836,9 @@ model User {
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @Validator.IsOptional()
   role             UserRole              @default(USER)
-  /// @Validator.IsOptional()
-  addressId        BigInt?              @db.UnsignedBigInt @unique
   createdAt        DateTime             @default(now()) @db.Timestamp(0)
   updatedAt          DateTime?             @db.Timestamp(0) @updatedAt
   deletedAt        DateTime?            @db.Timestamp(0)
-  address          Address?             @relation(fields: [addressId], references: [addressId], onDelete: SetNull)
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   vehicles         Vehicle[]
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
@@ -1110,7 +1106,8 @@ model WorkshopDeviceOtp {
   WorkshopDeviceOtpId                   BigInt      @id @unique(map: "workshop_device_otp_id") @default(autoincrement()) @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
-  employeeId                            BigInt      @db.UnsignedBigInt
+  /// @Validator.IsOptional()
+  employeeId                            BigInt?      @db.UnsignedBigInt
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   workshopId                            BigInt      @db.UnsignedBigInt @unique

@@ -23,12 +23,6 @@ export class EmployeePermissionCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     conditions?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

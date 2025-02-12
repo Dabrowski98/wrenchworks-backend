@@ -36,18 +36,6 @@ export class WorkshopOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     isOfferingService?: SortOrderInput;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => WorkshopCountOrderByAggregateInput, {nullable:true})
     _count?: WorkshopCountOrderByAggregateInput;
 

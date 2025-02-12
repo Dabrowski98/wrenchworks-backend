@@ -29,8 +29,8 @@ export class JobService {
     return job;
   }
 
-  async findMany(args: FindManyJobArgs): Promise<Job[]> {
-    return this.prisma.job.findMany(args);
+  async findMany(args?: FindManyJobArgs): Promise<Job[]> {
+    return this.prisma.job.findMany(args || {});
   }
 
   async update(args: UpdateOneJobArgs): Promise<Job> {

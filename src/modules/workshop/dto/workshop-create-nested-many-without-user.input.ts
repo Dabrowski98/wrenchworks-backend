@@ -12,15 +12,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class WorkshopCreateNestedManyWithoutUserInput {
 
-    @HideField()
-    create?: Array<WorkshopCreateWithoutUserInput>;
-
-    @HideField()
-    connectOrCreate?: Array<WorkshopCreateOrConnectWithoutUserInput>;
-
-    @HideField()
-    createMany?: WorkshopCreateManyUserInputEnvelope;
-
     @Field(() => [WorkshopWhereUniqueInput], {nullable:true})
     @Type(() => WorkshopWhereUniqueInput)
     @ValidateNested()

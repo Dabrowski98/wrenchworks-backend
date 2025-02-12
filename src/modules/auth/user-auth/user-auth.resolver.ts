@@ -29,6 +29,7 @@ export class UserAuthResolver {
     private readonly userService: UserService,
   ) {}
 
+  // ANYONE can register user
   @Public()
   @Mutation(() => User)
   registerUser(
@@ -37,6 +38,7 @@ export class UserAuthResolver {
     return this.userAuthService.registerUser(registerUserInput);
   }
 
+  // ANYONE can login
   @Public()
   @UseGuards(LoginAuthGuard)
   @Mutation(() => LoginUserResponse)
@@ -48,6 +50,7 @@ export class UserAuthResolver {
     return this.userAuthService.loginUser(context.user, deviceData);
   }
 
+  // ANYONE can refresh tokens
   @Public()
   @Mutation(() => LoginUserResponse)
   refreshTokens(
@@ -57,7 +60,9 @@ export class UserAuthResolver {
     return this.userAuthService.refreshTokens(refreshToken, deviceData);
   }
 
+  // USER can logout himself
   @CheckAbilities({ action: Action.Update, subject: 'User' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   logoutUser(@Args('refreshToken') refreshToken: string): Promise<boolean> {
     return this.userAuthService
@@ -66,12 +71,14 @@ export class UserAuthResolver {
       .catch(() => false);
   }
 
+  // USER can logout all his sessions
   @CheckAbilities({ action: Action.Update, subject: 'User' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   logoutAllUserSessions(
+    @CurrentUser() currentUser: JwtUserPayload,
     @Args('userId', { type: () => GraphQLBigInt, nullable: true })
     userId: bigint,
-    @CurrentUser() currentUser: JwtUserPayload,
   ): Promise<boolean> {
     return this.userAuthService
       .revokeAllRefreshTokens(userId)
@@ -79,7 +86,9 @@ export class UserAuthResolver {
       .catch(() => false);
   }
 
+  // ADMIN can create admin
   @CheckAbilities({ action: Action.Create, subject: 'User' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => User)
   createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput,
@@ -87,21 +96,17 @@ export class UserAuthResolver {
     return this.userAuthService.createAdmin(createAdminInput);
   }
 
+  // USER can change his password
   @CheckAbilities({ action: Action.Update, subject: 'User' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   changeUserPassword(
-    @CurrentUserID() userId: bigint,
+    @CurrentUser() currentUser: JwtUserPayload,
     @Args('changeUserPasswordInput') changePasswordInput: ChangePasswordInput,
   ): Promise<boolean> {
     return this.userAuthService
-      .changeUserPassword(userId, changePasswordInput)
+      .changeUserPassword(currentUser.userId, changePasswordInput)
       .then(() => true)
       .catch(() => false);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @Query(() => String)
-  AdminTest() {
-    return 'Hello World from admin';
   }
 }

@@ -6,7 +6,4 @@ export class UserAvgAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     userId?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    addressId?: true;
 }

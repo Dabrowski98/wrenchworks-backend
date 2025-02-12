@@ -10,8 +10,9 @@ export class WorkshopDeviceOtpUncheckedCreateInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     WorkshopDeviceOtpId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    employeeId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;
@@ -28,6 +29,4 @@ export class WorkshopDeviceOtpUncheckedCreateInput {
     @Validator.IsNotEmpty()
     expiresAt!: Date | string;
 
-    @HideField()
-    createdAt?: Date | string;
-}
+    }

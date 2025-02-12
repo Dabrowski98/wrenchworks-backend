@@ -8,6 +8,8 @@ import { DateTimeNullableFilter } from '../../prisma/dto/date-time-nullable-filt
 import { VehicleModelListRelationFilter } from '../../vehicle-model/dto/vehicle-model-list-relation-filter.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class VehicleBrandWhereUniqueInput {
@@ -27,12 +29,6 @@ export class VehicleBrandWhereUniqueInput {
 
     @Field(() => [VehicleBrandWhereInput], {nullable:true})
     NOT?: Array<VehicleBrandWhereInput>;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
 
     @Field(() => VehicleModelListRelationFilter, {nullable:true})
     @ValidateNested()

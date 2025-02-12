@@ -21,6 +21,4 @@ export class WorkshopDeviceOtpMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-}
+    }

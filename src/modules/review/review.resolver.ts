@@ -24,49 +24,77 @@ import { ReviewResponse } from '../review-response/dto/review-response.model';
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
-
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
+import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { JwtUserPayload } from '../auth/user-auth/dto';
+import { EditReviewArgs } from './custom-dto/edit-review.args';
 @Resolver(() => Review)
 export class ReviewResolver {
   constructor(private readonly reviewService: ReviewService) {}
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Create, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)
-  createReview(@Args() args: CreateOneReviewArgs): Promise<Review> {
-    return this.reviewService.create(args);
+  createReview(
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: CreateOneReviewArgs,
+  ): Promise<Review> {
+    return this.reviewService.create(currentUser, args);
   }
 
+  // PUBLIC
+  @Public()
   @CheckAbilities({ action: Action.Read, subject: 'Review' })
   @Query(() => Review)
   review(@Args() args: FindUniqueReviewArgs): Promise<Review> {
     return this.reviewService.findOne(args);
   }
 
+  // PUBLIC
+  @Public()
   @CheckAbilities({ action: Action.Read, subject: 'Review' })
   @Query(() => [Review])
-  reviews(@Args() args: FindManyReviewArgs): Promise<Review[]> {
+  reviews(@Args() args?: FindManyReviewArgs): Promise<Review[]> {
     return this.reviewService.findMany(args);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'Review' })
+  // ADMIN, USER
+  @CheckAbilities({ action: Action.Moderate, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)
-  updateReview(@Args() args: UpdateOneReviewArgs): Promise<Review> {
-    return this.reviewService.update(args);
+  updateReview(
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: UpdateOneReviewArgs,
+  ): Promise<Review> {
+    return this.reviewService.update(currentUser, args);
   }
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Update, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)
-  editReview(@Args() args: UpdateOneReviewArgs): Promise<Review> {
-    return this.reviewService.edit(args);
+  editReview(
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: EditReviewArgs,
+  ): Promise<Review> {
+    return this.reviewService.edit(currentUser, args);
   }
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Delete, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
-  deleteReview(@Args() args: DeleteOneReviewArgs): Promise<boolean> {
-    return this.reviewService.delete(args);
+  deleteReview(
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: DeleteOneReviewArgs,
+  ): Promise<boolean> {
+    return this.reviewService.delete(currentUser, args);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'Review' })
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)
   acceptReview(
     @Args('reviewId', { type: () => GraphQLBigInt }) reviewId: bigint,
@@ -74,7 +102,9 @@ export class ReviewResolver {
     return this.reviewService.accept(reviewId);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'Review' })
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)
   rejectReview(
     @Args('reviewId', { type: () => GraphQLBigInt }) reviewId: bigint,

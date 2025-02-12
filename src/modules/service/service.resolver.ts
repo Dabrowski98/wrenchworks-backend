@@ -29,52 +29,80 @@ import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto/jwt-employee-payload';
 
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => Service)
 export class ServiceResolver {
   constructor(private readonly serviceService: ServiceService) {}
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Service)
   async createService(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: CreateOneServiceArgs,
-    @CurrentEmployeeID() employeeId: bigint,
   ): Promise<Service> {
-    return this.serviceService.create(args, employeeId);
+    return this.serviceService.create(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Read, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Service)
-  async service(@Args() args: FindUniqueServiceArgs): Promise<Service> {
-    return this.serviceService.findOne(args);
+  async service(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: FindUniqueServiceArgs,
+  ): Promise<Service> {
+    return this.serviceService.findOne(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Read, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Service])
-  async services(@Args() args: FindManyServiceArgs): Promise<Service[]> {
-    return this.serviceService.findMany(args);
+  async services(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args?: FindManyServiceArgs,
+  ): Promise<Service[]> {
+    return this.serviceService.findMany(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Service)
-  async updateService(@Args() args: UpdateOneServiceArgs): Promise<Service> {
-    return this.serviceService.update(args);
+  async updateService(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: UpdateOneServiceArgs,
+  ): Promise<Service> {
+    return this.serviceService.update(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Service)
   async changeEmployee(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args('serviceId', { type: () => GraphQLBigInt }) serviceId: bigint,
     @Args('employeeId', { type: () => GraphQLBigInt }) employeeId: bigint,
   ): Promise<Service> {
-    return this.serviceService.changeEmployee(serviceId, employeeId);
+    return this.serviceService.changeEmployee(currentEntity, serviceId, employeeId);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Delete, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  async deleteService(@Args() args: DeleteOneServiceArgs): Promise<boolean> {
-    return this.serviceService.delete(args);
+  async deleteService(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteOneServiceArgs,
+  ): Promise<boolean> {
+    return this.serviceService.delete(currentEntity, args);
   }
 
   // RESOLVE FIELDS

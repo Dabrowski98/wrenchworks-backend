@@ -4,12 +4,11 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseCreateManyParentResponseInput {
-
-    @HideField()
-    reviewResponseId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     reviewId!: bigint | number;
@@ -24,15 +23,4 @@ export class ReviewResponseCreateManyParentResponseInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText!: string;
 
-    @HideField()
-    originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    status?: keyof typeof ReviewResponseStatus;
-}
+    }

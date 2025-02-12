@@ -21,9 +21,4 @@ export class EmployeePermissionMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     subject?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: keyof typeof SortOrder;
-}
+    }

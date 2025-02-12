@@ -3,10 +3,9 @@ import { InputType } from '@nestjs/graphql';
 import { BigIntFilter } from '../../prisma/dto/big-int-filter.input';
 import { StringFilter } from '../../prisma/dto/string-filter.input';
 import { StringNullableFilter } from '../../prisma/dto/string-nullable-filter.input';
-import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
+import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopNullableRelationFilter } from '../../workshop/dto/workshop-nullable-relation-filter.input';
 
 @InputType()
 export class AddressWhereInput {
@@ -43,11 +42,6 @@ export class AddressWhereInput {
 
     @Field(() => StringFilter, {nullable:true})
     postCode?: StringFilter;
-
-    @Field(() => UserNullableRelationFilter, {nullable:true})
-    @Type(() => UserNullableRelationFilter)
-    @ValidateNested()
-    user?: UserNullableRelationFilter;
 
     @Field(() => WorkshopNullableRelationFilter, {nullable:true})
     @Type(() => WorkshopNullableRelationFilter)

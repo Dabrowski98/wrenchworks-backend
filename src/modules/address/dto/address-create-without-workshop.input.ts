@@ -2,13 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { UserCreateNestedOneWithoutAddressInput } from '../../user/dto/user-create-nested-one-without-address.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class AddressCreateWithoutWorkshopInput {
-
-    @HideField()
-    addressId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Country must be a string' })
@@ -56,7 +54,4 @@ export class AddressCreateWithoutWorkshopInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Post code is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     postCode!: string;
-
-    @HideField()
-    user?: UserCreateNestedOneWithoutAddressInput;
 }

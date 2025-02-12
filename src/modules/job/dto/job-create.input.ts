@@ -11,9 +11,6 @@ import { WorkshopJobCreateNestedManyWithoutJobInput } from '../../workshop-job/d
 @InputType()
 export class JobCreateInput {
 
-    @HideField()
-    jobId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
@@ -36,9 +33,4 @@ export class JobCreateInput {
     @Type(() => JobCategoryCreateNestedOneWithoutJobsInput)
     jobCategory!: JobCategoryCreateNestedOneWithoutJobsInput;
 
-    @HideField()
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutJobsInput;
-
-    @HideField()
-    jobWorkshops?: WorkshopJobCreateNestedManyWithoutJobInput;
-}
+    }

@@ -8,4 +8,5 @@ export enum EntityType {
 
 registerEnumType(EntityType, {
   name: 'EntityType',
+  description: 'Type of entity used to identify the type of entity',
 });

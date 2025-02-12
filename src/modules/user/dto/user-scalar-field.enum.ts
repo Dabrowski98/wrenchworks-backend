@@ -12,7 +12,6 @@ export enum UserScalarFieldEnum {
     firstName = "firstName",
     lastName = "lastName",
     role = "role",
-    addressId = "addressId",
     createdAt = "createdAt",
     updatedAt = "updatedAt",
     deletedAt = "deletedAt"

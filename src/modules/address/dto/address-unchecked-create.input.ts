@@ -2,10 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { UserUncheckedCreateNestedOneWithoutAddressInput } from '../../user/dto/user-unchecked-create-nested-one-without-address.input';
+import { WorkshopUncheckedCreateNestedOneWithoutAddressInput } from '../../workshop/dto/workshop-unchecked-create-nested-one-without-address.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopUncheckedCreateNestedOneWithoutAddressInput } from '../../workshop/dto/workshop-unchecked-create-nested-one-without-address.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class AddressUncheckedCreateInput {
@@ -59,11 +60,6 @@ export class AddressUncheckedCreateInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Post code is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     postCode!: string;
-
-    @Field(() => UserUncheckedCreateNestedOneWithoutAddressInput, {nullable:true})
-    @Type(() => UserUncheckedCreateNestedOneWithoutAddressInput)
-    @ValidateNested()
-    user?: UserUncheckedCreateNestedOneWithoutAddressInput;
 
     @Field(() => WorkshopUncheckedCreateNestedOneWithoutAddressInput, {nullable:true})
     @Type(() => WorkshopUncheckedCreateNestedOneWithoutAddressInput)

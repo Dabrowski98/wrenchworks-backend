@@ -14,6 +14,4 @@ export class WorkshopAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     addressId?: true;
 
-    @HideField()
-    updatedBy?: true;
-}
+    }

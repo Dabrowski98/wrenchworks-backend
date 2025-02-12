@@ -12,15 +12,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class VehicleModelCreateNestedManyWithoutVehicleBrandInput {
 
-    @HideField()
-    create?: Array<VehicleModelCreateWithoutVehicleBrandInput>;
-
-    @HideField()
-    connectOrCreate?: Array<VehicleModelCreateOrConnectWithoutVehicleBrandInput>;
-
-    @HideField()
-    createMany?: VehicleModelCreateManyVehicleBrandInputEnvelope;
-
     @Field(() => [VehicleModelWhereUniqueInput], {nullable:true})
     @Type(() => VehicleModelWhereUniqueInput)
     @ValidateNested()

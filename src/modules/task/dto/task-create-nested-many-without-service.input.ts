@@ -17,14 +17,9 @@ export class TaskCreateNestedManyWithoutServiceInput {
     @ValidateNested()
     create?: Array<TaskCreateWithoutServiceInput>;
 
-    @HideField()
-    connectOrCreate?: Array<TaskCreateOrConnectWithoutServiceInput>;
-
     @Field(() => TaskCreateManyServiceInputEnvelope, {nullable:true})
     @Type(() => TaskCreateManyServiceInputEnvelope)
     @ValidateNested()
     createMany?: TaskCreateManyServiceInputEnvelope;
 
-    @HideField()
-    connect?: Array<Prisma.AtLeast<TaskWhereUniqueInput, 'taskId'>>;
-}
+    }

@@ -74,7 +74,7 @@ export class UnauthorizedError extends CustomError {
   }
 }
 
-export class ForbiddenError extends CustomError {
+export class CustomForbiddenError extends CustomError {
   constructor(message: string) {
     super(message);
     this.name = 'ForbiddenError';

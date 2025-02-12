@@ -24,38 +24,82 @@ import { JoinWorkshopRequest } from '../join-workshop-request/dto/join-workshop-
 import { Task } from '../task/dto/task.model';
 import { Service } from '../service/dto';
 import { EmployeeStatus } from '../prisma';
-
+import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { AbilityFactory, accessibleBy } from '../ability';
+import { ForbiddenError } from '@casl/ability';
+import { Action } from '../ability';
+import { subject } from '@casl/ability';
+import { isEmployeePayload } from 'src/common/utils/type-guards';
 @Injectable()
 export class EmployeeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
-  async create(args: CreateOneEmployeeArgs): Promise<Employee> {
+  async create(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: CreateOneEmployeeArgs,
+  ): Promise<Employee> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('Employee', {
+        workshopId: args.data.workshop.connect.workshopId,
+      } as any),
+    );
+
     return this.prisma.employee.create({
       data: { ...args.data, status: EmployeeStatus.ACTIVE },
     });
   }
 
-  async findOne(args: FindUniqueEmployeeArgs): Promise<Employee> {
+  async findOne(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: FindUniqueEmployeeArgs,
+  ): Promise<Employee> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
     const employee = await this.prisma.employee.findUnique(args);
     if (!employee) throw new RecordNotFoundError(Employee);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Read,
+      subject('Employee', employee),
+    );
+
     return employee;
   }
 
-  async findOneWithPassword(
-    args: FindUniqueEmployeeArgs,
-  ): Promise<Employee & { password: string }> {
-    const employee = await this.prisma.employee.findUnique({
-      ...args,
+  async findMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args?: FindManyEmployeeArgs,
+  ): Promise<Employee[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    return this.prisma.employee.findMany({
+      where: {
+        AND: [accessibleBy(ability).Employee, args.where],
+      },
     });
+  }
+
+  async update(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: UpdateOneEmployeeArgs,
+  ): Promise<Employee> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const employee = await this.prisma.employee.findUnique(args);
     if (!employee) throw new RecordNotFoundError(Employee);
-    return employee;
-  }
 
-  async findMany(args: FindManyEmployeeArgs): Promise<Employee[]> {
-    return this.prisma.employee.findMany(args);
-  }
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Employee', employee),
+    );
 
-  async update(args: UpdateOneEmployeeArgs): Promise<Employee> {
     return this.prisma.employee.update(args);
   }
 
@@ -70,43 +114,85 @@ export class EmployeeService {
   }
 
   async enable(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
     employeeId: bigint,
-    employeeToEnableId: bigint,
   ): Promise<boolean> {
-    if (employeeId === employeeToEnableId)
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const employeeToEnable = await this.prisma.employee.findUnique({
+      where: { employeeId },
+    });
+
+    if (!employeeToEnable) throw new RecordNotFoundError(Employee);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Employee', employeeToEnable),
+    );
+
+    if (
+      isEmployeePayload(currentEntity) &&
+      currentEntity.employeeId === employeeToEnable.employeeId
+    )
       throw new ForbiddenException('You are not allowed to enable yourself');
 
     return !!(await this.prisma.employee.update({
-      where: { employeeId: employeeToEnableId },
+      where: { employeeId: employeeToEnable.employeeId },
       data: { status: EmployeeStatus.ACTIVE },
     }));
   }
 
   async disable(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
     employeeId: bigint,
-    employeeToDisableId: bigint,
   ): Promise<boolean> {
-    if (employeeId === employeeToDisableId)
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const employeeToDisable = await this.prisma.employee.findUnique({
+      where: { employeeId },
+    });
+
+    if (!employeeToDisable) throw new RecordNotFoundError(Employee);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Employee', employeeToDisable),
+    );
+
+    if (
+      isEmployeePayload(currentEntity) &&
+      currentEntity.employeeId === employeeToDisable.employeeId
+    )
       throw new ForbiddenException('You are not allowed to disable yourself');
 
     return !!(await this.prisma.employee.update({
-      where: { employeeId: employeeToDisableId },
+      where: { employeeId },
       data: { status: EmployeeStatus.INACTIVE },
     }));
   }
 
-  async delete(employeeId: bigint, args: FindUniqueEmployeeArgs) {
-    const employeeToDelete = await this.findOne(args);
+  async delete(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    employeeId: bigint,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
 
-    if (!employeeToDelete)
-      throw new UnauthorizedException('Employee not found');
+    const employeeToDelete = await this.prisma.employee.findUnique({
+      where: { employeeId },
+    });
+    if (!employeeToDelete) throw new RecordNotFoundError(Employee);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('Employee', employeeToDelete),
+    );
 
     if (employeeId === employeeToDelete.employeeId)
       throw new ForbiddenException('You are not allowed to delete yourself');
 
     return this.prisma.employee
       .delete({
-        where: args.where,
+        where: { employeeId },
       })
       .then(() => true)
       .catch(() => false);

@@ -10,11 +10,9 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class WorkshopDeviceOtpCreateInput {
 
-    @HideField()
-    WorkshopDeviceOtpId?: bigint | number;
-
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
-    employeeId!: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Validator.IsOptional()
+    employeeId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Code must be a string' })
@@ -27,9 +25,6 @@ export class WorkshopDeviceOtpCreateInput {
     @Validator.IsDate()
     @Validator.IsNotEmpty()
     expiresAt!: Date | string;
-
-    @HideField()
-    createdAt?: Date | string;
 
     @Field(() => WorkshopCreateNestedOneWithoutWorkshopDeviceOtpInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutWorkshopDeviceOtpInput)

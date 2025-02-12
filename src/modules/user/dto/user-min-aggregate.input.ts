@@ -38,15 +38,4 @@ export class UserMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     role?: true;
 
-    @Field(() => Boolean, {nullable:true})
-    addressId?: true;
-
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    deletedAt?: true;
-}
+    }

@@ -16,12 +16,11 @@ import { JobCategoryCreateNestedManyWithoutWorkshopsInput } from '../../job-cate
 import { JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-workshop.input';
 import { WorkshopDeviceOtpCreateNestedOneWithoutWorkshopInput } from '../../workshop-device-otp/dto/workshop-device-otp-create-nested-one-without-workshop.input';
 import { WorkshopDeviceCreateNestedManyWithoutWorkshopInput } from '../../workshop-device/dto/workshop-device-create-nested-many-without-workshop.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopCreateWithoutUserInput {
-
-    @HideField()
-    workshopId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -37,9 +36,6 @@ export class WorkshopCreateWithoutUserInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     telephoneNumber!: string;
 
-    @HideField()
-    isVerified?: boolean;
-
     @Field(() => Boolean, {nullable:true})
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
@@ -50,37 +46,10 @@ export class WorkshopCreateWithoutUserInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
     @Field(() => AddressCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressCreateNestedOneWithoutWorkshopInput)
     address?: AddressCreateNestedOneWithoutWorkshopInput;
-
-    @HideField()
-    customers?: CustomerCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    employees?: EmployeeCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    reviews?: ReviewCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    services?: ServiceCreateNestedManyWithoutWorkshopInput;
 
     @Field(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput, {nullable:true})
     @Type(() => WorkshopDetailsCreateNestedOneWithoutWorkshopInput)
@@ -99,12 +68,4 @@ export class WorkshopCreateWithoutUserInput {
     @Type(() => JobCategoryCreateNestedManyWithoutWorkshopsInput)
     jobCategories?: JobCategoryCreateNestedManyWithoutWorkshopsInput;
 
-    @HideField()
-    joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutWorkshopInput;
-
-    @HideField()
-    WorkshopDeviceOtp?: WorkshopDeviceOtpCreateNestedOneWithoutWorkshopInput;
-
-    @HideField()
-    workshopDevices?: WorkshopDeviceCreateNestedManyWithoutWorkshopInput;
-}
+    }

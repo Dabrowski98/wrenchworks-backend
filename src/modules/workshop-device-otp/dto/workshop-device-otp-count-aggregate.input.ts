@@ -20,9 +20,6 @@ export class WorkshopDeviceOtpCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     expiresAt?: true;
 
-    @HideField()
-    createdAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

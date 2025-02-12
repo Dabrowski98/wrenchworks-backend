@@ -26,12 +26,4 @@ export class ServiceAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     paymentAmount?: true;
 
-    @HideField()
-    addedBy?: true;
-
-    @HideField()
-    resolvedBy?: true;
-
-    @HideField()
-    updatedBy?: true;
-}
+    }

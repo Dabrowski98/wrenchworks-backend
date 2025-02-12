@@ -6,7 +6,6 @@ import { StringNullableWithAggregatesFilter } from '../../prisma/dto/string-null
 import { BoolNullableWithAggregatesFilter } from '../../prisma/dto/bool-nullable-with-aggregates-filter.input';
 import { EnumUserStatusNullableWithAggregatesFilter } from '../../prisma/dto/enum-user-status-nullable-with-aggregates-filter.input';
 import { EnumUserRoleWithAggregatesFilter } from '../../prisma/dto/enum-user-role-with-aggregates-filter.input';
-import { BigIntNullableWithAggregatesFilter } from '../../prisma/dto/big-int-nullable-with-aggregates-filter.input';
 import { DateTimeWithAggregatesFilter } from '../../prisma/dto/date-time-with-aggregates-filter.input';
 import { HideField } from '@nestjs/graphql';
 import { DateTimeNullableWithAggregatesFilter } from '../../prisma/dto/date-time-nullable-with-aggregates-filter.input';
@@ -56,15 +55,4 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => EnumUserRoleWithAggregatesFilter, {nullable:true})
     role?: EnumUserRoleWithAggregatesFilter;
 
-    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
-    addressId?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    createdAt?: DateTimeWithAggregatesFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

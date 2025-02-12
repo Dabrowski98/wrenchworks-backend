@@ -12,38 +12,89 @@ import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Customer } from '../customer/dto';
 import { ServiceRequest } from '../service-request/dto';
+import { AbilityFactory, Action } from '../ability';
+import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { ForbiddenError, subject } from '@casl/ability';
+import { JwtUserPayload } from '../auth/user-auth/dto';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class GuestService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
-  async create(args: CreateOneGuestArgs): Promise<Guest> {
-    return this.prisma.guest.create({
-      data: args.data,
+  async findOne(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: FindUniqueGuestArgs,
+  ): Promise<Guest> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const guest = await this.prisma.guest.findUnique({
+      where: args.where,
     });
-  }
-
-  async findOne(args: FindUniqueGuestArgs): Promise<Guest> {
-    const guest = await this.prisma.guest.findUnique(args);
 
     if (!guest) throw new RecordNotFoundError(Guest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Read,
+      subject('Guest', guest),
+    );
 
     return guest;
   }
 
-  async findMany(args?: FindManyGuestArgs): Promise<Guest[]> {
-    return this.prisma.guest.findMany();
+  async findMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args?: FindManyGuestArgs,
+  ): Promise<Guest[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return this.prisma.guest.findMany({
+      where: { AND: [accessibleBy(ability).Guest, args?.where] },
+    });
   }
 
-  async updateGuest(args: UpdateOneGuestArgs): Promise<Guest> {
+  async updateGuest(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: UpdateOneGuestArgs,
+  ): Promise<Guest> {
     const { where, data } = args;
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const guest = await this.prisma.guest.findUnique({
+      where,
+    });
+
+    if (!guest) throw new RecordNotFoundError(Guest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Guest', guest),
+    );
     return this.prisma.guest.update({
       where,
       data,
     });
   }
 
-  async delete(args: DeleteOneGuestArgs): Promise<Boolean> {
+  async delete(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteOneGuestArgs,
+  ): Promise<Boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const guest = await this.prisma.guest.findUnique({
+      where: args.where,
+    });
+
+    if (!guest) throw new RecordNotFoundError(Guest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('Guest', guest),
+    );
+
     return this.prisma.guest
       .delete({
         where: args.where,

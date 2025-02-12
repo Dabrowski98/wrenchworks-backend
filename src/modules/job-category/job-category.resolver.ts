@@ -23,26 +23,13 @@ import { Workshop } from '../workshop/dto/workshop.model';
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 
-// TODO: Moderator and above.
-
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => JobCategory)
 export class JobCategoryResolver {
   constructor(private readonly jobCategoryService: JobCategoryService) {}
 
-  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
-  @Query(() => JobCategory)
-  jobCategory(@Args() args: FindUniqueJobCategoryArgs): Promise<JobCategory> {
-    return this.jobCategoryService.findOne(args);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
-  @Query(() => [JobCategory])
-  jobCategories(@Args() args: FindManyJobCategoryArgs): Promise<JobCategory[]> {
-    return this.jobCategoryService.findMany(args);
-  }
-
+  // ADMIN ONLY
   @CheckAbilities({ action: Action.Create, subject: 'JobCategory' })
   @Mutation(() => JobCategory)
   createJobCategory(
@@ -51,6 +38,21 @@ export class JobCategoryResolver {
     return this.jobCategoryService.create(args);
   }
 
+  // PUBLIC
+  @Public()
+  @Query(() => JobCategory)
+  jobCategory(@Args() args: FindUniqueJobCategoryArgs): Promise<JobCategory> {
+    return this.jobCategoryService.findOne(args);
+  }
+
+  // PUBLIC
+  @Public()
+  @Query(() => [JobCategory])
+  jobCategories(@Args() args?: FindManyJobCategoryArgs): Promise<JobCategory[]> {
+    return this.jobCategoryService.findMany(args);
+  }
+
+  // ADMIN ONLY
   @CheckAbilities({ action: Action.Update, subject: 'JobCategory' })
   @Mutation(() => JobCategory)
   updateJobCategory(
@@ -59,6 +61,7 @@ export class JobCategoryResolver {
     return this.jobCategoryService.update(args);
   }
 
+  // ADMIN ONLY
   @CheckAbilities({ action: Action.Delete, subject: 'JobCategory' })
   @Mutation(() => Boolean)
   deleteJobCategory(@Args() args: DeleteOneJobCategoryArgs): Promise<boolean> {

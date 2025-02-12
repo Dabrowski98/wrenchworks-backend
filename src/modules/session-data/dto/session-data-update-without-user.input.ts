@@ -5,9 +5,6 @@ import { HideField } from '@nestjs/graphql';
 @InputType()
 export class SessionDataUpdateWithoutUserInput {
 
-    @HideField()
-    sessionDataId?: string;
-
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 

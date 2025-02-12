@@ -9,6 +9,8 @@ import { Type } from 'class-transformer';
 import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 import { ReviewStatus } from '../../prisma/dto/review-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class ReviewUncheckedUpdateManyWithoutUserInput {
@@ -44,12 +46,6 @@ export class ReviewUncheckedUpdateManyWithoutUserInput {
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     originalReviewText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewStatus, {nullable:true})
     @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })

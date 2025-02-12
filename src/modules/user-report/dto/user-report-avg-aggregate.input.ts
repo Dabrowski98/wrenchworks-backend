@@ -14,6 +14,4 @@ export class UserReportAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     reportedId?: true;
 
-    @HideField()
-    updatedBy?: true;
-}
+    }

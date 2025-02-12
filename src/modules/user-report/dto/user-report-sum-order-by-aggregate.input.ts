@@ -15,6 +15,4 @@ export class UserReportSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     reportedId?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

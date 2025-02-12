@@ -24,9 +24,4 @@ export class EmployeePermissionCountOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     conditions?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: keyof typeof SortOrder;
-}
+    }

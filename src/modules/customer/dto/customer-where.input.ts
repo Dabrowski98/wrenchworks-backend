@@ -72,21 +72,6 @@ export class CustomerWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     companyName?: StringNullableFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
     @Field(() => ServiceListRelationFilter, {nullable:true})
     @Type(() => ServiceListRelationFilter)
     @ValidateNested()

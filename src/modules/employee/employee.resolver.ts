@@ -18,95 +18,98 @@ import {
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
-import { Guest } from '../guest/dto/guest.model';
 import { User } from '../user/dto/user.model';
-import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { Workshop } from '../workshop/dto/workshop.model';
-import { Address } from '../address/dto/address.model';
-import { SessionData } from '../session-data/dto/session-data.model';
-import { Review } from '../review/dto/review.model';
-import { ReviewResponse } from '../review-response/dto/review-response.model';
 import { Service } from '../service/dto/service.model';
-import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
-import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
-import * as Scalars from 'graphql-scalars';
 import { Task } from '../task/dto/task.model';
 import { JoinWorkshopRequest } from '../join-workshop-request/dto';
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
-import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/dto';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 
-@UseGuards(EmployeeJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  // @CheckAbilities({ action: Action.Read, subject: 'Employee' })
-  // @Query(() => Employee)
-  // employee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args() args: FindUniqueEmployeeArgs,
-  // ): Promise<Employee> {
-  //   return this.employeeService.findOne(args, currentEmployee);
-  // }
 
-  // @CheckAbilities({ action: Action.Read, subject: 'Employee' })
-  // @Query(() => [Employee])
-  // employees(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args() args: FindManyEmployeeArgs,
-  // ): Promise<Employee[]> {
-  //   return this.employeeService.findMany(args, currentEmployee);
-  // }
+  @CheckAbilities({ action: Action.Create, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Employee)
+  createEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: CreateOneEmployeeArgs,
+  ): Promise<Employee> {
+    return this.employeeService.create(currentEntity, args);
+  }
 
-  // @CheckAbilities({ action: Action.Create, subject: 'Employee' })
-  // @Mutation(() => Employee)
-  // createEmployee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args() args: CreateOneEmployeeArgs,
-  // ): Promise<Employee> {
-  //   return this.employeeService.create(args, currentEmployee);
-  // }
+  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Query(() => Employee)
+  employee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: FindUniqueEmployeeArgs,
+  ): Promise<Employee> {
+    return this.employeeService.findOne(currentEntity, args);
+  }
 
-  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
-  // @Mutation(() => Employee)
-  // updateEmployee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args() args: UpdateOneEmployeeArgs,
-  // ): Promise<Employee> {
-  //   return this.employeeService.update(args, currentEmployee);
-  // }
+  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Query(() => [Employee])
+  employees(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args?: FindManyEmployeeArgs,
+  ): Promise<Employee[]> {
+    return this.employeeService.findMany(currentEntity, args);
+  }
 
-  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
-  // @Mutation(() => Boolean)
-  // disableEmployee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args('employeeId', { type: () => GraphQLBigInt })
-  //   employeeToDisableId: bigint,
-  // ): Promise<boolean> {
-  //   return this.employeeService.disable(employeeToDisableId, currentEmployee);
-  // }
 
-  // @CheckAbilities({ action: Action.Update, subject: 'Employee' })
-  // @Mutation(() => Boolean)
-  // enableEmployee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args('employeeId', { type: () => GraphQLBigInt })
-  //   employeeToEnableId: bigint,
-  // ): Promise<boolean> {
-  //   return this.employeeService.enable(employeeToEnableId, currentEmployee);
-  // }
+  @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Employee)
+  updateEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: UpdateOneEmployeeArgs,
+  ): Promise<Employee> {
+    return this.employeeService.update(currentEntity, args);
+  }
 
-  // @CheckAbilities({ action: Action.Delete, subject: 'Employee' })
-  // @Mutation(() => Boolean)
-  // deleteEmployee(
-  //   @CurrentEmployee() currentEmployee: JwtEmployeePayload,
-  //   @Args() args: DeleteOneEmployeeArgs,
-  // ): Promise<boolean> {
-  //   return this.employeeService.delete(args, currentEmployee);
-  // }
+  @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  disableEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args('employeeId', { type: () => GraphQLBigInt })
+    employeeId: bigint,
+  ): Promise<boolean> {
+    return this.employeeService.disable(currentEntity, employeeId);
+  }
+
+  @CheckAbilities({ action: Action.Update, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  enableEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args('employeeId', { type: () => GraphQLBigInt })
+    employeeId: bigint,
+  ): Promise<boolean> {
+    return this.employeeService.enable(currentEntity, employeeId);
+  }
+
+  @CheckAbilities({ action: Action.Delete, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  deleteEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args('employeeId', { type: () => GraphQLBigInt })
+    employeeId: bigint,
+  ): Promise<boolean> {
+    return this.employeeService.delete(currentEntity, employeeId);
+  }
 
   // RESOLVER METHODS
 

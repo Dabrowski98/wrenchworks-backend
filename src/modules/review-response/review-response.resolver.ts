@@ -24,22 +24,29 @@ import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { JwtUserPayload } from '../auth/user-auth/dto';
+import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
+import { VoteReviewResponseArgs } from './custom-dto/vote-review-response.args';
 
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => ReviewResponse)
 export class ReviewResponseResolver {
   constructor(private readonly reviewResponseService: ReviewResponseService) {}
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Create, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => ReviewResponse)
   createReviewResponse(
+    @CurrentUser() currentUser: JwtUserPayload,
     @Args() args: CreateOneReviewResponseArgs,
-    @CurrentUserID() userId: bigint,
   ): Promise<ReviewResponse> {
-    return this.reviewResponseService.create(args, userId);
+    return this.reviewResponseService.create(currentUser, args);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
+  // PUBLIC
+  @Public()
   @Query(() => ReviewResponse)
   reviewResponse(
     @Args() args: FindUniqueReviewResponseArgs,
@@ -47,15 +54,18 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.findOne(args);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
+  // PUBLIC
+  @Public()
   @Query(() => [ReviewResponse])
   reviewResponses(
-    @Args() args: FindManyReviewResponseArgs,
+    @Args() args?: FindManyReviewResponseArgs,
   ): Promise<ReviewResponse[]> {
     return this.reviewResponseService.findMany(args);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => ReviewResponse)
   updateReviewResponse(
     @Args() args: UpdateOneReviewResponseArgs,
@@ -63,31 +73,31 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.update(args);
   }
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => ReviewResponse)
   editReviewResponse(
-    @Args() args: UpdateOneReviewResponseArgs,
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: EditReviewResponseArgs,
   ): Promise<ReviewResponse> {
-    return this.reviewResponseService.edit(args);
+    return this.reviewResponseService.edit(currentUser, args);
   }
 
+  // ADMIN, USER
   @CheckAbilities({ action: Action.Delete, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   deleteReviewResponse(
+    @CurrentUser() currentUser: JwtUserPayload,
     @Args() args: DeleteOneReviewResponseArgs,
   ): Promise<boolean> {
-    return this.reviewResponseService.delete(args);
+    return this.reviewResponseService.delete(currentUser, args);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
-  @Mutation(() => Boolean)
-  hideReviewResponse(
-    @Args() args: DeleteOneReviewResponseArgs,
-  ): Promise<boolean> {
-    return this.reviewResponseService.hide(args);
-  }
-
-  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   acceptReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
@@ -95,12 +105,24 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.accept(args);
   }
 
-  @CheckAbilities({ action: Action.Update, subject: 'ReviewResponse' })
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   rejectReviewResponse(
     @Args() args: DeleteOneReviewResponseArgs,
   ): Promise<boolean> {
     return this.reviewResponseService.reject(args);
+  }
+
+  //ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'ReviewResponse' })
+  @UseGuards(UserJwtAuthGuard)
+  @Mutation(() => Boolean)
+  hideReviewResponse(
+    @Args() args: DeleteOneReviewResponseArgs,
+  ): Promise<boolean> {
+    return this.reviewResponseService.hide(args);
   }
 
   // RESOLVE FIELDS

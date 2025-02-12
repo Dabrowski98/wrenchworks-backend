@@ -6,7 +6,4 @@ export class UserSumAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     userId?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    addressId?: true;
 }

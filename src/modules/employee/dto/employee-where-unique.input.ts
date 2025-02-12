@@ -62,21 +62,6 @@ export class EmployeeWhereUniqueInput {
     @Field(() => DateTimeFilter, {nullable:true})
     joinedAt?: DateTimeFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    createdBy?: BigIntNullableFilter;
-
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
     @Field(() => EmployeePermissionListRelationFilter, {nullable:true})
     permissions?: EmployeePermissionListRelationFilter;
 

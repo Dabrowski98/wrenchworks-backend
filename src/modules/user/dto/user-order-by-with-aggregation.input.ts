@@ -45,18 +45,6 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     role?: keyof typeof SortOrder;
 
-    @Field(() => SortOrderInput, {nullable:true})
-    addressId?: SortOrderInput;
-
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})
     _count?: UserCountOrderByAggregateInput;
 

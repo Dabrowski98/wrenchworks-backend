@@ -35,18 +35,6 @@ export class WorkshopJobOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     availability?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    createdBy?: SortOrderInput;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
     @Field(() => TaskOrderByRelationAggregateInput, {nullable:true})
     @Type(() => TaskOrderByRelationAggregateInput)
     @ValidateNested()
