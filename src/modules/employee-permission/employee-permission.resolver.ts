@@ -48,9 +48,10 @@ export class EmployeePermissionResolver {
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => EmployeePermission)
   employeePermission(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: FindUniqueEmployeePermissionArgs,
   ): Promise<EmployeePermission> {
-    return this.employeePermissionService.findOne(args);
+    return this.employeePermissionService.findOne(currentEntity, args);
   }
 
   // ADMIN, EMPLOYEE, USER
@@ -58,9 +59,10 @@ export class EmployeePermissionResolver {
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [EmployeePermission])
   employeePermissions(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: FindManyEmployeePermissionArgs,
   ): Promise<EmployeePermission[]> {
-    return this.employeePermissionService.findMany(args);
+    return this.employeePermissionService.findMany(currentEntity, args);
   }
 
   // ADMIN

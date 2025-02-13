@@ -48,11 +48,16 @@ export class EmployeeAbilityHandler {
     };
 
     employeePayload.permissions.forEach((permission) => {
-      can(
-        permission.action,
-        permission.subject,
-        permission.conditions || defaultCondition,
-      );
+      const conditions = permission.conditions
+        ? JSON.parse(
+            JSON.stringify(permission.conditions).replace(
+              /\$workshopId/g,
+              employeePayload.workshopId.toString(),
+            ),
+          )
+        : defaultCondition;
+
+      can(permission.action, permission.subject, conditions);
     });
   }
 }

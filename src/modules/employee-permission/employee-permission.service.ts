@@ -31,15 +31,29 @@ export class EmployeePermissionService {
   }
 
   async findOne(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueEmployeePermissionArgs,
   ): Promise<EmployeePermission> {
-    return this.prisma.employeePermission.findUniqueOrThrow(args);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const permission = await this.prisma.employeePermission.findFirst({
+      where: {
+        AND: [accessibleBy(ability).EmployeePermission, args.where],
+      },
+    });
+    if (!permission) {
+      throw new ForbiddenException('Employee permission not found');
+    }
+    return permission;
   }
 
   async findMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindManyEmployeePermissionArgs,
   ): Promise<EmployeePermission[]> {
-    return this.prisma.employeePermission.findMany(args);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return this.prisma.employeePermission.findMany({
+      where: { AND: [accessibleBy(ability).EmployeePermission, args.where] },
+    });
   }
 
   async update(

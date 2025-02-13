@@ -43,13 +43,17 @@ export class WorkshopService {
     args: UpdateOneWorkshopArgs,
   ): Promise<Workshop> {
     const ability = this.abilityFactory.defineAbility(currentEntity);
-    const workshop = await this.findOne({
+    const workshop = await this.prisma.workshop.findFirst({
       where: { workshopId: args.where.workshopId },
-    });
+      select: {
+        workshopId: true,
+        ownerId: true,
+      },
+    }); 
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
-      subject('Workshop', workshop),
+      subject('Workshop', workshop as any),
     );
     return this.prisma.workshop.update(args);
   }

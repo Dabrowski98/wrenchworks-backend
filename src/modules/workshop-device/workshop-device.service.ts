@@ -69,7 +69,7 @@ export class WorkshopDeviceService {
     const ability = this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: args.where,
-      include: { workshop: true },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
@@ -98,7 +98,7 @@ export class WorkshopDeviceService {
     const ability = this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: { workshopDeviceId: deviceId },
-      include: { workshop: true },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     ForbiddenError.from(ability).throwUnlessCan(
@@ -119,7 +119,7 @@ export class WorkshopDeviceService {
     const ability = this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: { workshopDeviceId: deviceId },
-      include: { workshop: true },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     ForbiddenError.from(ability).throwUnlessCan(
