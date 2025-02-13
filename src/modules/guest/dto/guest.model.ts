@@ -7,38 +7,66 @@ import { ServiceRequest } from '../../service-request/dto/service-request.model'
 import { Customer } from '../../customer/dto/customer.model';
 
 /**
- * Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.
+ * The Guest model captures details for guest users who may interact with the system without full account registration.
+ * It associates guest actions with other entities such as vehicles and service requests.
  */
-@ObjectType({description:'Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.'})
+@ObjectType({description:'The Guest model captures details for guest users who may interact with the system without full account registration.\nIt associates guest actions with other entities such as vehicles and service requests.'})
 export class Guest {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the guest
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the guest'})
     guestId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * First name of the guest
+     */
+    @Field(() => String, {nullable:false,description:'First name of the guest'})
     firstName!: string;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Contact phone number
+     */
+    @Field(() => String, {nullable:true,description:'Contact phone number'})
     telephoneNumber!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Email address
+     */
+    @Field(() => String, {nullable:true,description:'Email address'})
     email!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Tax identification number
+     */
+    @Field(() => String, {nullable:true,description:'Tax identification number'})
     NIP!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Name of the company
+     */
+    @Field(() => String, {nullable:true,description:'Name of the company'})
     companyName!: string | null;
 
-    @Field(() => Vehicle, {nullable:true})
+    /**
+     * Associated vehicle
+     */
+    @Field(() => Vehicle, {nullable:true,description:'Associated vehicle'})
     @Type(() => Vehicle)
     vehicle?: Vehicle | null;
 
-    @Field(() => ServiceRequest, {nullable:true})
+    /**
+     * Associated service request
+     */
+    @Field(() => ServiceRequest, {nullable:true,description:'Associated service request'})
     @Type(() => ServiceRequest)
     serviceRequest?: ServiceRequest | null;
 
-    @Field(() => Customer, {nullable:true})
+    /**
+     * Associated customer record
+     */
+    @Field(() => Customer, {nullable:true,description:'Associated customer record'})
     @Type(() => Customer)
     customer?: Customer | null;
 }

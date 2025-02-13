@@ -6,40 +6,69 @@ import { Job } from '../../job/dto/job.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { JobCategoryCount } from './job-category-count.output';
 
-@ObjectType()
+/**
+ * This model represents a JobCategory that groups jobs into different categories based on their type.
+ * It supports hierarchical relationships to allow subcategories and organized classification of jobs.
+ */
+@ObjectType({description:'This model represents a JobCategory that groups jobs into different categories based on their type.\nIt supports hierarchical relationships to allow subcategories and organized classification of jobs.'})
 export class JobCategory {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the job category
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the job category'})
     categoryId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Name of the category
+     */
+    @Field(() => String, {nullable:false,description:'Name of the category'})
     name!: string;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the parent category
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the parent category'})
     parentId!: bigint | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Description of the category
+     */
+    @Field(() => String, {nullable:true,description:'Description of the category'})
     description!: string | null;
 
     /**
+     * Popularity flag for the category
      * Note: Optional because field defaults to false
      */
-    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional because field defaults to false'})
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Popularity flag for the category\nNote: Optional because field defaults to false'})
     isPopular!: boolean;
 
-    @Field(() => JobCategory, {nullable:true})
+    /**
+     * Parent category reference
+     */
+    @Field(() => JobCategory, {nullable:true,description:'Parent category reference'})
     @Type(() => JobCategory)
     parent?: JobCategory | null;
 
-    @Field(() => [JobCategory], {nullable:true})
+    /**
+     * Child categories
+     */
+    @Field(() => [JobCategory], {nullable:true,description:'Child categories'})
     @Type(() => JobCategory)
     children?: Array<JobCategory>;
 
-    @Field(() => [Job], {nullable:true})
+    /**
+     * Jobs in this category
+     */
+    @Field(() => [Job], {nullable:true,description:'Jobs in this category'})
     @Type(() => Job)
     jobs?: Array<Job>;
 
-    @Field(() => [Workshop], {nullable:true})
+    /**
+     * Workshops associated with this category
+     */
+    @Field(() => [Workshop], {nullable:true,description:'Workshops associated with this category'})
     @Type(() => Workshop)
     workshops?: Array<Workshop>;
 

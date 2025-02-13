@@ -7,4 +7,4 @@ export enum JoinWorkshopRequestStatus {
 }
 
 
-registerEnumType(JoinWorkshopRequestStatus, { name: 'JoinWorkshopRequestStatus', description: undefined })
+registerEnumType(JoinWorkshopRequestStatus, { name: 'JoinWorkshopRequestStatus', description: "Status of workshop join requests" })

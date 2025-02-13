@@ -5,43 +5,83 @@ import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.en
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
 
-@ObjectType()
+/**
+ * This model manages the devices associated with a workshop, including device names, serial numbers, and status.
+ * It tracks device authentication data such as last login and update timestamps.
+ */
+@ObjectType({description:'This model manages the devices associated with a workshop, including device names, serial numbers, and status.\nIt tracks device authentication data such as last login and update timestamps.'})
 export class WorkshopDevice {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop device
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop device'})
     workshopDeviceId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the associated workshop
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the associated workshop'})
     workshopId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Serial number of the device
+     */
+    @Field(() => String, {nullable:false,description:'Serial number of the device'})
     serialNumber!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Name of the device
+     */
+    @Field(() => String, {nullable:false,description:'Name of the device'})
     deviceName!: string;
 
-    @Field(() => WorkshopDeviceStatus, {nullable:true,defaultValue:'INACTIVE'})
+    /**
+     * Current status of the device
+     */
+    @Field(() => WorkshopDeviceStatus, {nullable:true,defaultValue:'INACTIVE',description:'Current status of the device'})
     status!: keyof typeof WorkshopDeviceStatus | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last login
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last login'})
     lastLoginAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last logged in
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last logged in'})
     lastLoginBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last updated the device
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last updated the device'})
     updatedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp when device was accepted
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp when device was accepted'})
     acceptedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who accepted the device
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who accepted the device'})
     acceptedBy!: bigint | null;
 
-    @Field(() => Workshop, {nullable:false})
+    /**
+     * Workshop associated with this device
+     */
+    @Field(() => Workshop, {nullable:false,description:'Workshop associated with this device'})
     @Type(() => Workshop)
     workshop?: Workshop;
 }

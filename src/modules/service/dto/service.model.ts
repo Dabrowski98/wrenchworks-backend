@@ -13,99 +13,175 @@ import { Vehicle } from '../../vehicle/dto/vehicle.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { ServiceCount } from './service-count.output';
 
-@ObjectType()
+/**
+ * The Service model records information about the services provided by a workshop including payment details and service status.
+ * It connects various entities such as customers, employees, vehicles, and service requests.
+ */
+@ObjectType({description:'The Service model records information about the services provided by a workshop including payment details and service status.\nIt connects various entities such as customers, employees, vehicles, and service requests.'})
 export class Service {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the service'})
     serviceId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the service request
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the service request'})
     serviceRequestId!: bigint | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop providing the service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop providing the service'})
     workshopId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the vehicle being serviced
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the vehicle being serviced'})
     vehicleId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the customer receiving the service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the customer receiving the service'})
     customerId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the employee performing the service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the employee performing the service'})
     employeeId!: bigint;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * General description of the service
+     */
+    @Field(() => String, {nullable:true,description:'General description of the service'})
     description!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Technical description of service performed
+     */
+    @Field(() => String, {nullable:true,description:'Technical description of service performed'})
     serviceDescription!: string | null;
 
-    @Field(() => ServiceStatus, {nullable:true,defaultValue:'PENDING'})
+    /**
+     * Current status of the service
+     */
+    @Field(() => ServiceStatus, {nullable:true,defaultValue:'PENDING',description:'Current status of the service'})
     status!: keyof typeof ServiceStatus | null;
 
     /**
+     * Payment status of the service
      * Note: Optional because field defaults to false
      */
-    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional because field defaults to false'})
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Payment status of the service\nNote: Optional because field defaults to false'})
     payedOff!: boolean;
 
     /**
+     * Total amount to be paid for the service
      * Note: Optional because field defaults to 0.00
      */
-    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0,description:'Note: Optional because field defaults to 0.00'})
+    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:0,description:'Total amount to be paid for the service\nNote: Optional because field defaults to 0.00'})
     paymentAmount!: Decimal;
 
     /**
+     * Date when service work began
      * Note: Optional because field defaults to now()
      */
-    @Field(() => Date, {nullable:false,description:'Note: Optional because field defaults to now()'})
+    @Field(() => Date, {nullable:false,description:'Date when service work began\nNote: Optional because field defaults to now()'})
     serviceStartDate!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Date when service work was completed
+     */
+    @Field(() => Date, {nullable:true,description:'Date when service work was completed'})
     serviceEndDate!: Date | null;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp when record was added
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp when record was added'})
     addedAt!: Date;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who added the record
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who added the record'})
     addedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp when service was resolved
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp when service was resolved'})
     resolvedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who resolved the service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who resolved the service'})
     resolvedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last updated the record
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last updated the record'})
     updatedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of deletion
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of deletion'})
     deletedAt!: Date | null;
 
-    @Field(() => ServiceRequest, {nullable:true})
+    /**
+     * Associated service request
+     */
+    @Field(() => ServiceRequest, {nullable:true,description:'Associated service request'})
     @Type(() => ServiceRequest)
     serviceRequest?: ServiceRequest | null;
 
-    @Field(() => [Task], {nullable:true})
+    /**
+     * Tasks associated with this service
+     */
+    @Field(() => [Task], {nullable:true,description:'Tasks associated with this service'})
     @Type(() => Task)
     tasks?: Array<Task>;
 
-    @Field(() => Customer, {nullable:false})
+    /**
+     * Customer receiving the service
+     */
+    @Field(() => Customer, {nullable:false,description:'Customer receiving the service'})
     @Type(() => Customer)
     customer?: Customer;
 
-    @Field(() => Employee, {nullable:false})
+    /**
+     * Employee performing the service
+     */
+    @Field(() => Employee, {nullable:false,description:'Employee performing the service'})
     @Type(() => Employee)
     employee?: Employee;
 
-    @Field(() => Vehicle, {nullable:false})
+    /**
+     * Vehicle being serviced
+     */
+    @Field(() => Vehicle, {nullable:false,description:'Vehicle being serviced'})
     @Type(() => Vehicle)
     vehicle?: Vehicle;
 
-    @Field(() => Workshop, {nullable:false})
+    /**
+     * Workshop providing the service
+     */
+    @Field(() => Workshop, {nullable:false,description:'Workshop providing the service'})
     @Type(() => Workshop)
     workshop?: Workshop;
 

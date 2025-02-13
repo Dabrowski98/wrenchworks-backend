@@ -7,4 +7,4 @@ export enum UserStatus {
 }
 
 
-registerEnumType(UserStatus, { name: 'UserStatus', description: undefined })
+registerEnumType(UserStatus, { name: 'UserStatus', description: "Status of user accounts" })

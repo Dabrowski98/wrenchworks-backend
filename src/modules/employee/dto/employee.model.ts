@@ -12,78 +12,133 @@ import { User } from '../../user/dto/user.model';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { EmployeeCount } from './employee-count.output';
 
-@ObjectType()
+/**
+ * The Employee model holds data related to workshop employees including login credentials and employment status.
+ * It also defines associations with roles, permissions, and tasks within the system.
+ */
+@ObjectType({description:'The Employee model holds data related to workshop employees including login credentials and employment status.\nIt also defines associations with roles, permissions, and tasks within the system.'})
 export class Employee {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the employee
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the employee'})
     employeeId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop where employee works
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop where employee works'})
     workshopId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of associated user account
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of associated user account'})
     userId!: bigint | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Display name for the employee
+     */
+    @Field(() => String, {nullable:true,description:'Display name for the employee'})
     nickname!: string | null;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Login username for employee
+     */
+    @Field(() => String, {nullable:false,description:'Login username for employee'})
     login!: string;
 
     /**
+     * Password for employee account
      * Note: Password will be hashed before storage
      */
-    @Field(() => String, {nullable:true})
+    /**
+     * Token for session refresh
+     */
+    @Field(() => String, {nullable:true,description:'Token for session refresh'})
     refreshToken!: string | null;
 
-    @Field(() => EmployeeStatus, {nullable:false,defaultValue:'INACTIVE'})
+    /**
+     * Current status of employee account
+     */
+    @Field(() => EmployeeStatus, {nullable:false,defaultValue:'INACTIVE',description:'Current status of employee account'})
     status!: keyof typeof EmployeeStatus;
 
     /**
+     * Date when employee joined
      * Note: Optional because field defaults to now()
      */
-    @Field(() => Date, {nullable:false,description:'Note: Optional because field defaults to now()'})
+    @Field(() => Date, {nullable:false,description:'Date when employee joined\nNote: Optional because field defaults to now()'})
     joinedAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of deletion
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of deletion'})
     deletedAt!: Date | null;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of creation'})
     createdAt!: Date;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who created the record
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who created the record'})
     createdBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last updated the record
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last updated the record'})
     updatedBy!: bigint | null;
 
     /**
-     * Note: Connect or Create only allowed
+     * Employee permissions
      */
-    @Field(() => [EmployeePermission], {nullable:true,description:'Note: Connect or Create only allowed'})
+    @Field(() => [EmployeePermission], {nullable:true,description:'Employee permissions'})
     permissions?: Array<EmployeePermission>;
 
-    @Field(() => [Service], {nullable:true})
+    /**
+     * Services managed by employee
+     */
+    @Field(() => [Service], {nullable:true,description:'Services managed by employee'})
     @Type(() => Service)
     services?: Array<Service>;
 
-    @Field(() => [JoinWorkshopRequest], {nullable:true})
+    /**
+     * Workshop join requests by employee
+     */
+    @Field(() => [JoinWorkshopRequest], {nullable:true,description:'Workshop join requests by employee'})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
 
-    @Field(() => [Task], {nullable:true})
+    /**
+     * Tasks assigned to employee
+     */
+    @Field(() => [Task], {nullable:true,description:'Tasks assigned to employee'})
     @Type(() => Task)
     tasks?: Array<Task>;
 
     /**
+     * Associated user account
      * Note: Depends solely on join workshop request status.
      */
-    @Field(() => User, {nullable:true,description:'Note: Depends solely on join workshop request status.'})
+    @Field(() => User, {nullable:true,description:'Associated user account\nNote: Depends solely on join workshop request status.'})
     user?: User | null;
 
-    @Field(() => Workshop, {nullable:false})
+    /**
+     * Workshop where employee works
+     */
+    @Field(() => Workshop, {nullable:false,description:'Workshop where employee works'})
     @Type(() => Workshop)
     workshop?: Workshop;
 

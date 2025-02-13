@@ -17,91 +17,170 @@ import { WorkshopDeviceOtp } from '../../workshop-device-otp/dto/workshop-device
 import { WorkshopDevice } from '../../workshop-device/dto/workshop-device.model';
 import { WorkshopCount } from './workshop-count.output';
 
-@ObjectType()
+/**
+ * The Workshop model represents workshop entities that manage services, employees, and customers.
+ * It stores essential information like contact details, verification status, and related address.
+ */
+@ObjectType({description:'The Workshop model represents workshop entities that manage services, employees, and customers.\nIt stores essential information like contact details, verification status, and related address.'})
 export class Workshop {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop'})
     workshopId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop owner
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop owner'})
     ownerId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the workshop address
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the workshop address'})
     addressId!: bigint | null;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Email address for workshop contact
+     */
+    @Field(() => String, {nullable:false,description:'Email address for workshop contact'})
     email!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Contact phone number for the workshop
+     */
+    @Field(() => String, {nullable:false,description:'Contact phone number for the workshop'})
     telephoneNumber!: string;
 
-    @Field(() => Boolean, {nullable:true,defaultValue:false})
+    /**
+     * Verification status of the workshop
+     */
+    @Field(() => Boolean, {nullable:true,defaultValue:false,description:'Verification status of the workshop'})
     isVerified!: boolean | null;
 
-    @Field(() => Boolean, {nullable:true,defaultValue:false})
+    /**
+     * Flag indicating if workshop is managing work
+     */
+    @Field(() => Boolean, {nullable:true,defaultValue:false,description:'Flag indicating if workshop is managing work'})
     isManagingWork!: boolean | null;
 
-    @Field(() => Boolean, {nullable:true,defaultValue:false})
+    /**
+     * Flag indicating if workshop is offering services
+     */
+    @Field(() => Boolean, {nullable:true,defaultValue:false,description:'Flag indicating if workshop is offering services'})
     isOfferingService!: boolean | null;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of workshop creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of workshop creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last updated the workshop
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last updated the workshop'})
     updatedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of workshop deletion
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of workshop deletion'})
     deletedAt!: Date | null;
 
-    @Field(() => Address, {nullable:true})
+    /**
+     * Address details of the workshop
+     */
+    @Field(() => Address, {nullable:true,description:'Address details of the workshop'})
     @Type(() => Address)
     address?: Address | null;
 
-    @Field(() => [Customer], {nullable:true})
+    /**
+     * Customers associated with this workshop
+     */
+    @Field(() => [Customer], {nullable:true,description:'Customers associated with this workshop'})
     @Type(() => Customer)
     customers?: Array<Customer>;
 
-    @Field(() => [Employee], {nullable:true})
+    /**
+     * Employees working at this workshop
+     */
+    @Field(() => [Employee], {nullable:true,description:'Employees working at this workshop'})
     @Type(() => Employee)
     employees?: Array<Employee>;
 
-    @Field(() => [Review], {nullable:true})
+    /**
+     * Reviews received by this workshop
+     */
+    @Field(() => [Review], {nullable:true,description:'Reviews received by this workshop'})
     @Type(() => Review)
     reviews?: Array<Review>;
 
-    @Field(() => [ServiceRequest], {nullable:true})
+    /**
+     * Service requests received by this workshop
+     */
+    @Field(() => [ServiceRequest], {nullable:true,description:'Service requests received by this workshop'})
     @Type(() => ServiceRequest)
     serviceRequests?: Array<ServiceRequest>;
 
-    @Field(() => [Service], {nullable:true})
+    /**
+     * Services provided by this workshop
+     */
+    @Field(() => [Service], {nullable:true,description:'Services provided by this workshop'})
     @Type(() => Service)
     services?: Array<Service>;
 
-    @Field(() => User, {nullable:false})
+    /**
+     * Owner of the workshop
+     */
+    @Field(() => User, {nullable:false,description:'Owner of the workshop'})
     user?: User;
 
-    @Field(() => WorkshopDetails, {nullable:true})
+    /**
+     * Additional details about the workshop
+     */
+    @Field(() => WorkshopDetails, {nullable:true,description:'Additional details about the workshop'})
     @Type(() => WorkshopDetails)
     workshopDetails?: WorkshopDetails | null;
 
-    @Field(() => [WorkshopJob], {nullable:true})
+    /**
+     * Jobs performed at this workshop
+     */
+    @Field(() => [WorkshopJob], {nullable:true,description:'Jobs performed at this workshop'})
     @Type(() => WorkshopJob)
     workshopJobs?: Array<WorkshopJob>;
 
-    @Field(() => [JobCategory], {nullable:true})
+    /**
+     * Job categories offered by this workshop
+     */
+    @Field(() => [JobCategory], {nullable:true,description:'Job categories offered by this workshop'})
     @Type(() => JobCategory)
     jobCategories?: Array<JobCategory>;
 
-    @Field(() => [JoinWorkshopRequest], {nullable:true})
+    /**
+     * Join requests for this workshop
+     */
+    @Field(() => [JoinWorkshopRequest], {nullable:true,description:'Join requests for this workshop'})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
 
-    @Field(() => WorkshopDeviceOtp, {nullable:true})
+    /**
+     * OTP device settings for this workshop
+     */
+    @Field(() => WorkshopDeviceOtp, {nullable:true,description:'OTP device settings for this workshop'})
     WorkshopDeviceOtp?: WorkshopDeviceOtp | null;
 
-    @Field(() => [WorkshopDevice], {nullable:true})
+    /**
+     * Devices registered to this workshop
+     */
+    @Field(() => [WorkshopDevice], {nullable:true,description:'Devices registered to this workshop'})
     workshopDevices?: Array<WorkshopDevice>;
 
     @Field(() => WorkshopCount, {nullable:false})

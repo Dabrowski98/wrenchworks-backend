@@ -4,34 +4,65 @@ import * as Scalars from 'graphql-scalars';
 import { Workshop } from '../../workshop/dto/workshop.model';
 import { Type } from 'class-transformer';
 
-@ObjectType()
+/**
+ * Address model represents an Address entity that holds location details such as country, region, city, and street.
+ * It is used to link physical addresses to workshops and other entities requiring location information.
+ */
+@ObjectType({description:'Address model represents an Address entity that holds location details such as country, region, city, and street.\nIt is used to link physical addresses to workshops and other entities requiring location information.'})
 export class Address {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Unique identifier for the address
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Unique identifier for the address'})
     addressId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Country name where the address is located
+     */
+    @Field(() => String, {nullable:false,description:'Country name where the address is located'})
     country!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Region or state within the country
+     */
+    @Field(() => String, {nullable:false,description:'Region or state within the country'})
     region!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * City or town name
+     */
+    @Field(() => String, {nullable:false,description:'City or town name'})
     city!: string;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Street name or road identifier
+     */
+    @Field(() => String, {nullable:true,description:'Street name or road identifier'})
     street!: string | null;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Building number or identifier
+     */
+    @Field(() => String, {nullable:false,description:'Building number or identifier'})
     buildingNo!: string;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Apartment or flat number within the building
+     */
+    @Field(() => String, {nullable:true,description:'Apartment or flat number within the building'})
     flatNo!: string | null;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Postal or ZIP code for the address
+     */
+    @Field(() => String, {nullable:false,description:'Postal or ZIP code for the address'})
     postCode!: string;
 
-    @Field(() => Workshop, {nullable:true})
+    /**
+     * Reference to the associated workshop
+     */
+    @Field(() => Workshop, {nullable:true,description:'Reference to the associated workshop'})
     @Type(() => Workshop)
     workshop?: Workshop | null;
 }

@@ -6,42 +6,77 @@ import { UserReportReportedEntityType } from '../../prisma/dto/user-report-repor
 import { UserReportStatus } from '../../prisma/dto/user-report-status.enum';
 import { User } from '../../user/dto/user.model';
 
-@ObjectType()
+/**
+ * The UserReport model is used to document user reports regarding issues such as offensive content or fraudulent activity.
+ * It includes details about the report text, status, and the reported entity, along with user associations.
+ */
+@ObjectType({description:'The UserReport model is used to document user reports regarding issues such as offensive content or fraudulent activity.\nIt includes details about the report text, status, and the reported entity, along with user associations.'})
 export class UserReport {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the report
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the report'})
     reportId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the user who submitted the report
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the user who submitted the report'})
     userId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Content of the report
+     */
+    @Field(() => String, {nullable:false,description:'Content of the report'})
     reportText!: string;
 
-    @Field(() => UserReportType, {nullable:false})
+    /**
+     * Type of the report (e.g., SPAM, ABUSE, INAPPROPRIATE)
+     */
+    @Field(() => UserReportType, {nullable:false,description:'Type of the report (e.g., SPAM, ABUSE, INAPPROPRIATE)'})
     reportType!: keyof typeof UserReportType;
 
-    @Field(() => UserReportReportedEntityType, {nullable:false})
+    /**
+     * Type of entity being reported (e.g., USER, REVIEW, WORKSHOP)
+     */
+    @Field(() => UserReportReportedEntityType, {nullable:false,description:'Type of entity being reported (e.g., USER, REVIEW, WORKSHOP)'})
     reportedEntityType!: keyof typeof UserReportReportedEntityType;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the entity being reported
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the entity being reported'})
     reportedId!: bigint;
 
     /**
+     * Current status of the report
      * Note: Optional because field defaults to pending
      */
-    @Field(() => UserReportStatus, {nullable:false,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
+    @Field(() => UserReportStatus, {nullable:false,defaultValue:'PENDING',description:'Current status of the report\nNote: Optional because field defaults to pending'})
     status!: keyof typeof UserReportStatus;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of report creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of report creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who last updated the report
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who last updated the report'})
     updatedBy!: bigint | null;
 
-    @Field(() => User, {nullable:false})
+    /**
+     * User who submitted the report
+     */
+    @Field(() => User, {nullable:false,description:'User who submitted the report'})
     user?: User;
 }

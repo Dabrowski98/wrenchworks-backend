@@ -7,43 +7,83 @@ import { BodyColor } from '../../prisma/dto/body-color.enum';
 import { Vehicle } from '../../vehicle/dto/vehicle.model';
 import { Type } from 'class-transformer';
 
-@ObjectType()
+/**
+ * The VehicleDetails model provides additional details for a vehicle such as year of production, VIN, and engine capacity.
+ * It enhances the vehicle information with technical specifications and registration details.
+ */
+@ObjectType({description:'The VehicleDetails model provides additional details for a vehicle such as year of production, VIN, and engine capacity.\nIt enhances the vehicle information with technical specifications and registration details.'})
 export class VehicleDetails {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the vehicle details record
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the vehicle details record'})
     vehicleDetailsId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the associated vehicle
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the associated vehicle'})
     vehicleId!: bigint;
 
-    @Field(() => Int, {nullable:true})
+    /**
+     * Manufacturing year of the vehicle
+     */
+    @Field(() => Int, {nullable:true,description:'Manufacturing year of the vehicle'})
     yearOfProduction!: number | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Vehicle Identification Number
+     */
+    @Field(() => String, {nullable:true,description:'Vehicle Identification Number'})
     VIN!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Engine size/capacity
+     */
+    @Field(() => String, {nullable:true,description:'Engine size/capacity'})
     engineCapacity!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Country where vehicle is registered
+     */
+    @Field(() => String, {nullable:true,description:'Country where vehicle is registered'})
     countryOfRegistration!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Vehicle registration plate number
+     */
+    @Field(() => String, {nullable:true,description:'Vehicle registration plate number'})
     licensePlate!: string | null;
 
-    @Field(() => FuelType, {nullable:true})
+    /**
+     * Type of fuel used by the vehicle
+     */
+    @Field(() => FuelType, {nullable:true,description:'Type of fuel used by the vehicle'})
     fuelType!: keyof typeof FuelType | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Engine serial number
+     */
+    @Field(() => String, {nullable:true,description:'Engine serial number'})
     engineNo!: string | null;
 
-    @Field(() => BodyColor, {nullable:true})
+    /**
+     * Color of the vehicle body
+     */
+    @Field(() => BodyColor, {nullable:true,description:'Color of the vehicle body'})
     bodyColor!: keyof typeof BodyColor | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp when record was deleted
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp when record was deleted'})
     deletedAt!: Date | null;
 
-    @Field(() => Vehicle, {nullable:false})
+    /**
+     * Associated vehicle record
+     */
+    @Field(() => Vehicle, {nullable:false,description:'Associated vehicle record'})
     @Type(() => Vehicle)
     vehicle?: Vehicle;
 }

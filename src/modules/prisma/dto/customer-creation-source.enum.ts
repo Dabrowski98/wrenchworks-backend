@@ -7,4 +7,4 @@ export enum CustomerCreationSource {
 }
 
 
-registerEnumType(CustomerCreationSource, { name: 'CustomerCreationSource', description: undefined })
+registerEnumType(CustomerCreationSource, { name: 'CustomerCreationSource', description: "Source of customer creation" })

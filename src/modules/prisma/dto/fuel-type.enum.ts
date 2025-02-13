@@ -12,4 +12,4 @@ export enum FuelType {
 }
 
 
-registerEnumType(FuelType, { name: 'FuelType', description: undefined })
+registerEnumType(FuelType, { name: 'FuelType', description: "Types of fuel used by vehicles" })

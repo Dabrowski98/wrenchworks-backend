@@ -18,89 +18,160 @@ import { SessionData } from '../../session-data/dto/session-data.model';
 import { UserCount } from './user-count.output';
 
 /**
- * Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED.
+ * The User model stores account details for users, including authentication credentials and profile information.
+ * It manages relationships with vehicles, service requests, reviews, and other user-related activities.
  */
-@ObjectType({description:'Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED.'})
+@ObjectType({description:'The User model stores account details for users, including authentication credentials and profile information.\nIt manages relationships with vehicles, service requests, reviews, and other user-related activities.'})
 export class User {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the user
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the user'})
     userId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Username for account login
+     */
+    @Field(() => String, {nullable:false,description:'Username for account login'})
     username!: string;
 
     /**
+     * Password for account authentication
      * Note: Password will be hashed before storage
      */
-    @Field(() => String, {nullable:false})
+    /**
+     * Email address for account
+     */
+    @Field(() => String, {nullable:false,description:'Email address for account'})
     email!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Contact phone number
+     */
+    @Field(() => String, {nullable:false,description:'Contact phone number'})
     telephoneNumber!: string;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * URL to user's avatar image
+     */
+    @Field(() => String, {nullable:true,description:"URL to user's avatar image"})
     avatarURL!: string | null;
 
-    @Field(() => Boolean, {nullable:true,defaultValue:false})
+    /**
+     * Account verification status
+     */
+    @Field(() => Boolean, {nullable:true,defaultValue:false,description:'Account verification status'})
     isVerified!: boolean | null;
 
-    @Field(() => UserStatus, {nullable:true,defaultValue:'INACTIVE'})
+    /**
+     * Current status of the user account
+     */
+    @Field(() => UserStatus, {nullable:true,defaultValue:'INACTIVE',description:'Current status of the user account'})
     status!: keyof typeof UserStatus | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * User's first name
+     */
+    @Field(() => String, {nullable:true,description:"User's first name"})
     firstName!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * User's last name
+     */
+    @Field(() => String, {nullable:true,description:"User's last name"})
     lastName!: string | null;
 
-    @Field(() => UserRole, {nullable:false,defaultValue:'USER'})
+    /**
+     * Role assigned to the user
+     */
+    @Field(() => UserRole, {nullable:false,defaultValue:'USER',description:'Role assigned to the user'})
     role!: keyof typeof UserRole;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of account creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of account creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of account deletion
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of account deletion'})
     deletedAt!: Date | null;
 
-    @Field(() => [Vehicle], {nullable:true})
+    /**
+     * Vehicles associated with the user
+     */
+    @Field(() => [Vehicle], {nullable:true,description:'Vehicles associated with the user'})
     @Type(() => Vehicle)
     vehicles?: Array<Vehicle>;
 
-    @Field(() => [ServiceRequest], {nullable:true})
+    /**
+     * Service requests made by the user
+     */
+    @Field(() => [ServiceRequest], {nullable:true,description:'Service requests made by the user'})
     @Type(() => ServiceRequest)
     serviceRequests?: Array<ServiceRequest>;
 
-    @Field(() => [Customer], {nullable:true})
+    /**
+     * Customer profiles associated with the user
+     */
+    @Field(() => [Customer], {nullable:true,description:'Customer profiles associated with the user'})
     @Type(() => Customer)
     customers?: Array<Customer>;
 
-    @Field(() => [Employee], {nullable:true})
+    /**
+     * Employee profiles associated with the user
+     */
+    @Field(() => [Employee], {nullable:true,description:'Employee profiles associated with the user'})
     @Type(() => Employee)
     employees?: Array<Employee>;
 
-    @Field(() => [Workshop], {nullable:true})
+    /**
+     * Workshops owned by the user
+     */
+    @Field(() => [Workshop], {nullable:true,description:'Workshops owned by the user'})
     @Type(() => Workshop)
     workshops?: Array<Workshop>;
 
-    @Field(() => [Review], {nullable:true})
+    /**
+     * Reviews written by the user
+     */
+    @Field(() => [Review], {nullable:true,description:'Reviews written by the user'})
     @Type(() => Review)
     reviews?: Array<Review>;
 
-    @Field(() => [ReviewResponse], {nullable:true})
+    /**
+     * Review responses written by the user
+     */
+    @Field(() => [ReviewResponse], {nullable:true,description:'Review responses written by the user'})
     @Type(() => ReviewResponse)
     reviewResponses?: Array<ReviewResponse>;
 
-    @Field(() => [UserReport], {nullable:true})
+    /**
+     * Reports submitted by the user
+     */
+    @Field(() => [UserReport], {nullable:true,description:'Reports submitted by the user'})
     @Type(() => UserReport)
     userReports?: Array<UserReport>;
 
-    @Field(() => [JoinWorkshopRequest], {nullable:true})
+    /**
+     * Workshop join requests made by the user
+     */
+    @Field(() => [JoinWorkshopRequest], {nullable:true,description:'Workshop join requests made by the user'})
     joinWorkshopRequests?: Array<JoinWorkshopRequest>;
 
-    @Field(() => [SessionData], {nullable:true})
+    /**
+     * Session data for the user
+     */
+    @Field(() => [SessionData], {nullable:true,description:'Session data for the user'})
     sessionData?: Array<SessionData>;
 
     @Field(() => UserCount, {nullable:false})

@@ -21,7 +21,7 @@ export class EmployeeGroupBy {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Field(() => String, {nullable:true})
     nickname?: string;
 
     @Field(() => String, {nullable:false})

@@ -7,4 +7,4 @@ export enum WorkshopDeviceStatus {
 }
 
 
-registerEnumType(WorkshopDeviceStatus, { name: 'WorkshopDeviceStatus', description: undefined })
+registerEnumType(WorkshopDeviceStatus, { name: 'WorkshopDeviceStatus', description: "Status of workshop devices" })

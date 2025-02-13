@@ -14,4 +14,4 @@ export enum UserReportType {
 }
 
 
-registerEnumType(UserReportType, { name: 'UserReportType', description: undefined })
+registerEnumType(UserReportType, { name: 'UserReportType', description: "Categories of user reports" })

@@ -16,7 +16,7 @@ export class EmployeeUncheckedUpdateManyWithoutUserInput {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
     @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })

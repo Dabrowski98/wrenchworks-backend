@@ -8,4 +8,4 @@ export enum UserReportReportedEntityType {
 }
 
 
-registerEnumType(UserReportReportedEntityType, { name: 'UserReportReportedEntityType', description: undefined })
+registerEnumType(UserReportReportedEntityType, { name: 'UserReportReportedEntityType', description: "Types of entities that can be reported by users" })

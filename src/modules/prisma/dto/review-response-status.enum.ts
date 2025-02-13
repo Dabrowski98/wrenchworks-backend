@@ -8,4 +8,4 @@ export enum ReviewResponseStatus {
 }
 
 
-registerEnumType(ReviewResponseStatus, { name: 'ReviewResponseStatus', description: undefined })
+registerEnumType(ReviewResponseStatus, { name: 'ReviewResponseStatus', description: "Status of review responses" })

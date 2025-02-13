@@ -7,36 +7,62 @@ import { ServiceRequest } from '../../service-request/dto/service-request.model'
 import { WorkshopJob } from '../../workshop-job/dto/workshop-job.model';
 import { JobCount } from './job-count.output';
 
-@ObjectType()
+/**
+ * The Job model defines various job entries representing tasks or services offered by workshops.
+ * It includes details like name, description, popularity, and associated categories.
+ */
+@ObjectType({description:'The Job model defines various job entries representing tasks or services offered by workshops.\nIt includes details like name, description, popularity, and associated categories.'})
 export class Job {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the job
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the job'})
     jobId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the job category
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the job category'})
     categoryId!: bigint;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Name of the job
+     */
+    @Field(() => String, {nullable:true,description:'Name of the job'})
     name!: string | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Description of the job
+     */
+    @Field(() => String, {nullable:true,description:'Description of the job'})
     description!: string | null;
 
     /**
+     * Popularity flag for the job
      * Note: Optional because field defaults to false
      */
-    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Note: Optional because field defaults to false'})
+    @Field(() => Boolean, {nullable:false,defaultValue:false,description:'Popularity flag for the job\nNote: Optional because field defaults to false'})
     isPopular!: boolean;
 
-    @Field(() => JobCategory, {nullable:false})
+    /**
+     * Category this job belongs to
+     */
+    @Field(() => JobCategory, {nullable:false,description:'Category this job belongs to'})
     @Type(() => JobCategory)
     jobCategory?: JobCategory;
 
-    @Field(() => [ServiceRequest], {nullable:true})
+    /**
+     * Service requests associated with this job
+     */
+    @Field(() => [ServiceRequest], {nullable:true,description:'Service requests associated with this job'})
     @Type(() => ServiceRequest)
     serviceRequests?: Array<ServiceRequest>;
 
-    @Field(() => [WorkshopJob], {nullable:true})
+    /**
+     * Workshop jobs associated with this job
+     */
+    @Field(() => [WorkshopJob], {nullable:true,description:'Workshop jobs associated with this job'})
     @Type(() => WorkshopJob)
     workshopJobs?: Array<WorkshopJob>;
 

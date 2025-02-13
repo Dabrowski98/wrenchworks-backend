@@ -14,4 +14,4 @@ export enum BodyColor {
 }
 
 
-registerEnumType(BodyColor, { name: 'BodyColor', description: undefined })
+registerEnumType(BodyColor, { name: 'BodyColor', description: "Vehicle body colors" })

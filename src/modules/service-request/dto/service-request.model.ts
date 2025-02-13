@@ -11,71 +11,125 @@ import { User } from '../../user/dto/user.model';
 import { Guest } from '../../guest/dto/guest.model';
 import { ServiceRequestCount } from './service-request-count.output';
 
-@ObjectType()
+/**
+ * The ServiceRequest model handles customer requests for services, documenting the status and description of the request.
+ * It links vehicles, workshops, users, and approved services in the system.
+ */
+@ObjectType({description:'The ServiceRequest model handles customer requests for services, documenting the status and description of the request.\nIt links vehicles, workshops, users, and approved services in the system.'})
 export class ServiceRequest {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the service request
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the service request'})
     serviceRequestId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the workshop
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the workshop'})
     workshopId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the vehicle
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the vehicle'})
     vehicleId!: bigint;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the user
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the user'})
     userId!: bigint | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the guest
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the guest'})
     guestId!: bigint | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of the approved service
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of the approved service'})
     approvedServiceId!: bigint | null;
 
     /**
+     * Current status of the request
      * Note: Optional because field defaults to pending
      */
-    @Field(() => ServiceRequestStatus, {nullable:true,defaultValue:'PENDING',description:'Note: Optional because field defaults to pending'})
+    @Field(() => ServiceRequestStatus, {nullable:true,defaultValue:'PENDING',description:'Current status of the request\nNote: Optional because field defaults to pending'})
     status!: keyof typeof ServiceRequestStatus | null;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Description of the service request
+     */
+    @Field(() => String, {nullable:true,description:'Description of the service request'})
     description!: string | null;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp when request was resolved
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp when request was resolved'})
     resolvedAt!: Date | null;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    /**
+     * Identifier of user who resolved the request
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true,description:'Identifier of user who resolved the request'})
     resolvedBy!: bigint | null;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of deletion
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of deletion'})
     deletedAt!: Date | null;
 
-    @Field(() => [Job], {nullable:true})
+    /**
+     * Jobs associated with this request
+     */
+    @Field(() => [Job], {nullable:true,description:'Jobs associated with this request'})
     @Type(() => Job)
     jobs?: Array<Job>;
 
-    @Field(() => Service, {nullable:true})
+    /**
+     * Approved service for this request
+     */
+    @Field(() => Service, {nullable:true,description:'Approved service for this request'})
     @Type(() => Service)
     approvedService?: Service | null;
 
-    @Field(() => Vehicle, {nullable:false})
+    /**
+     * Vehicle associated with this request
+     */
+    @Field(() => Vehicle, {nullable:false,description:'Vehicle associated with this request'})
     @Type(() => Vehicle)
     vehicle?: Vehicle;
 
-    @Field(() => Workshop, {nullable:false})
+    /**
+     * Workshop handling this request
+     */
+    @Field(() => Workshop, {nullable:false,description:'Workshop handling this request'})
     @Type(() => Workshop)
     workshop?: Workshop;
 
-    @Field(() => User, {nullable:true})
+    /**
+     * User who created the request
+     */
+    @Field(() => User, {nullable:true,description:'User who created the request'})
     user?: User | null;
 
     /**
+     * Guest who created the request
      * Note: Cannot fill guest while creating service request, because sr with guest can only be created by guest creation.
      */
-    @Field(() => Guest, {nullable:true,description:'Note: Cannot fill guest while creating service request, because sr with guest can only be created by guest creation.'})
+    @Field(() => Guest, {nullable:true,description:'Guest who created the request\nNote: Cannot fill guest while creating service request, because sr with guest can only be created by guest creation.'})
     guest?: Guest | null;
 
     @Field(() => ServiceRequestCount, {nullable:false})

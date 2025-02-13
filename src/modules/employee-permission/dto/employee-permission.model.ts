@@ -6,34 +6,65 @@ import { Employee } from '../../employee/dto/employee.model';
 import { Type } from 'class-transformer';
 import { EmployeePermissionCount } from './employee-permission-count.output';
 
-@ObjectType()
+/**
+ * This model represents EmployeePermission detailing the allowed actions and associated permissions for employees.
+ * It is used to control access and operations within the application for different employee roles.
+ */
+@ObjectType({description:'This model represents EmployeePermission detailing the allowed actions and associated permissions for employees.\nIt is used to control access and operations within the application for different employee roles.'})
 export class EmployeePermission {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the permission
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the permission'})
     permissionId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Name of the permission
+     */
+    @Field(() => String, {nullable:false,description:'Name of the permission'})
     name!: string;
 
-    @Field(() => String, {nullable:true})
+    /**
+     * Description of the permission
+     */
+    @Field(() => String, {nullable:true,description:'Description of the permission'})
     description!: string | null;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Action allowed by this permission
+     */
+    @Field(() => String, {nullable:false,description:'Action allowed by this permission'})
     action!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Subject of the permission
+     */
+    @Field(() => String, {nullable:false,description:'Subject of the permission'})
     subject!: string;
 
-    @Field(() => GraphQLJSON, {nullable:true})
+    /**
+     * Additional conditions for permission
+     */
+    @Field(() => GraphQLJSON, {nullable:true,description:'Additional conditions for permission'})
     conditions!: any | null;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of last update'})
     updatedAt!: Date;
 
-    @Field(() => [Employee], {nullable:true})
+    /**
+     * Employees with this permission
+     */
+    @Field(() => [Employee], {nullable:true,description:'Employees with this permission'})
     @Type(() => Employee)
     employees?: Array<Employee>;
 

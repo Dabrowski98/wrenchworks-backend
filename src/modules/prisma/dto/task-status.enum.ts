@@ -7,4 +7,4 @@ export enum TaskStatus {
 }
 
 
-registerEnumType(TaskStatus, { name: 'TaskStatus', description: undefined })
+registerEnumType(TaskStatus, { name: 'TaskStatus', description: "Status of tasks" })

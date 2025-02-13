@@ -1,7 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
-import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
 import { EmployeePermissionUpdateManyWithoutEmployeesNestedInput } from '../../employee-permission/dto/employee-permission-update-many-without-employees-nested.input';
@@ -16,7 +15,7 @@ import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
 @InputType()
 export class EmployeeUpdateWithoutServicesInput {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Nickname must be a string' })
     @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
     @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })

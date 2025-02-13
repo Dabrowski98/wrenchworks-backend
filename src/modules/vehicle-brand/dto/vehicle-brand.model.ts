@@ -4,19 +4,35 @@ import { VehicleModel } from '../../vehicle-model/dto/vehicle-model.model';
 import { Type } from 'class-transformer';
 import { VehicleBrandCount } from './vehicle-brand-count.output';
 
-@ObjectType()
+/**
+ * This model represents VehicleBrand information, including brand names and related vehicle models.
+ * It is used to categorize and link vehicles to their respective brands in the application.
+ */
+@ObjectType({description:'This model represents VehicleBrand information, including brand names and related vehicle models.\nIt is used to categorize and link vehicles to their respective brands in the application.'})
 export class VehicleBrand {
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Name of the vehicle brand
+     */
+    @Field(() => String, {nullable:false,description:'Name of the vehicle brand'})
     brandName!: string;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of brand creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of brand creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => [VehicleModel], {nullable:true})
+    /**
+     * Models associated with this brand
+     */
+    @Field(() => [VehicleModel], {nullable:true,description:'Models associated with this brand'})
     @Type(() => VehicleModel)
     vehicleModels?: Array<VehicleModel>;
 

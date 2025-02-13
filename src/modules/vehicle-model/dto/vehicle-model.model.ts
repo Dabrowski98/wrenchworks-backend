@@ -6,29 +6,54 @@ import { Type } from 'class-transformer';
 import { VehicleBrand } from '../../vehicle-brand/dto/vehicle-brand.model';
 import { VehicleModelCount } from './vehicle-model-count.output';
 
-@ObjectType()
+/**
+ * The VehicleModel model defines specific vehicle models along with the associated brand.
+ * It contains details like model name and is used to establish relationships with individual vehicles.
+ */
+@ObjectType({description:'The VehicleModel model defines specific vehicle models along with the associated brand.\nIt contains details like model name and is used to establish relationships with individual vehicles.'})
 export class VehicleModel {
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    /**
+     * Identifier of the vehicle model
+     */
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false,description:'Identifier of the vehicle model'})
     modelId!: bigint;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Name of the vehicle model
+     */
+    @Field(() => String, {nullable:false,description:'Name of the vehicle model'})
     modelName!: string;
 
-    @Field(() => String, {nullable:false})
+    /**
+     * Brand name of the vehicle model
+     */
+    @Field(() => String, {nullable:false,description:'Brand name of the vehicle model'})
     brand!: string;
 
-    @Field(() => Date, {nullable:false})
+    /**
+     * Timestamp of model creation
+     */
+    @Field(() => Date, {nullable:false,description:'Timestamp of model creation'})
     createdAt!: Date;
 
-    @Field(() => Date, {nullable:true})
+    /**
+     * Timestamp of last update
+     */
+    @Field(() => Date, {nullable:true,description:'Timestamp of last update'})
     updatedAt!: Date | null;
 
-    @Field(() => [Vehicle], {nullable:true})
+    /**
+     * Vehicles of this model
+     */
+    @Field(() => [Vehicle], {nullable:true,description:'Vehicles of this model'})
     @Type(() => Vehicle)
     vehicles?: Array<Vehicle>;
 
-    @Field(() => VehicleBrand, {nullable:false})
+    /**
+     * Brand associated with this model
+     */
+    @Field(() => VehicleBrand, {nullable:false,description:'Brand associated with this model'})
     @Type(() => VehicleBrand)
     vehicleBrand?: VehicleBrand;
 
