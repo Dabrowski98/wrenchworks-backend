@@ -84,6 +84,8 @@ datasource db {
 }
 
 
+// Address model represents an Address entity that holds location details such as country, region, city, and street.
+// It is used to link physical addresses to workshops and other entities requiring location information.
 model Address{ 
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -125,6 +127,8 @@ model Address{
   workshop         Workshop?
 }
 
+// The Customer model stores information about customers including their personal details and contact information.
+// It also maintains relationships with workshops, vehicles, and orders in the system.
 model Customer {
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(Customer)@(Create|Update)*Input' })
@@ -193,6 +197,8 @@ model Customer {
   @@index([workshopId])
 } 
 
+// The Employee model holds data related to workshop employees including login credentials and employment status.
+// It also defines associations with roles, permissions, and tasks within the system.
 model Employee {
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -261,22 +267,9 @@ model Employee {
   @@index([workshopId])
 }
 
-// model EmployeeRole {
-//   /// @FieldType('Scalars.GraphQLBigInt')
-//   roleId               BigInt @id @unique(map: "role_id") @default(autoincrement()) @db.UnsignedBigInt
-//   /// @FieldType('Scalars.GraphQLBigInt')
-//   workshopId           BigInt @db.UnsignedBigInt
-//   /// @Validator.IsString({ message: 'Name must be a string' })
-//   /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
-//   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
-//   /// @Validator.IsOptional({ groups: [UPDATE]})
-//   name                 String @db.VarChar(30)
-//   employees            Employee[]
-//   permissions          EmployeePermission[]
-//   workshops            Workshop[]
 
-// }
-
+// This model represents EmployeePermission detailing the allowed actions and associated permissions for employees.
+// It is used to control access and operations within the application for different employee roles.
 model EmployeePermission {
   /// @FieldType('Scalars.GraphQLBigInt')
   permissionId    BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
@@ -310,8 +303,8 @@ model EmployeePermission {
 
 }
 
-// TODO: PHONE NUMBER OR EMAIL IS REQUIRED.
-/// Note: When service request is accepted guest is removed and customer is updated with service request id. Updated and deleted automatically.
+// The Guest model captures details for guest users who may interact with the system without full account registration.
+// It associates guest actions with other entities such as vehicles and service requests.
 model Guest {
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                       BigInt              @id @unique(map: "guest_id") @default(autoincrement()) @db.UnsignedBigInt
@@ -346,6 +339,8 @@ model Guest {
   customer                      Customer?           
 }
 
+// The Job model defines various job entries representing tasks or services offered by workshops.
+// It includes details like name, description, popularity, and associated categories.
 model Job {
   /// @HideField({ match: '@(Job)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -374,6 +369,8 @@ model Job {
   @@index([categoryId])
 }
 
+// This model represents a JobCategory that groups jobs into different categories based on their type.
+// It supports hierarchical relationships to allow subcategories and organized classification of jobs.
 model JobCategory {
   /// @HideField({ match: '@(JobCategory)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -404,7 +401,8 @@ model JobCategory {
   @@index([parentId])
 }
 
-/// Note: Do not allow receiver to update this model apart from status.
+// The JoinWorkshopRequest model is used to manage requests for joining a workshop by employees or users.
+// It stores request status, messages, and references to the related user and workshop.
 model JoinWorkshopRequest {
   /// @FieldType('Scalars.GraphQLBigInt')
   joinWorkshopRequestId BigInt @id @unique(map: "join_workshop_request_id") @default(autoincrement()) @db.UnsignedBigInt
@@ -438,83 +436,8 @@ model JoinWorkshopRequest {
   employee            Employee                   @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeCanRespondToJoinRequest")
 }
 
-// model PermissionSet {
-//   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
-//   /// @FieldType('Scalars.GraphQLBigInt')
-//   permissionSetId             Int       @id @unique(map: "permission_set_id") @default(autoincrement()) @db.UnsignedInt
-//   /// @FieldType('Scalars.GraphQLBigInt')
-//   /// @Validator.IsOptional()
-//   workshopId                  BigInt?      @db.UnsignedBigInt
-//   /// @Validator.IsString({ message: 'Set name must be a string' })
-//   /// @Validator.Length(2, 30, { message: 'Set name must be between 2 and 30 characters' })
-//   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Set name is required' })
-//   /// @Validator.IsOptional({groups: [UPDATE]})
-//   setName                     String       @db.VarChar(30)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   /// Note: Optional on all bool fields because they default to false
-//   canReadWorkshopDetails      Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canUpdateWorkshopDetails    Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyWorkshopDetails    Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canReadEmployees            Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canUpdateEmployees          Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyEmployees          Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canReadCustomers            Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canUpdateCustomers          Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyCustomers          Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canReadServices             Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canUpdateServices           Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyServices          Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canReadTasks               Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canUpdateTasks             Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyTasks             Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canReadReports             Boolean      @default(false)
-//   /// @Validator.IsBoolean({  message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canGenerateReports         Boolean      @default(false)
-//   /// @Validator.IsBoolean({ message: 'Permission must be a boolean' })
-//   /// @Validator.IsOptional()
-//   canModifyPermissions       Boolean      @default(false)
-//   updatedAt          DateTime?     @db.Timestamp(0) @updatedAt
-//   updatedBy                  BigInt?      @db.UnsignedBigInt
-//   /// @HideField({ match: '@(PermissionSet)@(Create|Update)*Input' })
-//   employees                   Employee[]
-//   /// @HideField({ match: '@(PermissionSet)@(Update)*Input' })
-//   workshop                    Workshop?  @relation(fields: [workshopId], references: [workshopId], onDelete: Cascade, map: "fk_permissionSetForCertainWorkshop")
-
-//   @@index([workshopId])
-// }
-
+// The Review model captures customer reviews including ratings and textual feedback for workshops and services.
+// It maintains information about review status, original review modifications, and user associations.
 model Review {
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -557,6 +480,8 @@ model Review {
   @@index([workshopId])
 }
 
+// This model represents a ReviewResponse which contains responses to customer reviews.
+// It allows hierarchical responses and tracks modifications along with review relationships.
 model ReviewResponse {
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -597,6 +522,8 @@ model ReviewResponse {
   @@index([userId])
 }
 
+// The Service model records information about the services provided by a workshop including payment details and service status.
+// It connects various entities such as customers, employees, vehicles, and service requests.
 model Service {
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -672,6 +599,8 @@ model Service {
   @@index([workshopId])
 }
 
+// The ServiceRequest model handles customer requests for services, documenting the status and description of the request.
+// It links vehicles, workshops, users, and approved services in the system.
 model ServiceRequest {
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -719,6 +648,8 @@ model ServiceRequest {
   @@index([userId])
 }
 
+// This model represents SessionData for managing user sessions, refresh tokens and device information.
+// It is utilized for maintaining secure user login sessions across the application.
 model SessionData {
   /// @HideField({ match: '@(SessionData)@(Update)*Input' })
   sessionDataId        String      @id @unique @db.Char(36)
@@ -739,6 +670,8 @@ model SessionData {
   @@unique([userId, deviceId])
 }
 
+// The Task model defines individual tasks related to a service order including descriptions, execution time, and costs.
+// It also tracks task statuses and associations with employees and workshop jobs.
 model Task {
   /// @HideField({ match: '@(Task)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -788,7 +721,9 @@ model Task {
 
   @@index([serviceId])
 }
-///Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED.
+
+// The User model stores account details for users, including authentication credentials and profile information.
+// It manages relationships with vehicles, service requests, reviews, and other user-related activities.
 model User {
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -864,6 +799,8 @@ model User {
   sessionData       SessionData[]
 }
 
+// The UserReport model is used to document user reports regarding issues such as offensive content or fraudulent activity.
+// It includes details about the report text, status, and the reported entity, along with user associations.
 model UserReport {
   /// @HideField({ match: '@(UserReport)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -898,6 +835,8 @@ model UserReport {
 }
 
 
+// The Vehicle model holds information about vehicles owned or managed within the system, including details like model and owner.
+// It tracks service requests and links to vehicle details for further information.
 model Vehicle {
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -930,6 +869,8 @@ model Vehicle {
   @@index([customerId])
 }
 
+// This model represents VehicleBrand information, including brand names and related vehicle models.
+// It is used to categorize and link vehicles to their respective brands in the application.
 model VehicleBrand {
   /// @Validator.IsString({ message: 'Brand name must be a string' })
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Brand name is required' })
@@ -942,6 +883,8 @@ model VehicleBrand {
   vehicleModels   VehicleModel[]
 }
 
+// The VehicleDetails model provides additional details for a vehicle such as year of production, VIN, and engine capacity.
+// It enhances the vehicle information with technical specifications and registration details.
 model VehicleDetails {
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleDetailsId  BigInt    @id @unique(map: "vehicle_details_id") @default(autoincrement()) @db.UnsignedBigInt
@@ -988,6 +931,8 @@ model VehicleDetails {
   @@index([vehicleId])
 }
 
+// The VehicleModel model defines specific vehicle models along with the associated brand.
+// It contains details like model name and is used to establish relationships with individual vehicles.
 model VehicleModel {
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -1013,6 +958,8 @@ model VehicleModel {
   @@index([brand])
 }
 
+// The Workshop model represents workshop entities that manage services, employees, and customers.
+// It stores essential information like contact details, verification status, and related address.
 model Workshop {
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
@@ -1075,6 +1022,8 @@ model Workshop {
   @@index([ownerId])
 }
 
+// This model manages the devices associated with a workshop, including device names, serial numbers, and status.
+// It tracks device authentication data such as last login and update timestamps.
 model WorkshopDevice {
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
@@ -1111,6 +1060,8 @@ model WorkshopDevice {
   @@index([workshopId])
 }
 
+// The WorkshopDeviceOtp model handles one-time passwords for workshop devices used for secure authentication.
+// It includes the OTP code, expiry time, and links to the associated workshop for verification.
 model WorkshopDeviceOtp {
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
@@ -1141,6 +1092,8 @@ model WorkshopDeviceOtp {
   @@index([workshopId])
 }
 
+// This model provides additional details specific to a workshop such as its rating, description, and NIP.
+// It centralizes supplementary information that augments the basic workshop record.
 model WorkshopDetails {
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId       BigInt                    @id @db.UnsignedBigInt
@@ -1181,6 +1134,8 @@ model WorkshopDetails {
   workshop         Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDetails")
 }
 
+// The WorkshopJob model outlines the jobs offered by a workshop, including descriptions, pricing, and availability.
+// It establishes connections between the workshop and job entities and tracks creation and update details.
 model WorkshopJob {
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
