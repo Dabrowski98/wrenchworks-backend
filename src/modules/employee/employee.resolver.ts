@@ -36,6 +36,7 @@ import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decor
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Employee)
@@ -46,6 +47,7 @@ export class EmployeeResolver {
     return this.employeeService.create(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Employee)
@@ -56,6 +58,7 @@ export class EmployeeResolver {
     return this.employeeService.findOne(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Employee])
@@ -66,6 +69,7 @@ export class EmployeeResolver {
     return this.employeeService.findMany(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Employee)
@@ -76,6 +80,7 @@ export class EmployeeResolver {
     return this.employeeService.update(currentEntity, args);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
@@ -87,6 +92,7 @@ export class EmployeeResolver {
     return this.employeeService.disable(currentEntity, employeeId);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
@@ -98,6 +104,7 @@ export class EmployeeResolver {
     return this.employeeService.enable(currentEntity, employeeId);
   }
 
+  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Delete, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)

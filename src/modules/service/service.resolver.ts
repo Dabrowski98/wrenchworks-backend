@@ -33,6 +33,7 @@ import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { CloseOneServiceArgs } from './custom-dto/close-one-service.args';
 
 @Resolver(() => Service)
 export class ServiceResolver {
@@ -93,8 +94,16 @@ export class ServiceResolver {
     return this.serviceService.delete(currentEntity, args);
   }
 
-  //start service etc.
-  //end service etc.
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Resolve, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Service)
+  async closeService(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: CloseOneServiceArgs,
+  ): Promise<Service> {
+    return this.serviceService.close(currentEntity, args);
+  }
 
   // RESOLVE FIELDS
 

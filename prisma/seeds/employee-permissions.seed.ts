@@ -5,20 +5,21 @@ const prisma = new PrismaClient();
 const customConditions = {};
 
 const subjects = [
-  'Address',
-  'Workshop',
-  'WorkshopDetails',
-  'Employee',
-  'Customer',
-  'Service',
-  'ServiceRequest',
-  'Task',
-  'EmployeePermission',
-  'WorkshopJob',
-  'WorkshopDeviceOTP',
-  'WorkshopDevice',
-  'JobCategory',
-  'JoinWorkshopRequest',
+  'Address',                //create,       update, delete
+  'Employee',               //create, read, update, delete
+  'Customer',               //create, read, update, delete
+  'EmployeePermission',     //        read, update
+  'Guest',                  //        read, update, delete
+  'JoinWorkshopRequest',    //create, read, update, delete
+  'Service',                //create, read, update, delete, resolve
+  'ServiceRequest',         //        read, update, delete, resolve
+  'Task',                   //create, read, update, delete, resolve
+  'Vehicle',                //create, read, update, delete
+  'VehicleDetails',         //create, read, update, delete
+  'Workshop',               //              update
+  'WorkshopDetails',        //              update
+  'WorkshopDevice',         //        read, update,       , resolve
+  'WorkshopJob',            //create, read, update, delete
 ];
 
 enum Action {
@@ -26,6 +27,7 @@ enum Action {
   Read = 'Read',
   Update = 'Update',
   Delete = 'Delete',
+  Resolve = 'Resolve',
 }
 
 async function seedEmployeePermissions() {

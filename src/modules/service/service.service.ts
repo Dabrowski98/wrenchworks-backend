@@ -24,6 +24,7 @@ import { ForbiddenError, subject } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { isEmployeePayload } from 'src/common/utils/type-guards';
 import { accessibleBy } from '@casl/prisma';
+import { CloseOneServiceArgs } from './custom-dto/close-one-service.args';
 
 @Injectable()
 export class ServiceService {
@@ -129,6 +130,37 @@ export class ServiceService {
       .delete(args)
       .then(() => true)
       .catch(() => false);
+  }
+
+  async close(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: CloseOneServiceArgs,
+  ): Promise<Service> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const service = await this.prisma.service.findUnique({
+      where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
+    });
+
+    if (!service) throw new RecordNotFoundError(Service);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Service', service),
+    );
+
+    return this.prisma.service.update({
+      where: args.where,
+      data: {
+        ...args.data,
+        resolvedAt: new Date(),
+        resolvedBy: isEmployeePayload(currentEntity)
+          ? currentEntity.employeeId
+          : undefined,
+      },
+    });
   }
 
   // RESOLVE METHODS

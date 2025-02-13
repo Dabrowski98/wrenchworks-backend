@@ -71,7 +71,7 @@ export class ServiceRequestResolver {
   }
 
   // ADMIN, EMPLOYEE
-  @CheckAbilities({ action: Action.Update, subject: 'ServiceRequest' })
+  @CheckAbilities({ action: Action.Resolve, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => ServiceRequest)
   async acceptServiceRequest(
@@ -82,7 +82,7 @@ export class ServiceRequestResolver {
   }
 
   // ADMIN, EMPLOYEE
-  @CheckAbilities({ action: Action.Update, subject: 'ServiceRequest' })
+  @CheckAbilities({ action: Action.Resolve, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => ServiceRequest)
   async rejectServiceRequest(

@@ -46,7 +46,7 @@ export class CustomerResolver {
   }
 
   // ADMIN, EMPLOYEE
-  // @CheckAbilities({ action: Action.Read, subject: 'Customer' })
+  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Customer)
   customer(

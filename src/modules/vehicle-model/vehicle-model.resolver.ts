@@ -90,7 +90,7 @@ export class VehicleModelResolver {
     return this.vehicleModelService.vehicleBrand(vehicleModel.modelId);
   }
 
-  // ADMIN, USER (his own), EMPLOYEE (for customer)
+  
   @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
   @ResolveField(() => [Vehicle])
   async vehicles(@Parent() vehicleModel: VehicleModel): Promise<Vehicle[]> {

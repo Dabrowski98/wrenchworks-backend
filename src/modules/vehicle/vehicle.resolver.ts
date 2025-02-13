@@ -78,6 +78,8 @@ export class VehicleResolver {
   }
 
   // ADMIN, USER (his own), EMPLOYEE (for customer and workshop)
+  @CheckAbilities({ action: Action.Update, subject: 'Vehicle' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Vehicle)
   async updateVehicle(
     @CurrentEntity() currentEntity: JwtEmployeePayload,
