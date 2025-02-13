@@ -2263,6 +2263,8 @@ type Mutation {
   rejectServiceRequest(serviceRequestId: BigInt!): ServiceRequest!
   removeDevice(deviceId: BigInt!): Boolean!
   removePermissionsFromEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
+  removeUserAccount(password: String!, userId: BigInt): Boolean!
+  renameSessionData(data: RenameSessionDataInput!, where: SessionDataWhereUniqueInput!): SessionData!
   requestDeviceRegistration(data: RequestDeviceRegistrationInput!): Boolean!
   sendJoinWorkshopRequest(data: JoinWorkshopRequestCreateInput!): JoinWorkshopRequest!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
@@ -2540,6 +2542,7 @@ enum NullsOrder {
 type Query {
   address(where: AddressWhereUniqueInput!): Address!
   addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
+  cancelServiceRequest(serviceRequestId: BigInt!): [ServiceRequest!]!
   customer(where: CustomerWhereUniqueInput!): Customer!
   customers(cursor: CustomerWhereUniqueInput, distinct: [CustomerScalarFieldEnum!], orderBy: [CustomerOrderByWithRelationInput!], skip: Int, take: Int, where: CustomerWhereInput): [Customer!]!
   employee(where: EmployeeWhereUniqueInput!): Employee!
@@ -2591,6 +2594,11 @@ input RegisterWorkshopInput {
 type RegisterWorkshopResponse {
   ownerEmployee: Employee!
   workshop: Workshop!
+}
+
+input RenameSessionDataInput {
+  deviceInfo: String
+  deviceName: String
 }
 
 input RequestDeviceRegistrationInput {

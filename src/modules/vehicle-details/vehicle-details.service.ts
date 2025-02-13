@@ -28,7 +28,7 @@ export class VehicleDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: CreateOneVehicleDetailsArgs,
   ): Promise<VehicleDetails> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const vehicle = await this.prisma.vehicle.findUnique({
       where: args.data.vehicle.connect,
       include: { customer: { select: { workshopId: true, userId: true } } },
@@ -51,7 +51,7 @@ export class VehicleDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueVehicleDetailsArgs,
   ): Promise<VehicleDetails> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const vehicleDetails = await this.prisma.vehicleDetails.findFirst({
       where: { AND: [accessibleBy(ability).VehicleDetails, args.where] },
     });
@@ -63,7 +63,7 @@ export class VehicleDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args?: FindManyVehicleDetailsArgs,
   ): Promise<VehicleDetails[]> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.vehicleDetails.findMany({
       where: {
         AND: [accessibleBy(ability).VehicleDetails, args?.where || {}],
@@ -75,7 +75,7 @@ export class VehicleDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneVehicleDetailsArgs,
   ): Promise<VehicleDetails> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
 
     const vehicleDetails = await this.prisma.vehicleDetails.findUnique({
       where: args.where,
@@ -100,7 +100,7 @@ export class VehicleDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: DeleteOneVehicleDetailsArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
 
     const vehicleDetails = await this.prisma.vehicleDetails.findUnique({
       where: args.where,

@@ -38,7 +38,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     args: CreateOneUserReportArgs,
   ): Promise<UserReport> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const user = await this.prisma.user.findUnique({
       where: { userId: args.data.user.connect.userId },
     });
@@ -95,7 +95,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     args: FindUniqueUserReportArgs,
   ): Promise<UserReport> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const userReport = await this.prisma.userReport.findFirst({
       where: { AND: [accessibleBy(ability).UserReport, args.where] },
     });
@@ -107,7 +107,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     args?: FindManyUserReportArgs,
   ): Promise<UserReport[]> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     return this.prisma.userReport.findMany({
       where: { AND: [accessibleBy(ability).UserReport, args.where || {}] },
     });
@@ -117,7 +117,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     args: UpdateOneUserReportArgs,
   ): Promise<UserReport> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const userReport = await this.prisma.userReport.findUnique({
       where: { reportId: args.where.reportId },
     });
@@ -138,7 +138,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     userReportId: bigint,
   ): Promise<UserReport> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const userReport = await this.prisma.userReport.findUnique({
       where: { reportId: userReportId },
     });
@@ -164,7 +164,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     userReportId: bigint,
   ): Promise<UserReport> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const userReport = await this.prisma.userReport.findUnique({
       where: { reportId: userReportId },
     });
@@ -190,7 +190,7 @@ export class UserReportService {
     currentUser: JwtUserPayload,
     args: DeleteOneUserReportArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const userReport = await this.prisma.userReport.findUnique({
       where: args.where,
     });

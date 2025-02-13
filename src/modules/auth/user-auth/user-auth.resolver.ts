@@ -93,4 +93,17 @@ export class UserAuthResolver {
   ): Promise<boolean> {
     return this.userAuthService.changeUserPassword(currentUser, args);
   }
+
+  // USER can remove his account
+  @CheckAbilities({ action: Action.Delete, subject: 'User' })
+  @UseGuards(UserJwtAuthGuard)
+  @Mutation(() => Boolean)
+  removeUserAccount(
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args('password') password: string,
+    @Args('userId', { type: () => GraphQLBigInt, nullable: true })
+    userId: bigint,
+  ): Promise<boolean> {
+    return this.userAuthService.removeUserAccount(currentUser, password, userId);
+  }
 }

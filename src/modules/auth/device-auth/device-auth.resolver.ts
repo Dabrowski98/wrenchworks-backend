@@ -49,7 +49,7 @@ export class DeviceAuthResolver {
   }
 
   // ADMIN, USER(Owner), EMPLOYEE
-  @CheckAbilities({ action: Action.Create, subject: 'WorkshopDevice' })
+  @CheckAbilities({ action: Action.Resolve, subject: 'WorkshopDevice' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => WorkshopDevice)
   acceptDeviceRegistration(

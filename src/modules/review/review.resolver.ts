@@ -59,7 +59,7 @@ export class ReviewResolver {
     return this.reviewService.findMany(args);
   }
 
-  // ADMIN, USER
+  // ADMIN
   @CheckAbilities({ action: Action.Moderate, subject: 'Review' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Review)

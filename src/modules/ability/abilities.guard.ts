@@ -48,9 +48,12 @@ export class AbilitiesGuard implements CanActivate {
 
     const ability = await this.abilityFactory.defineAbility(user || employee);
 
-    rules.forEach((rule) => {
-      ForbiddenError.from(ability).throwUnlessCan(rule.action, rule.subject);
-    });
+    for (const rule of rules) {
+      await ForbiddenError.from(ability).throwUnlessCan(
+        rule.action,
+        rule.subject,
+      );
+    }
     return true;
   }
 }

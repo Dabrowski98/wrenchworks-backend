@@ -37,7 +37,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: CreateOneTaskArgs,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
 
     const service = await this.prisma.service.findUnique({
       where: { serviceId: args.data.service.connect.serviceId },
@@ -66,7 +66,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueTaskArgs,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: { AND: [accessibleBy(ability).Task, args.where] },
     });
@@ -79,7 +79,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args?: FindManyTaskArgs,
   ): Promise<Task[]> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     return await this.prisma.task.findMany({
       where: { AND: [accessibleBy(ability).Task, args?.where || {}] },
     });
@@ -89,7 +89,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneTaskArgs,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: args.where,
       include: {
@@ -112,7 +112,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: DeleteOneTaskArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: args.where,
       include: {
@@ -138,7 +138,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: EditOneTaskArgs,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: args.where,
       include: {
@@ -168,7 +168,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     taskId: bigint,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: { taskId },
       include: {
@@ -208,7 +208,7 @@ export class TaskService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     taskId: bigint,
   ): Promise<Task> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const task = await this.prisma.task.findFirst({
       where: { taskId },
       include: {

@@ -32,7 +32,7 @@ export class WorkshopJobService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: CreateOneWorkshopJobArgs,
   ): Promise<WorkshopJob> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshop = await this.prisma.workshop.findUnique({
       where: { workshopId: args.data.workshop.connect.workshopId },
       include: { workshopJobs: true },
@@ -66,7 +66,7 @@ export class WorkshopJobService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneWorkshopJobArgs,
   ): Promise<WorkshopJob> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopJob = await this.prisma.workshopJob.findUnique({
       where: args.where,
       include: { workshop: true },
@@ -86,7 +86,7 @@ export class WorkshopJobService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: DeleteOneWorkshopJobArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopJob = await this.prisma.workshopJob.findUnique({
       where: args.where,
       include: { workshop: true },

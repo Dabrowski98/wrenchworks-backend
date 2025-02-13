@@ -36,7 +36,7 @@ export class WorkshopDeviceService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueWorkshopDeviceArgs,
   ): Promise<WorkshopDevice> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findFirst({
       where: { AND: [accessibleBy(ability).WorkshopDevice, args.where] },
     });
@@ -50,7 +50,7 @@ export class WorkshopDeviceService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindManyWorkshopDeviceArgs,
   ): Promise<WorkshopDevice[]> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     return await this.prisma.workshopDevice.findMany({
       where: {
         AND: [accessibleBy(ability).WorkshopDevice, args.where],
@@ -66,7 +66,7 @@ export class WorkshopDeviceService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: WorkshopDeviceChangeNameArgs,
   ): Promise<WorkshopDevice> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: args.where,
       include: { workshop: { select: { workshopId: true, ownerId: true } } },
@@ -95,7 +95,7 @@ export class WorkshopDeviceService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     deviceId: bigint,
   ): Promise<Boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: { workshopDeviceId: deviceId },
       include: { workshop: { select: { workshopId: true, ownerId: true } } },
@@ -116,7 +116,7 @@ export class WorkshopDeviceService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     deviceId: bigint,
   ): Promise<Boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopDevice = await this.prisma.workshopDevice.findUnique({
       where: { workshopDeviceId: deviceId },
       include: { workshop: { select: { workshopId: true, ownerId: true } } },

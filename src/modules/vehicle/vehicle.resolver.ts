@@ -89,6 +89,8 @@ export class VehicleResolver {
   }
 
   // ADMIN, USER (his own), EMPLOYEE (for customer and workshop)
+  @CheckAbilities({ action: Action.Delete, subject: 'Vehicle' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async deleteVehicle(
     @CurrentEntity() currentEntity: JwtEmployeePayload,

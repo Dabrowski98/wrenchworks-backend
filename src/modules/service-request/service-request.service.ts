@@ -220,6 +220,37 @@ export class ServiceRequestService {
     });
   }
 
+  async cancel(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    serviceRequestId: bigint,
+  ): Promise<ServiceRequest> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequest = await this.prisma.serviceRequest.findUnique({
+      where: { serviceRequestId },
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
+    });
+
+    if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
+    if (serviceRequest.status === 'ACCEPTED')
+      throw new BadRequestError(
+        'Cannot cancel service request that has been accepted',
+      );
+
+    return this.prisma.serviceRequest.update({
+      where: { serviceRequestId },
+      data: {
+        status: 'CANCELLED',
+        resolvedAt: new Date(),
+        resolvedBy: isEmployeePayload(currentEntity)
+          ? currentEntity.employeeId
+          : undefined,
+      },
+    });
+  }
+
   async findOne(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueServiceRequestArgs,
@@ -286,6 +317,11 @@ export class ServiceRequestService {
       Action.Delete,
       subject('ServiceRequest', serviceRequest),
     );
+
+    if (serviceRequest.status !== 'PENDING')
+      throw new BadRequestError(
+        'Cannot delete service request that is being processed',
+      );
 
     return this.prisma.serviceRequest
       .delete({ where: args.where })

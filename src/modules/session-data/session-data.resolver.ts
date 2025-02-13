@@ -26,6 +26,7 @@ import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
+import { RenameSessionDataArgs } from './custom-dto/rename-session-data.args';
 
 @Resolver(() => SessionData)
 export class SessionDataResolver {
@@ -73,6 +74,17 @@ export class SessionDataResolver {
     @Args() args: UpdateOneSessionDataArgs,
   ): Promise<SessionData> {
     return this.sessionDataService.update(currentEntity, args);
+  }
+
+  // ADMIN, USER
+  @CheckAbilities({ action: Action.Update, subject: 'SessionData' })
+  @UseGuards(UserJwtAuthGuard)
+  @Mutation(() => SessionData)
+  async renameSessionData(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: RenameSessionDataArgs,
+  ): Promise<SessionData> {
+    return this.sessionDataService.rename(currentEntity, args);
   }
 
   // RESOLVE METHODS

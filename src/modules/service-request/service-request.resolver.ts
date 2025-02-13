@@ -94,6 +94,18 @@ export class ServiceRequestResolver {
   }
 
   // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Resolve, subject: 'ServiceRequest' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Query(() => [ServiceRequest])
+  async cancelServiceRequest(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args('serviceRequestId', { type: () => GraphQLBigInt })
+    serviceRequestId: bigint,
+  ): Promise<ServiceRequest> {
+    return this.serviceRequestService.cancel(currentEntity, serviceRequestId);
+  }
+
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => ServiceRequest)
@@ -104,7 +116,7 @@ export class ServiceRequestResolver {
     return this.serviceRequestService.findOne(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [ServiceRequest])
@@ -126,7 +138,7 @@ export class ServiceRequestResolver {
     return this.serviceRequestService.update(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Delete, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)

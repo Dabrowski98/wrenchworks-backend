@@ -50,7 +50,7 @@ export class ServiceResolver {
     return this.serviceService.create(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'Service' })
   @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Service)
@@ -61,7 +61,7 @@ export class ServiceResolver {
     return this.serviceService.findOne(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'Service' })
   @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Service])

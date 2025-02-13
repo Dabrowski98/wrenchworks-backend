@@ -47,7 +47,7 @@ export class EmployeeResolver {
     return this.employeeService.create(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Employee)
@@ -58,7 +58,7 @@ export class EmployeeResolver {
     return this.employeeService.findOne(currentEntity, args);
   }
 
-  // ADMIN, EMPLOYEE
+  // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Employee])

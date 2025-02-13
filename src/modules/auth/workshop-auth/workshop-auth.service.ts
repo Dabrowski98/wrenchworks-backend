@@ -33,7 +33,7 @@ export class WorkshopAuthService {
         workshops: true,
       },
     });
-    const ability = this.userAbilityFactory.defineAbility(currentUser);
+    const ability = await this.userAbilityFactory.defineAbility(currentUser);
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
       subject('Workshop', { user } as any as Workshop),

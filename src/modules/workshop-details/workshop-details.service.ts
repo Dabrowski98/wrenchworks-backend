@@ -28,7 +28,7 @@ export class WorkshopDetailsService {
     currentUser: JwtUserPayload,
     args: CreateOneWorkshopDetailsArgs,
   ): Promise<WorkshopDetails> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const workshop = await this.prisma.workshop.findUnique({
       where: { workshopId: args.data.workshop.connect.workshopId },
       select: { workshopId: true, ownerId: true },
@@ -36,7 +36,7 @@ export class WorkshopDetailsService {
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('WorkshopDetails', {workshop} as any),
+      subject('WorkshopDetails', { workshop } as any),
     );
     return this.prisma.workshopDetails.create(args);
   }
@@ -57,7 +57,7 @@ export class WorkshopDetailsService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneWorkshopDetailsArgs,
   ): Promise<WorkshopDetails> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshopDetails = await this.prisma.workshopDetails.findUnique({
       where: args.where,
       include: { workshop: { select: { workshopId: true, ownerId: true } } },
@@ -75,7 +75,7 @@ export class WorkshopDetailsService {
     currentUser: JwtUserPayload,
     args: DeleteOneWorkshopDetailsArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const workshopDetails = await this.prisma.workshopDetails.findUnique({
       where: args.where,
       include: { workshop: { select: { workshopId: true, ownerId: true } } },

@@ -26,6 +26,7 @@ import { ServiceRequest } from '../service-request/dto';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { CheckAbilities } from '../ability';
 import { Action } from '../ability';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -33,6 +34,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => User)
   async findUserById(
     @Args('userId', { type: () => GraphQLBigInt }) userId: bigint,
@@ -42,6 +44,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => User)
   async findUserByEmail(@Args('email') email: string): Promise<User> {
     return this.userService.findOne({ where: { email } });
@@ -49,6 +52,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [User])
   async findUsers(@Args() args?: FindManyUserArgs): Promise<User[]> {
     return this.userService.findMany(args);

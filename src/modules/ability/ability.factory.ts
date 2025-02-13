@@ -115,15 +115,15 @@ export type UserAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
 export class AbilityFactory {
   constructor(private readonly prisma: PrismaService) {}
 
-  defineAbility(payload: JwtUserPayload | JwtEmployeePayload) {
+  async defineAbility(payload: JwtUserPayload | JwtEmployeePayload) {
     const { can, cannot, build } = new AbilityBuilder<UserAbility>(
       createPrismaAbility,
     );
 
     if (isUserPayload(payload))
-      UserAbilityHandler.handle(can, cannot, payload, this.prisma);
+      await UserAbilityHandler.handle(can, cannot, payload, this.prisma);
     else if (isEmployeePayload(payload))
-      EmployeeAbilityHandler.handle(can, cannot, payload, this.prisma);
+      await EmployeeAbilityHandler.handle(can, cannot, payload, this.prisma);
     else cannot(Action.Manage, 'all');
 
     cannot(Action.Read, 'User', ['password']);

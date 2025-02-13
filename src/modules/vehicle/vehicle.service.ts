@@ -41,7 +41,7 @@ export class VehicleService {
     currentUser: JwtUserPayload,
     args: CreateOneVehicleForUserArgs,
   ): Promise<Vehicle> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
       subject('Vehicle', { userId: args.data.user.connect.userId } as any),
@@ -53,7 +53,7 @@ export class VehicleService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: CreateOneVehicleArgs,
   ): Promise<Vehicle> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
@@ -67,7 +67,7 @@ export class VehicleService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: FindUniqueVehicleArgs,
   ): Promise<Vehicle> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const vehicle = await this.prisma.vehicle.findFirst({
       where: { AND: [accessibleBy(ability).Vehicle, args.where] },
     });
@@ -81,7 +81,7 @@ export class VehicleService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args?: FindManyVehicleArgs,
   ): Promise<Vehicle[]> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.vehicle.findMany({
       where: {
         AND: [accessibleBy(ability).Vehicle, args?.where || {}],
@@ -93,7 +93,7 @@ export class VehicleService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneVehicleArgs,
   ): Promise<Vehicle> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const vehicle = await this.prisma.vehicle.findUnique({
       where: args.where,
       include: { customer: { select: { workshopId: true, userId: true } } },
@@ -114,7 +114,7 @@ export class VehicleService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: DeleteOneVehicleArgs,
   ): Promise<boolean> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const vehicle = await this.prisma.vehicle.findUnique({
       where: args.where,
       include: {

@@ -137,8 +137,6 @@ export class UserAuthService {
 
     if (!decodedRefreshToken) return false;
 
-    console.log('Decoded refresh token:', decodedRefreshToken);
-
     const result = await this.sessionDataService.delete({
       where: { sessionDataId: decodedRefreshToken.jti },
     });
@@ -155,7 +153,7 @@ export class UserAuthService {
     });
     if (!user) throw new UnauthorizedError('User not found');
     if (currentUser) {
-      const ability = this.userAbilityFactory.defineAbility(currentUser);
+      const ability = await this.userAbilityFactory.defineAbility(currentUser);
       ForbiddenError.from(ability).throwUnlessCan(
         Action.Update,
         subject('User', user),
@@ -216,7 +214,7 @@ export class UserAuthService {
     changeUserPasswordArgs: ChangeUserPasswordArgs,
   ) {
     const { where, data } = changeUserPasswordArgs;
-    const ability = this.userAbilityFactory.defineAbility(currentUser);
+    const ability = await this.userAbilityFactory.defineAbility(currentUser);
     const user = await this.userService.findOneWithPassword({
       where,
     });
@@ -266,5 +264,27 @@ export class UserAuthService {
       role: UserRole.ADMIN,
     };
     return this.userService.create(userData);
+  }
+
+  async removeUserAccount(
+    currentUser: JwtUserPayload,
+    password: string,
+    userId: bigint,
+  ): Promise<boolean> {
+    const ability = await this.userAbilityFactory.defineAbility(currentUser);
+    const user = await this.userService.findOneWithPassword({
+      where: { userId },
+    });
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('User', user as any),
+    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) throw new UnauthorizedError('Invalid password');
+    
+    return this.userService
+      .delete({ where: { userId } })
+      .then(() => true)
+      .catch(() => false);
   }
 }

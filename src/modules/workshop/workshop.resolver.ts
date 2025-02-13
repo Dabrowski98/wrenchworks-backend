@@ -57,7 +57,7 @@ export class WorkshopResolver {
     return this.workshopService.update(currentEntity, args);
   }
 
-  // ADMIN, OWNER
+  // ADMIN, USER(OWNER)
   @CheckAbilities({ action: Action.Delete, subject: 'Workshop' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)

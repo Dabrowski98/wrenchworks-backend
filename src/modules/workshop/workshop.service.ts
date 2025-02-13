@@ -42,14 +42,14 @@ export class WorkshopService {
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: UpdateOneWorkshopArgs,
   ): Promise<Workshop> {
-    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
     const workshop = await this.prisma.workshop.findFirst({
       where: { workshopId: args.where.workshopId },
       select: {
         workshopId: true,
         ownerId: true,
       },
-    }); 
+    });
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
@@ -72,7 +72,7 @@ export class WorkshopService {
     currentUser: JwtUserPayload,
     args: DeleteOneWorkshopArgs,
   ): Promise<Boolean> {
-    const ability = this.abilityFactory.defineAbility(currentUser);
+    const ability = await this.abilityFactory.defineAbility(currentUser);
     const workshop = await this.findOne({
       where: { workshopId: args.where.workshopId },
     });

@@ -18,6 +18,7 @@ import { accessibleBy } from '@casl/prisma';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { ForbiddenError } from '@casl/ability';
 import { subject } from '@casl/ability';
+import { RenameSessionDataArgs } from './custom-dto/rename-session-data.args';
 @Injectable()
 export class SessionDataService {
   constructor(
@@ -95,6 +96,25 @@ export class SessionDataService {
       where: { userId },
     });
     return !!result;
+  }
+
+  async rename(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: RenameSessionDataArgs,
+  ): Promise<SessionData> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const sessionData = await this.prisma.sessionData.findUnique({
+      where: args.where,
+    });
+
+    if (!sessionData) throw new RecordNotFoundError(SessionData);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('SessionData', sessionData),
+    );
+
+    return this.prisma.sessionData.update(args);
   }
 
   // RESOLVE METHODS

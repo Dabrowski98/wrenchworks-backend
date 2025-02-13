@@ -67,7 +67,7 @@ export class CustomerService {
     args: FindManyCustomerArgs,
   ): Promise<Customer[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-    console.log("XD")
+
     return this.prisma.customer.findMany({
       where: {
         AND: [accessibleBy(ability).Customer, args.where || {}],

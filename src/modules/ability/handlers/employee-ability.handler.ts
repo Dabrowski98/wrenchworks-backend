@@ -33,6 +33,19 @@ export class EmployeeAbilityHandler {
       workshop: { is: { workshopId: employeePayload.workshopId } },
     };
 
-    console.log(permissions)
+    permissions.forEach((permission) => {
+      const action = permission.action.toLowerCase();
+      const subject = permission.subject;
+      const conditions = permission.conditions;
+
+      //swap out $workshopId with employeePayload.workshopId
+      const conditionsString = JSON.stringify(conditions);
+      const conditionsStringWithWorkshopId = conditionsString.replace(
+        /\$workshopId/g,
+        employeePayload.workshopId.toString(),
+      );
+      can(action, subject, JSON.parse(conditionsStringWithWorkshopId));
+    });
+
   }
 }
