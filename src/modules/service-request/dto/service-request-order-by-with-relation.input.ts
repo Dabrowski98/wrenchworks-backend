@@ -39,18 +39,6 @@ export class ServiceRequestOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     description?: SortOrderInput;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    resolvedAt?: SortOrderInput;
-
-    @HideField()
-    resolvedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => JobOrderByRelationAggregateInput, {nullable:true})
     @Type(() => JobOrderByRelationAggregateInput)
     @ValidateNested()

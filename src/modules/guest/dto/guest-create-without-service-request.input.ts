@@ -7,6 +7,8 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { CustomerCreateNestedOneWithoutGuestInput } from '../../customer/dto/customer-create-nested-one-without-guest.input';
 import { HideField } from '@nestjs/graphql';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class GuestCreateWithoutServiceRequestInput {
@@ -51,6 +53,4 @@ export class GuestCreateWithoutServiceRequestInput {
     @Type(() => VehicleCreateNestedOneWithoutGuestInput)
     vehicle?: VehicleCreateNestedOneWithoutGuestInput;
 
-    @HideField()
-    customer?: CustomerCreateNestedOneWithoutGuestInput;
-}
+    }

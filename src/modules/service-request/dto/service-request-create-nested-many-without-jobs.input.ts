@@ -16,9 +16,4 @@ export class ServiceRequestCreateNestedManyWithoutJobsInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutJobsInput>;
 
-    @HideField()
-    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutJobsInput>;
-
-    @HideField()
-    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
-}
+    }

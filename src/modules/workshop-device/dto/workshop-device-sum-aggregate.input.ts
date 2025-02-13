@@ -14,9 +14,6 @@ export class WorkshopDeviceSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     lastLoginBy?: true;
 
-    @HideField()
-    updatedBy?: true;
-
     @Field(() => Boolean, {nullable:true})
     acceptedBy?: true;
 }

@@ -20,9 +20,6 @@ export class VehicleCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
-    @HideField()
-    deletedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

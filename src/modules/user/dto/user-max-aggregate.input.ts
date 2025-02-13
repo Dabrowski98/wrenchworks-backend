@@ -38,12 +38,4 @@ export class UserMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     role?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    deletedAt?: true;
-}
+    }

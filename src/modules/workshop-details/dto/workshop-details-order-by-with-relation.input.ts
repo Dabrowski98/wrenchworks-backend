@@ -32,15 +32,6 @@ export class WorkshopDetailsOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     NIP?: SortOrderInput;
 
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
     @Type(() => WorkshopOrderByWithRelationInput)
     @ValidateNested()

@@ -21,6 +21,4 @@ export class VehicleMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
 
-    @HideField()
-    deletedAt?: keyof typeof SortOrder;
-}
+    }

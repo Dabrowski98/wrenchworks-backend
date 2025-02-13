@@ -6,12 +6,11 @@ import * as Validator from 'class-validator';
 import { UserReportType } from '../../prisma/dto/user-report-type.enum';
 import { UserReportReportedEntityType } from '../../prisma/dto/user-report-reported-entity-type.enum';
 import { UserReportStatus } from '../../prisma/dto/user-report-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserReportCreateManyInput {
-
-    @HideField()
-    reportId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     userId!: bigint | number;
@@ -39,12 +38,4 @@ export class UserReportCreateManyInput {
     @Validator.IsOptional()
     status?: keyof typeof UserReportStatus;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-}
+    }

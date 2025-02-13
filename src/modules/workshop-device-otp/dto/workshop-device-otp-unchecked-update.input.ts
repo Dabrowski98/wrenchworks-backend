@@ -29,6 +29,4 @@ export class WorkshopDeviceOtpUncheckedUpdateInput {
     @Validator.IsNotEmpty()
     expiresAt?: Date | string;
 
-    @HideField()
-    createdAt?: Date | string;
-}
+    }

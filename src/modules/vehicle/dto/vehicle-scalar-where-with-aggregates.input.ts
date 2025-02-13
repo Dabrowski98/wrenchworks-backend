@@ -32,6 +32,4 @@ export class VehicleScalarWhereWithAggregatesInput {
     @Field(() => BigIntWithAggregatesFilter, {nullable:true})
     modelId?: BigIntWithAggregatesFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

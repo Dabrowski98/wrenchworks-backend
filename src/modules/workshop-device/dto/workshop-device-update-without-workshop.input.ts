@@ -4,15 +4,11 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 import * as Scalars from 'graphql-scalars';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopDeviceUpdateWithoutWorkshopInput {
-
-    @HideField()
-    workshopDeviceId?: bigint | number;
-
-    @HideField()
-    serialNumber?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Device name must be a string' })
@@ -31,12 +27,6 @@ export class WorkshopDeviceUpdateWithoutWorkshopInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;

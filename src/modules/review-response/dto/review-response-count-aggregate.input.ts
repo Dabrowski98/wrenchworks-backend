@@ -23,12 +23,6 @@ export class ReviewResponseCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     originalResponseText?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     status?: true;
 

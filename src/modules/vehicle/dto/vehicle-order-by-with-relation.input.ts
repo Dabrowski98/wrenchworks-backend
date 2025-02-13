@@ -31,9 +31,6 @@ export class VehicleOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
 
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => ServiceRequestOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ServiceRequestOrderByRelationAggregateInput)
     @ValidateNested()

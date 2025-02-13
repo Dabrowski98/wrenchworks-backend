@@ -20,6 +20,4 @@ export class WorkshopDeviceOtpMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     expiresAt?: true;
 
-    @HideField()
-    createdAt?: true;
-}
+    }

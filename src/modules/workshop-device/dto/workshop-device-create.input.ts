@@ -7,12 +7,11 @@ import * as Scalars from 'graphql-scalars';
 import { WorkshopCreateNestedOneWithoutWorkshopDevicesInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-devices.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopDeviceCreateInput {
-
-    @HideField()
-    workshopDeviceId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Serial number must be a string' })
@@ -37,12 +36,6 @@ export class WorkshopDeviceCreateInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;

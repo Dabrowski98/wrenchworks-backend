@@ -26,12 +26,4 @@ export class WorkshopDetailsMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     NIP?: true;
 
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
-    @HideField()
-    deletedAt?: true;
-}
+    }

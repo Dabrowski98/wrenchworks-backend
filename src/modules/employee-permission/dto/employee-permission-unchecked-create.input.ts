@@ -7,6 +7,8 @@ import { HideField } from '@nestjs/graphql';
 import { EmployeeUncheckedCreateNestedManyWithoutPermissionsInput } from '../../employee/dto/employee-unchecked-create-nested-many-without-permissions.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class EmployeePermissionUncheckedCreateInput {
@@ -44,12 +46,6 @@ export class EmployeePermissionUncheckedCreateInput {
     @Field(() => GraphQLJSON, {nullable:true})
     @Validator.IsOptional()
     conditions?: any;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => EmployeeUncheckedCreateNestedManyWithoutPermissionsInput, {nullable:true})
     @Type(() => EmployeeUncheckedCreateNestedManyWithoutPermissionsInput)

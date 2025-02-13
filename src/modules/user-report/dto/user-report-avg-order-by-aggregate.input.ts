@@ -15,6 +15,4 @@ export class UserReportAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     reportedId?: keyof typeof SortOrder;
 
-    @HideField()
-    updatedBy?: keyof typeof SortOrder;
-}
+    }

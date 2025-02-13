@@ -35,15 +35,6 @@ export class WorkshopDetailsOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     NIP?: SortOrderInput;
 
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    updatedBy?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => WorkshopDetailsCountOrderByAggregateInput, {nullable:true})
     @Type(() => WorkshopDetailsCountOrderByAggregateInput)
     _count?: WorkshopDetailsCountOrderByAggregateInput;

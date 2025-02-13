@@ -53,9 +53,6 @@ export class VehicleDetailsWhereInput {
     @Field(() => EnumBodyColorNullableFilter, {nullable:true})
     bodyColor?: EnumBodyColorNullableFilter;
 
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-
     @Field(() => VehicleRelationFilter, {nullable:true})
     @Type(() => VehicleRelationFilter)
     @ValidateNested()

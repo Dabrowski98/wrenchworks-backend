@@ -40,9 +40,6 @@ export class VehicleDetailsOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     bodyColor?: SortOrderInput;
 
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => VehicleOrderByWithRelationInput, {nullable:true})
     @Type(() => VehicleOrderByWithRelationInput)
     @ValidateNested()

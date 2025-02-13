@@ -11,12 +11,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class UserCreateNestedOneWithoutUserReportsInput {
 
-    @HideField()
-    create?: UserCreateWithoutUserReportsInput;
-
-    @HideField()
-    connectOrCreate?: UserCreateOrConnectWithoutUserReportsInput;
-
     @Field(() => UserWhereUniqueInput, {nullable:true})
     @Type(() => UserWhereUniqueInput)
     @ValidateNested()

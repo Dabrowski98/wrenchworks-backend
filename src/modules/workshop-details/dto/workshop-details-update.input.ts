@@ -9,6 +9,8 @@ import * as Validator from 'class-validator';
 import { WorkshopDetailsStatus } from '../../prisma/dto/workshop-details-status.enum';
 import { HideField } from '@nestjs/graphql';
 import { WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-details-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopDetailsUpdateInput {
@@ -54,15 +56,4 @@ export class WorkshopDetailsUpdateInput {
     @Validator.IsOptional()
     NIP?: string;
 
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    workshop?: WorkshopUpdateOneRequiredWithoutWorkshopDetailsNestedInput;
-}
+    }

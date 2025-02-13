@@ -44,15 +44,4 @@ export class ServiceRequestScalarWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     description?: StringNullableFilter;
 
-    @HideField()
-    createdAt?: DateTimeFilter;
-
-    @HideField()
-    resolvedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableFilter;
-}
+    }

@@ -4,6 +4,8 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class ReviewResponseUncheckedUpdateWithoutChildrenResponsesInput {
@@ -31,12 +33,6 @@ export class ReviewResponseUncheckedUpdateWithoutChildrenResponsesInput {
     @Field(() => String, {nullable:true})
     @Validator.IsOptional()
     originalResponseText?: string;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
 
     @Field(() => ReviewResponseStatus, {nullable:true})
     @Validator.IsEnum(ReviewResponseStatus, { message: 'Invalid response status' })

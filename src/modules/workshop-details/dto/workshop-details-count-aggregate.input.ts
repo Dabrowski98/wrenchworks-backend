@@ -26,15 +26,6 @@ export class WorkshopDetailsCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     NIP?: true;
 
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
-    @HideField()
-    deletedAt?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

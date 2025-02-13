@@ -5,9 +5,6 @@ import { HideField } from '@nestjs/graphql';
 @InputType()
 export class SessionDataUpdateManyMutationInput {
 
-    @HideField()
-    sessionDataId?: string;
-
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 

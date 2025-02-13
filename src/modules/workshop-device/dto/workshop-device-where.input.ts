@@ -43,12 +43,6 @@ export class WorkshopDeviceWhereInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     lastLoginBy?: BigIntNullableFilter;
 
-    @HideField()
-    updatedAt?: DateTimeNullableFilter;
-
-    @HideField()
-    updatedBy?: BigIntNullableFilter;
-
     @Field(() => DateTimeNullableFilter, {nullable:true})
     acceptedAt?: DateTimeNullableFilter;
 

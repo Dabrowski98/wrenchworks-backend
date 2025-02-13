@@ -15,6 +15,8 @@ import { WorkshopJobUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../
 import { JobCategoryUncheckedUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-unchecked-update-many-without-workshops-nested.input';
 import { WorkshopDeviceOtpUncheckedUpdateOneWithoutWorkshopNestedInput } from '../../workshop-device-otp/dto/workshop-device-otp-unchecked-update-one-without-workshop-nested.input';
 import { WorkshopDeviceUncheckedUpdateManyWithoutWorkshopNestedInput } from '../../workshop-device/dto/workshop-device-unchecked-update-many-without-workshop-nested.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class WorkshopUncheckedUpdateWithoutJoinWorkshopRequestsInput {
@@ -57,18 +59,6 @@ export class WorkshopUncheckedUpdateWithoutJoinWorkshopRequestsInput {
     @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
     @Validator.IsOptional()
     isOfferingService?: boolean;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
 
     @Field(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput, {nullable:true})
     @Type(() => CustomerUncheckedUpdateManyWithoutWorkshopNestedInput)

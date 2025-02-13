@@ -52,15 +52,6 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     role?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
-    @HideField()
-    updatedAt?: SortOrderInput;
-
-    @HideField()
-    deletedAt?: SortOrderInput;
-
     @Field(() => VehicleOrderByRelationAggregateInput, {nullable:true})
     @Type(() => VehicleOrderByRelationAggregateInput)
     @ValidateNested()

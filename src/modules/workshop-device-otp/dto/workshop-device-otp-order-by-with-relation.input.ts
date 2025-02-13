@@ -25,9 +25,6 @@ export class WorkshopDeviceOtpOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     expiresAt?: keyof typeof SortOrder;
 
-    @HideField()
-    createdAt?: keyof typeof SortOrder;
-
     @Field(() => WorkshopOrderByWithRelationInput, {nullable:true})
     @Type(() => WorkshopOrderByWithRelationInput)
     @ValidateNested()

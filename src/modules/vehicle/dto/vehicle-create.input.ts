@@ -14,18 +14,6 @@ import { VehicleDetailsCreateNestedOneWithoutVehicleInput } from '../../vehicle-
 @InputType()
 export class VehicleCreateInput {
 
-    @HideField()
-    vehicleId?: bigint | number;
-
-    @HideField()
-    deletedAt?: Date | string;
-
-    @HideField()
-    serviceRequests?: ServiceRequestCreateNestedManyWithoutVehicleInput;
-
-    @HideField()
-    services?: ServiceCreateNestedManyWithoutVehicleInput;
-
     @Field(() => VehicleModelCreateNestedOneWithoutVehiclesInput, {nullable:false})
     @ValidateNested()
     @Type(() => VehicleModelCreateNestedOneWithoutVehiclesInput)
@@ -41,9 +29,6 @@ export class VehicleCreateInput {
     @ValidateNested()
     @Type(() => CustomerCreateNestedOneWithoutVehiclesInput)
     customer?: CustomerCreateNestedOneWithoutVehiclesInput;
-
-    @HideField()
-    guest?: GuestCreateNestedOneWithoutVehicleInput;
 
     @Field(() => VehicleDetailsCreateNestedOneWithoutVehicleInput, {nullable:true})
     @ValidateNested()

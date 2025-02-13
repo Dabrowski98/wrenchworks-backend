@@ -44,15 +44,4 @@ export class ServiceRequestScalarWhereWithAggregatesInput {
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     description?: StringNullableWithAggregatesFilter;
 
-    @HideField()
-    createdAt?: DateTimeWithAggregatesFilter;
-
-    @HideField()
-    resolvedAt?: DateTimeNullableWithAggregatesFilter;
-
-    @HideField()
-    resolvedBy?: BigIntNullableWithAggregatesFilter;
-
-    @HideField()
-    deletedAt?: DateTimeNullableWithAggregatesFilter;
-}
+    }

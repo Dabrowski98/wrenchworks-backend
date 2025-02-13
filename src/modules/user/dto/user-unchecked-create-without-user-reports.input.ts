@@ -16,6 +16,8 @@ import { ReviewUncheckedCreateNestedManyWithoutUserInput } from '../../review/dt
 import { ReviewResponseUncheckedCreateNestedManyWithoutUserInput } from '../../review-response/dto/review-response-unchecked-create-nested-many-without-user.input';
 import { JoinWorkshopRequestUncheckedCreateNestedManyWithoutUserInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-create-nested-many-without-user.input';
 import { SessionDataUncheckedCreateNestedManyWithoutUserInput } from '../../session-data/dto/session-data-unchecked-create-nested-many-without-user.input';
+import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
+
 
 @InputType()
 export class UserUncheckedCreateWithoutUserReportsInput {
@@ -83,15 +85,6 @@ export class UserUncheckedCreateWithoutUserReportsInput {
     @Validator.IsEnum(UserRole, { message: 'Invalid user role' })
     @Validator.IsOptional()
     role?: keyof typeof UserRole;
-
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    deletedAt?: Date | string;
 
     @Field(() => VehicleUncheckedCreateNestedManyWithoutUserInput, {nullable:true})
     @Type(() => VehicleUncheckedCreateNestedManyWithoutUserInput)

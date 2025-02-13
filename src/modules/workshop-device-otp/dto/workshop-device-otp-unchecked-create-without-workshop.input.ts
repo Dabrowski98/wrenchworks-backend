@@ -26,6 +26,4 @@ export class WorkshopDeviceOtpUncheckedCreateWithoutWorkshopInput {
     @Validator.IsNotEmpty()
     expiresAt!: Date | string;
 
-    @HideField()
-    createdAt?: Date | string;
-}
+    }

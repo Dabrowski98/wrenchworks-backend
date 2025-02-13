@@ -12,15 +12,6 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class ServiceCreateNestedManyWithoutEmployeeInput {
 
-    @HideField()
-    create?: Array<ServiceCreateWithoutEmployeeInput>;
-
-    @HideField()
-    connectOrCreate?: Array<ServiceCreateOrConnectWithoutEmployeeInput>;
-
-    @HideField()
-    createMany?: ServiceCreateManyEmployeeInputEnvelope;
-
     @Field(() => [ServiceWhereUniqueInput], {nullable:true})
     @Type(() => ServiceWhereUniqueInput)
     @ValidateNested()

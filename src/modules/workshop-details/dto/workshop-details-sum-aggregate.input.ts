@@ -11,6 +11,4 @@ export class WorkshopDetailsSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     rating?: true;
 
-    @HideField()
-    updatedBy?: true;
-}
+    }

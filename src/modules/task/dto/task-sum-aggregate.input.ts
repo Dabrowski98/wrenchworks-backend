@@ -20,12 +20,4 @@ export class TaskSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     partsCost?: true;
 
-    @HideField()
-    createdBy?: true;
-
-    @HideField()
-    updatedBy?: true;
-
-    @HideField()
-    resolvedBy?: true;
-}
+    }

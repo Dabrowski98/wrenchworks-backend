@@ -13,9 +13,6 @@ import { WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput } from '../../w
 @InputType()
 export class WorkshopJobUpdateWithoutJobInput {
 
-    @HideField()
-    workshopJobId?: bigint | number;
-
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Workshop description must be a string' })
     @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 500 characters' })
@@ -45,21 +42,4 @@ export class WorkshopJobUpdateWithoutJobInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    @HideField()
-    createdAt?: Date | string;
-
-    @HideField()
-    createdBy?: bigint | number;
-
-    @HideField()
-    updatedAt?: Date | string;
-
-    @HideField()
-    updatedBy?: bigint | number;
-
-    @HideField()
-    tasks?: TaskUpdateManyWithoutWorkshopJobNestedInput;
-
-    @HideField()
-    workshop?: WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput;
-}
+    }

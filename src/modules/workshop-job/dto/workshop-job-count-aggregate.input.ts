@@ -26,18 +26,6 @@ export class WorkshopJobCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     availability?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    createdBy?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

@@ -26,15 +26,6 @@ export class UserReportCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     status?: true;
 
-    @HideField()
-    createdAt?: true;
-
-    @HideField()
-    updatedAt?: true;
-
-    @HideField()
-    updatedBy?: true;
-
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
