@@ -26,6 +26,8 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -55,6 +57,7 @@ export class AddressResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'Address' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Address)
   async address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
@@ -63,6 +66,7 @@ export class AddressResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'Address' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Address])
   addresses(@Args() args?: FindManyAddressArgs): Promise<Address[]> {
@@ -91,10 +95,11 @@ export class AddressResolver {
   }
 
   //RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
-  @ResolveField(() => Workshop)
-  workshop(@Parent() address: Address): Promise<Workshop> {
-    return this.addressService.workshop(address.addressId);
+  @ResolveField(() => Workshop, { nullable: true })
+  workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() address: Address,
+  ): Promise<Workshop | null> {
+    return this.addressService.workshop(ability, address.addressId);
   }
 }

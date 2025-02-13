@@ -38,7 +38,7 @@ export class Job {
 
     @Field(() => [WorkshopJob], {nullable:true})
     @Type(() => WorkshopJob)
-    jobWorkshops?: Array<WorkshopJob>;
+    workshopJobs?: Array<WorkshopJob>;
 
     @Field(() => JobCount, {nullable:false})
     _count?: JobCount;

@@ -5,10 +5,9 @@ import * as Validator from 'class-validator';
 import { ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput } from '../../service-request/dto/service-request-unchecked-update-many-without-jobs-nested.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { WorkshopJobUncheckedUpdateManyWithoutJobNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-job-nested.input';
 
 @InputType()
-export class JobUncheckedUpdateInput {
+export class JobUncheckedUpdateWithoutWorkshopJobsInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     jobId?: bigint | number;
@@ -38,10 +37,4 @@ export class JobUncheckedUpdateInput {
     @ValidateNested()
     @Type(() => ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput)
     serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutJobsNestedInput;
-
-    @Field(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput, {nullable:true})
-    @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
-    @ValidateNested()
-    @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
-    workshopJobs?: WorkshopJobUncheckedUpdateManyWithoutJobNestedInput;
 }

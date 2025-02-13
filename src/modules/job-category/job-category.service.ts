@@ -12,6 +12,8 @@ import { PrismaService } from 'src/database/prisma.service';
 import { Job } from '../job/dto/job.model';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Workshop } from '../workshop/dto/workshop.model';
+import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class JobCategoryService {
@@ -46,50 +48,70 @@ export class JobCategoryService {
 
   // RESOLVE METHODS
 
-  async parent(categoryId: bigint): Promise<JobCategory | null> {
+  async parent(
+    ability: PureAbility,
+    categoryId: bigint,
+  ): Promise<JobCategory | null> {
     return (
-      await this.prisma.jobCategory.findUnique({
-        where: { categoryId },
-        include: { parent: true },
-      })
-    ).parent;
+      this.prisma.jobCategory.findFirst({
+        where: { AND: [accessibleBy(ability).JobCategory, { categoryId }] },
+      }) || null
+    );
   }
 
-  async children(categoryId: bigint): Promise<JobCategory[]> {
-    return (
-      await this.prisma.jobCategory.findUnique({
-        where: { categoryId },
-        include: { children: true },
-      })
-    ).children;
+  async children(
+    ability: PureAbility,
+    categoryId: bigint,
+  ): Promise<JobCategory[]> {
+    return await this.prisma.jobCategory.findMany({
+      where: {
+        AND: [accessibleBy(ability).JobCategory, { parentId: categoryId }],
+      },
+    });
   }
 
-  async jobs(categoryId: bigint): Promise<Job[]> {
-    return (
-      await this.prisma.jobCategory.findUnique({
-        where: { categoryId },
-        include: { jobs: true },
-      })
-    ).jobs;
+  async jobs(ability: PureAbility, categoryId: bigint): Promise<Job[]> {
+    return await this.prisma.job.findMany({
+      where: {
+        AND: [accessibleBy(ability).Job, { jobCategory: { categoryId } }],
+      },
+    });
   }
 
-  async workshops(categoryId: bigint): Promise<Workshop[]> {
-    return (
-      await this.prisma.jobCategory.findUnique({
-        where: { categoryId },
-        include: { workshops: true },
-      })
-    ).workshops;
+  async workshops(
+    ability: PureAbility,
+    categoryId: bigint,
+  ): Promise<Workshop[]> {
+    return await this.prisma.workshop.findMany({
+      where: {
+        AND: [
+          accessibleBy(ability).Workshop,
+          { jobCategories: { some: { categoryId } } },
+        ],
+      },
+    });
   }
 
-  async resolveCount(categoryId: bigint): Promise<JobCategoryCount> {
+  async resolveCount(
+    ability: PureAbility,
+    categoryId: bigint,
+  ): Promise<JobCategoryCount> {
     const counts = await this.prisma.$transaction([
-      this.prisma.jobCategory.count({ where: { categoryId } }),
+      this.prisma.jobCategory.count({
+        where: { AND: [accessibleBy(ability).JobCategory, { categoryId }] },
+      }),
       this.prisma.job.count({
-        where: { jobCategory: { categoryId } },
+        where: {
+          AND: [accessibleBy(ability).Job, { jobCategory: { categoryId } }],
+        },
       }),
       this.prisma.workshop.count({
-        where: { jobCategories: { some: { categoryId } } },
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { jobCategories: { some: { categoryId } } },
+          ],
+        },
       }),
     ]);
 

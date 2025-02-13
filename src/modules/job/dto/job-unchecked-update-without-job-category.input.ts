@@ -40,5 +40,5 @@ export class JobUncheckedUpdateWithoutJobCategoryInput {
     @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
     @ValidateNested()
     @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
-    jobWorkshops?: WorkshopJobUncheckedUpdateManyWithoutJobNestedInput;
+    workshopJobs?: WorkshopJobUncheckedUpdateManyWithoutJobNestedInput;
 }

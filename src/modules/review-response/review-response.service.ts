@@ -18,7 +18,7 @@ import {
 } from 'src/common/custom-errors/errors.config';
 import { ReviewResponseStatus } from '@prisma/client';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { Action, AbilityFactory } from '../ability/ability.factory';
 import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
@@ -207,46 +207,68 @@ export class ReviewResponseService {
 
   // RESOLVE METHODS
 
-  async parentResponse(reviewResponseId: bigint): Promise<ReviewResponse> {
+  async parentResponse(
+    ability: PureAbility,
+    reviewResponseId: bigint,
+  ): Promise<ReviewResponse> {
     return (
-      await this.prisma.reviewResponse.findUnique({
-        where: { reviewResponseId },
-        include: { parentResponse: true },
-      })
-    ).parentResponse;
+      (await this.prisma.reviewResponse.findFirst({
+        where: {
+          AND: [accessibleBy(ability).ReviewResponse, { reviewResponseId }],
+        },
+      })) || null
+    );
   }
 
-  async childrenResponses(reviewResponseId: bigint): Promise<ReviewResponse[]> {
-    return (
-      await this.prisma.reviewResponse.findUnique({
-        where: { reviewResponseId },
-        include: { childrenResponses: true },
-      })
-    ).childrenResponses;
+  async childrenResponses(
+    ability: PureAbility,
+    reviewResponseId: bigint,
+  ): Promise<ReviewResponse[]> {
+    return await this.prisma.reviewResponse.findMany({
+      where: {
+        AND: [accessibleBy(ability).ReviewResponse, { reviewResponseId }],
+      },
+    });
   }
 
-  async review(reviewResponseId: bigint): Promise<Review | null> {
+  async review(
+    ability: PureAbility,
+    reviewResponseId: bigint,
+  ): Promise<Review | null> {
     return (
-      await this.prisma.reviewResponse.findUnique({
-        where: { reviewResponseId },
-        include: { review: true },
-      })
-    ).review;
+      (await this.prisma.review.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Review, { reviewId: reviewResponseId }],
+        },
+      })) || null
+    );
   }
 
-  async user(reviewResponseId: bigint): Promise<User | null> {
+  async user(
+    ability: PureAbility,
+    reviewResponseId: bigint,
+  ): Promise<User | null> {
     return (
-      await this.prisma.reviewResponse.findUnique({
-        where: { reviewResponseId },
-        include: { user: true },
-      })
-    ).user;
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [accessibleBy(ability).User, { userId: reviewResponseId }],
+        },
+      })) || null
+    );
   }
 
-  async resolveCount(reviewResponseId: bigint): Promise<ReviewResponseCount> {
+  async resolveCount(
+    ability: PureAbility,
+    reviewResponseId: bigint,
+  ): Promise<ReviewResponseCount> {
     const [childrenResponses] = await this.prisma.$transaction([
       this.prisma.reviewResponse.count({
-        where: { parentResponseId: reviewResponseId },
+        where: {
+          AND: [
+            accessibleBy(ability).ReviewResponse,
+            { parentResponseId: reviewResponseId },
+          ],
+        },
       }),
     ]);
 

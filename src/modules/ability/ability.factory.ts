@@ -99,6 +99,18 @@ export class AbilityFactory {
       await EmployeeAbilityHandler.handle(can, cannot, payload, this.prisma);
     else cannot(Action.Manage, 'all');
 
+    can(Action.Read, 'Address')
+    can(Action.Read, 'Job')
+    can(Action.Read, 'JobCategory')
+    can(Action.Read, 'Review')
+    can(Action.Read, 'ReviewResponse')
+    can(Action.Read, 'User')
+    can(Action.Read, 'VehicleBrand')
+    can(Action.Read, 'VehicleModel')
+    can(Action.Read, 'Workshop')
+    can(Action.Read, 'WorkshopDetails')
+    can(Action.Read, 'WorkshopJob')
+
     cannot(Action.Read, 'User', ['password']);
     cannot(Action.Read, 'Employee', ['password']);
     return build();

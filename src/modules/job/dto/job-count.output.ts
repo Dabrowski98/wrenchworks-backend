@@ -9,5 +9,5 @@ export class JobCount {
     serviceRequests?: number;
 
     @Field(() => Int, {nullable:false})
-    jobWorkshops?: number;
+    workshopJobs?: number;
 }

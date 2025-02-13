@@ -21,7 +21,7 @@ import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { Prisma } from '@prisma/client';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { isEmployeePayload } from 'src/common/utils/type-guards';
 import { accessibleBy } from '@casl/prisma';
@@ -193,64 +193,101 @@ export class ServiceService {
 
   // RESOLVE METHODS
 
-  async serviceRequest(serviceId: bigint): Promise<ServiceRequest | null> {
+  async serviceRequest(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<ServiceRequest | null> {
     return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { serviceRequest: true },
-      })
-    ).serviceRequest;
+      (await this.prisma.serviceRequest.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).ServiceRequest,
+            { approvedServiceId: serviceId },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async tasks(serviceId: bigint): Promise<Task[]> {
-    return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { tasks: true },
-      })
-    ).tasks;
+  async tasks(ability: PureAbility, serviceId: bigint): Promise<Task[]> {
+    return await this.prisma.task.findMany({
+      where: {
+        AND: [accessibleBy(ability).Task, { serviceId }],
+      },
+    });
   }
 
-  async customer(serviceId: bigint): Promise<Customer | null> {
+  async customer(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<Customer | null> {
     return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { customer: true },
-      })
-    ).customer;
+      (await this.prisma.customer.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Customer,
+            { services: { some: { serviceId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async employee(serviceId: bigint): Promise<Employee | null> {
+  async employee(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<Employee | null> {
     return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { employee: true },
-      })
-    ).employee;
+      (await this.prisma.employee.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Employee,
+            { services: { some: { serviceId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async vehicle(serviceId: bigint): Promise<Vehicle | null> {
+  async vehicle(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<Vehicle | null> {
     return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { vehicle: true },
-      })
-    ).vehicle;
+      (await this.prisma.vehicle.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Vehicle,
+            { services: { some: { serviceId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshop(serviceId: bigint): Promise<Workshop | null> {
+  async workshop(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<Workshop | null> {
     return (
-      await this.prisma.service.findUnique({
-        where: { serviceId },
-        include: { workshop: true },
-      })
-    ).workshop;
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { services: { some: { serviceId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async resolveCount(serviceId: bigint): Promise<ServiceCount> {
+  async resolveCount(
+    ability: PureAbility,
+    serviceId: bigint,
+  ): Promise<ServiceCount> {
     const [tasks] = await this.prisma.$transaction([
       this.prisma.task.count({
-        where: { serviceId },
+        where: { AND: [accessibleBy(ability).Task, { serviceId }] },
       }),
     ]);
 

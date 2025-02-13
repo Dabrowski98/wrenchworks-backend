@@ -31,6 +31,8 @@ import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employe
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { EditOneTaskArgs } from './custom-dto/edit-one-task.args';
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 
 @Resolver(() => Task)
 export class TaskResolver {
@@ -136,28 +138,39 @@ export class TaskResolver {
   }
 
   // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'WorkshopJob' })
+ 
   @ResolveField(() => WorkshopJob, { nullable: true })
-  async workshopJob(@Parent() task: Task): Promise<WorkshopJob | null> {
-    return this.taskService.workshopJob(task.taskId);
+  async workshopJob(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() task: Task,
+  ): Promise<WorkshopJob | null> {
+    return this.taskService.workshopJob(
+      ability,
+      task.taskId,
+    );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+ 
   @ResolveField(() => [Employee], { nullable: true })
-  async employees(@Parent() task: Task): Promise<Employee[]> {
-    return this.taskService.employees(task.taskId);
+  async employees(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() task: Task,
+  ): Promise<Employee[]> {
+    return this.taskService.employees(ability, task.taskId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
+ 
   @ResolveField(() => Service, { nullable: true })
-  async service(@Parent() task: Task): Promise<Service | null> {
-    return this.taskService.service(task.serviceId);
+  async service(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() task: Task,
+  ): Promise<Service | null> {
+    return this.taskService.service(ability, task.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Task' })
+ 
   @ResolveField(() => TaskCount)
-  async _count(@Parent() task: Task): Promise<TaskCount> {
-    return this.taskService.resolveCount(task.taskId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() task: Task,
+  ): Promise<TaskCount> {
+    return this.taskService.resolveCount(ability, task.taskId);
   }
 }

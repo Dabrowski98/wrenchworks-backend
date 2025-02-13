@@ -27,6 +27,8 @@ import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decor
 import { CheckAbilities } from '../ability';
 import { Action } from '../ability';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -34,6 +36,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => User)
   async findUserById(
@@ -44,6 +47,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => User)
   async findUserByEmail(@Args('email') email: string): Promise<User> {
@@ -52,6 +56,7 @@ export class UserResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [User])
   async findUsers(@Args() args?: FindManyUserArgs): Promise<User[]> {
@@ -59,70 +64,95 @@ export class UserResolver {
   }
 
   // RESOLVER METHODS
-
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
+ 
   @ResolveField(() => [Vehicle])
-  vehicles(@Parent() user: User): Promise<Vehicle[]> {
-    return this.userService.vehicles(user.userId);
+  vehicles(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<Vehicle[]> {
+    return this.userService.vehicles(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
+ 
   @ResolveField(() => [ServiceRequest])
-  serviceRequests(@Parent() user: User): Promise<ServiceRequest[]> {
-    return this.userService.serviceRequests(user.userId);
+  serviceRequests(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<ServiceRequest[]> {
+    return this.userService.serviceRequests(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
+ 
   @ResolveField(() => [Customer])
-  customers(@Parent() user: User): Promise<Customer[]> {
-    return this.userService.customers(user.userId);
+  customers(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<Customer[]> {
+    return this.userService.customers(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+ 
   @ResolveField(() => [Employee])
-  employees(@Parent() user: User): Promise<Employee[]> {
-    return this.userService.employees(user.userId);
+  employees(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<Employee[]> {
+    return this.userService.employees(ability, user.userId);
   }
 
   @Public()
   @ResolveField(() => [Workshop])
-  workshops(@Parent() user: User): Promise<Workshop[]> {
-    return this.userService.workshops(user.userId);
+  workshops(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<Workshop[]> {
+    return this.userService.workshops(ability, user.userId);
   }
 
   @Public()
   @ResolveField(() => [Review])
-  reviews(@Parent() user: User): Promise<Review[]> {
-    return this.userService.reviews(user.userId);
+  reviews(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<Review[]> {
+    return this.userService.reviews(ability, user.userId);
   }
 
   @Public()
   @ResolveField(() => [ReviewResponse])
-  reviewResponses(@Parent() user: User): Promise<ReviewResponse[]> {
-    return this.userService.reviewResponses(user.userId);
+  reviewResponses(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<ReviewResponse[]> {
+    return this.userService.reviewResponses(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'UserReport' })
+ 
   @ResolveField(() => [UserReport])
-  userReports(@Parent() user: User): Promise<UserReport[]> {
-    return this.userService.userReports(user.userId);
+  userReports(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<UserReport[]> {
+    return this.userService.userReports(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'JoinWorkshopRequest' })
+ 
   @ResolveField(() => [JoinWorkshopRequest])
-  joinWorkshopRequests(@Parent() user: User): Promise<JoinWorkshopRequest[]> {
-    return this.userService.joinWorkshopRequests(user.userId);
+  joinWorkshopRequests(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<JoinWorkshopRequest[]> {
+    return this.userService.joinWorkshopRequests(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'SessionData' })
+ 
   @ResolveField(() => [SessionData])
-  sessionData(@Parent() user: User): Promise<SessionData[]> {
-    return this.userService.sessionData(user.userId);
+  sessionData(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<SessionData[]> {
+    return this.userService.sessionData(ability, user.userId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
+ 
   @ResolveField(() => UserCount)
-  async _count(@Parent() user: User): Promise<UserCount> {
-    return this.userService.resolveCount(user.userId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() user: User,
+  ): Promise<UserCount> {
+    return this.userService.resolveCount(ability, user.userId);
   }
 }

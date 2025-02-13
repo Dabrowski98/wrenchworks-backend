@@ -2,18 +2,18 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
-import { WorkshopJobUncheckedUpdateManyWithoutJobNestedInput } from '../../workshop-job/dto/workshop-job-unchecked-update-many-without-job-nested.input';
+import { ServiceRequestUncheckedCreateNestedManyWithoutJobsInput } from '../../service-request/dto/service-request-unchecked-create-nested-many-without-jobs.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
-export class JobUncheckedUpdateWithoutServiceRequestsInput {
+export class JobUncheckedCreateWithoutWorkshopJobsInput {
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     jobId?: bigint | number;
 
-    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
-    categoryId?: bigint | number;
+    @Field(() => Scalars.GraphQLBigInt, {nullable:false})
+    categoryId!: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
@@ -32,9 +32,9 @@ export class JobUncheckedUpdateWithoutServiceRequestsInput {
     @Validator.IsOptional()
     isPopular?: boolean;
 
-    @Field(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput, {nullable:true})
-    @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
+    @Field(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput, {nullable:true})
+    @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput)
     @ValidateNested()
-    @Type(() => WorkshopJobUncheckedUpdateManyWithoutJobNestedInput)
-    workshopJobs?: WorkshopJobUncheckedUpdateManyWithoutJobNestedInput;
+    @Type(() => ServiceRequestUncheckedCreateNestedManyWithoutJobsInput)
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutJobsInput;
 }

@@ -105,9 +105,9 @@ export class UserAuthService {
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.USER_REFRESH_SECRET,
     });
-    const sessions = await this.userService.sessionData(
-      decodedRefreshToken.userId,
-    );
+    const sessions = await this.prisma.sessionData.findMany({
+      where: { userId: decodedRefreshToken.userId },
+    });
 
     const sessionData = sessions.find((a) => a.deviceId === deviceId);
 
@@ -281,7 +281,7 @@ export class UserAuthService {
     );
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new UnauthorizedError('Invalid password');
-    
+
     return this.userService
       .delete({ where: { userId } })
       .then(() => true)

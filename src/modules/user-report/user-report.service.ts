@@ -20,7 +20,7 @@ import { UserReportStatus } from '@prisma/client';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { Action } from '../ability';
 import { AbilityFactory } from '../ability/ability.factory';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { UserReportReportedEntityType } from '../prisma';
 import { Review } from '../review/dto/review.model';
 import { ReviewResponse } from '../review-response/dto/review-response.model';
@@ -236,12 +236,16 @@ export class UserReportService {
 
   // RESOLVE METHODS
 
-  async user(reportId: bigint): Promise<User | null> {
+  async user(ability: PureAbility, reportId: bigint): Promise<User | null> {
     return (
-      await this.prisma.userReport.findUnique({
-        where: { reportId },
-        include: { user: true },
-      })
-    ).user;
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { userReports: { some: { reportId } } },
+          ],
+        },
+      })) || null
+    );
   }
 }

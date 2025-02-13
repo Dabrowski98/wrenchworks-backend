@@ -12,6 +12,8 @@ import {
 import { Vehicle } from '../vehicle/dto';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { VehicleBrand } from '../vehicle-brand/dto';
+import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class VehicleModelService {
@@ -49,28 +51,37 @@ export class VehicleModelService {
 
   // RESOLVE METHODS
 
-  async vehicleBrand(modelId: bigint): Promise<VehicleBrand> {
-    return (
-      await this.prisma.vehicleModel.findUnique({
-        where: { modelId },
-        include: { vehicleBrand: true },
-      })
-    ).vehicleBrand;
+  async vehicleBrand(
+    ability: PureAbility,
+    modelId: bigint,
+  ): Promise<VehicleBrand> {
+    return await this.prisma.vehicleBrand.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).VehicleBrand,
+          { vehicleModels: { some: { modelId } } },
+        ],
+      },
+    });
   }
 
-  async vehicles(modelId: bigint): Promise<Vehicle[]> {
-    return (
-      await this.prisma.vehicleModel.findUnique({
-        where: { modelId },
-        include: { vehicles: true },
-      })
-    ).vehicles;
+  async vehicles(ability: PureAbility, modelId: bigint): Promise<Vehicle[]> {
+    return await this.prisma.vehicle.findMany({
+      where: {
+        AND: [accessibleBy(ability).Vehicle, { vehicleModel: { modelId } }],
+      },
+    });
   }
 
-  async resolveCount(modelId: bigint): Promise<VehicleModelCount> {
+  async resolveCount(
+    ability: PureAbility,
+    modelId: bigint,
+  ): Promise<VehicleModelCount> {
     const [vehicles] = await this.prisma.$transaction([
       this.prisma.vehicle.count({
-        where: { modelId },
+        where: {
+          AND: [accessibleBy(ability).Vehicle, { vehicleModel: { modelId } }],
+        },
       }),
     ]);
 

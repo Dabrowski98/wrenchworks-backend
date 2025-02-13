@@ -12,9 +12,9 @@ import {
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Workshop } from '../workshop/dto';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-import { AbilityFactory } from '../ability';
+import { AbilityFactory, accessibleBy } from '../ability';
 import { Action } from '../ability';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 
 @Injectable()
@@ -96,12 +96,17 @@ export class WorkshopDetailsService {
 
   // RESOLVE METHODS
 
-  async workshop(workshopId: bigint): Promise<Workshop> {
-    return (
-      await this.prisma.workshopDetails.findUnique({
-        where: { workshopId },
-        include: { workshop: true },
-      })
-    ).workshop;
+  async workshop(
+    ability: PureAbility,
+    workshopDetailsId: bigint,
+  ): Promise<Workshop> {
+    return await this.prisma.workshop.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).Workshop,
+          { workshopDetails: { workshopId: workshopDetailsId } },
+        ],
+      },
+    });
   }
 }

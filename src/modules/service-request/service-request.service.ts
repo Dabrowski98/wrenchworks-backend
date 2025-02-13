@@ -29,7 +29,7 @@ import { Workshop } from '../workshop/dto';
 import { Guest } from '../guest/dto';
 import { User } from '../user/dto';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { isEmployeePayload } from 'src/common/utils/type-guards';
@@ -359,64 +359,106 @@ export class ServiceRequestService {
 
   // RESOLVE METHODS
 
-  async jobs(serviceRequestId: bigint): Promise<Job[]> {
-    return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { jobs: true },
-      })
-    ).jobs;
+  async jobs(ability: PureAbility, serviceRequestId: bigint): Promise<Job[]> {
+    return await this.prisma.job.findMany({
+      where: {
+        AND: [
+          accessibleBy(ability).Job,
+          { serviceRequests: { some: { serviceRequestId } } },
+        ],
+      },
+    });
   }
 
-  async approvedService(serviceRequestId: bigint): Promise<Service | null> {
+  async approvedService(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<Service | null> {
     return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { approvedService: true },
-      })
-    ).approvedService;
+      (await this.prisma.service.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Service, { serviceRequestId }],
+        },
+      })) || null
+    );
   }
 
-  async vehicle(serviceRequestId: bigint): Promise<Vehicle> {
+  async vehicle(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<Vehicle> {
     return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { vehicle: true },
-      })
-    ).vehicle;
+      (await this.prisma.vehicle.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Vehicle,
+            { serviceRequests: { some: { serviceRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshop(serviceRequestId: bigint): Promise<Workshop> {
+  async workshop(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<Workshop> {
     return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { workshop: true },
-      })
-    ).workshop;
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { serviceRequests: { some: { serviceRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async user(serviceRequestId: bigint): Promise<User | null> {
+  async user(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<User | null> {
     return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { user: true },
-      })
-    ).user;
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { serviceRequests: { some: { serviceRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async guest(serviceRequestId: bigint): Promise<Guest | null> {
+  async guest(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<Guest | null> {
     return (
-      await this.prisma.serviceRequest.findUnique({
-        where: { serviceRequestId },
-        include: { guest: true },
-      })
-    ).guest;
+      (await this.prisma.guest.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Guest,
+            { serviceRequest: { serviceRequestId } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async resolveCount(serviceRequestId: bigint): Promise<ServiceRequestCount> {
+  async resolveCount(
+    ability: PureAbility,
+    serviceRequestId: bigint,
+  ): Promise<ServiceRequestCount> {
     const [jobs] = await this.prisma.$transaction([
       this.prisma.job.count({
-        where: { serviceRequests: { some: { serviceRequestId } } },
+        where: {
+          AND: [
+            accessibleBy(ability).Job,
+            { serviceRequests: { some: { serviceRequestId } } },
+          ],
+        },
       }),
     ]);
 

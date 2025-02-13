@@ -27,6 +27,8 @@ import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employe
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { RenameSessionDataArgs } from './custom-dto/rename-session-data.args';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => SessionData)
 export class SessionDataResolver {
@@ -88,10 +90,15 @@ export class SessionDataResolver {
   }
 
   // RESOLVE METHODS
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @ResolveField(() => User)
-  async user(@Parent() sessionData: SessionData): Promise<User> {
-    return this.sessionDataService.user(sessionData.sessionDataId);
+ 
+  @ResolveField(() => User, { nullable: true })
+  async user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() sessionData: SessionData,
+  ): Promise<User | null> {
+    return this.sessionDataService.user(
+      ability,
+      sessionData.sessionDataId,
+    );
   }
 }

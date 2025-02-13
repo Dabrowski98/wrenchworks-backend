@@ -29,7 +29,8 @@ import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 @Resolver(() => Guest)
 export class GuestResolver {
   constructor(private readonly guestService: GuestService) {}
@@ -91,21 +92,27 @@ export class GuestResolver {
 
   // RESOLVE FIELDS
 
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
   @ResolveField(() => Vehicle, { nullable: true })
-  vehicle(@Parent() guest: Guest): Promise<Vehicle | null> {
-    return this.guestService.vehicle(guest.guestId);
+  vehicle(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() guest: Guest,
+  ): Promise<Vehicle | null> {
+    return this.guestService.vehicle(ability, guest.guestId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
   @ResolveField(() => ServiceRequest, { nullable: true })
-  serviceRequest(@Parent() guest: Guest): Promise<ServiceRequest | null> {
-    return this.guestService.serviceRequest(guest.guestId);
+  serviceRequest(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() guest: Guest,
+  ): Promise<ServiceRequest | null> {
+    return this.guestService.serviceRequest(ability, guest.guestId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
   @ResolveField(() => Customer, { nullable: true })
-  customer(@Parent() guest: Guest): Promise<Customer | null> {
-    return this.guestService.customer(guest.guestId);
+  customer(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() guest: Guest,
+  ): Promise<Customer | null> {
+    return this.guestService.customer(ability, guest.guestId);
   }
 }

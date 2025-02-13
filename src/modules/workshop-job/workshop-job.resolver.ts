@@ -27,6 +27,8 @@ import { Action, CheckAbilities } from '../ability';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 
 @Resolver(() => WorkshopJob)
 export class WorkshopJobResolver {
@@ -45,6 +47,7 @@ export class WorkshopJobResolver {
 
   //PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopJob' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => WorkshopJob)
   async workshopJob(
@@ -55,6 +58,7 @@ export class WorkshopJobResolver {
 
   //PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopJob' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [WorkshopJob])
   async workshopJobs(
@@ -101,28 +105,39 @@ export class WorkshopJobResolver {
   //ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Read, subject: 'Task' })
   @ResolveField(() => [Task])
-  async tasks(@Parent() workshopJob: WorkshopJob): Promise<Task[]> {
-    return this.workshopJobService.tasks(workshopJob.jobId);
+  async tasks(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshopJob: WorkshopJob,
+  ): Promise<Task[]> {
+    return this.workshopJobService.tasks(ability, workshopJob.jobId);
   }
 
   //PUBLIC
   @Public()
   @ResolveField(() => Job)
-  async job(@Parent() workshopJob: WorkshopJob): Promise<Job> {
-    return this.workshopJobService.job(workshopJob.jobId);
+  async job(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshopJob: WorkshopJob,
+  ): Promise<Job> {
+    return this.workshopJobService.job(ability, workshopJob.jobId);
   }
 
   //PUBLIC
   @Public()
   @ResolveField(() => Workshop)
-  async workshop(@Parent() workshopJob: WorkshopJob): Promise<Workshop> {
-    return this.workshopJobService.workshop(workshopJob.jobId);
+  async workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshopJob: WorkshopJob,
+  ): Promise<Workshop> {
+    return this.workshopJobService.workshop(ability, workshopJob.jobId);
   }
 
   //ADMIN, USER(Owner), EMPLOYEE
-  @CheckAbilities({ action: Action.Read, subject: 'WorkshopJob' })
   @ResolveField(() => WorkshopJobCount)
-  async _count(@Parent() workshopJob: WorkshopJob): Promise<WorkshopJobCount> {
-    return this.workshopJobService.resolveCount(workshopJob.jobId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshopJob: WorkshopJob,
+  ): Promise<WorkshopJobCount> {
+    return this.workshopJobService.resolveCount(ability, workshopJob.jobId);
   }
 }

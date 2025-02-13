@@ -35,7 +35,9 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CloseOneServiceArgs } from './custom-dto/close-one-service.args';
-
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 @Resolver(() => Service)
 export class ServiceResolver {
   constructor(private readonly serviceService: ServiceService) {}
@@ -53,7 +55,7 @@ export class ServiceResolver {
 
   // ADMIN, EMPLOYEE, USER
   @CheckAbilities({ action: Action.Read, subject: 'Service' })
-  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Service)
   async service(
     @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
@@ -118,48 +120,60 @@ export class ServiceResolver {
   }
 
   // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
+ 
   @ResolveField(() => ServiceRequest, { nullable: true })
   async serviceRequest(
+    @CurrentAbility() ability: PureAbility,
     @Parent() service: Service,
   ): Promise<ServiceRequest | null> {
-    return this.serviceService.serviceRequest(service.serviceId);
+    return this.serviceService.serviceRequest(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Task' })
+ 
   @ResolveField(() => [Task], { nullable: true })
-  async tasks(@Parent() service: Service): Promise<Task[]> {
-    return this.serviceService.tasks(service.serviceId);
+  async tasks(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<Task[]> {
+    return this.serviceService.tasks(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
+ 
   @ResolveField(() => Customer, { nullable: true })
-  async customer(@Parent() service: Service): Promise<Customer | null> {
-    return this.serviceService.customer(service.serviceId);
+  async customer(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<Customer | null> {
+    return this.serviceService.customer(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
-  @ResolveField(() => Employee)
-  async employee(@Parent() service: Service): Promise<Employee> {
-    return this.serviceService.employee(service.serviceId);
+ 
+  @ResolveField(() => Employee, { nullable: true })
+  async employee(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<Employee | null> {
+    return this.serviceService.employee(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
-  @ResolveField(() => Vehicle)
-  async vehicle(@Parent() service: Service): Promise<Vehicle> {
-    return this.serviceService.vehicle(service.serviceId);
+ 
+  @ResolveField(() => Vehicle, { nullable: true })
+  async vehicle(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<Vehicle | null> {
+    return this.serviceService.vehicle(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
-  @ResolveField(() => Workshop)
-  async workshop(@Parent() service: Service): Promise<Workshop> {
-    return this.serviceService.workshop(service.serviceId);
+ 
+  @ResolveField(() => Workshop, { nullable: true })
+  async workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<Workshop | null> {
+    return this.serviceService.workshop(ability, service.serviceId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
+ 
   @ResolveField(() => ServiceCount)
-  async _count(@Parent() service: Service): Promise<ServiceCount> {
-    return this.serviceService.resolveCount(service.serviceId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() service: Service,
+  ): Promise<ServiceCount> {
+    return this.serviceService.resolveCount(ability, service.serviceId);
   }
 }

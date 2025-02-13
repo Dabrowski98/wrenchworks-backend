@@ -21,6 +21,8 @@ import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 
 @Resolver(() => UserReport)
 export class UserReportResolver {
@@ -102,7 +104,7 @@ export class UserReportResolver {
   ): Promise<boolean> {
     return this.userReportService.delete(currentUser, args);
   }
-  
+
   // ADMIN
   @CheckAbilities({ action: Action.Delete, subject: 'UserReport' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
@@ -115,10 +117,12 @@ export class UserReportResolver {
   }
 
   // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @ResolveField(() => User)
-  async user(@Parent() userReport: UserReport): Promise<User> {
-    return this.userReportService.user(userReport.userId);
+ 
+  @ResolveField(() => User, { nullable: true })
+  async user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() userReport: UserReport,
+  ): Promise<User | null> {
+    return this.userReportService.user(ability, userReport.userId);
   }
 }

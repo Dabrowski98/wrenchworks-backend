@@ -31,6 +31,7 @@ import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user
 import { EntityType } from 'src/common/enums/entity-type.enum';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class AddressService {
@@ -127,9 +128,7 @@ export class AddressService {
       });
   }
 
-  async deleteMany(
-    args: DeleteManyAddressArgs,
-  ): Promise<boolean> {
+  async deleteMany(args: DeleteManyAddressArgs): Promise<boolean> {
     return this.prisma.address
       .deleteMany({
         where: args.where,
@@ -140,12 +139,16 @@ export class AddressService {
 
   //RESOLVE METHODS
 
-  async workshop(addressId: bigint): Promise<Workshop> {
+  async workshop(
+    ability: PureAbility,
+    addressId: bigint,
+  ): Promise<Workshop | null> {
     return (
-      await this.prisma.address.findUnique({
-        where: { addressId },
-        include: { workshop: true },
-      })
-    ).workshop;
+      this.prisma.workshop.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Workshop, { address: { addressId } }],
+        },
+      }) || null
+    );
   }
 }

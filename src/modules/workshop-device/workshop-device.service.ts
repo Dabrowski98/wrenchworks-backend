@@ -17,7 +17,7 @@ import { ServiceRequestCount } from '../service-request/dto';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
-import { subject } from '@casl/ability';
+import { PureAbility, subject } from '@casl/ability';
 import { ForbiddenError } from '@casl/ability';
 import { accessibleBy } from '@casl/prisma';
 import { WorkshopDeviceChangeNameArgs } from './custom-dto/workshop-device-change-name.args';
@@ -135,17 +135,6 @@ export class WorkshopDeviceService {
     });
   }
 
-  // RESOLVE METHODS
-
-  async workshop(workshopDeviceId: bigint): Promise<Workshop> {
-    return (
-      await this.prisma.workshopDevice.findUnique({
-        where: { workshopDeviceId },
-        include: { workshop: true },
-      })
-    ).workshop;
-  }
-
   async deleteMany(
     currentEntity: JwtEmployeePayload | JwtUserPayload,
     args: DeleteManyWorkshopDeviceArgs,
@@ -170,5 +159,23 @@ export class WorkshopDeviceService {
       })
       .then(() => true)
       .catch(() => false);
+  }
+
+  // RESOLVE METHODS
+
+  async workshop(
+    ability: PureAbility,
+    workshopDeviceId: bigint,
+  ): Promise<Workshop | null> {
+    return (
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { workshopDevices: { some: { workshopDeviceId } } },
+          ],
+        },
+      })) || null
+    );
   }
 }

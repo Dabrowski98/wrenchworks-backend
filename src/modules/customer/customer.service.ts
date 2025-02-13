@@ -23,6 +23,7 @@ import { subject } from '@casl/ability';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class CustomerService {
@@ -149,51 +150,39 @@ export class CustomerService {
 
   // RESOLVER METHODS
 
-  async services(
-    currentEntity: JwtEmployeePayload | JwtUserPayload,
-    customerId: bigint,
-  ): Promise<Service[]> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    return await this.prisma.service.findMany({
+  async services(ability: PureAbility, customerId: bigint): Promise<Service[]> {
+    return this.prisma.service.findMany({
       where: {
         AND: [accessibleBy(ability).Service, { customerId }],
       },
     });
   }
 
-  async guest(
-    currentEntity: JwtEmployeePayload | JwtUserPayload,
-    customerId: bigint,
-  ): Promise<Guest | null> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    return await this.prisma.guest.findFirst({
-      where: {
-        AND: [accessibleBy(ability).Guest, { customer: { customerId } }],
-      },
-    });
+  async guest(ability: PureAbility, customerId: bigint): Promise<Guest | null> {
+    return (
+      this.prisma.guest.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Guest, { customer: { customerId } }],
+        },
+      }) || null
+    );
   }
 
-  async user(
-    currentEntity: JwtEmployeePayload | JwtUserPayload,
-    customerId: bigint,
-  ): Promise<User | null> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    return await this.prisma.user.findFirst({
-      where: {
-        AND: [
-          accessibleBy(ability).User,
-          { customers: { some: { customerId } } },
-        ],
-      },
-    });
+  async user(ability: PureAbility, customerId: bigint): Promise<User | null> {
+    return (
+      this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { customers: { some: { customerId } } },
+          ],
+        },
+      }) || null
+    );
   }
 
-  async vehicles(
-    currentEntity: JwtEmployeePayload | JwtUserPayload,
-    customerId: bigint,
-  ): Promise<Vehicle[]> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    return await this.prisma.vehicle.findMany({
+  async vehicles(ability: PureAbility, customerId: bigint): Promise<Vehicle[]> {
+    return this.prisma.vehicle.findMany({
       where: {
         AND: [accessibleBy(ability).Vehicle, { customerId }],
       },
@@ -201,24 +190,32 @@ export class CustomerService {
   }
 
   async workshop(
-    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    ability: PureAbility,
     customerId: bigint,
   ): Promise<Workshop | null> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    return await this.prisma.workshop.findFirst({
-      where: {
-        AND: [
-          accessibleBy(ability).Workshop,
-          { customers: { some: { customerId } } },
-        ],
-      },
-    });
+    return (
+      this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { customers: { some: { customerId } } },
+          ],
+        },
+      }) || null
+    );
   }
 
-  async resolveCount(customerId: bigint): Promise<CustomerCount> {
+  async resolveCount(
+    ability: PureAbility,
+    customerId: bigint,
+  ): Promise<CustomerCount> {
     const counts = await this.prisma.$transaction([
-      this.prisma.service.count({ where: { customerId } }),
-      this.prisma.vehicle.count({ where: { customerId } }),
+      this.prisma.service.count({
+        where: { AND: [accessibleBy(ability).Service, { customerId }] },
+      }),
+      this.prisma.vehicle.count({
+        where: { AND: [accessibleBy(ability).Vehicle, { customerId }] },
+      }),
     ]);
 
     const [services, vehicles] = counts;

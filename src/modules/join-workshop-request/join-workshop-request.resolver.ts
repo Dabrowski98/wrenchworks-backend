@@ -31,6 +31,8 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => JoinWorkshopRequest)
 export class JoinWorkshopRequestResolver {
@@ -132,33 +134,36 @@ export class JoinWorkshopRequestResolver {
     return this.joinWorkshopRequestService.deleteMany(currentEntity, args);
   }
 
-  // RESOLVE FIELDS
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
+  // RESOLVE FIELDS 
   @ResolveField(() => Employee, { nullable: true })
   employee(
+    @CurrentAbility() ability: PureAbility,
     @Parent() joinWorkshopRequest: JoinWorkshopRequest,
   ): Promise<Employee | null> {
     return this.joinWorkshopRequestService.employee(
+      ability,
       joinWorkshopRequest.joinWorkshopRequestId,
     );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
+ 
   @ResolveField(() => Workshop, { nullable: true })
   workshop(
+    @CurrentAbility() ability: PureAbility,
     @Parent() joinWorkshopRequest: JoinWorkshopRequest,
   ): Promise<Workshop | null> {
     return this.joinWorkshopRequestService.workshop(
+      ability,
       joinWorkshopRequest.joinWorkshopRequestId,
     );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
+ 
   @ResolveField(() => User, { nullable: true })
   user(
+    @CurrentAbility() ability: PureAbility,
     @Parent() joinWorkshopRequest: JoinWorkshopRequest,
   ): Promise<User | null> {
     return this.joinWorkshopRequestService.user(
+      ability,
       joinWorkshopRequest.joinWorkshopRequestId,
     );
   }

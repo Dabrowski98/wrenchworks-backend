@@ -16,7 +16,7 @@ import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { accessibleBy } from '@casl/prisma';
 import { AbilityFactory, Action } from '../ability/ability.factory';
-import { ForbiddenError } from '@casl/ability';
+import { ForbiddenError, PureAbility } from '@casl/ability';
 import { subject } from '@casl/ability';
 import { RenameSessionDataArgs } from './custom-dto/rename-session-data.args';
 @Injectable()
@@ -120,14 +120,16 @@ export class SessionDataService {
 
   // RESOLVE METHODS
 
-  async user(sessionDataId: string): Promise<User> {
+  async user(ability: PureAbility, sessionDataId: string): Promise<User> {
     return (
-      await this.prisma.sessionData.findUnique({
-        where: { sessionDataId: sessionDataId },
-        include: {
-          user: true,
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { sessionData: { some: { sessionDataId } } },
+          ],
         },
-      })
-    ).user;
+      })) || null
+    );
   }
 }

@@ -22,6 +22,10 @@ import { VehicleBrandService } from './vehicle-brand.service';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards/user-jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 
 @Resolver(() => VehicleBrand)
 export class VehicleBrandResolver {
@@ -39,6 +43,8 @@ export class VehicleBrandResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'VehicleBrand' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => VehicleBrand)
   async vehicleBrand(
     @Args() args: FindUniqueVehicleBrandArgs,
@@ -48,6 +54,8 @@ export class VehicleBrandResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'VehicleBrand' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [VehicleBrand])
   async vehicleBrands(
     @Args() args?: FindManyVehicleBrandArgs,
@@ -79,19 +87,21 @@ export class VehicleBrandResolver {
 
   // PUBLIC
   @Public()
-  @ResolveField(() => [VehicleModel])
+  @ResolveField(() => [VehicleModel], { nullable: true })
   async vehicleModels(
+    @CurrentAbility() ability: PureAbility,
     @Parent() vehicleBrand: VehicleBrand,
   ): Promise<VehicleModel[]> {
-    return this.vehicleBrandService.vehicleModels(vehicleBrand.brandName);
+    return this.vehicleBrandService.vehicleModels(ability, vehicleBrand.brandName);
   }
 
   // PUBLIC
   @Public()
   @ResolveField(() => VehicleBrandCount)
   async _count(
+    @CurrentAbility() ability: PureAbility,
     @Parent() vehicleBrand: VehicleBrand,
   ): Promise<VehicleBrandCount> {
-    return this.vehicleBrandService.resolveCount(vehicleBrand.brandName);
+    return this.vehicleBrandService.resolveCount(ability, vehicleBrand.brandName);
   }
 }

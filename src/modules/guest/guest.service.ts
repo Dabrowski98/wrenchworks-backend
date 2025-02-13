@@ -18,6 +18,7 @@ import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employe
 import { ForbiddenError, subject } from '@casl/ability';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class GuestService {
@@ -134,30 +135,42 @@ export class GuestService {
 
   //RESOLVE METHODS
 
-  async vehicle(guestId: bigint): Promise<Vehicle> {
+  async customer(
+    ability: PureAbility,
+    guestId: bigint,
+  ): Promise<Customer | null> {
     return (
-      await this.prisma.guest.findUnique({
-        where: { guestId },
-        include: { vehicle: true },
-      })
-    ).vehicle;
+      this.prisma.customer.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Customer, { guest: { guestId } }],
+        },
+      }) || null
+    );
   }
 
-  async serviceRequest(guestId: bigint): Promise<ServiceRequest> {
+  async vehicle(
+    ability: PureAbility,
+    guestId: bigint,
+  ): Promise<Vehicle | null> {
     return (
-      await this.prisma.guest.findUnique({
-        where: { guestId },
-        include: { serviceRequest: true },
-      })
-    ).serviceRequest;
+      this.prisma.vehicle.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Vehicle, { guest: { guestId } }],
+        },
+      }) || null
+    );
   }
 
-  async customer(guestId: bigint): Promise<Customer> {
+  async serviceRequest(
+    ability: PureAbility,
+    guestId: bigint,
+  ): Promise<ServiceRequest | null> {
     return (
-      await this.prisma.guest.findUnique({
-        where: { guestId },
-        include: { customer: true },
-      })
-    ).customer;
+      this.prisma.serviceRequest.findFirst({
+        where: {
+          AND: [accessibleBy(ability).ServiceRequest, { guest: { guestId } }],
+        },
+      }) || null
+    );
   }
 }

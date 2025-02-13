@@ -51,5 +51,5 @@ export class JobWhereInput {
     @Type(() => WorkshopJobListRelationFilter)
     @ValidateNested()
     @Type(() => WorkshopJobListRelationFilter)
-    jobWorkshops?: WorkshopJobListRelationFilter;
+    workshopJobs?: WorkshopJobListRelationFilter;
 }

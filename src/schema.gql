@@ -1473,9 +1473,9 @@ type Job {
   isPopular: Boolean!
   jobCategory: JobCategory!
   jobId: BigInt!
-  jobWorkshops: [WorkshopJob!]
   name: String
   serviceRequests: [ServiceRequest!]
+  workshopJobs: [WorkshopJob!]
 }
 
 type JobAvgAggregate {
@@ -1681,8 +1681,8 @@ input JobCategoryWhereUniqueInput {
 }
 
 type JobCount {
-  jobWorkshops: Int!
   serviceRequests: Int!
+  workshopJobs: Int!
 }
 
 type JobCountAggregate {
@@ -1705,13 +1705,8 @@ input JobCreateNestedManyWithoutServiceRequestsInput {
   connect: [JobWhereUniqueInput!]
 }
 
-input JobCreateNestedOneWithoutJobWorkshopsInput {
+input JobCreateNestedOneWithoutWorkshopJobsInput {
   connect: JobWhereUniqueInput
-}
-
-input JobCreateOrConnectWithoutJobWorkshopsInput {
-  create: JobCreateWithoutJobWorkshopsInput!
-  where: JobWhereUniqueInput!
 }
 
 input JobCreateOrConnectWithoutServiceRequestsInput {
@@ -1719,14 +1714,19 @@ input JobCreateOrConnectWithoutServiceRequestsInput {
   where: JobWhereUniqueInput!
 }
 
-input JobCreateWithoutJobWorkshopsInput {
+input JobCreateOrConnectWithoutWorkshopJobsInput {
+  create: JobCreateWithoutWorkshopJobsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobCreateWithoutServiceRequestsInput {
   description: String
   isPopular: Boolean
   jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
   name: String
 }
 
-input JobCreateWithoutServiceRequestsInput {
+input JobCreateWithoutWorkshopJobsInput {
   description: String
   isPopular: Boolean
   jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
@@ -1765,9 +1765,9 @@ input JobOrderByWithRelationInput {
   isPopular: SortOrder
   jobCategory: JobCategoryOrderByWithRelationInput
   jobId: SortOrder
-  jobWorkshops: WorkshopJobOrderByRelationAggregateInput
   name: SortOrderInput
   serviceRequests: ServiceRequestOrderByRelationAggregateInput
+  workshopJobs: WorkshopJobOrderByRelationAggregateInput
 }
 
 input JobRelationFilter {
@@ -1829,16 +1829,16 @@ input JobUpdateManyWithoutServiceRequestsNestedInput {
   upsert: [JobUpsertWithWhereUniqueWithoutServiceRequestsInput!]
 }
 
-input JobUpdateOneRequiredWithoutJobWorkshopsNestedInput {
+input JobUpdateOneRequiredWithoutWorkshopJobsNestedInput {
   connect: JobWhereUniqueInput
-  connectOrCreate: JobCreateOrConnectWithoutJobWorkshopsInput
-  create: JobCreateWithoutJobWorkshopsInput
-  update: JobUpdateToOneWithWhereWithoutJobWorkshopsInput
-  upsert: JobUpsertWithoutJobWorkshopsInput
+  connectOrCreate: JobCreateOrConnectWithoutWorkshopJobsInput
+  create: JobCreateWithoutWorkshopJobsInput
+  update: JobUpdateToOneWithWhereWithoutWorkshopJobsInput
+  upsert: JobUpsertWithoutWorkshopJobsInput
 }
 
-input JobUpdateToOneWithWhereWithoutJobWorkshopsInput {
-  data: JobUpdateWithoutJobWorkshopsInput!
+input JobUpdateToOneWithWhereWithoutWorkshopJobsInput {
+  data: JobUpdateWithoutWorkshopJobsInput!
   where: JobWhereInput
 }
 
@@ -1847,13 +1847,13 @@ input JobUpdateWithWhereUniqueWithoutServiceRequestsInput {
   where: JobWhereUniqueInput!
 }
 
-input JobUpdateWithoutJobWorkshopsInput {
+input JobUpdateWithoutServiceRequestsInput {
   description: String
   isPopular: Boolean
   name: String
 }
 
-input JobUpdateWithoutServiceRequestsInput {
+input JobUpdateWithoutWorkshopJobsInput {
   description: String
   isPopular: Boolean
   name: String
@@ -1865,9 +1865,9 @@ input JobUpsertWithWhereUniqueWithoutServiceRequestsInput {
   where: JobWhereUniqueInput!
 }
 
-input JobUpsertWithoutJobWorkshopsInput {
-  create: JobCreateWithoutJobWorkshopsInput!
-  update: JobUpdateWithoutJobWorkshopsInput!
+input JobUpsertWithoutWorkshopJobsInput {
+  create: JobCreateWithoutWorkshopJobsInput!
+  update: JobUpdateWithoutWorkshopJobsInput!
   where: JobWhereInput
 }
 
@@ -1880,9 +1880,9 @@ input JobWhereInput {
   isPopular: BoolFilter
   jobCategory: JobCategoryRelationFilter
   jobId: BigIntFilter
-  jobWorkshops: WorkshopJobListRelationFilter
   name: StringNullableFilter
   serviceRequests: ServiceRequestListRelationFilter
+  workshopJobs: WorkshopJobListRelationFilter
 }
 
 input JobWhereUniqueInput {
@@ -1894,9 +1894,9 @@ input JobWhereUniqueInput {
   isPopular: BoolFilter
   jobCategory: JobCategoryRelationFilter
   jobId: BigInt
-  jobWorkshops: WorkshopJobListRelationFilter
   name: String
   serviceRequests: ServiceRequestListRelationFilter
+  workshopJobs: WorkshopJobListRelationFilter
 }
 
 """Note: Do not allow receiver to update this model apart from status."""
@@ -2228,6 +2228,17 @@ type Mutation {
   deleteJob(where: JobWhereUniqueInput!): Boolean!
   deleteJobCategory(where: JobCategoryWhereUniqueInput!): Boolean!
   deleteJoinWorkshopRequest(where: JoinWorkshopRequestWhereUniqueInput!): Boolean!
+  deleteManyAddress(where: AddressWhereInput): Boolean!
+  deleteManyCustomer(where: CustomerWhereInput): Boolean!
+  deleteManyEmployee(where: EmployeeWhereInput): Boolean!
+  deleteManyGuest(where: GuestWhereInput): Boolean!
+  deleteManyJoinWorkshopRequest(where: JoinWorkshopRequestWhereInput): Boolean!
+  deleteManyReview(where: ReviewWhereInput): Boolean!
+  deleteManyReviewResponse(where: ReviewResponseWhereInput): Boolean!
+  deleteManyService(where: ServiceWhereInput): Boolean!
+  deleteManyServiceRequest(where: ServiceRequestWhereInput): Boolean!
+  deleteManyTask(where: TaskWhereInput): Boolean!
+  deleteManyVehicle(where: VehicleWhereInput): Boolean!
   deleteReview(where: ReviewWhereUniqueInput!): Boolean!
   deleteReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
   deleteService(where: ServiceWhereUniqueInput!): Boolean!
@@ -5597,7 +5608,7 @@ input WorkshopJobCreateOrConnectWithoutTasksInput {
 
 input WorkshopJobCreateWithoutTasksInput {
   availability: Boolean
-  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  job: JobCreateNestedOneWithoutWorkshopJobsInput!
   maxPrice: Decimal
   minPrice: Decimal
   workshop: WorkshopCreateNestedOneWithoutWorkshopJobsInput!
@@ -5606,7 +5617,7 @@ input WorkshopJobCreateWithoutTasksInput {
 
 input WorkshopJobCreateWithoutWorkshopInput {
   availability: Boolean
-  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  job: JobCreateNestedOneWithoutWorkshopJobsInput!
   maxPrice: Decimal
   minPrice: Decimal
   workshopJobDescription: String
@@ -5693,7 +5704,7 @@ input WorkshopJobUpdateToOneWithWhereWithoutTasksInput {
 
 input WorkshopJobUpdateWithoutTasksInput {
   availability: Boolean
-  job: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput
+  job: JobUpdateOneRequiredWithoutWorkshopJobsNestedInput
   maxPrice: Decimal
   minPrice: Decimal
   workshopJobDescription: String

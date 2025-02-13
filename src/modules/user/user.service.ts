@@ -24,6 +24,8 @@ import { JoinWorkshopRequest } from '../join-workshop-request/dto';
 import { UserReport } from '../user-report/dto';
 import { Review } from '../review/dto';
 import { ReviewResponse } from '../review-response/dto';
+import { PureAbility } from '@casl/ability';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class UserService {
@@ -66,115 +68,137 @@ export class UserService {
 
   // RESOLVE METHODS
 
-  async vehicles(userId: bigint): Promise<Vehicle[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { vehicles: true },
-      })
-    ).vehicles;
+  async vehicles(ability: PureAbility, userId: bigint): Promise<Vehicle[]> {
+    return await this.prisma.vehicle.findMany({
+      where: {
+        AND: [accessibleBy(ability).Vehicle, { userId }],
+      },
+    });
   }
 
-  async serviceRequests(userId: bigint): Promise<ServiceRequest[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { serviceRequests: true },
-      })
-    ).serviceRequests;
+  async serviceRequests(
+    ability: PureAbility,
+    userId: bigint,
+  ): Promise<ServiceRequest[]> {
+    return await this.prisma.serviceRequest.findMany({
+      where: {
+        AND: [accessibleBy(ability).ServiceRequest, { userId }],
+      },
+    });
   }
 
-  async customers(userId: bigint): Promise<Customer[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { customers: true },
-      })
-    ).customers;
+  async customers(ability: PureAbility, userId: bigint): Promise<Customer[]> {
+    return await this.prisma.customer.findMany({
+      where: {
+        AND: [accessibleBy(ability).Customer, { userId }],
+      },
+    });
   }
 
-  async employees(userId: bigint): Promise<Employee[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { employees: true },
-      })
-    ).employees;
+  async employees(ability: PureAbility, userId: bigint): Promise<Employee[]> {
+    return await this.prisma.employee.findMany({
+      where: {
+        AND: [accessibleBy(ability).Employee, { userId }],
+      },
+    });
   }
 
-  async joinWorkshopRequests(userId: bigint): Promise<JoinWorkshopRequest[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { joinWorkshopRequests: true },
-      })
-    ).joinWorkshopRequests;
+  async joinWorkshopRequests(
+    ability: PureAbility,
+    userId: bigint,
+  ): Promise<JoinWorkshopRequest[]> {
+    return await this.prisma.joinWorkshopRequest.findMany({
+      where: {
+        AND: [accessibleBy(ability).JoinWorkshopRequest, { user: { userId } }],
+      },
+    });
   }
 
-  async userReports(userId: bigint): Promise<UserReport[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { userReports: true },
-      })
-    ).userReports;
+  async userReports(
+    ability: PureAbility,
+    userId: bigint,
+  ): Promise<UserReport[]> {
+    return await this.prisma.userReport.findMany({
+      where: {
+        AND: [accessibleBy(ability).UserReport, { userId }],
+      },
+    });
   }
 
-  async workshops(userId: bigint): Promise<Workshop[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { workshops: true },
-      })
-    ).workshops;
+  async workshops(ability: PureAbility, userId: bigint): Promise<Workshop[]> {
+    return await this.prisma.workshop.findMany({
+      where: {
+        AND: [accessibleBy(ability).Workshop, { user: { userId } }],
+      },
+    });
   }
 
-  async reviews(userId: bigint): Promise<Review[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { reviews: true },
-      })
-    ).reviews;
+  async reviews(ability: PureAbility, userId: bigint): Promise<Review[]> {
+    return await this.prisma.review.findMany({
+      where: {
+        AND: [accessibleBy(ability).Review, { userId }],
+      },
+    });
   }
 
-  async reviewResponses(userId: bigint): Promise<ReviewResponse[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { reviewResponses: true },
-      })
-    ).reviewResponses;
+  async reviewResponses(
+    ability: PureAbility,
+    userId: bigint,
+  ): Promise<ReviewResponse[]> {
+    return await this.prisma.reviewResponse.findMany({
+      where: {
+        AND: [accessibleBy(ability).ReviewResponse, { userId }],
+      },
+    });
   }
 
-  async sessionData(userId: bigint): Promise<SessionData[]> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { sessionData: true },
-      })
-    ).sessionData;
+  async sessionData(
+    ability: PureAbility,
+    userId: bigint,
+  ): Promise<SessionData[]> {
+    return await this.prisma.sessionData.findMany({
+      where: {
+        AND: [accessibleBy(ability).SessionData, { userId }],
+      },
+    });
   }
 
-  async resolveCount(userId: bigint): Promise<UserCount> {
+  async resolveCount(ability: PureAbility, userId: bigint): Promise<UserCount> {
     const counts = await this.prisma.$transaction([
-      this.prisma.vehicle.count({ where: { userId } }),
-      this.prisma.serviceRequest.count({ where: { userId } }),
-      this.prisma.customer.count({ where: { userId } }),
-      this.prisma.employee.count({ where: { userId } }),
+      this.prisma.vehicle.count({
+        where: { AND: [accessibleBy(ability).Vehicle, { userId }] },
+      }),
+      this.prisma.serviceRequest.count({
+        where: { AND: [accessibleBy(ability).ServiceRequest, { userId }] },
+      }),
+      this.prisma.customer.count({
+        where: { AND: [accessibleBy(ability).Customer, { userId }] },
+      }),
+      this.prisma.employee.count({
+        where: { AND: [accessibleBy(ability).Employee, { userId }] },
+      }),
       this.prisma.joinWorkshopRequest.count({
-        where: { user: { userId } },
+        where: {
+          AND: [
+            accessibleBy(ability).JoinWorkshopRequest,
+            { user: { userId } },
+          ],
+        },
       }),
-      this.prisma.userReport.count({ where: { userId } }),
+      this.prisma.userReport.count({
+        where: { AND: [accessibleBy(ability).UserReport, { userId }] },
+      }),
       this.prisma.workshop.count({
-        where: { user: { userId } },
+        where: { AND: [accessibleBy(ability).Workshop, { user: { userId } }] },
       }),
-      this.prisma.review.count({ where: { user: { userId } } }),
+      this.prisma.review.count({
+        where: { AND: [accessibleBy(ability).Review, { userId }] },
+      }),
       this.prisma.reviewResponse.count({
-        where: { user: { userId } },
+        where: { AND: [accessibleBy(ability).ReviewResponse, { userId }] },
       }),
       this.prisma.sessionData.count({
-        where: { user: { userId } },
+        where: { AND: [accessibleBy(ability).SessionData, { userId }] },
       }),
     ]);
 

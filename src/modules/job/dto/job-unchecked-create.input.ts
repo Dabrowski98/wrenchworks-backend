@@ -43,5 +43,5 @@ export class JobUncheckedCreateInput {
     @Type(() => WorkshopJobUncheckedCreateNestedManyWithoutJobInput)
     @ValidateNested()
     @Type(() => WorkshopJobUncheckedCreateNestedManyWithoutJobInput)
-    jobWorkshops?: WorkshopJobUncheckedCreateNestedManyWithoutJobInput;
+    workshopJobs?: WorkshopJobUncheckedCreateNestedManyWithoutJobInput;
 }

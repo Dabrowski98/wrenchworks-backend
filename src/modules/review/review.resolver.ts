@@ -33,6 +33,8 @@ import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 @Resolver(() => Review)
 export class ReviewResolver {
   constructor(private readonly reviewService: ReviewService) {}
@@ -51,6 +53,7 @@ export class ReviewResolver {
   // PUBLIC
   @Public()
   @CheckAbilities({ action: Action.Read, subject: 'Review' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Review)
   review(@Args() args: FindUniqueReviewArgs): Promise<Review> {
     return this.reviewService.findOne(args);
@@ -59,6 +62,7 @@ export class ReviewResolver {
   // PUBLIC
   @Public()
   @CheckAbilities({ action: Action.Read, subject: 'Review' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Review])
   reviews(@Args() args?: FindManyReviewArgs): Promise<Review[]> {
     return this.reviewService.findMany(args);
@@ -117,39 +121,48 @@ export class ReviewResolver {
     return this.reviewService.reject(reviewId);
   }
 
-  // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @ResolveField(() => User)
-  user(@Parent() review: Review): Promise<User> {
-    return this.reviewService.user(review.reviewId);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
-  @ResolveField(() => Workshop)
-  workshop(@Parent() review: Review): Promise<Workshop> {
-    return this.reviewService.workshop(review.reviewId);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
-  @ResolveField(() => [ReviewResponse], { nullable: true })
-  responses(@Parent() review: Review): Promise<ReviewResponse[]> {
-    return this.reviewService.reviewResponses(review.reviewId);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Review' })
-  @ResolveField(() => ReviewCount)
-  _count(@Parent() review: Review): Promise<ReviewCount> {
-    return this.reviewService.resolveCount(review.reviewId);
-  }
-
-  @CheckAbilities({ action: Action.Delete, subject: 'Review' })
-  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'Review' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   deleteManyReview(
     @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
     @Args() args: DeleteManyReviewArgs,
   ): Promise<boolean> {
     return this.reviewService.deleteMany(currentEntity, args);
+  }
+
+  // RESOLVE FIELDS
+
+  @ResolveField(() => User, { nullable: true })
+  user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() review: Review,
+  ): Promise<User | null> {
+    return this.reviewService.user(ability, review.reviewId);
+  }
+
+  @ResolveField(() => Workshop, { nullable: true })
+  workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() review: Review,
+  ): Promise<Workshop | null> {
+    return this.reviewService.workshop(ability, review.reviewId);
+  }
+
+  @ResolveField(() => [ReviewResponse], { nullable: true })
+  responses(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() review: Review,
+  ): Promise<ReviewResponse[]> {
+    return this.reviewService.reviewResponses(ability, review.reviewId);
+  }
+
+  @ResolveField(() => ReviewCount)
+  _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() review: Review,
+  ): Promise<ReviewCount> {
+    return this.reviewService.resolveCount(ability, review.reviewId);
   }
 }

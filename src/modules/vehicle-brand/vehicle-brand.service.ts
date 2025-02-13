@@ -14,6 +14,8 @@ import {
   VehicleBrandCount,
 } from './dto';
 import { VehicleModel } from '../vehicle-model/dto';
+import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class VehicleBrandService {
@@ -51,19 +53,32 @@ export class VehicleBrandService {
 
   // RESOLVE METHODS
 
-  async vehicleModels(brandName: string): Promise<VehicleModel[]> {
-    return (
-      await this.prisma.vehicleBrand.findUnique({
-        where: { brandName },
-        include: { vehicleModels: true },
-      })
-    ).vehicleModels;
+  async vehicleModels(
+    ability: PureAbility,
+    brandName: string,
+  ): Promise<VehicleModel[]> {
+    return await this.prisma.vehicleModel.findMany({
+      where: {
+        AND: [
+          accessibleBy(ability).VehicleModel,
+          { vehicleBrand: { brandName } },
+        ],
+      },
+    });
   }
 
-  async resolveCount(brandName: string): Promise<VehicleBrandCount> {
+  async resolveCount(
+    ability: PureAbility,
+    brandName: string,
+  ): Promise<VehicleBrandCount> {
     const [models] = await this.prisma.$transaction([
       this.prisma.vehicleModel.count({
-        where: { vehicleBrand: { brandName } },
+        where: {
+          AND: [
+            accessibleBy(ability).VehicleModel,
+            { vehicleBrand: { brandName } },
+          ],
+        },
       }),
     ]);
 

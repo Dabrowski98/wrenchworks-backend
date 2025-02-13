@@ -41,5 +41,5 @@ export class JobOrderByWithRelationInput {
     @Type(() => WorkshopJobOrderByRelationAggregateInput)
     @ValidateNested()
     @Type(() => WorkshopJobOrderByRelationAggregateInput)
-    jobWorkshops?: WorkshopJobOrderByRelationAggregateInput;
+    workshopJobs?: WorkshopJobOrderByRelationAggregateInput;
 }

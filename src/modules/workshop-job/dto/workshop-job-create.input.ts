@@ -8,7 +8,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { TaskCreateNestedManyWithoutWorkshopJobInput } from '../../task/dto/task-create-nested-many-without-workshop-job.input';
-import { JobCreateNestedOneWithoutJobWorkshopsInput } from '../../job/dto/job-create-nested-one-without-job-workshops.input';
+import { JobCreateNestedOneWithoutWorkshopJobsInput } from '../../job/dto/job-create-nested-one-without-workshop-jobs.input';
 import { ValidateNested } from 'class-validator';
 import { WorkshopCreateNestedOneWithoutWorkshopJobsInput } from '../../workshop/dto/workshop-create-nested-one-without-workshop-jobs.input';
 
@@ -44,11 +44,11 @@ export class WorkshopJobCreateInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    @Field(() => JobCreateNestedOneWithoutJobWorkshopsInput, {nullable:false})
-    @Type(() => JobCreateNestedOneWithoutJobWorkshopsInput)
+    @Field(() => JobCreateNestedOneWithoutWorkshopJobsInput, {nullable:false})
+    @Type(() => JobCreateNestedOneWithoutWorkshopJobsInput)
     @ValidateNested()
-    @Type(() => JobCreateNestedOneWithoutJobWorkshopsInput)
-    job!: JobCreateNestedOneWithoutJobWorkshopsInput;
+    @Type(() => JobCreateNestedOneWithoutWorkshopJobsInput)
+    job!: JobCreateNestedOneWithoutWorkshopJobsInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutWorkshopJobsInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutWorkshopJobsInput)

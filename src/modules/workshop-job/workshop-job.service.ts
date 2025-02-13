@@ -17,7 +17,7 @@ import {
 import { Task } from '../task/dto';
 import { Job } from '../job/dto';
 import { Workshop } from '../workshop/dto';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 import { AbilityFactory, accessibleBy, Action } from '../ability';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
@@ -136,37 +136,48 @@ export class WorkshopJobService {
 
   // RESOLVE METHODS
 
-  async tasks(workshopJobId: bigint): Promise<Task[]> {
-    return (
-      await this.prisma.workshopJob.findUnique({
-        where: { workshopJobId },
-        include: { tasks: true },
-      })
-    ).tasks;
+  async tasks(ability: PureAbility, workshopJobId: bigint): Promise<Task[]> {
+    return await this.prisma.task.findMany({
+      where: { AND: [accessibleBy(ability).Task, { workshopJobId }] },
+    });
   }
 
-  async job(workshopJobId: bigint): Promise<Job> {
+  async job(ability: PureAbility, workshopJobId: bigint): Promise<Job> {
     return (
-      await this.prisma.workshopJob.findUnique({
-        where: { workshopJobId },
-        include: { job: true },
-      })
-    ).job;
+      (await this.prisma.job.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Job,
+            { workshopJobs: { some: { workshopJobId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshop(workshopJobId: bigint): Promise<Workshop> {
+  async workshop(
+    ability: PureAbility,
+    workshopJobId: bigint,
+  ): Promise<Workshop> {
     return (
-      await this.prisma.workshopJob.findUnique({
-        where: { workshopJobId },
-        include: { workshop: true },
-      })
-    ).workshop;
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { workshopJobs: { some: { workshopJobId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async resolveCount(workshopJobId: bigint): Promise<WorkshopJobCount> {
+  async resolveCount(
+    ability: PureAbility,
+    workshopJobId: bigint,
+  ): Promise<WorkshopJobCount> {
     const [tasks] = await this.prisma.$transaction([
       this.prisma.task.count({
-        where: { workshopJobId },
+        where: { AND: [accessibleBy(ability).Task, { workshopJobId }] },
       }),
     ]);
 

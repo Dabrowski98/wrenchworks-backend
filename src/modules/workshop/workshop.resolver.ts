@@ -40,6 +40,8 @@ import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.d
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
 @Resolver(() => Workshop)
@@ -70,6 +72,7 @@ export class WorkshopResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Workshop)
   workshop(@Args() args: FindUniqueWorkshopArgs): Promise<Workshop> {
@@ -78,6 +81,7 @@ export class WorkshopResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Workshop])
   workshops(@Args() args?: FindManyWorkshopArgs): Promise<Workshop[]> {
@@ -86,69 +90,96 @@ export class WorkshopResolver {
 
   //RESOLVE FIELDS
 
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
-  @ResolveField(() => [Employee])
-  employees(@Parent() workshop: Workshop): Promise<Employee[]> {
-    return this.workshopService.employees(workshop.workshopId);
+  @ResolveField(() => [Employee], { nullable: true })
+  employees(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<Employee[]> {
+    return this.workshopService.employees(ability, workshop.workshopId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
-  @ResolveField(() => [Customer])
-  customers(@Parent() workshop: Workshop): Promise<Customer[]> {
-    return this.workshopService.customers(workshop.workshopId);
+  @ResolveField(() => [Customer], { nullable: true })
+  customers(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<Customer[] | null> {
+    return this.workshopService.customers(ability, workshop.workshopId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
-  @ResolveField(() => [Service])
-  services(@Parent() workshop: Workshop): Promise<Service[]> {
-    return this.workshopService.services(workshop.workshopId);
-  }
-
-  @Public()
-  @ResolveField(() => [JobCategory])
-  jobCategories(@Parent() workshop: Workshop): Promise<JobCategory[]> {
-    return this.workshopService.jobCategories(workshop.workshopId);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @ResolveField(() => User)
-  user(@Parent() workshop: Workshop): Promise<User> {
-    return this.workshopService.user(workshop.workshopId);
+  @ResolveField(() => [Service], { nullable: true })
+  services(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<Service[] | null> {
+    return this.workshopService.services(ability, workshop.workshopId);
   }
 
   @Public()
-  @ResolveField(() => Address)
-  address(@Parent() workshop: Workshop): Promise<Address> {
-    return this.workshopService.address(workshop.workshopId);
+  @ResolveField(() => [JobCategory], { nullable: true })
+  jobCategories(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<JobCategory[] | null> {
+    return this.workshopService.jobCategories(ability, workshop.workshopId);
+  }
+
+  @ResolveField(() => User, { nullable: true })
+  user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<User | null> {
+    return this.workshopService.user(ability, workshop.workshopId);
   }
 
   @Public()
-  @ResolveField(() => [WorkshopJob])
-  workshopJobs(@Parent() workshop: Workshop): Promise<WorkshopJob[]> {
-    return this.workshopService.workshopJobs(workshop.workshopId);
+  @ResolveField(() => Address, { nullable: true })
+  address(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<Address | null> {
+    return this.workshopService.address(ability, workshop.workshopId);
   }
 
   @Public()
-  @ResolveField(() => [Review])
-  reviews(@Parent() workshop: Workshop): Promise<Review[]> {
-    return this.workshopService.reviews(workshop.workshopId);
+  @ResolveField(() => [WorkshopJob], { nullable: true })
+  workshopJobs(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<WorkshopJob[] | null> {
+    return this.workshopService.workshopJobs(ability, workshop.workshopId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
+  @Public()
+  @ResolveField(() => [Review], { nullable: true })
+  reviews(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<Review[] | null> {
+    return this.workshopService.reviews(ability, workshop.workshopId);
+  }
+
   @ResolveField(() => [ServiceRequest])
-  serviceRequests(@Parent() workshop: Workshop): Promise<ServiceRequest[]> {
-    return this.workshopService.serviceRequests(workshop.workshopId);
+  serviceRequests(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<ServiceRequest[] | null> {
+    return this.workshopService.serviceRequests(ability, workshop.workshopId);
   }
 
   @Public()
-  @ResolveField(() => WorkshopDetails)
-  workshopDetails(@Parent() workshop: Workshop): Promise<WorkshopDetails> {
-    return this.workshopService.workshopDetails(workshop.workshopId);
+  @ResolveField(() => WorkshopDetails, { nullable: true })
+  workshopDetails(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<WorkshopDetails | null> {
+    return this.workshopService.workshopDetails(ability, workshop.workshopId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @ResolveField(() => WorkshopCount)
-  async _count(@Parent() workshop: Workshop): Promise<WorkshopCount> {
-    return this.workshopService.resolveCount(workshop.workshopId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshop: Workshop,
+  ): Promise<WorkshopCount> {
+    return this.workshopService.resolveCount(ability, workshop.workshopId);
   }
 }

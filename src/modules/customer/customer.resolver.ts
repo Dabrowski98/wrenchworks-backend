@@ -30,6 +30,8 @@ import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => Customer)
 export class CustomerResolver {
@@ -104,54 +106,51 @@ export class CustomerResolver {
 
   // RESOLVER METHODS
 
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
-  @ResolveField(() => [Service])
-  async services(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+  @ResolveField(() => [Service], { nullable: true })
+  services(
+    @CurrentAbility() ability: PureAbility,
     @Parent() customer: Customer,
   ): Promise<Service[]> {
-    return this.customerService.services(currentEntity, customer.customerId);
+    return this.customerService.services(ability, customer.customerId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Guest' })
-  @ResolveField(() => Guest)
-  async guest(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+  @ResolveField(() => Guest, { nullable: true })
+  guest(
+    @CurrentAbility() ability: PureAbility,
     @Parent() customer: Customer,
   ): Promise<Guest | null> {
-    return this.customerService.guest(currentEntity, customer.customerId);
+    return this.customerService.guest(ability, customer.customerId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @ResolveField(() => User, { nullable: true })
   user(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @CurrentAbility() ability: PureAbility,
     @Parent() customer: Customer,
   ): Promise<User | null> {
-    return this.customerService.user(currentEntity, customer.customerId);
+    return this.customerService.user(ability, customer.customerId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
   @ResolveField(() => [Vehicle], { nullable: true })
   vehicles(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @CurrentAbility() ability: PureAbility,
     @Parent() customer: Customer,
   ): Promise<Vehicle[]> {
-    return this.customerService.vehicles(currentEntity, customer.customerId);
+    return this.customerService.vehicles(ability, customer.customerId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @ResolveField(() => Workshop, { nullable: true })
   workshop(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @CurrentAbility() ability: PureAbility,
     @Parent() customer: Customer,
   ): Promise<Workshop | null> {
-    return this.customerService.workshop(currentEntity, customer.customerId);
+    return this.customerService.workshop(ability, customer.customerId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Customer' })
-  @ResolveField(() => CustomerCount)
-  _count(@Parent() customer: Customer): Promise<CustomerCount> {
-    return this.customerService.resolveCount(customer.customerId);
+  @ResolveField(() => CustomerCount, { nullable: true })
+  _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() customer: Customer,
+  ): Promise<CustomerCount> {
+    return this.customerService.resolveCount(ability, customer.customerId);
   }
 }

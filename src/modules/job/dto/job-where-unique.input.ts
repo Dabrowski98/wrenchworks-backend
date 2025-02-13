@@ -57,5 +57,5 @@ export class JobWhereUniqueInput {
     @Type(() => WorkshopJobListRelationFilter)
     @ValidateNested()
     @Type(() => WorkshopJobListRelationFilter)
-    jobWorkshops?: WorkshopJobListRelationFilter;
+    workshopJobs?: WorkshopJobListRelationFilter;
 }

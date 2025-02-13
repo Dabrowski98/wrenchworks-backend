@@ -16,6 +16,7 @@ import { AbilityFactory } from '../ability';
 import { ForbiddenError, subject } from '@casl/ability';
 import { Action } from '../ability';
 import { accessibleBy } from '@casl/prisma';
+import { PureAbility } from '@casl/ability';
 
 @Injectable()
 export class EmployeePermissionService {
@@ -139,30 +140,35 @@ export class EmployeePermissionService {
   }
 
   // Resolver field methods
-  async employees(permissionId: bigint): Promise<Employee[]> {
-    const permission = await this.prisma.employeePermission.findUnique({
+  async employees(
+    ability: PureAbility,
+    permissionId: bigint,
+  ): Promise<Employee[]> {
+    return this.prisma.employee.findMany({
       where: {
-        permissionId,
+        AND: [
+          accessibleBy(ability).Employee,
+          { permissions: { some: { permissionId } } },
+        ],
       },
-      include: { employees: true },
     });
-    return permission.employees;
   }
 
-  async resolveCount(permissionId: bigint): Promise<EmployeePermissionCount> {
-    const [employeePermissions] = await this.prisma.$transaction([
-      this.prisma.employeePermission.findUnique({
-        where: { permissionId },
-        include: {
-          _count: {
-            select: {
-              employees: true,
-            },
-          },
-        },
-      }),
-    ]);
+  async resolveCount(
+    ability: PureAbility,
+    permissionId: bigint,
+  ): Promise<EmployeePermissionCount> {
+    const employees = await this.prisma.employee.count({
+      where: {
+        AND: [
+          accessibleBy(ability).Employee,
+          { permissions: { some: { permissionId } } },
+        ],
+      },
+    });
 
-    return employeePermissions._count;
+    return {
+      employees,
+    };
   }
 }

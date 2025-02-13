@@ -20,7 +20,7 @@ import {
 import { ReviewStatus } from '../prisma';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-import { ForbiddenError } from '@casl/ability';
+import { ForbiddenError, PureAbility } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { subject } from '@casl/ability';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
@@ -181,32 +181,55 @@ export class ReviewService {
 
   // RESOLVE METHODS
 
-  async user(reviewId: bigint): Promise<User | null> {
-    const review = await this.prisma.review.findUnique({
-      where: { reviewId },
-      include: { user: true },
-    });
-    return review?.user || null;
+  async user(ability: PureAbility, reviewId: bigint): Promise<User | null> {
+    return (
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { reviews: { some: { reviewId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshop(reviewId: bigint): Promise<Workshop | null> {
-    const review = await this.prisma.review.findUnique({
-      where: { reviewId },
-      include: { workshop: true },
-    });
-    return review?.workshop || null;
+  async workshop(
+    ability: PureAbility,
+    reviewId: bigint,
+  ): Promise<Workshop | null> {
+    return (
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { reviews: { some: { reviewId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async reviewResponses(reviewId: bigint): Promise<ReviewResponse[]> {
-    return this.prisma.reviewResponse.findMany({
-      where: { reviewId },
+  async reviewResponses(
+    ability: PureAbility,
+    reviewId: bigint,
+  ): Promise<ReviewResponse[]> {
+    return await this.prisma.reviewResponse.findMany({
+      where: {
+        AND: [accessibleBy(ability).ReviewResponse, { reviewId }],
+      },
     });
   }
 
-  async resolveCount(reviewId: bigint): Promise<ReviewCount> {
+  async resolveCount(
+    ability: PureAbility,
+    reviewId: bigint,
+  ): Promise<ReviewCount> {
     const [reviewResponses] = await this.prisma.$transaction([
       this.prisma.reviewResponse.count({
-        where: { reviewId },
+        where: {
+          AND: [accessibleBy(ability).ReviewResponse, { reviewId }],
+        },
       }),
     ]);
 

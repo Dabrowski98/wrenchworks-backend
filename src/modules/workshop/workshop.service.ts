@@ -24,8 +24,8 @@ import { JobCategory } from '../job-category/dto';
 import { User } from '../user/dto';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
-import { AbilityFactory, Action } from '../ability';
-import { ForbiddenError, subject } from '@casl/ability';
+import { AbilityFactory, accessibleBy, Action } from '../ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 
 @Injectable()
 export class WorkshopService {
@@ -91,124 +91,146 @@ export class WorkshopService {
 
   //RESOLVE FIELDS
 
-  async address(workshopId: bigint): Promise<Address | null> {
+  async address(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<Address | null> {
     return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { address: true },
-      })
-    ).address;
+      this.prisma.address.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Address, { workshop: { workshopId } }],
+        },
+      }) || null
+    );
   }
 
-  async customers(workshopId: bigint): Promise<Customer[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { customers: true },
-      })
-    ).customers;
+  async customers(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<Customer[]> {
+    return await this.prisma.customer.findMany({
+      where: { AND: [accessibleBy(ability).Customer, { workshopId }] },
+    });
   }
 
-  async employees(workshopId: bigint): Promise<Employee[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { employees: true },
-      })
-    ).employees;
+  async employees(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<Employee[]> {
+    return await this.prisma.employee.findMany({
+      where: { AND: [accessibleBy(ability).Employee, { workshopId }] },
+    });
   }
 
-  async reviews(workshopId: bigint): Promise<Review[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { reviews: true },
-      })
-    ).reviews;
+  async reviews(ability: PureAbility, workshopId: bigint): Promise<Review[]> {
+    return await this.prisma.review.findMany({
+      where: { AND: [accessibleBy(ability).Review, { workshopId }] },
+    });
   }
 
-  async serviceRequests(workshopId: bigint): Promise<ServiceRequest[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { serviceRequests: true },
-      })
-    ).serviceRequests;
+  async serviceRequests(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<ServiceRequest[]> {
+    return await this.prisma.serviceRequest.findMany({
+      where: { AND: [accessibleBy(ability).ServiceRequest, { workshopId }] },
+    });
   }
 
-  async services(workshopId: bigint): Promise<Service[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { services: true },
-      })
-    ).services;
+  async services(ability: PureAbility, workshopId: bigint): Promise<Service[]> {
+    return await this.prisma.service.findMany({
+      where: { AND: [accessibleBy(ability).Service, { workshopId }] },
+    });
   }
 
-  async user(workshopId: bigint): Promise<User> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { user: true },
-      })
-    ).user;
+  async user(ability: PureAbility, workshopId: bigint): Promise<User> {
+    return await this.prisma.user.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).User,
+          { workshops: { some: { workshopId } } },
+        ],
+      },
+    });
   }
 
-  async workshopDetails(workshopId: bigint): Promise<WorkshopDetails> {
+  async workshopDetails(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<WorkshopDetails | null> {
     return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { workshopDetails: true },
-      })
-    ).workshopDetails;
+      (await this.prisma.workshopDetails.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).WorkshopDetails,
+            { workshop: { workshopId } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshopJobs(workshopId: bigint): Promise<WorkshopJob[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { workshopJobs: true },
-      })
-    ).workshopJobs;
+  async workshopJobs(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<WorkshopJob[]> {
+    return await this.prisma.workshopJob.findMany({
+      where: { AND: [accessibleBy(ability).WorkshopJob, { workshopId }] },
+    });
   }
 
-  async jobCategories(workshopId: bigint): Promise<JobCategory[]> {
-    return (
-      await this.prisma.workshop.findUnique({
-        where: { workshopId },
-        include: { jobCategories: true },
-      })
-    ).jobCategories;
+  async jobCategories(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<JobCategory[]> {
+    return await this.prisma.jobCategory.findMany({
+      where: {
+        AND: [
+          accessibleBy(ability).JobCategory,
+          { workshops: { some: { workshopId } } },
+        ],
+      },
+    });
   }
 
-  async resolveCount(workshopId: bigint): Promise<WorkshopCount> {
+  async resolveCount(
+    ability: PureAbility,
+    workshopId: bigint,
+  ): Promise<WorkshopCount> {
     const counts = await this.prisma.$transaction([
       this.prisma.customer.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).Customer, { workshopId }] },
       }),
       this.prisma.employee.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).Employee, { workshopId }] },
       }),
       this.prisma.review.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).Review, { workshopId }] },
       }),
       this.prisma.serviceRequest.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).ServiceRequest, { workshopId }] },
       }),
       this.prisma.service.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).Service, { workshopId }] },
       }),
       this.prisma.workshopJob.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).WorkshopJob, { workshopId }] },
       }),
       this.prisma.jobCategory.count({
-        where: { workshops: { some: { workshopId } } },
+        where: {
+          AND: [
+            accessibleBy(ability).JobCategory,
+            { workshops: { some: { workshopId } } },
+          ],
+        },
       }),
       this.prisma.joinWorkshopRequest.count({
-        where: { workshopId },
+        where: {
+          AND: [accessibleBy(ability).JoinWorkshopRequest, { workshopId }],
+        },
       }),
       this.prisma.workshopDevice.count({
-        where: { workshopId },
+        where: { AND: [accessibleBy(ability).WorkshopDevice, { workshopId }] },
       }),
     ]);
 

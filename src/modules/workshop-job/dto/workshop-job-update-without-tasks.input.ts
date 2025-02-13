@@ -7,7 +7,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
-import { JobUpdateOneRequiredWithoutJobWorkshopsNestedInput } from '../../job/dto/job-update-one-required-without-job-workshops-nested.input';
+import { JobUpdateOneRequiredWithoutWorkshopJobsNestedInput } from '../../job/dto/job-update-one-required-without-workshop-jobs-nested.input';
 import { ValidateNested } from 'class-validator';
 import { WorkshopUpdateOneRequiredWithoutWorkshopJobsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-jobs-nested.input';
 
@@ -43,10 +43,10 @@ export class WorkshopJobUpdateWithoutTasksInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    @Field(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput, {nullable:true})
-    @Type(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput)
+    @Field(() => JobUpdateOneRequiredWithoutWorkshopJobsNestedInput, {nullable:true})
+    @Type(() => JobUpdateOneRequiredWithoutWorkshopJobsNestedInput)
     @ValidateNested()
-    @Type(() => JobUpdateOneRequiredWithoutJobWorkshopsNestedInput)
-    job?: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput;
+    @Type(() => JobUpdateOneRequiredWithoutWorkshopJobsNestedInput)
+    job?: JobUpdateOneRequiredWithoutWorkshopJobsNestedInput;
 
     }

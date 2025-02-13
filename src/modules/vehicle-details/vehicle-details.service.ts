@@ -10,7 +10,7 @@ import {
 } from './dto';
 import { Vehicle } from '../vehicle/dto';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
-import { ForbiddenError } from '@casl/ability';
+import { ForbiddenError, PureAbility } from '@casl/ability';
 import { subject } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
@@ -129,12 +129,17 @@ export class VehicleDetailsService {
 
   // RESOLVE METHODS
 
-  async vehicle(vehicleDetailsId: bigint): Promise<Vehicle> {
-    return (
-      await this.prisma.vehicleDetails.findUnique({
-        where: { vehicleDetailsId },
-        include: { vehicle: true },
-      })
-    ).vehicle;
+  async vehicle(
+    ability: PureAbility,
+    vehicleDetailsId: bigint,
+  ): Promise<Vehicle> {
+    return await this.prisma.vehicle.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).Vehicle,
+          { vehicleDetails: { vehicleDetailsId } },
+        ],
+      },
+    });
   }
 }

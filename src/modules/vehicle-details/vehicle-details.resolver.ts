@@ -24,6 +24,8 @@ import { Action } from '../ability';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 
 @Resolver(() => VehicleDetails)
 export class VehicleDetailsResolver {
@@ -87,10 +89,11 @@ export class VehicleDetailsResolver {
   // RESOLVE FIELDS
 
   // ADMIN, USER (his own), EMPLOYEE (for customer)
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
-  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
-  @ResolveField(() => Vehicle)
-  async vehicle(@Parent() vehicleDetails: VehicleDetails): Promise<Vehicle> {
-    return this.vehicleDetailsService.vehicle(vehicleDetails.vehicleDetailsId);
+  @ResolveField(() => Vehicle, { nullable: true })
+  async vehicle(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicleDetails: VehicleDetails,
+  ): Promise<Vehicle | null> {
+    return this.vehicleDetailsService.vehicle(ability, vehicleDetails.vehicleDetailsId);
   }
 }

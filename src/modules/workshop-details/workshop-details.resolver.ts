@@ -26,6 +26,8 @@ import { UserJwtAuthGuard } from '../auth/user-auth/guards/user-jwt-auth.guard';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { PureAbility } from '@casl/ability';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
 
 @Resolver(() => WorkshopDetails)
 export class WorkshopDetailsResolver {
@@ -46,6 +48,7 @@ export class WorkshopDetailsResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopDetails' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => WorkshopDetails)
   async workshopDetails(
@@ -56,6 +59,7 @@ export class WorkshopDetailsResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopDetails' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [WorkshopDetails])
   async workshopDetailsList(
@@ -90,8 +94,12 @@ export class WorkshopDetailsResolver {
 
   @ResolveField(() => Workshop)
   async workshop(
+    @CurrentAbility() ability: PureAbility,
     @Parent() workshopDetails: WorkshopDetails,
-  ): Promise<Workshop> {
-    return this.workshopDetailsService.workshop(workshopDetails.workshopId);
+  ): Promise<Workshop | null> {
+    return this.workshopDetailsService.workshop(
+      ability,
+      workshopDetails.workshopId,
+    );
   }
 }

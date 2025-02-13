@@ -21,7 +21,7 @@ import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employe
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { isEmployeePayload } from 'src/common/utils/type-guards';
 import { AbilityFactory } from '../ability/ability.factory';
-import { ForbiddenError } from '@casl/ability';
+import { ForbiddenError, PureAbility } from '@casl/ability';
 import { Action } from '../ability';
 import { subject } from '@casl/ability';
 import { accessibleBy } from '@casl/prisma';
@@ -280,37 +280,49 @@ export class TaskService {
 
   // RESOLVE METHODS
 
-  async workshopJob(taskId: bigint): Promise<WorkshopJob | null> {
+  async workshopJob(
+    ability: PureAbility,
+    taskId: bigint,
+  ): Promise<WorkshopJob | null> {
     return (
-      await this.prisma.task.findUnique({
-        where: { taskId },
-        include: { workshopJob: true },
-      })
-    ).workshopJob;
+      (await this.prisma.workshopJob.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).WorkshopJob,
+            { tasks: { some: { taskId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async employees(taskId: bigint): Promise<Employee[]> {
-    return (
-      await this.prisma.task.findUnique({
-        where: { taskId },
-        include: { employees: true },
-      })
-    ).employees;
+  async employees(ability: PureAbility, taskId: bigint): Promise<Employee[]> {
+    return await this.prisma.employee.findMany({
+      where: {
+        AND: [accessibleBy(ability).Employee, { tasks: { some: { taskId } } }],
+      },
+    });
   }
 
-  async service(taskId: bigint): Promise<Service | null> {
+  async service(ability: PureAbility, taskId: bigint): Promise<Service | null> {
     return (
-      await this.prisma.task.findUnique({
-        where: { taskId },
-        include: { service: true },
-      })
-    ).service;
+      (await this.prisma.service.findFirst({
+        where: {
+          AND: [accessibleBy(ability).Service, { tasks: { some: { taskId } } }],
+        },
+      })) || null
+    );
   }
 
-  async resolveCount(taskId: bigint): Promise<TaskCount> {
+  async resolveCount(ability: PureAbility, taskId: bigint): Promise<TaskCount> {
     const [employees] = await this.prisma.$transaction([
       this.prisma.employee.count({
-        where: { tasks: { some: { taskId } } },
+        where: {
+          AND: [
+            accessibleBy(ability).Employee,
+            { tasks: { some: { taskId } } },
+          ],
+        },
       }),
     ]);
 

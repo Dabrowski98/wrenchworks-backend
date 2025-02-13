@@ -29,6 +29,8 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CreateOneVehicleForUserArgs } from './custom-dto/create-one-vehicle-for-user.args';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => Vehicle)
 export class VehicleResolver {
@@ -112,48 +114,69 @@ export class VehicleResolver {
   }
 
   // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
-  @ResolveField(() => [ServiceRequest])
-  async serviceRequests(@Parent() vehicle: Vehicle): Promise<ServiceRequest[]> {
-    return this.vehicleService.serviceRequests(vehicle.vehicleId);
+ 
+  @ResolveField(() => [ServiceRequest], { nullable: true })
+  async serviceRequests(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<ServiceRequest[]> {
+    return this.vehicleService.serviceRequests(ability, vehicle.vehicleId);
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
-  @ResolveField(() => [Service])
-  async services(@Parent() vehicle: Vehicle): Promise<Service[]> {
-    return this.vehicleService.services(vehicle.vehicleId);
+ 
+  @ResolveField(() => [Service], { nullable: true })
+  async services(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<Service[]> {
+    return this.vehicleService.services(ability, vehicle.vehicleId);
   }
 
   @Public()
-  @ResolveField(() => VehicleModel)
-  async vehicleModel(@Parent() vehicle: Vehicle): Promise<VehicleModel> {
-    return this.vehicleService.vehicleModel(vehicle.vehicleId);
+  @ResolveField(() => VehicleModel, { nullable: true })
+  async vehicleModel(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<VehicleModel | null> {
+    return this.vehicleService.vehicleModel(ability, vehicle.vehicleId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @ResolveField(() => User)
-  async user(@Parent() vehicle: Vehicle): Promise<User> {
-    return this.vehicleService.user(vehicle.vehicleId);
+  async user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<User | null> {
+    return this.vehicleService.user(ability, vehicle.vehicleId);
   }
 
-  @ResolveField(() => Customer)
-  async customer(@Parent() vehicle: Vehicle): Promise<Customer> {
-    return this.vehicleService.customer(vehicle.vehicleId);
+  @ResolveField(() => Customer, { nullable: true })
+  async customer(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<Customer | null> {
+    return this.vehicleService.customer(ability, vehicle.vehicleId);
   }
 
-  @ResolveField(() => Guest)
-  async guest(@Parent() vehicle: Vehicle): Promise<Guest> {
-    return this.vehicleService.guest(vehicle.vehicleId);
+  @ResolveField(() => Guest, { nullable: true })
+  async guest(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<Guest | null> {
+    return this.vehicleService.guest(ability, vehicle.vehicleId);
   }
 
-  @ResolveField(() => VehicleDetails)
-  async vehicleDetails(@Parent() vehicle: Vehicle): Promise<VehicleDetails> {
-    return this.vehicleService.vehicleDetails(vehicle.vehicleId);
+  @ResolveField(() => VehicleDetails, { nullable: true })
+  async vehicleDetails(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<VehicleDetails | null> {
+    return this.vehicleService.vehicleDetails(ability, vehicle.vehicleId);
   }
 
   @ResolveField(() => VehicleCount)
-  async _count(@Parent() vehicle: Vehicle): Promise<VehicleCount> {
-    return this.vehicleService.resolveCount(vehicle.vehicleId);
+  async _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() vehicle: Vehicle,
+  ): Promise<VehicleCount> {
+    return this.vehicleService.resolveCount(ability, vehicle.vehicleId);
   }
 }

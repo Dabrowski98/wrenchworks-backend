@@ -26,6 +26,8 @@ import { EmployeePermissionService } from './employee-permission.service';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { GraphQLBigInt } from 'graphql-scalars';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => EmployeePermission)
 export class EmployeePermissionResolver {
@@ -124,22 +126,24 @@ export class EmployeePermissionResolver {
 
   // RESOLVER METHODS
 
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
   @ResolveField(() => [Employee], { nullable: true })
   employees(
+    @CurrentAbility() ability: PureAbility,
     @Parent() employeePermission: EmployeePermission,
   ): Promise<Employee[]> {
     return this.employeePermissionService.employees(
+      ability,
       employeePermission.permissionId,
     );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'EmployeePermission' })
-  @ResolveField(() => EmployeePermissionCount)
+  @ResolveField(() => EmployeePermissionCount, { nullable: true })
   _count(
+    @CurrentAbility() ability: PureAbility,
     @Parent() employeePermission: EmployeePermission,
   ): Promise<EmployeePermissionCount> {
     return this.employeePermissionService.resolveCount(
+      ability,
       employeePermission.permissionId,
     );
   }

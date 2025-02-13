@@ -46,6 +46,8 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { IpAddress } from 'src/common/decorators/headers-decorators/ip-address.decorator';
 import { CreateServiceRequestAsGuestArgs } from './custom-dto/create-service-request-as-guest.args';
 import { AcceptServiceRequestArgs } from './custom-dto/accept-service-request.args';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 @Resolver(() => ServiceRequest)
 export class ServiceRequestResolver {
   constructor(private readonly serviceRequestService: ServiceRequestService) {}
@@ -161,53 +163,77 @@ export class ServiceRequestResolver {
   }
 
   // RESOLVE FIELDS
-
-  @CheckAbilities({ action: Action.Read, subject: 'Job' })
+ 
   @ResolveField(() => [Job])
-  async jobs(@Parent() serviceRequest: ServiceRequest): Promise<Job[]> {
-    return this.serviceRequestService.jobs(serviceRequest.serviceRequestId);
+  async jobs(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() serviceRequest: ServiceRequest,
+  ): Promise<Job[]> {
+    return this.serviceRequestService.jobs(ability, serviceRequest.serviceRequestId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
   @ResolveField(() => Service)
   async approvedService(
+    @CurrentAbility() ability: PureAbility,
     @Parent() serviceRequest: ServiceRequest,
   ): Promise<Service> {
     return this.serviceRequestService.approvedService(
+      ability,
+      serviceRequest.serviceRequestId,
+    );
+  }
+ 
+  @ResolveField(() => Vehicle)
+  async vehicle(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() serviceRequest: ServiceRequest,
+  ): Promise<Vehicle> {
+    return this.serviceRequestService.vehicle(
+      ability,
       serviceRequest.serviceRequestId,
     );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Vehicle' })
-  @ResolveField(() => Vehicle)
-  async vehicle(@Parent() serviceRequest: ServiceRequest): Promise<Vehicle> {
-    return this.serviceRequestService.vehicle(serviceRequest.serviceRequestId);
+  @ResolveField(() => Workshop, { nullable: true })
+  async workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() serviceRequest: ServiceRequest,
+  ): Promise<Workshop | null> {
+    return this.serviceRequestService.workshop(
+      ability,
+      serviceRequest.serviceRequestId,
+    );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
-  @ResolveField(() => Workshop)
-  async workshop(@Parent() serviceRequest: ServiceRequest): Promise<Workshop> {
-    return this.serviceRequestService.workshop(serviceRequest.serviceRequestId);
-  }
-
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
+ 
   @ResolveField(() => User)
-  async user(@Parent() serviceRequest: ServiceRequest): Promise<User> {
-    return this.serviceRequestService.user(serviceRequest.serviceRequestId);
+  async user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() serviceRequest: ServiceRequest,
+  ): Promise<User> {
+    return this.serviceRequestService.user(
+      ability,
+      serviceRequest.serviceRequestId,
+    );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'Guest' })
-  @ResolveField(() => Guest)
-  async guest(@Parent() serviceRequest: ServiceRequest): Promise<Guest> {
-    return this.serviceRequestService.guest(serviceRequest.serviceRequestId);
+ 
+  @ResolveField(() => Guest, { nullable: true })
+  async guest(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() serviceRequest: ServiceRequest,
+  ): Promise<Guest | null> {
+    return this.serviceRequestService.guest(
+      ability,
+      serviceRequest.serviceRequestId,
+    );
   }
-
-  @CheckAbilities({ action: Action.Read, subject: 'ServiceRequest' })
+ 
   @ResolveField(() => ServiceRequestCount)
   async _count(
+    @CurrentAbility() ability: PureAbility,
     @Parent() serviceRequest: ServiceRequest,
   ): Promise<ServiceRequestCount> {
     return this.serviceRequestService.resolveCount(
+      ability,
       serviceRequest.serviceRequestId,
     );
   }

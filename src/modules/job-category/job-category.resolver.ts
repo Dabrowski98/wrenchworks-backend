@@ -24,6 +24,10 @@ import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 
 @Resolver(() => JobCategory)
 export class JobCategoryResolver {
@@ -40,6 +44,8 @@ export class JobCategoryResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => JobCategory)
   jobCategory(@Args() args: FindUniqueJobCategoryArgs): Promise<JobCategory> {
     return this.jobCategoryService.findOne(args);
@@ -47,8 +53,12 @@ export class JobCategoryResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [JobCategory])
-  jobCategories(@Args() args?: FindManyJobCategoryArgs): Promise<JobCategory[]> {
+  jobCategories(
+    @Args() args?: FindManyJobCategoryArgs,
+  ): Promise<JobCategory[]> {
     return this.jobCategoryService.findMany(args);
   }
 
@@ -70,33 +80,46 @@ export class JobCategoryResolver {
 
   // RESOLVE FIELDS
 
-  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
   @ResolveField(() => JobCategory, { nullable: true })
-  parent(@Parent() jobCategory: JobCategory): Promise<JobCategory | null> {
-    return this.jobCategoryService.parent(jobCategory.categoryId);
+  parent(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() jobCategory: JobCategory,
+  ): Promise<JobCategory | null> {
+    return this.jobCategoryService.parent(ability, jobCategory.categoryId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
   @ResolveField(() => [JobCategory], { nullable: true })
-  children(@Parent() jobCategory: JobCategory): Promise<JobCategory[]> {
-    return this.jobCategoryService.children(jobCategory.categoryId);
+  children(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() jobCategory: JobCategory,
+  ): Promise<JobCategory[]> {
+    return this.jobCategoryService.children(ability, jobCategory.categoryId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Job' })
-  @ResolveField(() => [Job])
-  jobs(@Parent() jobCategory: JobCategory): Promise<Job[]> {
-    return this.jobCategoryService.jobs(jobCategory.categoryId);
+  @ResolveField(() => [Job], { nullable: true })
+  jobs(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() jobCategory: JobCategory,
+  ): Promise<Job[]> {
+    return this.jobCategoryService.jobs(ability, jobCategory.categoryId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @ResolveField(() => [Workshop], { nullable: true })
-  workshops(@Parent() jobCategory: JobCategory): Promise<Workshop[]> {
-    return this.jobCategoryService.workshops(jobCategory.categoryId);
+  workshops(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() jobCategory: JobCategory,
+  ): Promise<Workshop[]> {
+    return this.jobCategoryService.workshops(ability, jobCategory.categoryId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'JobCategory' })
-  @ResolveField(() => JobCategoryCount)
-  _count(@Parent() jobCategory: JobCategory): Promise<JobCategoryCount> {
-    return this.jobCategoryService.resolveCount(jobCategory.categoryId);
+  @ResolveField(() => JobCategoryCount, { nullable: true })
+  _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() jobCategory: JobCategory,
+  ): Promise<JobCategoryCount> {
+    return this.jobCategoryService.resolveCount(
+      ability,
+      jobCategory.categoryId,
+    );
   }
 }

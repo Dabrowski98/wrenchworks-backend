@@ -29,10 +29,12 @@ import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
-import { OrGuards } from '../ability/or-guards';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
-import { CurrentEntity } from '../ability/current-entity.decorator';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => ReviewResponse)
 export class ReviewResponseResolver {
@@ -51,6 +53,8 @@ export class ReviewResponseResolver {
 
   // PUBLIC
   @Public()
+  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => ReviewResponse)
   reviewResponse(
     @Args() args: FindUniqueReviewResponseArgs,
@@ -142,44 +146,57 @@ export class ReviewResponseResolver {
 
   // RESOLVE FIELDS
 
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => ReviewResponse, { nullable: true })
   parentResponse(
+    @CurrentAbility() ability: PureAbility,
     @Parent() reviewResponse: ReviewResponse,
   ): Promise<ReviewResponse | null> {
     return this.reviewResponseService.parentResponse(
+      ability,
       reviewResponse.reviewResponseId,
     );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => [ReviewResponse], { nullable: true })
   childrenResponses(
+    @CurrentAbility() ability: PureAbility,
     @Parent() reviewResponse: ReviewResponse,
   ): Promise<ReviewResponse[]> {
     return this.reviewResponseService.childrenResponses(
+      ability,
       reviewResponse.reviewResponseId,
     );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Review' })
   @ResolveField(() => Review, { nullable: true })
-  review(@Parent() reviewResponse: ReviewResponse): Promise<Review | null> {
-    return this.reviewResponseService.review(reviewResponse.reviewResponseId);
+  review(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() reviewResponse: ReviewResponse,
+  ): Promise<Review | null> {
+    return this.reviewResponseService.review(
+      ability,
+      reviewResponse.reviewResponseId,
+    );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
-  @ResolveField(() => User)
-  user(@Parent() reviewResponse: ReviewResponse): Promise<User> {
-    return this.reviewResponseService.user(reviewResponse.reviewResponseId);
+  @ResolveField(() => User, { nullable: true })
+  user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() reviewResponse: ReviewResponse,
+  ): Promise<User | null> {
+    return this.reviewResponseService.user(
+      ability,
+      reviewResponse.reviewResponseId,
+    );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'ReviewResponse' })
   @ResolveField(() => ReviewResponseCount)
   _count(
+    @CurrentAbility() ability: PureAbility,
     @Parent() reviewResponse: ReviewResponse,
   ): Promise<ReviewResponseCount> {
     return this.reviewResponseService.resolveCount(
+      ability,
       reviewResponse.reviewResponseId,
     );
   }

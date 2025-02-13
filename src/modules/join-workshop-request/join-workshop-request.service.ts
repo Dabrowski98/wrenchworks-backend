@@ -21,7 +21,7 @@ import { JoinWorkshopRequestStatus } from '@prisma/client';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { AbilityFactory, accessibleBy, Action } from '../ability';
-import { ForbiddenError, subject } from '@casl/ability';
+import { ForbiddenError, PureAbility, subject } from '@casl/ability';
 
 @Injectable()
 export class JoinWorkshopRequestService {
@@ -238,30 +238,51 @@ export class JoinWorkshopRequestService {
 
   // RESOLVE METHODS
 
-  async employee(joinWorkshopRequestId: bigint): Promise<Employee | null> {
+  async employee(
+    ability: PureAbility,
+    joinWorkshopRequestId: bigint,
+  ): Promise<Employee | null> {
     return (
-      await this.prisma.joinWorkshopRequest.findUnique({
-        where: { joinWorkshopRequestId },
-        include: { employee: true },
-      })
-    ).employee;
+      (await this.prisma.employee.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Employee,
+            { joinWorkshopRequests: { some: { joinWorkshopRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async workshop(joinWorkshopRequestId: bigint): Promise<Workshop | null> {
+  async workshop(
+    ability: PureAbility,
+    joinWorkshopRequestId: bigint,
+  ): Promise<Workshop | null> {
     return (
-      await this.prisma.joinWorkshopRequest.findUnique({
-        where: { joinWorkshopRequestId },
-        include: { workshop: true },
-      })
-    ).workshop;
+      (await this.prisma.workshop.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).Workshop,
+            { joinWorkshopRequests: { some: { joinWorkshopRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 
-  async user(joinWorkshopRequestId: bigint): Promise<User | null> {
+  async user(
+    ability: PureAbility,
+    joinWorkshopRequestId: bigint,
+  ): Promise<User | null> {
     return (
-      await this.prisma.joinWorkshopRequest.findUnique({
-        where: { joinWorkshopRequestId },
-        include: { user: true },
-      })
-    ).user;
+      (await this.prisma.user.findFirst({
+        where: {
+          AND: [
+            accessibleBy(ability).User,
+            { joinWorkshopRequests: { some: { joinWorkshopRequestId } } },
+          ],
+        },
+      })) || null
+    );
   }
 }

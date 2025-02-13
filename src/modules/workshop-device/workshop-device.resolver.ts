@@ -27,6 +27,8 @@ import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { WorkshopDeviceChangeNameArgs } from './custom-dto/workshop-device-change-name.args';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => WorkshopDevice)
 export class WorkshopDeviceResolver {
@@ -109,8 +111,14 @@ export class WorkshopDeviceResolver {
   // RESOLVE FIELDS
 
   @Public()
-  @ResolveField(() => Workshop)
-  workshop(@Parent() workshopDevice: WorkshopDevice) {
-    return this.workshopDeviceService.workshop(workshopDevice.workshopDeviceId);
+  @ResolveField(() => Workshop, { nullable: true })
+  workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() workshopDevice: WorkshopDevice,
+  ): Promise<Workshop | null> {
+    return this.workshopDeviceService.workshop(
+      ability,
+      workshopDevice.workshopDeviceId,
+    );
   }
 }

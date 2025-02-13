@@ -32,6 +32,8 @@ import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-enti
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { CurrentAbility } from 'src/common/decorators/jwt-decorators/current-ability.decorator';
+import { PureAbility } from '@casl/ability';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -130,41 +132,54 @@ export class EmployeeResolver {
 
   // RESOLVER METHODS
 
-  @CheckAbilities({ action: Action.Read, subject: 'Service' })
   @ResolveField(() => [Service], { nullable: true })
-  services(@Parent() employee: Employee): Promise<Service[]> {
-    return this.employeeService.services(employee.employeeId);
+  services(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() employee: Employee,
+  ): Promise<Service[]> {
+    return this.employeeService.services(ability, employee.employeeId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'JoinWorkshopRequest' })
   @ResolveField(() => [JoinWorkshopRequest], { nullable: true })
   joinWorkshopRequests(
+    @CurrentAbility() ability: PureAbility,
     @Parent() employee: Employee,
   ): Promise<JoinWorkshopRequest[]> {
-    return this.employeeService.joinWorkshopRequests(employee.employeeId);
+    return this.employeeService.joinWorkshopRequests(
+      ability,
+      employee.employeeId,
+    );
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Task' })
   @ResolveField(() => [Task], { nullable: true })
-  tasks(@Parent() employee: Employee): Promise<Task[]> {
-    return this.employeeService.tasks(employee.employeeId);
+  tasks(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() employee: Employee,
+  ): Promise<Task[]> {
+    return this.employeeService.tasks(ability, employee.employeeId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @ResolveField(() => User, { nullable: true })
-  user(@Parent() employee: Employee): Promise<User | null> {
-    return this.employeeService.user(employee.employeeId);
+  user(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() employee: Employee,
+  ): Promise<User | null> {
+    return this.employeeService.user(ability, employee.employeeId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Workshop' })
   @ResolveField(() => Workshop, { nullable: true })
-  workshop(@Parent() employee: Employee): Promise<Workshop | null> {
-    return this.employeeService.workshop(employee.workshopId);
+  workshop(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() employee: Employee,
+  ): Promise<Workshop | null> {
+    return this.employeeService.workshop(ability, employee.employeeId);
   }
 
-  @CheckAbilities({ action: Action.Read, subject: 'Employee' })
-  @ResolveField(() => EmployeeCount)
-  _count(@Parent() employee: Employee): Promise<EmployeeCount> {
-    return this.employeeService.resolveCount(employee.employeeId);
+  @ResolveField(() => EmployeeCount, { nullable: true })
+  _count(
+    @CurrentAbility() ability: PureAbility,
+    @Parent() employee: Employee,
+  ): Promise<EmployeeCount> {
+    return this.employeeService.resolveCount(ability, employee.employeeId);
   }
 }
