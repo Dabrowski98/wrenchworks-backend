@@ -7,6 +7,7 @@ import {
   FindManyTaskArgs,
   Task,
   TaskCount,
+  DeleteManyTaskArgs,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { Employee } from '../employee/dto/employee.model';
@@ -243,6 +244,39 @@ export class TaskService {
       },
     });
   }
+
+  async deleteMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteManyTaskArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const tasks = await this.prisma.task.findMany({
+      where: { AND: [accessibleBy(ability).Task, args.where] },
+      include: {
+        service: {
+          select: {
+            workshop: { select: { workshopId: true, ownerId: true } },
+          },
+        },
+      },
+    });
+
+    tasks.forEach((task) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Task', task),
+      );
+    });
+
+    return this.prisma.task
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Task, args.where] },
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
 
   // RESOLVE METHODS
 

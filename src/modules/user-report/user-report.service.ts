@@ -12,6 +12,7 @@ import {
   DeleteOneUserReportArgs,
   UpdateOneUserReportArgs,
   UserReport,
+  DeleteManyUserReportArgs,
 } from './dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../user/dto';
@@ -202,6 +203,31 @@ export class UserReportService {
     return await this.prisma.userReport
       .delete({
         where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteManyUserReportArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const reports = await this.prisma.userReport.findMany({
+      where: { AND: [accessibleBy(ability).UserReport, args.where] },
+    });
+
+    reports.forEach((report) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('UserReport', report),
+      );
+    });
+
+    return this.prisma.userReport
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).UserReport, args.where] },
       })
       .then(() => true)
       .catch(() => false);

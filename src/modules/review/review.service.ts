@@ -7,6 +7,7 @@ import {
   FindManyReviewArgs,
   Review,
   ReviewCount,
+  DeleteManyReviewArgs,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { User } from '../user/dto/user.model';
@@ -24,6 +25,7 @@ import { AbilityFactory, Action } from '../ability/ability.factory';
 import { subject } from '@casl/ability';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { EditReviewArgs } from './custom-dto/edit-review.args';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class ReviewService {
@@ -150,6 +152,31 @@ export class ReviewService {
       where: { reviewId },
       data: { status: ReviewStatus.REJECTED },
     });
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyReviewArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const reviews = await this.prisma.review.findMany({
+      where: { AND: [accessibleBy(ability).Review, args.where] },
+    });
+
+    reviews.forEach((review) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Review', review),
+      );
+    });
+
+    return this.prisma.review
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Review, args.where] },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS

@@ -15,6 +15,7 @@ import {
   UpdateOneServiceRequestArgs,
   ServiceRequest,
   ServiceRequestCount,
+  DeleteManyServiceRequestArgs,
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-employee-id.decorator';
@@ -147,6 +148,16 @@ export class ServiceRequestResolver {
     @Args() args: DeleteOneServiceRequestArgs,
   ): Promise<boolean> {
     return this.serviceRequestService.delete(currentEntity, args);
+  }
+
+  @CheckAbilities({ action: Action.Delete, subject: 'ServiceRequest' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyServiceRequest(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteManyServiceRequestArgs,
+  ): Promise<boolean> {
+    return this.serviceRequestService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

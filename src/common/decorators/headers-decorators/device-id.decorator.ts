@@ -1,4 +1,3 @@
-// src/common/decorators/ip-address.decorator.ts
 import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 

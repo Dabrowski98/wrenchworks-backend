@@ -5,6 +5,7 @@ import {
   FindManyJobArgs,
   UpdateOneJobArgs,
   DeleteOneJobArgs,
+  DeleteManyJobArgs,
   Job,
   JobCount,
 } from './dto';
@@ -45,6 +46,7 @@ export class JobService {
       .then(() => true)
       .catch(() => false);
   }
+
 
   // RESOLVE METHODS
 

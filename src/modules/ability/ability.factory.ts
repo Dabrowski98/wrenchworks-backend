@@ -82,33 +82,6 @@ export type AppSubjects =
       WorkshopJob: WorkshopJob;
     }>;
 
-//EMPLOYEE PERMISSION MANAGE means CREATE, READ, UPDATE, DELETE
-//EMPLOYEE PERMISSION UPDATE means Assign/Remove permissions to/from employee
-
-//REVIEW CREATE conditional compare userId's
-//REVIEW RESPONSE SAME
-//SESSION DATA conditional compare userId's
-//USER REPORT CREATE conditional compare userId's
-//VEHICLE CREATE on USER compare userIds
-//VEHICLE CREATE on EMPLOYEE compare workshopIds
-//VEHICLE READ on USER compare userIds
-//VEHICLE READ on EMPLOYEE compare workshopIds on nested customers
-
-//VEHICLE BY USER COMPARE BY USERID
-//VEHICLE BY EMPLOYEE COMPARE BY CUSTOMER.WORKSHOPID
-
-//VEHICLE DETAILS BY USER COMPARE BY VEHICLE.USERID
-//VEHICLE DETAILS BY EMPLOYEE COMPARE BY VEHICLE.CUSTOMER.WORKSHOPID
-
-//WORKSHOP USER by ownerID on workshop
-//WORKSHOP EMPLOYEE by workshopId on workshop
-
-//WORKSHOP DETAILS USER by workshopId on workshop
-//WORKSHOP DETAILS EMPLOYEE by workshopId on workshop
-
-//WORKSHOP DEVICE USER by workshopId on WORKSHOP.OWNERID
-//WORKSHOP DEVICE EMPLOYEE by workshopId on WORKSHOP.WORKSHOPID
-
 export type UserAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
 
 @Injectable()

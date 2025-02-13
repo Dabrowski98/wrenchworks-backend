@@ -10,6 +10,7 @@ import { GraphQLBigInt } from 'graphql-scalars';
 import {
   CreateOneJoinWorkshopRequestArgs,
   DeleteOneJoinWorkshopRequestArgs,
+  DeleteManyJoinWorkshopRequestArgs,
   FindManyJoinWorkshopRequestArgs,
   FindUniqueJoinWorkshopRequestArgs,
   UpdateOneJoinWorkshopRequestArgs,
@@ -119,6 +120,16 @@ export class JoinWorkshopRequestResolver {
     @Args() args: DeleteOneJoinWorkshopRequestArgs,
   ): Promise<boolean> {
     return this.joinWorkshopRequestService.delete(currentEntity, args);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'JoinWorkshopRequest' })
+  @Mutation(() => Boolean)
+  deleteManyJoinWorkshopRequest(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyJoinWorkshopRequestArgs,
+  ): Promise<boolean> {
+    return this.joinWorkshopRequestService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

@@ -6,6 +6,7 @@ import {
   FindUniqueJoinWorkshopRequestArgs,
   FindManyJoinWorkshopRequestArgs,
   JoinWorkshopRequest,
+  DeleteManyJoinWorkshopRequestArgs,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { Employee } from '../employee/dto/employee.model';
@@ -206,6 +207,32 @@ export class JoinWorkshopRequestService {
     return !!this.prisma.joinWorkshopRequest.delete({
       where: args.where,
     });
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyJoinWorkshopRequestArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const requests = await this.prisma.joinWorkshopRequest.findMany({
+      where: { AND: [accessibleBy(ability).JoinWorkshopRequest, args.where] },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
+
+    requests.forEach((request) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('JoinWorkshopRequest', request),
+      );
+    });
+
+    return this.prisma.joinWorkshopRequest
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).JoinWorkshopRequest, args.where] },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   // RESOLVE METHODS

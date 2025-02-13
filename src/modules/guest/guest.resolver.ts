@@ -14,6 +14,7 @@ import {
   DeleteOneGuestArgs,
   FindUniqueGuestArgs,
   FindManyGuestArgs,
+  DeleteManyGuestArgs,
 } from './dto';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { ServiceRequest } from '../service-request/dto/service-request.model';
@@ -75,6 +76,17 @@ export class GuestResolver {
     @Args() args: DeleteOneGuestArgs,
   ): Promise<Boolean> {
     return this.guestService.delete(currentEntity, args);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'Guest' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyGuest(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyGuestArgs,
+  ): Promise<boolean> {
+    return this.guestService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

@@ -8,6 +8,7 @@ import {
   UpdateOneWorkshopJobArgs,
   WorkshopJob,
   WorkshopJobCount,
+  DeleteManyWorkshopJobArgs,
 } from './dto';
 import {
   BadRequestError,
@@ -17,7 +18,7 @@ import { Task } from '../task/dto';
 import { Job } from '../job/dto';
 import { Workshop } from '../workshop/dto';
 import { ForbiddenError, subject } from '@casl/ability';
-import { AbilityFactory, Action } from '../ability';
+import { AbilityFactory, accessibleBy, Action } from '../ability';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 
@@ -102,6 +103,32 @@ export class WorkshopJobService {
     return await this.prisma.workshopJob
       .delete({
         where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteManyWorkshopJobArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const workshopJobs = await this.prisma.workshopJob.findMany({
+      where: { AND: [accessibleBy(ability).WorkshopJob, args.where] },
+      include: { workshop: true },
+    });
+
+    workshopJobs.forEach((workshopJob) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('WorkshopJob', workshopJob),
+      );
+    });
+
+    return this.prisma.workshopJob
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).WorkshopJob, args.where] },
       })
       .then(() => true)
       .catch(() => false);

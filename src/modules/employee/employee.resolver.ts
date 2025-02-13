@@ -15,6 +15,7 @@ import {
   UpdateOneEmployeeArgs,
   Employee,
   EmployeeCount,
+  DeleteManyEmployeeArgs,
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
@@ -114,6 +115,17 @@ export class EmployeeResolver {
     employeeId: bigint,
   ): Promise<boolean> {
     return this.employeeService.delete(currentEntity, employeeId);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'Employee' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyEmployee(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyEmployeeArgs,
+  ): Promise<boolean> {
+    return this.employeeService.deleteMany(currentEntity, args);
   }
 
   // RESOLVER METHODS

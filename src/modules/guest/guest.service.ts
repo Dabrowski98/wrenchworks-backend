@@ -5,6 +5,7 @@ import {
   DeleteOneGuestArgs,
   FindUniqueGuestArgs,
   FindManyGuestArgs,
+  DeleteManyGuestArgs,
 } from './dto';
 import { Guest } from './dto/guest.model';
 import { PrismaService } from 'src/database/prisma.service';
@@ -97,6 +98,34 @@ export class GuestService {
     return this.prisma.guest
       .delete({
         where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyGuestArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const guests = await this.prisma.guest.findMany({
+      where: { AND: [accessibleBy(ability).Guest, args.where] },
+      include: {
+        serviceRequest: { select: { workshopId: true } },
+      },
+    });
+
+    guests.forEach((guest) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Guest', guest),
+      );
+    });
+
+    return this.prisma.guest
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Guest, args.where] },
       })
       .then(() => true)
       .catch(() => false);

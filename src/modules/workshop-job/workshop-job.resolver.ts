@@ -14,6 +14,7 @@ import {
   FindManyWorkshopJobArgs,
   FindUniqueWorkshopJobArgs,
   UpdateOneWorkshopJobArgs,
+  DeleteManyWorkshopJobArgs,
 } from './dto';
 import { Workshop } from '../workshop/dto';
 import { Task } from '../task/dto';
@@ -82,6 +83,17 @@ export class WorkshopJobResolver {
     @Args() args: DeleteOneWorkshopJobArgs,
   ): Promise<boolean> {
     return this.workshopJobService.delete(currentEntity, args);
+  }
+
+  //ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'WorkshopJob' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyWorkshopJob(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteManyWorkshopJobArgs,
+  ): Promise<boolean> {
+    return this.workshopJobService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

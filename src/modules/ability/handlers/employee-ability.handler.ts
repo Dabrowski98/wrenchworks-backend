@@ -38,7 +38,6 @@ export class EmployeeAbilityHandler {
       const subject = permission.subject;
       const conditions = permission.conditions;
 
-      //swap out $workshopId with employeePayload.workshopId
       const conditionsString = JSON.stringify(conditions);
       const conditionsStringWithWorkshopId = conditionsString.replace(
         /\$workshopId/g,

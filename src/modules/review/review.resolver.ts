@@ -15,6 +15,7 @@ import {
   UpdateOneReviewArgs,
   Review,
   ReviewCount,
+  DeleteManyReviewArgs,
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { ReviewService } from './review.service';
@@ -28,6 +29,10 @@ import { Public } from 'src/common/decorators/guard-decorators/public.decorator'
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { EditReviewArgs } from './custom-dto/edit-review.args';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 @Resolver(() => Review)
 export class ReviewResolver {
   constructor(private readonly reviewService: ReviewService) {}
@@ -136,5 +141,15 @@ export class ReviewResolver {
   @ResolveField(() => ReviewCount)
   _count(@Parent() review: Review): Promise<ReviewCount> {
     return this.reviewService.resolveCount(review.reviewId);
+  }
+
+  @CheckAbilities({ action: Action.Delete, subject: 'Review' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  deleteManyReview(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyReviewArgs,
+  ): Promise<boolean> {
+    return this.reviewService.deleteMany(currentEntity, args);
   }
 }

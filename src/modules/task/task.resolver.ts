@@ -10,6 +10,7 @@ import { GraphQLBigInt } from 'graphql-scalars';
 import {
   CreateOneTaskArgs,
   DeleteOneTaskArgs,
+  DeleteManyTaskArgs,
   FindManyTaskArgs,
   FindUniqueTaskArgs,
   UpdateOneTaskArgs,
@@ -88,6 +89,17 @@ export class TaskResolver {
     @Args() args: DeleteOneTaskArgs,
   ): Promise<boolean> {
     return this.taskService.delete(currentEntity, args);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'Task' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyTask(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteManyTaskArgs,
+  ): Promise<boolean> {
+    return this.taskService.deleteMany(currentEntity, args);
   }
 
   // ADMIN, EMPLOYEE

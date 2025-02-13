@@ -13,6 +13,7 @@ import {
   FindManyAddressArgs,
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
+  DeleteManyAddressArgs,
 } from './dto';
 import { Workshop } from '../workshop/dto';
 import { Action, CheckAbilities } from '../ability';
@@ -24,6 +25,7 @@ import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employe
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 
 @Resolver(() => Address)
 export class AddressResolver {
@@ -76,6 +78,16 @@ export class AddressResolver {
     @Args() args: DeleteOneAddressArgs,
   ): Promise<Boolean> {
     return this.addressService.delete(currentEntity, args);
+  }
+
+  // ADMIN
+  @CheckAbilities({ action: Action.Manage, subject: 'Address' })
+  @OrGuards(UserJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyAddress(
+    @Args() args: DeleteManyAddressArgs,
+  ): Promise<boolean> {
+    return this.addressService.deleteMany(args);
   }
 
   //RESOLVE FIELDS

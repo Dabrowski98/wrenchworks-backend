@@ -14,6 +14,7 @@ import {
   UpdateOneCustomerArgs,
   Customer,
   CustomerCount,
+  DeleteManyCustomerArgs,
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { CustomerService } from './customer.service';
@@ -88,6 +89,17 @@ export class CustomerResolver {
     customerId: bigint,
   ): Promise<boolean> {
     return this.customerService.delete(currentEntity, customerId);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'Customer' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyCustomer(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyCustomerArgs,
+  ): Promise<boolean> {
+    return this.customerService.deleteMany(currentEntity, args);
   }
 
   // RESOLVER METHODS

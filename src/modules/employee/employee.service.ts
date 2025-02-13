@@ -10,6 +10,7 @@ import {
   FindManyEmployeeArgs,
   UpdateOneEmployeeArgs,
   DeleteOneEmployeeArgs,
+  DeleteManyEmployeeArgs,
   Employee,
   EmployeeCount,
 } from './dto';
@@ -198,6 +199,32 @@ export class EmployeeService {
     return this.prisma.employee
       .delete({
         where: { employeeId },
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyEmployeeArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const employees = await this.prisma.employee.findMany({
+      where: { AND: [accessibleBy(ability).Employee, args.where] },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
+
+    employees.forEach((employee) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Employee', employee),
+      );
+    });
+
+    return this.prisma.employee
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Employee, args.where] },
       })
       .then(() => true)
       .catch(() => false);

@@ -8,6 +8,7 @@ import {
   DeleteOneCustomerArgs,
   Customer,
   CustomerCount,
+  DeleteManyCustomerArgs,
 } from './dto';
 import { ForbiddenError } from '@casl/ability';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
@@ -115,6 +116,32 @@ export class CustomerService {
     return this.prisma.customer
       .delete({
         where: { customerId },
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyCustomerArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const customers = await this.prisma.customer.findMany({
+      where: { AND: [accessibleBy(ability).Customer, args.where] },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
+
+    customers.forEach((customer) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Customer', customer),
+      );
+    });
+
+    return this.prisma.customer
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Customer, args.where] },
       })
       .then(() => true)
       .catch(() => false);

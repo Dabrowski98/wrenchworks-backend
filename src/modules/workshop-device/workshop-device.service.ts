@@ -9,6 +9,7 @@ import {
   DeleteOneWorkshopDeviceArgs,
   FindManyWorkshopDeviceArgs,
   UpdateOneWorkshopDeviceArgs,
+  DeleteManyWorkshopDeviceArgs,
 } from './dto';
 import { Workshop } from '../workshop/dto/workshop.model';
 import { WorkshopDeviceStatus } from '@prisma/client';
@@ -142,5 +143,31 @@ export class WorkshopDeviceService {
         include: { workshop: true },
       })
     ).workshop;
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyWorkshopDeviceArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const devices = await this.prisma.workshopDevice.findMany({
+      where: { AND: [accessibleBy(ability).WorkshopDevice, args.where] },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
+
+    devices.forEach((device) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('WorkshopDevice', device),
+      );
+    });
+
+    return this.prisma.workshopDevice
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).WorkshopDevice, args.where] },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 }

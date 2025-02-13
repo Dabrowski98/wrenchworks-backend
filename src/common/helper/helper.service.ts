@@ -4,7 +4,6 @@ import {
   RecordNotFoundError,
 } from '../custom-errors/errors.config';
 
-//TODO: test vs singleton
 @Injectable({ scope: Scope.REQUEST })
 export class HelperService {
   private model: { name: string };

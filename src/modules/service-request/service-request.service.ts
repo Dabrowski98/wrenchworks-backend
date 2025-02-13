@@ -7,6 +7,7 @@ import {
   FindManyServiceRequestArgs,
   ServiceRequest,
   ServiceRequestCount,
+  DeleteManyServiceRequestArgs,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { Employee } from '../employee/dto';
@@ -325,6 +326,32 @@ export class ServiceRequestService {
 
     return this.prisma.serviceRequest
       .delete({ where: args.where })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteManyServiceRequestArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const requests = await this.prisma.serviceRequest.findMany({
+      where: { AND: [accessibleBy(ability).ServiceRequest, args.where] },
+      include: { workshop: { select: { workshopId: true } } },
+    });
+
+    requests.forEach((request) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('ServiceRequest', request),
+      );
+    });
+
+    return this.prisma.serviceRequest
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).ServiceRequest, args.where] },
+      })
       .then(() => true)
       .catch(() => false);
   }

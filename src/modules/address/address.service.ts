@@ -15,6 +15,7 @@ import {
   FindManyAddressArgs,
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
+  DeleteManyAddressArgs,
 } from './dto';
 import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
@@ -126,6 +127,17 @@ export class AddressService {
       .catch(() => {
         return false;
       });
+  }
+
+  async deleteMany(
+    args: DeleteManyAddressArgs,
+  ): Promise<boolean> {
+    return this.prisma.address
+      .deleteMany({
+        where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 
   //RESOLVE METHODS

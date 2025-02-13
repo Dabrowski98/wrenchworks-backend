@@ -15,6 +15,7 @@ import {
   UpdateOneWorkshopDeviceArgs,
   DeleteOneWorkshopDeviceArgs,
   FindManyWorkshopDeviceArgs,
+  DeleteManyWorkshopDeviceArgs,
 } from './dto';
 import { Action } from '../ability';
 import { CheckAbilities } from '../ability';
@@ -92,6 +93,17 @@ export class WorkshopDeviceResolver {
     @Args('deviceId') deviceId: bigint,
   ) {
     return this.workshopDeviceService.enable(currentEntity, deviceId);
+  }
+
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyWorkshopDevice(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyWorkshopDeviceArgs,
+  ): Promise<boolean> {
+    return this.workshopDeviceService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

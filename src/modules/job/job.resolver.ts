@@ -10,6 +10,7 @@ import { GraphQLBigInt } from 'graphql-scalars';
 import {
   CreateOneJobArgs,
   DeleteOneJobArgs,
+  DeleteManyJobArgs,
   FindManyJobArgs,
   FindUniqueJobArgs,
   UpdateOneJobArgs,
@@ -30,7 +31,7 @@ import { Public } from 'src/common/decorators/guard-decorators/public.decorator'
 @Resolver(() => Job)
 export class JobResolver {
   constructor(private readonly jobService: JobService) {}
-  
+
   // ADMIN
   @CheckAbilities({ action: Action.Create, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard)
@@ -38,7 +39,7 @@ export class JobResolver {
   createJob(@Args() args: CreateOneJobArgs): Promise<Job> {
     return this.jobService.create(args);
   }
-  
+
   // PUBLIC
   @Public()
   @Query(() => Job)
@@ -52,7 +53,7 @@ export class JobResolver {
   jobs(@Args() args?: FindManyJobArgs): Promise<Job[]> {
     return this.jobService.findMany(args);
   }
-  
+
   // ADMIN
   @CheckAbilities({ action: Action.Update, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard, AbilitiesGuard)
@@ -60,7 +61,7 @@ export class JobResolver {
   updateJob(@Args() args: UpdateOneJobArgs): Promise<Job> {
     return this.jobService.update(args);
   }
-  
+
   // ADMIN
   @CheckAbilities({ action: Action.Delete, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard, AbilitiesGuard)

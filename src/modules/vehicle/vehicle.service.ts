@@ -15,6 +15,7 @@ import {
   UpdateOneVehicleArgs,
   Vehicle,
   VehicleCount,
+  DeleteManyVehicleArgs,
 } from './dto';
 import { Guest } from '../guest/dto';
 import { ServiceRequest } from '../service-request/dto';
@@ -129,6 +130,39 @@ export class VehicleService {
     return await this.prisma.vehicle
       .delete({
         where: args.where,
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyVehicleArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: { AND: [accessibleBy(ability).Vehicle, args.where] },
+      include: {
+        customer: {
+          select: {
+            workshopId: true,
+            userId: true,
+          },
+        },
+      },
+    });
+
+    vehicles.forEach((vehicle) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Vehicle', vehicle),
+      );
+    });
+
+    return this.prisma.vehicle
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).Vehicle, args.where] },
       })
       .then(() => true)
       .catch(() => false);

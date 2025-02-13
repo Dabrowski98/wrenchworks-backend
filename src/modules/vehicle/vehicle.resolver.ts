@@ -11,6 +11,7 @@ import {
   UpdateOneVehicleArgs,
   DeleteOneVehicleArgs,
   VehicleCount,
+  DeleteManyVehicleArgs,
 } from './dto';
 import { ServiceRequest } from '../service-request/dto';
 import { Service } from '../service/dto';
@@ -97,6 +98,17 @@ export class VehicleResolver {
     @Args() args: DeleteOneVehicleArgs,
   ): Promise<boolean> {
     return this.vehicleService.delete(currentEntity, args);
+  }
+
+  // ADMIN, USER (his own), EMPLOYEE (for customer and workshop)
+  @CheckAbilities({ action: Action.Delete, subject: 'Vehicle' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyVehicle(
+    @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
+    @Args() args: DeleteManyVehicleArgs,
+  ): Promise<boolean> {
+    return this.vehicleService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

@@ -15,6 +15,7 @@ import {
   Service,
   ServiceCount,
   FindUniqueServiceArgs,
+  DeleteManyServiceArgs,
 } from './dto';
 import { UseGuards } from '@nestjs/common';
 import { ServiceService } from './service.service';
@@ -103,6 +104,17 @@ export class ServiceResolver {
     @Args() args: CloseOneServiceArgs,
   ): Promise<Service> {
     return this.serviceService.close(currentEntity, args);
+  }
+
+  // ADMIN, EMPLOYEE
+  @CheckAbilities({ action: Action.Delete, subject: 'Service' })
+  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyService(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteManyServiceArgs,
+  ): Promise<boolean> {
+    return this.serviceService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

@@ -3,6 +3,7 @@ import { Resolver } from '@nestjs/graphql';
 import {
   CreateOneUserReportArgs,
   DeleteOneUserReportArgs,
+  DeleteManyUserReportArgs,
   FindManyUserReportArgs,
   FindUniqueUserReportArgs,
   UpdateOneUserReportArgs,
@@ -16,6 +17,10 @@ import { UserJwtAuthGuard } from '../auth/user-auth/guards/user-jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 
 @Resolver(() => UserReport)
 export class UserReportResolver {
@@ -96,6 +101,17 @@ export class UserReportResolver {
     @Args() args: DeleteOneUserReportArgs,
   ): Promise<boolean> {
     return this.userReportService.delete(currentUser, args);
+  }
+  
+  // ADMIN
+  @CheckAbilities({ action: Action.Delete, subject: 'UserReport' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteManyUserReport(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: DeleteManyUserReportArgs,
+  ): Promise<boolean> {
+    return this.userReportService.deleteMany(currentEntity, args);
   }
 
   // RESOLVE FIELDS

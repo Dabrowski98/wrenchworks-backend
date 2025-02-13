@@ -7,6 +7,7 @@ import {
   FindManyReviewResponseArgs,
   ReviewResponse,
   ReviewResponseCount,
+  DeleteManyReviewResponseArgs,
 } from './dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { User } from '../user/dto/user.model';
@@ -20,6 +21,8 @@ import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { ForbiddenError, subject } from '@casl/ability';
 import { Action, AbilityFactory } from '../ability/ability.factory';
 import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class ReviewResponseService {
@@ -80,7 +83,6 @@ export class ReviewResponseService {
       Action.Update,
       subject('ReviewResponse', reviewResponse),
     );
-
 
     const reviewResponseId = args.where.reviewResponseId;
 
@@ -173,6 +175,31 @@ export class ReviewResponseService {
       .update({
         where: args.where,
         data: { status: ReviewResponseStatus.HIDDEN },
+      })
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  async deleteMany(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    args: DeleteManyReviewResponseArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+
+    const responses = await this.prisma.reviewResponse.findMany({
+      where: { AND: [accessibleBy(ability).ReviewResponse, args.where] },
+    });
+
+    responses.forEach((reviewResponse) => {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('ReviewResponse', reviewResponse),
+      );
+    });
+
+    return this.prisma.reviewResponse
+      .deleteMany({
+        where: { AND: [accessibleBy(ability).ReviewResponse, args.where] },
       })
       .then(() => true)
       .catch(() => false);
