@@ -3,7 +3,12 @@ import { PrismaModule } from './database/prisma.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { AddressModule, AuthModule, EmployeeModule, WorkshopModule } from './modules/index';
+import {
+  AddressModule,
+  AuthModule,
+  EmployeeModule,
+  WorkshopModule,
+} from './modules/index';
 import { AppController } from './app.controller';
 import { HelperModule } from './common/helper/helper.module';
 import { UserModule } from './modules/user/user.module';
@@ -43,15 +48,35 @@ import { VehicleModelModule } from './modules/vehicle-model';
       playground: true,
       fieldResolverEnhancers: ['guards'],
       formatError: (error) => {
-        let originalError = error.extensions?.originalError as
+        const originalError = error.extensions?.originalError as
           | Error
           | undefined;
+
+        if (
+          error.message.includes('Forbidden resource') &&
+          error.extensions?.code === 'FORBIDDEN'
+        ) {
+          const fieldName = error.path?.slice(-1)[0];
+          const matches = error.message.match(/Cannot (.*?) (.*?)(?:\s|$)/);
+          const action = matches?.[1] || 'access';
+          const subject = matches?.[2] || 'resource';
+
+          return {
+            message: `Cannot ${action} ${fieldName || subject}`,
+            code: 403,
+            status: 'FORBIDDEN',
+            field: fieldName,
+            subject: subject,
+            action: action,
+          };
+        }
+
         return {
           message: originalError ? originalError.message : error.message,
-          code: error.extensions.code,
-          status: error.extensions.status,
-          errors: error.extensions.errors,
-          fields: error.extensions.fields,
+          code: error.extensions?.code,
+          status: error.extensions?.status,
+          errors: error.extensions?.errors,
+          fields: error.extensions?.fields,
         };
       },
     }),
@@ -92,8 +117,6 @@ import { VehicleModelModule } from './modules/vehicle-model';
     WorkshopDetailsModule,
     WorkshopDeviceModule,
     WorkshopDeviceOTPModule,
-
-
   ],
   providers: [
     Logger,

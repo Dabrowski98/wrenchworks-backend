@@ -35,6 +35,7 @@ export class UserJwtAuthGuard extends AuthGuard('user-jwt') {
     }
 
     if (!user) {
+      return null;
       throw new UnauthorizedError('You need to be logged in');
     }
 

@@ -37,6 +37,7 @@ export class EmployeeJwtAuthGuard extends AuthGuard('employee-jwt') {
     }
 
     if (!employee) {
+      return null;
       throw new UnauthorizedError('You need to be logged in as an employee');
     }
 
