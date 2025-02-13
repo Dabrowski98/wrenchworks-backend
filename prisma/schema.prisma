@@ -84,112 +84,166 @@ datasource db {
 }
 
 
-// Address model represents an Address entity that holds location details such as country, region, city, and street.
-// It is used to link physical addresses to workshops and other entities requiring location information.
+/// Address model represents an Address entity that holds location details such as country, region, city, and street.
+/// It is used to link physical addresses to workshops and other entities requiring location information.
 model Address{ 
+  /// Unique identifier for the address
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   addressId        BigInt           @id @unique @default(autoincrement()) @db.UnsignedBigInt
+  /// Country name where the address is located
   /// @Validator.IsString({ message: 'Country must be a string' })
   /// @Validator.Length(2, 30, { message: 'Country must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Country is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   country          String           @db.VarChar(30)
+  /// Region or state within the country
   /// @Validator.IsString({ message: 'Region must be a string' })
   /// @Validator.Length(2, 30, { message: 'Region must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Region is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   region           String           @db.VarChar(30)
+  /// City or town name
   /// @Validator.IsString({ message: 'City must be a string' })
   /// @Validator.Length(2, 30, { message: 'City must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'City is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   city             String           @db.VarChar(30)
+  /// Street name or road identifier
   /// @Validator.IsString({ message: 'Street must be a string' })
   /// @Validator.Length(2, 30, { message: 'Street must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   street           String?          @db.VarChar(30)
+  /// Building number or identifier
   /// @Validator.IsString({ message: 'Building number must be a string' })
   /// @Validator.Length(1, 6, { message: 'Building number must be between 1 and 6 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Building number is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   buildingNo       String           @db.VarChar(6)
+  /// Apartment or flat number within the building
   /// @Validator.IsString({ message: 'Flat number must be a string' })
   /// @Validator.Length(1, 6, { message: 'Flat number must be between 1 and 6 characters' })
   /// @Validator.IsOptional()
   flatNo           String?          @db.VarChar(6)
+  /// Postal or ZIP code for the address
   /// @Validator.IsString({ message: 'Post code must be a string' })
   /// @Validator.Length(4, 10, { message: 'Post code must be between 4 and 10 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Post code is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   postCode         String           @db.VarChar(10)
+  /// Reference to the associated workshop
   /// @HideField({ match: '@(Address)@(Create|Update)*Input' })
   workshop         Workshop?
 }
 
-// The Customer model stores information about customers including their personal details and contact information.
-// It also maintains relationships with workshops, vehicles, and orders in the system.
+/// The Customer model stores information about customers including their personal details and contact information.
+/// It also maintains relationships with workshops, vehicles, and orders in the system.
 model Customer {
+  /// Identifier of the customer
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(Customer)@(Create|Update)*Input' })
   customerId                BigInt     @id @unique(map: "customer_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the workshop this customer belongs to
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                BigInt     @db.UnsignedBigInt
+
+  /// Identifier of the user account
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                    BigInt?    @db.UnsignedBigInt
+
+  /// Identifier of the guest account
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                   BigInt?    @db.UnsignedBigInt @unique
+
+  /// First name of the customer
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   firstName                 String?    @db.VarChar(30)
+
+  /// Source of customer creation (GUEST, WORKSHOP, USER)
   creationSource            CustomerCreationSource 
+
+  /// Contact phone number
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
   telephoneNumber           String?                     @db.VarChar(12)
+
+  /// Email address
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
   email                     String?             @db.VarChar(320)
+
+  /// Verification status
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @Validator.IsOptional()
   /// @HideField({match: '@(Customer)@(Create)*Input'})
   isVerified  Boolean       @default(false)
+
+  /// Total amount due from customer
   /// @Validator.IsNumber({}, { message: 'Total due must be a number' })
   /// @Validator.Min(0, { message: 'Total due cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Total due cannot exceed 9999999.99' })
   /// Note: Optional because it defaults to 0.00
   /// @Validator.IsOptional()
   totalDue     Decimal      @default(0.00) @db.Decimal(10, 2)
+
+  /// Additional notes or description about the customer
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   description  String?      @db.Text
+
+  /// Tax identification number
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP          String?      @db.VarChar(10)
+
+  /// Name of the company
   /// @Validator.IsString({ message: 'Company name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   companyName  String?      @db.VarChar(30)
+
+  /// Timestamp of when the record was deleted
   deletedAt    DateTime?    @db.Timestamp(0)
+
+  /// Timestamp of record creation
   createdAt    DateTime     @default(now()) @db.Timestamp(0)
+
+  /// Identifier of user who created the record
   /// @FieldType('Scalars.GraphQLBigInt')
   createdBy    BigInt?      @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt    DateTime?     @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the record
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy    BigInt?      @db.UnsignedBigInt
+
+  /// Services associated with this customer
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
+
+  /// Guest account associated with this customer
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   guest        Guest?       @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestCanBecomeCustomer")
+
+  /// User account associated with this customer
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   user         User?        @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_customerCanBeUser")
+
+  /// Vehicles owned by this customer
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   vehicles     Vehicle[]
+
+  /// Workshop this customer belongs to
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   workshop     Workshop       @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_customerOfWorkshop")
 
@@ -197,29 +251,38 @@ model Customer {
   @@index([workshopId])
 } 
 
-// The Employee model holds data related to workshop employees including login credentials and employment status.
-// It also defines associations with roles, permissions, and tasks within the system.
+/// The Employee model holds data related to workshop employees including login credentials and employment status.
+/// It also defines associations with roles, permissions, and tasks within the system.
 model Employee {
+  /// Identifier of the employee
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   employeeId            BigInt            @id @unique(map: "employee_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the workshop where employee works
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId            BigInt            @db.UnsignedBigInt
+
+  /// Identifier of associated user account
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                BigInt?           @db.UnsignedBigInt
-  /// @FieldType('Scalars.GraphQLBigInt')
-  // roleId                BigInt?           @db.UnsignedBigInt
+
+  /// Display name for the employee
   /// @Validator.IsString({ message: 'Nickname must be a string' })
   /// @Validator.Length(1, 30, { message: 'Nickname must be between 1 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Nickname can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsOptional()
   nickname              String?           @db.VarChar(30)
+
+  /// Login username for employee
   /// @Validator.IsString({ message: 'login must be a string' })
   /// @Validator.Length(3, 30, { message: 'login must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'login can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'login is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   login                 String              @db.VarChar(30)
+
+  /// Password for employee account
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
@@ -228,251 +291,390 @@ model Employee {
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
   password              String              @db.VarChar(255)
+
+  /// Token for session refresh
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   refreshToken          String?             @db.VarChar(1000)
+
+  /// Current status of employee account
   /// @Validator.IsBoolean({ message: 'Disabled must be a boolean' })
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   status                EmployeeStatus      @default(INACTIVE)
-  // /// @Validator.IsNumber({}, { message: 'Permission set ID must be a number' })
-  // /// @Validator.IsOptional()
-  // permissionSetId       Int?              @db.UnsignedInt
+
+  /// Date when employee joined
   /// @Validator.IsDate({ message: 'Joined at must be a valid date' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to now()
   joinedAt              DateTime          @default(now()) @db.DateTime(0)
+
+  /// Timestamp of deletion
   deletedAt             DateTime?         @db.Timestamp(0)
+
+  /// Timestamp of creation
   createdAt             DateTime          @default(now()) @db.Timestamp(0)
+
+  /// Identifier of user who created the record
   /// @FieldType('Scalars.GraphQLBigInt')
   createdBy             BigInt?           @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the record
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy             BigInt?           @db.UnsignedBigInt
-  /// Note: Connect or Create only allowed
-  // role                  EmployeeRole?     @relation(fields: [roleId], references: [roleId], onDelete: NoAction, map: "fk_employeeCanHaveRoleAssigned")
+
+  /// Employee permissions
   permissions           EmployeePermission[]
+
+  /// Services managed by employee
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' }) 
   services              Service[]
+
+  /// Workshop join requests by employee
   joinWorkshopRequests  JoinWorkshopRequest[]
+
+  /// Tasks assigned to employee
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   tasks                 Task[]
+
+  /// Associated user account
   /// Note: Depends solely on join workshop request status.
   /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
   user                  User?            @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_userCanBeEmployee")
+
+  /// Workshop where employee works
   /// @HideField({ match: '@(Employee)@(Update)*Input' })
   workshop              Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_employeeWorksAtWorkshop")
-  /// @HideField({ match: '@(Employee)@(Create|Update)*Input' })
 
   @@unique([login, workshopId])
   @@index([workshopId])
 }
 
 
-// This model represents EmployeePermission detailing the allowed actions and associated permissions for employees.
-// It is used to control access and operations within the application for different employee roles.
+/// This model represents EmployeePermission detailing the allowed actions and associated permissions for employees.
+/// It is used to control access and operations within the application for different employee roles.
 model EmployeePermission {
+  /// Identifier of the permission
   /// @FieldType('Scalars.GraphQLBigInt')
   permissionId    BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Name of the permission
   /// @Validator.IsString({ message: 'Name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Name must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   name            String    @db.VarChar(30) @unique
+
+  /// Description of the permission
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 255, { message: 'Description cannot exceed 255 characters' })
   /// @Validator.IsOptional()
   description     String?   @db.VarChar(255)
+
+  /// Action allowed by this permission
   /// @Validator.IsString({ message: 'Action must be a string' })
   /// @Validator.Length(2, 30, { message: 'Action must be between 2 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z]+$/, { message: 'Action must only contain letters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Action is required' })
   action          String    @db.VarChar(30)
+
+  /// Subject of the permission
   /// @Validator.IsString({ message: 'Subject must be a string' })
   /// @Validator.Length(2, 30, { message: 'Subject must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Subject is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   subject         String    @db.VarChar(30)
+
+  /// Additional conditions for permission
   /// @Validator.IsOptional()
   conditions      Json?
+
+  /// Employees with this permission
   /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
   employees       Employee[]
+
+  /// Timestamp of creation
   /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
   createdAt       DateTime  @default(now()) @db.DateTime(0)
+
+  /// Timestamp of last update
   /// @HideField({ match: '@(EmployeePermission)@(Create|Update)*Input' })
   updatedAt       DateTime  @updatedAt @db.DateTime(0)
-
 }
 
-// The Guest model captures details for guest users who may interact with the system without full account registration.
-// It associates guest actions with other entities such as vehicles and service requests.
+/// The Guest model captures details for guest users who may interact with the system without full account registration.
+/// It associates guest actions with other entities such as vehicles and service requests.
 model Guest {
+  /// Identifier of the guest
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                       BigInt              @id @unique(map: "guest_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// First name of the guest
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'First name is required' })
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   firstName                     String              @db.VarChar(30)
+
+  /// Contact phone number
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   telephoneNumber               String?             @db.VarChar(12)
+
+  /// Email address
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
   email                         String?             @db.VarChar(320)
+
+  /// Tax identification number
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP                           String?             @db.VarChar(10)
+
+  /// Name of the company
   /// @Validator.IsString({ message: 'Company name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Company name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   companyName                   String?             @db.VarChar(30)
+
+  /// Associated vehicle
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   vehicle                       Vehicle?            
+
+  /// Associated service request
   /// @HideField({match: '@(Guest)@(Update)*Input'})
   serviceRequest                ServiceRequest?
+
+  /// Associated customer record
   /// @HideField({match: '@(Guest)@(Create|Update)*Input'})
   customer                      Customer?           
 }
 
-// The Job model defines various job entries representing tasks or services offered by workshops.
-// It includes details like name, description, popularity, and associated categories.
+/// The Job model defines various job entries representing tasks or services offered by workshops.
+/// It includes details like name, description, popularity, and associated categories.
 model Job {
+  /// Identifier of the job
   /// @HideField({ match: '@(Job)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   jobId                BigInt                 @id @unique(map: "job_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the job category
   /// @FieldType('Scalars.GraphQLBigInt')
   categoryId           BigInt                 @db.UnsignedBigInt
+
+  /// Name of the job
   /// @Validator.IsString({ message: 'Name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
   /// @Validator.IsOptional()
   name                 String?                @db.VarChar(50) @unique
+
+  /// Description of the job
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
   description          String?                @db.Text
+
+  /// Popularity flag for the job
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to false
   isPopular            Boolean                @default(false)
+
+  /// Category this job belongs to
   /// @HideField({ match: '@(Job)@(Update)*Input' })
   jobCategory          JobCategory   @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade, map: "fk_jobFallsUnderCategory")
+
+  /// Service requests associated with this job
   /// @HideField({ match: '@(Job)@(Create|Update)*Input' })
   serviceRequests      ServiceRequest[]
+
+  /// Workshop jobs associated with this job
   /// @HideField({ match: '@(Job)@(Create|Update)*Input' })
   workshopJobs         WorkshopJob[]
   
   @@index([categoryId])
 }
 
-// This model represents a JobCategory that groups jobs into different categories based on their type.
-// It supports hierarchical relationships to allow subcategories and organized classification of jobs.
+/// This model represents a JobCategory that groups jobs into different categories based on their type.
+/// It supports hierarchical relationships to allow subcategories and organized classification of jobs.
 model JobCategory {
+  /// Identifier of the job category
   /// @HideField({ match: '@(JobCategory)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   categoryId                 BigInt                      @id @unique(map: "category_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Name of the category
   /// @Validator.IsString({ message: 'Name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   name                       String                      @db.VarChar(50) @unique
+
+  /// Identifier of the parent category
   /// @FieldType('Scalars.GraphQLBigInt')
   parentId                   BigInt?                     @db.UnsignedBigInt
+
+  /// Description of the category
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
   description                String?                     @db.Text
+
+  /// Popularity flag for the category
   /// @Validator.IsBoolean({ message: 'Is popular must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to false
   isPopular                  Boolean                     @default(false)
+
+  /// Parent category reference
   parent                     JobCategory?                @relation("jobs_categories_dictTojobs_categories_dict", fields: [parentId], references: [categoryId], onDelete: Cascade, map: "fk_subcategory")
+
+  /// Child categories
   /// @HideField({ match: '@(JobCategory)@(Update)*Input' })
   children                   JobCategory[]               @relation("jobs_categories_dictTojobs_categories_dict")
+
+  /// Jobs in this category
   /// @HideField({ match: '@(JobCategory)@(Create|Update)*Input' })
   jobs                       Job[]
+
+  /// Workshops associated with this category
   /// @HideField({ match: '@(JobCategory)@(Create|Update)*Input' })
   workshops                  Workshop[]
   
   @@index([parentId])
 }
 
-// The JoinWorkshopRequest model is used to manage requests for joining a workshop by employees or users.
-// It stores request status, messages, and references to the related user and workshop.
+/// The JoinWorkshopRequest model is used to manage requests for joining a workshop by employees or users.
+/// It stores request status, messages, and references to the related user and workshop.
 model JoinWorkshopRequest {
+  /// Identifier of the join workshop request
   /// @FieldType('Scalars.GraphQLBigInt')
   joinWorkshopRequestId BigInt @id @unique(map: "join_workshop_request_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the user receiving the request
   /// @FieldType('Scalars.GraphQLBigInt')
   receiverId              BigInt @db.UnsignedBigInt
+
+  /// Identifier of the workshop
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId              BigInt @db.UnsignedBigInt
+
+  /// Identifier of the employee
   /// @FieldType('Scalars.GraphQLBigInt')
   employeeId              BigInt @db.UnsignedBigInt
+
+  /// Message content of the request
   /// @Validator.IsString({ message: 'Message must be a string' })
   /// @Validator.Length(0, 1000, { message: 'Message cannot exceed 1000 characters' })
   /// @Validator.IsOptional()
   message             String? @db.Text
+
+  /// Current status of the request
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Create)*Input' })
   /// @Validator.IsEnum(JoinWorkshopRequestStatus, { message: 'Invalid status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
   status              JoinWorkshopRequestStatus  @default(PENDING)
+
+  /// Timestamp of creation
   createdAt           DateTime                   @default(now()) @db.DateTime(0)
+
+  /// Identifier of user who created the record
   /// @FieldType('Scalars.GraphQLBigInt')
   createdBy           BigInt?                    @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the record
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?                    @db.UnsignedBigInt
+
+  /// Timestamp when request was resolved
   resolvedAt          DateTime?                  @db.DateTime(0)
+
+  /// User who received the request
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   user                User                       @relation(fields: [receiverId], references: [userId], onDelete: NoAction, map: "fk_userCanRequestToJoinWorkshop")
+
+  /// Workshop associated with the request
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   workshop            Workshop                   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanHaveJoinRequests")
+
+  /// Employee who responded to the request
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
   employee            Employee                   @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeCanRespondToJoinRequest")
 }
 
-// The Review model captures customer reviews including ratings and textual feedback for workshops and services.
-// It maintains information about review status, original review modifications, and user associations.
+/// The Review model captures customer reviews including ratings and textual feedback for workshops and services.
+/// It maintains information about review status, original review modifications, and user associations.
 model Review {
+  /// Identifier of the review
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   reviewId          BigInt              @id @unique(map: "review_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the user who wrote the review
   /// @FieldType('Scalars.GraphQLBigInt')
   userId            BigInt              @db.UnsignedBigInt
+
+  /// Identifier of the workshop being reviewed
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId        BigInt              @db.UnsignedBigInt
+
+  /// Rating score given in the review
   /// @Validator.IsNumber({}, { message: 'Rating must be a number' })
   /// @Validator.Min(0, { message: 'Rating cannot be negative' })
   /// @Validator.Max(5, { message: 'Rating cannot exceed 5' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   rating            Decimal             @default(0.00) @db.Decimal(3, 2)
+
+  /// Original rating before any modifications
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   originalRating    Decimal?            @db.Decimal(3, 2)
+
+  /// Text content of the review
   /// @Validator.IsString({ message: 'Review text must be a string' })
   /// @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Review text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   reviewText        String              @db.Text()
+
+  /// Original review text before any modifications
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   originalReviewText  String?           @db.Text
+
+  /// Timestamp of creation
   createdAt           DateTime          @default(now()) @db.DateTime(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+
+  /// Current status of the review
   /// @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to PENDING
   status            ReviewStatus       @default(PENDING)
+
+  /// User who wrote the review
   /// @HideField({ match: '@(Review)@(Update)*Input' })
   user              User                @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviews")
+
+  /// Workshop being reviewed
   /// @HideField({ match: '@(Review)@(Update)*Input' })
   workshop          Workshop            @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userReviewsWorkshop")
+
+  /// Responses to this review
   /// @HideField({ match: '@(Review)@(Create|Update)*Input' })
   reviewResponses   ReviewResponse[]
 
@@ -480,40 +682,65 @@ model Review {
   @@index([workshopId])
 }
 
-// This model represents a ReviewResponse which contains responses to customer reviews.
-// It allows hierarchical responses and tracks modifications along with review relationships.
+/// This model represents a ReviewResponse which contains responses to customer reviews.
+/// It allows hierarchical responses and tracks modifications along with review relationships.
 model ReviewResponse {
+  /// Identifier of the review response
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   reviewResponseId       BigInt                   @id @unique(map: "review_response_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the review being responded to
   /// @FieldType('Scalars.GraphQLBigInt')
   reviewId               BigInt                   @db.UnsignedBigInt
+
+  /// Identifier of the user writing the response
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                 BigInt                   @db.UnsignedBigInt
+
+  /// Identifier of the parent response
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   parentResponseId       BigInt?                  @db.UnsignedBigInt
+
+  /// Text content of the response
   /// @Validator.IsString({ message: 'Response text must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Response text cannot exceed 5000 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})  
   responseText           String                   @db.Text
+
+  /// Original response text before modifications
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   originalResponseText   String?                  @db.Text
+
+  /// Timestamp of creation
   createdAt              DateTime                 @default(now()) @db.DateTime(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?                 @db.Timestamp(0) @updatedAt
+
+  /// Current status of the response
   /// @Validator.IsEnum(ReviewResponseStatus, { message: 'Invalid response status' })
   /// @HideField({ match: '@(ReviewResponse)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
   status                 ReviewResponseStatus   @default(PENDING)
+
+  /// Parent response this response replies to
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   parentResponse         ReviewResponse?          @relation("reviews_responsesToreviews_responses", fields: [parentResponseId], references: [reviewResponseId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseToResponse")
+
+  /// Child responses to this response
   /// @HideField({ match: '@(ReviewResponse)@(Create|Update)*Input' })
   childrenResponses      ReviewResponse[]         @relation("reviews_responsesToreviews_responses")
+
+  /// Review this response belongs to
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   review                 Review                   @relation(fields: [reviewId], references: [reviewId], onDelete: NoAction, onUpdate: NoAction, map: "fk_responseUnderReview")
+
+  /// User who wrote the response
   /// @HideField({ match: '@(ReviewResponse)@(Update)*Input' })
   user                   User                     @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "fk_userResponses")
 
@@ -522,40 +749,61 @@ model ReviewResponse {
   @@index([userId])
 }
 
-// The Service model records information about the services provided by a workshop including payment details and service status.
-// It connects various entities such as customers, employees, vehicles, and service requests.
+/// The Service model records information about the services provided by a workshop including payment details and service status.
+/// It connects various entities such as customers, employees, vehicles, and service requests.
 model Service {
+  /// Identifier of the service
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   serviceId           BigInt            @id @unique(map: "service_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the service request
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   serviceRequestId    BigInt?           @unique(map: "service_request_id") @db.UnsignedBigInt
+
+  /// Identifier of the workshop providing the service
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId          BigInt            @db.UnsignedBigInt
+
+  /// Identifier of the vehicle being serviced
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId           BigInt            @db.UnsignedBigInt
+
+  /// Identifier of the customer receiving the service
   /// @FieldType('Scalars.GraphQLBigInt')
   customerId          BigInt            @db.UnsignedBigInt
+
+  /// Identifier of the employee performing the service
   /// @FieldType('Scalars.GraphQLBigInt')
   employeeId          BigInt            @db.UnsignedBigInt
+
+  /// General description of the service
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   description         String?           @db.Text
+
+  /// Technical description of service performed
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   serviceDescription  String?           @db.Text
+
+  /// Current status of the service
   /// @Validator.IsEnum(ServiceStatus, { message: 'Invalid service status' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
   status              ServiceStatus?   @default(PENDING)
+
+  /// Payment status of the service
   /// @Validator.IsBoolean({ message: 'Payed off must be a boolean' })
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to false
   payedOff            Boolean           @default(false)
+
+  /// Total amount to be paid for the service
   /// @Validator.IsNumber({}, { message: 'Payment amount must be a number' })
   /// @Validator.Min(0, { message: 'Payment amount cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Payment amount cannot exceed 9999999.99' })
@@ -563,33 +811,63 @@ model Service {
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   paymentAmount       Decimal           @default(0.00) @db.Decimal(10, 2)
+
+  /// Date when service work began
   /// @Validator.IsDate({ message: 'Service start date must be a valid date' }) 
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to now()
   serviceStartDate    DateTime          @default(now()) @db.DateTime(0)
+
+  /// Date when service work was completed
   /// @Validator.IsDate({ message: 'Service end date must be a valid date' })
   /// @Validator.IsOptional()
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   serviceEndDate      DateTime?         @db.DateTime(0)
+
+  /// Timestamp when record was added
   addedAt             DateTime          @default(now()) @db.DateTime(0)
+
+  /// Identifier of user who added the record
   /// @FieldType('Scalars.GraphQLBigInt')
   addedBy             BigInt?           @db.UnsignedBigInt
+
+  /// Timestamp when service was resolved
   resolvedAt          DateTime?         @db.DateTime(0)
+
+  /// Identifier of user who resolved the service
   /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy          BigInt?           @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the record
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?           @db.UnsignedBigInt
+
+  /// Timestamp of deletion
   deletedAt           DateTime?         @db.Timestamp(0)
+
+  /// Associated service request
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
   serviceRequest      ServiceRequest?  @relation("service_requests_approved_service_idToservices")
+
+  /// Tasks associated with this service
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   tasks               Task[]
+
+  /// Customer receiving the service
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   customer            Customer         @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_customerOrdersService")
+
+  /// Employee performing the service
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   employee            Employee         @relation(fields: [employeeId], references: [employeeId], onDelete: NoAction, map: "fk_employeeResponsibleForService")
+
+  /// Vehicle being serviced
   vehicle             Vehicle          @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_serviceAssignedToVehicle")
+
+  /// Workshop providing the service
   /// @HideField({ match: '@(Service)@(Update)*Input' })
   workshop            Workshop         @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_serviceAssignedToWorkshop")
 
@@ -599,141 +877,235 @@ model Service {
   @@index([workshopId])
 }
 
-// The ServiceRequest model handles customer requests for services, documenting the status and description of the request.
-// It links vehicles, workshops, users, and approved services in the system.
+/// The ServiceRequest model handles customer requests for services, documenting the status and description of the request.
+/// It links vehicles, workshops, users, and approved services in the system.
 model ServiceRequest {
+  /// Identifier of the service request
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   serviceRequestId      BigInt                    @id @unique(map: "service_request_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the workshop
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId            BigInt                    @db.UnsignedBigInt
+
+  /// Identifier of the vehicle
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId             BigInt                    @db.UnsignedBigInt
+
+  /// Identifier of the user
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   userId                BigInt?                   @db.UnsignedBigInt
+
+  /// Identifier of the guest
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   guestId               BigInt?                   @db.UnsignedBigInt @unique
+
+  /// Identifier of the approved service
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   approvedServiceId     BigInt?                   @unique(map: "approved_service_id") @db.UnsignedBigInt
+
+  /// Current status of the request
   /// @Validator.IsEnum(ServiceRequestStatus, { message: 'Invalid service request status' })
   /// @HideField({ match: '@(ServiceRequest)@(Create)*Input' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
   status                ServiceRequestStatus?     @default(PENDING)
+
+  /// Description of the service request
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 5000, { message: 'Description cannot exceed 5000 characters' })
   /// @Validator.IsOptional()
   description           String?                   @db.Text
+
+  /// Timestamp of creation
   createdAt             DateTime                  @default(now()) @db.DateTime(0)
+
+  /// Timestamp when request was resolved
   resolvedAt            DateTime?                 @db.DateTime(0)
+
+  /// Identifier of user who resolved the request
   /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy            BigInt?                   @db.UnsignedBigInt
+
+  /// Timestamp of deletion
   deletedAt             DateTime?                 @db.Timestamp(0)
-  jobs                                                    Job[]
+
+  /// Jobs associated with this request
+  jobs                  Job[]
+
+  /// Approved service for this request
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
-  approvedService                                         Service?                @relation("service_requests_approved_service_idToservices", fields: [approvedServiceId], references: [serviceId], onDelete: NoAction, map: "fk_requestApprovedService")
-  vehicle                                                 Vehicle                 @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_requestAssignedToVehicle")
+  approvedService       Service?                @relation("service_requests_approved_service_idToservices", fields: [approvedServiceId], references: [serviceId], onDelete: NoAction, map: "fk_requestApprovedService")
+
+  /// Vehicle associated with this request
+  vehicle               Vehicle                 @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_requestAssignedToVehicle")
+
+  /// Workshop handling this request
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
-  workshop                                                Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
+  workshop              Workshop                @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_requestAssignedToWorkshop")
+
+  /// User who created the request
   /// @HideField({ match: '@(ServiceRequest)@(Update)*Input' })
-  user                                                    User?                   @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_requestFromUser")
+  user                  User?                   @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_requestFromUser")
+
+  /// Guest who created the request
   /// @HideField({ match: '@(ServiceRequest)@(Create|Update)*Input' })
   /// Note: Cannot fill guest while creating service request, because sr with guest can only be created by guest creation.
-  guest                                                   Guest?                  @relation(fields: [guestId], references: [guestId], onDelete: SetNull , map: "fk_GuestProvidesServiceRequest")
+  guest                 Guest?                  @relation(fields: [guestId], references: [guestId], onDelete: SetNull , map: "fk_GuestProvidesServiceRequest")
+
   @@index([vehicleId])
   @@index([workshopId])
   @@index([userId])
 }
 
-// This model represents SessionData for managing user sessions, refresh tokens and device information.
-// It is utilized for maintaining secure user login sessions across the application.
+/// This model represents SessionData for managing user sessions, refresh tokens and device information.
+/// It is utilized for maintaining secure user login sessions across the application.
 model SessionData {
+  /// Identifier of the session
   /// @HideField({ match: '@(SessionData)@(Update)*Input' })
   sessionDataId        String      @id @unique @db.Char(36)
+
+  /// Identifier of the user
   /// @FieldType('Scalars.GraphQLBigInt')
   userId               BigInt      @db.UnsignedBigInt
+
+  /// Token for session refresh
   refreshToken         String      @db.VarChar(1000)
+
+  /// Unique identifier of the device
   deviceId             String      @db.VarChar(255)
+
+  /// Name of the device
   deviceName           String?     @db.VarChar(255)
+
+  /// Additional device information
   deviceInfo           String?     @db.VarChar(255)
+
+  /// IP address of the device
   ipAddress            String?     @db.VarChar(45)
+
+  /// Serial number of the device
   deviceSerialNumber   String?     @db.VarChar(255)
+
+  /// Timestamp when session was issued
   issuedAt             DateTime    @default(now()) @db.Timestamp(0)
+
+  /// Timestamp when session expires
   expiresAt            DateTime    @db.Timestamp(0)
 
+  /// User associated with this session
   user                 User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@index([userId])
   @@unique([userId, deviceId])
 }
 
-// The Task model defines individual tasks related to a service order including descriptions, execution time, and costs.
-// It also tracks task statuses and associations with employees and workshop jobs.
+/// The Task model defines individual tasks related to a service order including descriptions, execution time, and costs.
+/// It also tracks task statuses and associations with employees and workshop jobs.
 model Task {
+  /// Identifier of the task
   /// @HideField({ match: '@(Task)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   taskId               BigInt                @id @unique(map: "task_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the service
   /// @FieldType('Scalars.GraphQLBigInt')
   serviceId            BigInt                @db.UnsignedBigInt
+
+  /// Identifier of the workshop job
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopJobId        BigInt                @db.UnsignedBigInt
+
+  /// Custom name for the task
   /// @Validator.IsString({ message: 'Custom name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Custom name must be between 2 and 50 characters' })
   /// @Validator.IsOptional()
   customName           String?               @db.VarChar(50)
+
+  /// Description of the task
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 2500, { message: 'Description cannot exceed 2500 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Description is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   description          String                @db.Text
+
+  /// Current status of the task
   /// @Validator.IsEnum(TaskStatus, { message: 'Invalid task status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
   status               TaskStatus?          @default(PENDING)
+
+  /// Time taken to execute the task
   /// @Validator.IsNumber({}, { message: 'Execution time must be a number' })
   /// @Validator.Min(0, { message: 'Execution time cannot be negative' })
   /// @Validator.Max(9999.99, { message: 'Whoa Cowboy! Execution time cannot exceed 9999.99!' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   executionTime        Float                 @default(0.00) @db.Float
+
+  /// Cost of parts used in the task
   /// @Validator.IsNumber({}, { message: 'Parts cost must be a number' })
   /// @Validator.Min(0, { message: 'Parts cost cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Parts cost cannot exceed 9999999.99' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to 0.00
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
+
+  /// Timestamp of creation
   createdAt            DateTime              @default(now()) @db.DateTime(0)
+
+  /// Identifier of user who created the record
   /// @FieldType('Scalars.GraphQLBigInt')
   createdBy            BigInt?               @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt            DateTime?             @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the record
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy            BigInt?               @db.UnsignedBigInt
+
+  /// Timestamp when task was resolved
   resolvedAt           DateTime?             @db.DateTime(0)
+
+  /// Identifier of user who resolved the task
   /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy           BigInt?               @db.UnsignedBigInt
+
+  /// Workshop job associated with this task
   workshopJob          WorkshopJob           @relation(fields: [workshopJobId], references: [workshopJobId], onDelete: NoAction)
+
+  /// Service this task belongs to
   /// @HideField({ match: '@(Task)@(Update)*Input' })
   service              Service               @relation(fields: [serviceId], references: [serviceId], onDelete: NoAction, map: "fk_taskIsAPartOfService")
+
+  /// Employees assigned to this task
   employees            Employee[]
 
   @@index([serviceId])
 }
 
-// The User model stores account details for users, including authentication credentials and profile information.
-// It manages relationships with vehicles, service requests, reviews, and other user-related activities.
+/// The User model stores account details for users, including authentication credentials and profile information.
+/// It manages relationships with vehicles, service requests, reviews, and other user-related activities.
 model User {
+  /// Identifier of the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   userId         BigInt           @id @unique(map: "user_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Username for account login
   /// @Validator.IsString({ message: 'Username must be a string' })
   /// @Validator.Length(3, 30, { message: 'Username must be between 3 and 30 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9_-]+$/, { message: 'Username can only contain letters, numbers, underscores and hyphens' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Username is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   username          String              @db.VarChar(30) @unique
+
+  /// Password for account authentication
   /// @HideField(output: true)
   /// @Validator.IsString({ message: 'Password must be a string' })
   /// @Validator.MinLength(8, { message: 'Password must be at least 8 characters long' })
@@ -742,92 +1114,155 @@ model User {
   /// @Validator.IsOptional({groups: [UPDATE]})
   /// Note: Password will be hashed before storage
   password          String              @db.VarChar(255)
+
+  /// Email address for account
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsOptional()
   email             String              @db.VarChar(320) @unique
+
+  /// Contact phone number
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsOptional()
   telephoneNumber   String              @db.VarChar(12)
+
+  /// URL to user's avatar image
   /// @Validator.IsString({ message: 'Avatar URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Avatar URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()
   avatarURL         String?             @db.VarChar(255)
+
+  /// Account verification status
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @HideField({ match: '@(User)@(Create)*Input' })
   /// @Validator.IsOptional()
   isVerified        Boolean?            @default(false) 
+
+  /// Current status of the user account
   /// @Validator.IsEnum(UserStatus, { message: 'Invalid user status' })
   /// @HideField({ match: '@(User)@(Create)*Input' })
   /// @Validator.IsOptional()
   status            UserStatus?        @default(INACTIVE)
+
+  /// User's first name
   /// @Validator.IsString({ message: 'First name must be a string' })
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   firstName        String?               @db.VarChar(30)
+
+  /// User's last name
   /// @Validator.IsString({ message: 'Last name must be a string' })
   /// @Validator.Length(2, 30, { message: 'Last name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   lastName         String?               @db.VarChar(30)
+
+  /// Role assigned to the user
   /// @Validator.IsEnum(UserRole, { message: 'Invalid user role' })
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   /// @Validator.IsOptional()
   role             UserRole              @default(USER)
+
+  /// Timestamp of account creation
   createdAt        DateTime             @default(now()) @db.Timestamp(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?             @db.Timestamp(0) @updatedAt
+
+  /// Timestamp of account deletion
   deletedAt        DateTime?            @db.Timestamp(0)
+
+  /// Vehicles associated with the user
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   vehicles         Vehicle[]
+
+  /// Service requests made by the user
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   serviceRequests  ServiceRequest[]
+
+  /// Customer profiles associated with the user
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   customers        Customer[]
+
+  /// Employee profiles associated with the user
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   employees        Employee[]
+
+  /// Workshops owned by the user
   /// @HideField({match: '@(User)@(Create|Update)*Input'})
   workshops        Workshop[]
+
+  /// Reviews written by the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   reviews           Review[]
+
+  /// Review responses written by the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   reviewResponses   ReviewResponse[]
+
+  /// Reports submitted by the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   userReports       UserReport[]
+
+  /// Workshop join requests made by the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   joinWorkshopRequests JoinWorkshopRequest[]
+
+  /// Session data for the user
   /// @HideField({ match: '@(User)@(Create|Update)*Input' })
   sessionData       SessionData[]
 }
 
-// The UserReport model is used to document user reports regarding issues such as offensive content or fraudulent activity.
-// It includes details about the report text, status, and the reported entity, along with user associations.
+/// The UserReport model is used to document user reports regarding issues such as offensive content or fraudulent activity.
+/// It includes details about the report text, status, and the reported entity, along with user associations.
 model UserReport {
+  /// Identifier of the report
   /// @HideField({ match: '@(UserReport)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   reportId           BigInt                     @id @unique(map: "report_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the user who submitted the report
   /// @FieldType('Scalars.GraphQLBigInt')
   userId             BigInt                     @db.UnsignedBigInt
+
+  /// Content of the report
   /// @Validator.IsString({ message: 'Report text must be a string' })
   /// @Validator.Length(50, 2500, { message: 'Report text must be between 50 and 2500 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Report text is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   reportText         String                     @db.Text
+
+  /// Type of the report (e.g., SPAM, ABUSE, INAPPROPRIATE)
   /// @Validator.IsEnum(UserReportType, { message: 'Invalid report type' })
   reportType         UserReportType
+
+  /// Type of entity being reported (e.g., USER, REVIEW, WORKSHOP)
   /// @Validator.IsEnum(UserReportReportedEntityType, { message: 'Invalid reported entity type' })
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   reportedEntityType UserReportReportedEntityType
+
+  /// Identifier of the entity being reported
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(UserReport)@(Update)*Input'})
   reportedId         BigInt                     @db.UnsignedBigInt
+
+  /// Current status of the report
   /// @Validator.IsEnum(UserReportStatus, { message: 'Invalid report status' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to pending
   status             UserReportStatus          @default(PENDING)
+
+  /// Timestamp of report creation
   createdAt          DateTime                   @default(now()) @db.DateTime(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the report
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy          BigInt?                     @db.UnsignedBigInt
+
+  /// User who submitted the report
   /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
@@ -835,33 +1270,58 @@ model UserReport {
 }
 
 
-// The Vehicle model holds information about vehicles owned or managed within the system, including details like model and owner.
-// It tracks service requests and links to vehicle details for further information.
+/// The Vehicle model holds information about vehicles owned or managed within the system, including details like model and owner.
+/// It tracks service requests and links to vehicle details for further information.
 model Vehicle {
+  /// Identifier of the vehicle
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId                         BigInt             @id @unique(map: "vehicle_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the user who owns the vehicle
   /// @FieldType('Scalars.GraphQLBigInt')
   userId                            BigInt?            @db.UnsignedBigInt
+
+  /// Identifier of the guest who owns the vehicle
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                           BigInt?            @db.UnsignedBigInt @unique
+
+  /// Identifier of the customer who owns the vehicle
   /// @FieldType('Scalars.GraphQLBigInt')
   customerId                        BigInt?            @db.UnsignedBigInt
+
+  /// Identifier of the vehicle model
   /// @FieldType('Scalars.GraphQLBigInt')
   modelId                           BigInt             @db.UnsignedBigInt
+
+  /// Timestamp when vehicle was deleted
   deletedAt                         DateTime?          @db.Timestamp(0)
+
+  /// Service requests associated with this vehicle
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   serviceRequests                   ServiceRequest[]
+
+  /// Services performed on this vehicle
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   services                          Service[]
+
+  /// Model information for this vehicle
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   vehicleModel                      VehicleModel       @relation(fields: [modelId], references: [modelId], onDelete: NoAction, map: "fk_vehicleHasModel")
+
+  /// User who owns the vehicle
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   user                              User?              @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_vehicleCanBeOwnedByUser")
+
+  /// Customer who owns the vehicle
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   customer                          Customer?          @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_vehicleIsOwnedByCustomer")
+
+  /// Guest who owns the vehicle
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   guest                             Guest?             @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestProvidesVehicle")
+
+  /// Additional details about the vehicle
   vehicleDetails                    VehicleDetails?
 
   @@index([modelId])
@@ -869,88 +1329,132 @@ model Vehicle {
   @@index([customerId])
 }
 
-// This model represents VehicleBrand information, including brand names and related vehicle models.
-// It is used to categorize and link vehicles to their respective brands in the application.
+/// This model represents VehicleBrand information, including brand names and related vehicle models.
+/// It is used to categorize and link vehicles to their respective brands in the application.
 model VehicleBrand {
+  /// Name of the vehicle brand
   /// @Validator.IsString({ message: 'Brand name must be a string' })
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Brand name is required' })
   /// @Validator.IsOptional({groups: [UPDATE]}) 
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brandName       String            @id @unique(map: "brand_name") @db.VarChar(50)
+
+  /// Timestamp of brand creation
   createdAt       DateTime          @default(now()) @db.Timestamp(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+
+  /// Models associated with this brand
   /// @HideField({ match: '@(VehicleBrand)@(Create|Update)*Input' })
   vehicleModels   VehicleModel[]
 }
 
-// The VehicleDetails model provides additional details for a vehicle such as year of production, VIN, and engine capacity.
-// It enhances the vehicle information with technical specifications and registration details.
+/// The VehicleDetails model provides additional details for a vehicle such as year of production, VIN, and engine capacity.
+/// It enhances the vehicle information with technical specifications and registration details.
 model VehicleDetails {
+  /// Identifier of the vehicle details record
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleDetailsId  BigInt    @id @unique(map: "vehicle_details_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the associated vehicle
   /// @FieldType('Scalars.GraphQLBigInt')
   vehicleId         BigInt    @db.UnsignedBigInt @unique
+
+  /// Manufacturing year of the vehicle
   /// @Validator.IsInt({ message: 'Year of production must be an integer' })
   /// @Validator.Min(1900, { message: 'Year of production must be after 1900' })
   /// @Validator.Max(new Date().getFullYear(), { message: 'Year of production cannot be in the future' })
   /// @Validator.IsOptional()
   yearOfProduction  Int?     @db.Int
+
+  /// Vehicle Identification Number
   /// @Validator.IsString({ message: 'VIN must be a string' })
   /// @Validator.Length(17, 17, { message: 'VIN must be exactly 17 characters' })
   /// @Validator.Matches(/^[A-HJ-NPR-Z0-9]{17}$/, { message: 'Invalid VIN format' })
   /// @Validator.IsOptional()
   VIN               String?   @db.Char(17)
+
+  /// Engine size/capacity
   /// @Validator.IsString({ message: 'Engine capacity must be a string' })
   /// @Validator.Length(1, 5, { message: 'Engine capacity must be between 1 and 5 characters' })
   /// @Validator.IsOptional()
   engineCapacity    String?   @db.VarChar(5)
+
+  /// Country where vehicle is registered
   /// @Validator.IsString({ message: 'Country of registration must be a string' })
   /// @Validator.Length(2, 2, { message: 'Country of registration must be exactly 2 characters' })
   /// @Validator.Matches(/^[A-Z]{2}$/, { message: 'Invalid country of registration format' })
   /// @Validator.IsOptional()
   countryOfRegistration String? @db.VarChar(2)
+
+  /// Vehicle registration plate number
   /// @Validator.IsString({ message: 'License plate must be a string' })
   /// @Validator.Length(1, 20, { message: 'License plate must be between 1 and 20 characters' })
   /// @Validator.Matches(/^[A-Z0-9]+$/, { message: 'Invalid license plate format' })
   /// @Validator.IsOptional()
   licensePlate      String?   @db.VarChar(20)
+
+  /// Type of fuel used by the vehicle
   /// @Validator.IsEnum(FuelType, { message: 'Invalid fuel type' })
   /// @Validator.IsOptional()
   fuelType          FuelType?
+
+  /// Engine serial number
   /// @Validator.IsString({ message: 'Engine number must be a string' })
   /// @Validator.Length(2, 16, { message: 'Engine number must be between 2 and 16 characters' })
   /// @Validator.IsOptional()
   engineNo          String?   @db.VarChar(16)
+
+  /// Color of the vehicle body
   /// @Validator.IsEnum(BodyColor, { message: 'Invalid body color' })
   /// @Validator.IsOptional()
   bodyColor         BodyColor?
+
+  /// Timestamp when record was deleted
   deletedAt         DateTime? @db.Timestamp(0)
+
+  /// Associated vehicle record
   /// @HideField({ match: '@(VehicleDetails)@(Update)*Input' })
   /// @Validator.IsOptional()
   vehicle           Vehicle   @relation(fields: [vehicleId], references: [vehicleId], onDelete: NoAction, map: "fk_vehicleHasDetails")
+
   @@index([vehicleId])
 }
 
-// The VehicleModel model defines specific vehicle models along with the associated brand.
-// It contains details like model name and is used to establish relationships with individual vehicles.
+/// The VehicleModel model defines specific vehicle models along with the associated brand.
+/// It contains details like model name and is used to establish relationships with individual vehicles.
 model VehicleModel {
+  /// Identifier of the vehicle model
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   modelId        BigInt          @id @unique(map: "model_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Name of the vehicle model
   /// @Validator.IsString({ message: 'Model name must be a string' })
   /// @Validator.Length(2, 50, { message: 'Model name must be between 2 and 50 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Model name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   modelName      String          @db.VarChar(50)
+
+  /// Brand name of the vehicle model
   /// @Validator.IsString({ message: 'Brand name must be a string' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Set name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   /// @Validator.Length(2, 50, { message: 'Brand name must be between 2 and 50 characters' })
   brand          String          @db.VarChar(50) @map("brandName")
+
+  /// Timestamp of model creation
   createdAt      DateTime        @default(now()) @db.Timestamp(0)
+
+  /// Timestamp of last update
   updatedAt          DateTime?        @db.Timestamp(0) @updatedAt
+
+  /// Vehicles of this model
   /// @HideField({ match: '@(VehicleModel)@(Create|Update)*Input' })
   vehicles       Vehicle[]
+
+  /// Brand associated with this model
   /// @HideField({ match: '@(VehicleModel)@(Update)*Input' })
   vehicleBrand  VehicleBrand @relation(fields: [brand], references: [brandName], onDelete: NoAction, onUpdate: Cascade, map: "fk_modelMadeByBrand")
 
@@ -958,101 +1462,173 @@ model VehicleModel {
   @@index([brand])
 }
 
-// The Workshop model represents workshop entities that manage services, employees, and customers.
-// It stores essential information like contact details, verification status, and related address.
+/// The Workshop model represents workshop entities that manage services, employees, and customers.
+/// It stores essential information like contact details, verification status, and related address.
 model Workshop {
+  /// Identifier of the workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId                BigInt                      @id @unique(map: "workshop_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the workshop owner
   /// @FieldType('Scalars.GraphQLBigInt')
   ownerId                   BigInt                      @db.UnsignedBigInt
+
+  /// Identifier of the workshop address
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @Validator.IsOptional()
   addressId                 BigInt?                      @db.UnsignedBigInt @unique
+
+  /// Email address for workshop contact
   /// @Validator.IsEmail({}, { message: 'Invalid email format' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Email is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   email                     String                      @db.VarChar(320) @unique
+
+  /// Contact phone number for the workshop
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })
   /// @Validator.Matches(/^\+?[0-9]+$/, { message: 'Invalid telephone number format' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Telephone number is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   telephoneNumber           String                      @db.VarChar(12)
+
+  /// Verification status of the workshop
   /// @Validator.IsBoolean({ message: 'Is verified must be a boolean' })
   /// @HideField({ match: '@(Workshop)@(Create)*Input' })
   /// @Validator.IsOptional()
   isVerified                Boolean?                    @default(false)
+
+  /// Flag indicating if workshop is managing work
   /// @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
   /// @Validator.IsOptional()
   isManagingWork            Boolean?                    @default(false)
+
+  /// Flag indicating if workshop is offering services
   /// @Validator.IsBoolean({ message: 'Is managing work must be a boolean' })
   /// @Validator.IsOptional()
   isOfferingService         Boolean?                    @default(false)
+
+  /// Timestamp of workshop creation
   createdAt                 DateTime                    @default(now()) @db.Timestamp(0)
+
+  /// Timestamp of last update
   updatedAt                 DateTime?                   @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the workshop
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy                 BigInt?                     @db.UnsignedBigInt
+
+  /// Timestamp of workshop deletion
   deletedAt                 DateTime?                   @db.Timestamp(0)
+
+  /// Address details of the workshop
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: SetNull, map: "fk_workshopHasAddress")
+
+  /// Customers associated with this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   customers                 Customer[]
+
+  /// Employees working at this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   employees                 Employee[]
+
+  /// Reviews received by this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   reviews                   Review[]
+
+  /// Service requests received by this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   serviceRequests           ServiceRequest[]
+
+  /// Services provided by this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   services                  Service[]
+
+  /// Owner of the workshop
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   user                      User                        @relation(fields: [ownerId], references: [userId], onDelete: NoAction, map: "fk_workshopHasOwner")
+
+  /// Additional details about the workshop
   workshopDetails           WorkshopDetails?
+
+  /// Jobs performed at this workshop
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   workshopJobs              WorkshopJob[]
+
+  /// Job categories offered by this workshop
   /// @HideField({ match: '@(Workshop)@(Update)*Input' })
   jobCategories             JobCategory[]
+
+  /// Join requests for this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   joinWorkshopRequests      JoinWorkshopRequest[]
+
+  /// OTP device settings for this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   WorkshopDeviceOtp         WorkshopDeviceOtp?
+
+  /// Devices registered to this workshop
   /// @HideField({ match: '@(Workshop)@(Create|Update)*Input' })
   workshopDevices           WorkshopDevice[]
 
   @@index([ownerId])
 }
 
-// This model manages the devices associated with a workshop, including device names, serial numbers, and status.
-// It tracks device authentication data such as last login and update timestamps.
+/// This model manages the devices associated with a workshop, including device names, serial numbers, and status.
+/// It tracks device authentication data such as last login and update timestamps.
 model WorkshopDevice {
+  /// Identifier of the workshop device
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
   workshopDeviceId    BigInt                    @id @unique(map: "workshop_device_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the associated workshop
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   workshopId          BigInt                    @db.UnsignedBigInt
+
+  /// Serial number of the device
   /// @Validator.IsString({ message: 'Serial number must be a string' })
   /// @Validator.Length(1, 255, { message: 'Serial number must be between 1 and 255 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Serial number is required' })
   /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   serialNumber        String                    @db.VarChar(255)
+
+  /// Name of the device
   /// @Validator.IsString({ message: 'Device name must be a string' })
   /// @Validator.Length(1, 255, { message: 'Device name must be between 1 and 255 characters' })
   /// @Validator.IsNotEmpty({ groups: [CREATE], message: 'Device name is required' })
   /// @Validator.IsOptional({ groups: [UPDATE]})
   deviceName          String                    @db.VarChar(255)
+
+  /// Current status of the device
   /// @Validator.IsEnum(WorkshopDeviceStatus, { message: 'Invalid workshop device status' })
   /// @Validator.IsOptional()
   status              WorkshopDeviceStatus?     @default(INACTIVE)
+
+  /// Timestamp of last login
   lastLoginAt         DateTime?                 @db.Timestamp(0)
+
+  /// Identifier of user who last logged in
   /// @FieldType('Scalars.GraphQLBigInt')
   lastLoginBy         BigInt?                   @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt           DateTime?                 @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the device
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?                   @db.UnsignedBigInt
+
+  /// Timestamp when device was accepted
   acceptedAt          DateTime?                 @db.Timestamp(0)
+
+  /// Identifier of user who accepted the device
   /// @FieldType('Scalars.GraphQLBigInt')
   acceptedBy          BigInt?                   @db.UnsignedBigInt
+
+  /// Workshop associated with this device
   /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   workshop            Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDevice")
 
@@ -1060,31 +1636,44 @@ model WorkshopDevice {
   @@index([workshopId])
 }
 
-// The WorkshopDeviceOtp model handles one-time passwords for workshop devices used for secure authentication.
-// It includes the OTP code, expiry time, and links to the associated workshop for verification.
+/// The WorkshopDeviceOtp model handles one-time passwords for workshop devices used for secure authentication.
+/// It includes the OTP code, expiry time, and links to the associated workshop for verification.
 model WorkshopDeviceOtp {
+  /// Identifier of the workshop device OTP record
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
   WorkshopDeviceOtpId                   BigInt      @id @unique(map: "workshop_device_otp_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the employee associated with the OTP
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   /// @Validator.IsOptional()
   employeeId                            BigInt?      @db.UnsignedBigInt
+
+  /// Identifier of the workshop
   /// @FieldType('Scalars.GraphQLBigInt')
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   workshopId                            BigInt      @db.UnsignedBigInt @unique
+
+  /// One-time password code
   /// @Validator.IsString({ message: 'Code must be a string' })
   /// @Validator.Length(7, 7, { message: 'Code must be exactly 7 characters' })
   /// @Validator.Matches(/^[0-9]{7}$/, { message: 'Invalid code format' })
   /// @Validator.IsNotEmpty()
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   code                                  String      @unique @db.Char(7)
+
+  /// Timestamp when OTP expires
   /// @Validator.IsDate()
   /// @Validator.IsNotEmpty()
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   expiresAt                             DateTime
+
+  /// Timestamp of OTP creation
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Create|Update)*Input' })
   createdAt                             DateTime    @default(now()) @db.Timestamp(0)
+
+  /// Workshop associated with this OTP
   /// @HideField({ match: '@(WorkshopDeviceOtp)@(Update)*Input' })
   workshop                              Workshop    @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDeviceOtp")
 
@@ -1092,85 +1681,133 @@ model WorkshopDeviceOtp {
   @@index([workshopId])
 }
 
-// This model provides additional details specific to a workshop such as its rating, description, and NIP.
-// It centralizes supplementary information that augments the basic workshop record.
+/// This model provides additional details specific to a workshop such as its rating, description, and NIP.
+/// It centralizes supplementary information that augments the basic workshop record.
 model WorkshopDetails {
+  /// Identifier of the workshop details record
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId       BigInt                    @id @db.UnsignedBigInt
+
+  /// Overall rating of the workshop
   /// @Validator.IsNumber({}, { message: 'Rating must be a number' })
   /// @Validator.Min(0, { message: 'Rating cannot be negative' })
   /// @Validator.Max(5, { message: 'Rating cannot exceed 5' })
   /// Note: Optional because it is set to 0.00 by default
   /// @Validator.IsOptional()
   rating           Decimal?                   @default(0.00) @db.Decimal(3, 2)
+
+  /// Name of the workshop
   /// @Validator.IsString({ message: 'Workshop name must be a string' })
   /// @Validator.Length(2, 100, { message: 'Workshop name must be between 2 and 100 characters' })
   /// @Validator.Matches(/^[a-zA-Z0-9\s,\-&$]+$/, { message: 'Workshop name can only contain letters, numbers, spaces and signs like , - & $' })
   /// @Validator.IsNotEmpty({groups: [CREATE], message: 'Set name is required' })
   /// @Validator.IsOptional({groups: [UPDATE]})
   workshopName     String                    @db.VarChar(100)
+
+  /// Description of the workshop
   /// @Validator.IsString({ message: 'Description must be a string' })
   /// @Validator.Length(0, 10000, { message: 'Description cannot exceed 10000 characters' })
   /// @Validator.IsOptional()
   description      String?                   @db.Text
+
+  /// URL to workshop's logo image
   /// @Validator.IsString({ message: 'Logo URL must be a string' })
   /// @Validator.Length(0, 255, { message: 'Logo URL cannot exceed 255 characters' })
   /// @Validator.IsOptional()
   logoURL          String?                   @db.VarChar(255)
+
+  /// Current status of the workshop
   /// @Validator.IsEnum(WorkshopDetailsStatus, { message: 'Invalid workshop status' })
   /// @HideField({ match: '@(WorkshopDetails)@(Create)*Input' })
   /// @Validator.IsOptional()
   status           WorkshopDetailsStatus?   @default(INACTIVE)
+
+  /// Tax identification number
   /// @Validator.IsString({ message: 'NIP must be a string' })
   /// @Validator.Length(10, 10, { message: 'NIP must be exactly 10 characters' })
   /// @Validator.Matches(/^[0-9]{10}$/, { message: 'NIP must contain exactly 10 digits' })
   /// @Validator.IsOptional()
   NIP              String?                   @db.Char(10)
+
+  /// Timestamp of last update
   updatedAt        DateTime?                  @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the details
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy        BigInt?                   @db.UnsignedBigInt
+
+  /// Timestamp of deletion
   deletedAt        DateTime?                 @db.Timestamp(0)
+
+  /// Workshop associated with these details
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })
   workshop         Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDetails")
 }
 
-// The WorkshopJob model outlines the jobs offered by a workshop, including descriptions, pricing, and availability.
-// It establishes connections between the workshop and job entities and tracks creation and update details.
+/// The WorkshopJob model outlines the jobs offered by a workshop, including descriptions, pricing, and availability.
+/// It establishes connections between the workshop and job entities and tracks creation and update details.
 model WorkshopJob {
+  /// Identifier of the workshop job
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopJobId           BigInt    @id @unique(map: "workshop_job_id") @default(autoincrement()) @db.UnsignedBigInt
+
+  /// Identifier of the workshop offering the job
   /// @FieldType('Scalars.GraphQLBigInt')
   workshopId              BigInt    @db.UnsignedBigInt
+
+  /// Identifier of the job being offered
   /// @FieldType('Scalars.GraphQLBigInt')
   jobId                   BigInt    @db.UnsignedBigInt
+
+  /// Workshop-specific description of the job
   /// @Validator.IsString({ message: 'Workshop description must be a string' })
   /// @Validator.Length(0, 500, { message: 'Workshop description cannot exceed 500 characters' })
   /// @Validator.IsOptional()
   workshopJobDescription  String?   @db.Text
+
+  /// Minimum price for the job
   /// @Validator.IsNumber({}, { message: 'Minimum price must be a number' })
   /// @Validator.Min(0, { message: 'Minimum price cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Minimum price cannot exceed 9999999.99' })
   /// @Validator.IsOptional()
   minPrice                Decimal?  @db.Decimal(10, 2)
+
+  /// Maximum price for the job
   /// @Validator.IsNumber({}, { message: 'Maximum price must be a number' })
   /// @Validator.Min(0, { message: 'Maximum price cannot be negative' })
   /// @Validator.Max(9999999.99, { message: 'Maximum price cannot exceed 9999999.99' })
   /// @Validator.IsOptional()
   maxPrice                Decimal?  @db.Decimal(10, 2)
+
+  /// Flag indicating if job is currently available
   /// @Validator.IsBoolean({ message: 'Availability must be a boolean' })
   /// @Validator.IsOptional()
   /// Note: Optional because field defaults to true
   availability            Boolean   @default(true)
+
+  /// Timestamp of job creation
   createdAt               DateTime                  @default(now()) @db.Timestamp(0)
+
+  /// Identifier of user who created the job
   /// @FieldType('Scalars.GraphQLBigInt')
   createdBy               BigInt?                   @db.UnsignedBigInt
+
+  /// Timestamp of last update
   updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
+
+  /// Identifier of user who last updated the job
   /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy               BigInt?                   @db.UnsignedBigInt
+
+  /// Tasks associated with this workshop job
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   tasks                   Task[]    
+
+  /// Job details
   job                     Job        @relation(fields: [jobId], references: [jobId], onDelete: NoAction, map: "fk_jobsCanBeOfferedByWorkshops")
+
+  /// Workshop offering this job
   /// @HideField({ match: '@(WorkshopJob)@(Update)*Input' })
   workshop                Workshop   @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopCanOffersJobs")
 
@@ -1178,6 +1815,7 @@ model WorkshopJob {
   @@index([jobId])
 }
 
+/// Types of entities that can be reported by users
 enum UserReportReportedEntityType {
   USER
   WORKSHOP
@@ -1185,6 +1823,7 @@ enum UserReportReportedEntityType {
   REVIEW_RESPONSE
 }
 
+/// Categories of user reports
 enum UserReportType {
   OFFENSIVE_CONTENT
   HARRASMENT
@@ -1198,6 +1837,7 @@ enum UserReportType {
   OTHER
 }
 
+/// Types of fuel used by vehicles
 enum FuelType {
   PETROL
   DIESEL
@@ -1209,6 +1849,7 @@ enum FuelType {
   OTHER
 }
 
+/// Vehicle body colors
 enum BodyColor {
   BLACK
   WHITE
@@ -1222,6 +1863,7 @@ enum BodyColor {
   OTHER
 }
 
+/// User role levels in the system
 enum UserRole {
   USER
   MODERATOR
@@ -1229,6 +1871,7 @@ enum UserRole {
   SUPERADMIN
 }
 
+/// Status of service requests
 enum ServiceRequestStatus {
   PENDING
   ACCEPTED
@@ -1236,18 +1879,21 @@ enum ServiceRequestStatus {
   CANCELLED
 }
 
+/// Status of tasks
 enum TaskStatus {
   PENDING
   COMPLETED
   CANCELLED
 }
 
+/// Status of user reports
 enum UserReportStatus {
   PENDING
   ACTIVE
   CLOSED
 }
 
+/// Status of reviews
 enum ReviewStatus {
   PENDING
   ACCEPTED
@@ -1255,6 +1901,7 @@ enum ReviewStatus {
   HIDDEN
 }
 
+/// Status of review responses
 enum ReviewResponseStatus {
   PENDING
   ACCEPTED
@@ -1262,43 +1909,49 @@ enum ReviewResponseStatus {
   HIDDEN
 }
 
+/// Status of workshop details
 enum WorkshopDetailsStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
 }
 
+/// Status of services
 enum ServiceStatus {
   PENDING
   COMPLETED
   CANCELLED
 }
 
-
+/// Source of customer creation
 enum CustomerCreationSource {
   GUEST
   WORKSHOP
   USER
 }
 
+/// Status of workshop join requests
 enum JoinWorkshopRequestStatus {
   PENDING
   ACCEPTED
   REJECTED
 }
 
+/// Status of workshop devices
 enum WorkshopDeviceStatus {
   ENABLED
   INACTIVE
   DISABLED
 }
 
+/// Status of user accounts
 enum UserStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
 }
 
+/// Status of employee accounts
 enum EmployeeStatus {
   ACTIVE
   INACTIVE
