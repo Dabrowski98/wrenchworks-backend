@@ -74,6 +74,7 @@
     "prisma": "^5.22.0",
     "prisma-nestjs-graphql": "^20.0.3",
     "source-map-support": "^0.5.21",
+    "spectaql": "^3.0.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",

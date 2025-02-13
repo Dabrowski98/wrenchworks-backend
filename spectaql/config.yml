@@ -1,0 +1,151 @@
+introspection:
+  url: http://localhost:3000/graphql
+  queryNameStrategy: fieldName
+  fieldExpansionDepth: 1 # Controls how deep to expand nested types
+  # headers:
+  #   Authorization: Bearer <token>
+
+info:
+  title: WrenchWorks API Documentation
+  description: GraphQL API documentation for the WrenchWorks application
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/graphql
+    description: Local Development Server
+  # Add other environments as needed:
+  # - url: https://staging-api.example.com/graphql
+  #   description: Staging Server
+  # - url: https://api.example.com/graphql
+  #   description: Production Server
+
+spectaql:
+  displayAllServers: true
+  targetDir: ../../public/docs
+
+  # Schema options
+  metadata:
+    tags:
+      - name: Authentication
+        description: Authentication related operations
+      - name: Users
+        description: User management operations
+      - name: Workshops
+        description: Workshop management operations
+      - name: Vehicles
+        description: Vehicle management operations
+      - name: Services
+        description: Service management operations
+      - name: Reviews
+        description: Review management operations
+
+  # Documentation organization
+  groups:
+    - name: Queries
+      include: Query
+    - name: Mutations
+      include: Mutation
+    - name: Types
+      include:
+        # Main entity types
+        - User
+        - Workshop
+        - Customer
+        - Vehicle
+        - Service
+        - Review
+        - Task
+        - Employee
+        # Input types directly used in operations
+        - AcceptWorkshopDeviceInput
+        - WorkshopWhereUniqueInput
+        - AcceptServiceRequestInput
+        - ChangePasswordInput
+        - UserWhereUniqueInput
+        - CloseOneServiceInput
+        - ServiceWhereUniqueInput
+        - AddressCreateInput
+        - UserCreateInput
+        - CustomerCreateInput
+        - EmployeeCreateInput
+        - EmployeePermissionCreateInput
+        - JobCreateInput
+        - JobCategoryCreateInput
+        - ReviewCreateInput
+        - ReviewResponseCreateInput
+        - ServiceCreateInput
+        - CreateServiceRequestAsGuestInput
+        - ServiceRequestCreateInput
+        - SessionDataCreateInput
+        - TaskCreateInput
+        - VehicleBrandCreateInput
+        - VehicleDetailsCreateInput
+        - VehicleCreateInput
+        - CreateVehicleForUserInput
+        - VehicleModelCreateInput
+        - WorkshopDetailsUpdateInput
+        - WorkshopDetailsWhereUniqueInput
+        - WorkshopUpdateInput
+      exclude:
+        # Generated aggregations
+        - '*Aggregate'
+        - '*GroupBy'
+        - '*AvgAggregate'
+        - '*SumAggregate'
+        - '*MinAggregate'
+        - '*MaxAggregate'
+        - '*CountAggregate'
+        - '*ScalarFieldEnum'
+        # Bulk operations
+        - '*CreateMany*'
+        - '*UpdateMany*'
+        - '*DeleteMany*'
+        # Internal Prisma types
+        - '*UncheckedCreate*'
+        - '*UncheckedUpdate*'
+        - '*CreateWithout*'
+        - '*UpdateWithout*'
+        - '*OrderBy*'
+        - '*OrderByWith*'
+        - '*OrderByRelation*'
+        - '*Relation*'
+        - '*RelationFilter'
+        - '*Filter'
+        - '*WhereInput'
+        - '*ListRelation*'
+        - '*Nested*'
+        - '*WithRelation*'
+        - '*WithoutRelation*'
+        - '*WithAggregate*'
+        - '*ScalarWhere*'
+        # Additional patterns
+        - '*Where*'
+        - '*Count*'
+        - '*Scalar*'
+
+  # Add input type display configuration
+  inputObjectDetails: true
+  inputFieldsDefaultToRequired: false
+  queriesDocumentationHeader: |
+    # Queries
+    This section lists all available queries with their input parameters expanded.
+  mutationsDocumentationHeader: |
+    # Mutations
+    This section lists all available mutations with their input parameters expanded.
+
+  # Example configuration
+  exampleFormat: 'minimal' # Minimize example queries
+  maxDepth: 1 # Limit depth of example queries
+  defaultExpanded: true # Expand argument details by default
+  argumentsPlacement: 'before-examples' # Show arguments before examples
+
+  # Hide certain types or fields
+  hideIntrospection: true
+  hideDocs:
+    - type: __Schema
+    - type: __Type
+    - type: __TypeKind
+    - type: __Field
+    - type: __InputValue
+    - type: __EnumValue
+    - type: __Directive 

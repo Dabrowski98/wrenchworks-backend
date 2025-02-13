@@ -2,8 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//TODO: AUTHORIZATION ON RESOLVE FIELDS
-
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
     output = "../src/modules"
@@ -141,8 +139,6 @@ model Customer {
   /// @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
   /// @Validator.IsOptional()
   firstName                 String?    @db.VarChar(30)
-  // TODO: decide whats the default value.
-  /// Note: Fill this field in Service layer.
   creationSource            CustomerCreationSource 
   /// @Validator.IsString({ message: 'Telephone number must be a string' })
   /// @Validator.Length(8, 12, { message: 'Telephone number must be between 8 and 12 characters' })

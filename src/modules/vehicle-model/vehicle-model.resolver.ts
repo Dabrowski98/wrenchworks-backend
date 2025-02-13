@@ -83,7 +83,7 @@ export class VehicleModelResolver {
     return this.vehicleModelService.delete(args);
   }
 
-  // RESOLVE FIELDS
+  // RESOLVE FIELDS 
 
   // PUBLIC
   @Public()

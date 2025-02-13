@@ -2195,6 +2195,7 @@ type Mutation {
   acceptReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
   acceptServiceRequest(data: AcceptServiceRequestInput!): ServiceRequest!
   assignPermissionsToEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
+  cancelServiceRequest(serviceRequestId: BigInt!): [ServiceRequest!]!
   cancelTask(taskId: BigInt!): Task!
   changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
   changeUserPassword(data: ChangePasswordInput!, where: UserWhereUniqueInput!): Boolean!
@@ -2553,7 +2554,6 @@ enum NullsOrder {
 type Query {
   address(where: AddressWhereUniqueInput!): Address!
   addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
-  cancelServiceRequest(serviceRequestId: BigInt!): [ServiceRequest!]!
   customer(where: CustomerWhereUniqueInput!): Customer!
   customers(cursor: CustomerWhereUniqueInput, distinct: [CustomerScalarFieldEnum!], orderBy: [CustomerOrderByWithRelationInput!], skip: Int, take: Int, where: CustomerWhereInput): [Customer!]!
   employee(where: EmployeeWhereUniqueInput!): Employee!

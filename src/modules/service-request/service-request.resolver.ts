@@ -99,7 +99,7 @@ export class ServiceRequestResolver {
   // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Resolve, subject: 'ServiceRequest' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
-  @Query(() => [ServiceRequest])
+  @Mutation(() => [ServiceRequest])
   async cancelServiceRequest(
     @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args('serviceRequestId', { type: () => GraphQLBigInt })
