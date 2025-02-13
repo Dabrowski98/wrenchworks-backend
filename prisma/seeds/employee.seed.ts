@@ -93,7 +93,7 @@ export async function seedEmployees() {
       });
 
       // Determine if the employee is a workshop owner
-      const isOwner = employee.login.startsWith('owner');
+      const isOwner = employee.login.startsWith('employeeowner');
 
       // Fetch all permissions
       const allPermissions = await prisma.employeePermission.findMany();

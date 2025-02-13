@@ -41,6 +41,7 @@ import { EntityType } from 'src/common/enums/entity-type.enum';
 import { UserAbilityHandler } from './handlers/user-ability.handler';
 import { EmployeeAbilityHandler } from './handlers/employee-ability.handler';
 import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { isEmployeePayload, isUserPayload } from 'src/common/utils/type-guards';
 
 export enum Action {
   Manage = 'manage',
@@ -119,10 +120,10 @@ export class AbilityFactory {
       createPrismaAbility,
     );
 
-    if (payload.entityType === EntityType.USER)
-      UserAbilityHandler.handle(can, cannot, payload as JwtUserPayload);
-    else if (payload.entityType === EntityType.EMPLOYEE)
-      EmployeeAbilityHandler.handle(can, cannot, payload as JwtEmployeePayload);
+    if (isUserPayload(payload))
+      UserAbilityHandler.handle(can, cannot, payload, this.prisma);
+    else if (isEmployeePayload(payload))
+      EmployeeAbilityHandler.handle(can, cannot, payload, this.prisma);
     else cannot(Action.Manage, 'all');
 
     cannot(Action.Read, 'User', ['password']);

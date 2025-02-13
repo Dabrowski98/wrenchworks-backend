@@ -8,6 +8,6 @@ export class JwtEmployeePayload extends JwtAuthBasePayload {
   employeeId: bigint;
   workshopId: bigint;
   loggedInBy: keyof typeof LoggedInBy;
-  permissions: EmployeePermission[];
+  permissionIds: bigint[];
 }
 

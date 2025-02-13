@@ -253,6 +253,14 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+input CloseOneServiceInput {
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceDescription: String
+  serviceEndDate: DateTime
+  status: ServiceStatus
+}
+
 input CreateServiceRequestAsGuestInput {
   guest: GuestCreateInput!
   serviceRequest: ServiceRequestCreateInput!
@@ -2190,6 +2198,7 @@ type Mutation {
   cancelTask(taskId: BigInt!): Task!
   changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
   changeUserPassword(data: ChangePasswordInput!, where: UserWhereUniqueInput!): Boolean!
+  closeService(data: CloseOneServiceInput!, where: ServiceWhereUniqueInput!): Service!
   completeTask(taskId: BigInt!): Task!
   createAddressForWorkshop(data: AddressCreateInput!, workshopId: BigInt!): Address!
   createAdmin(data: UserCreateInput!): User!

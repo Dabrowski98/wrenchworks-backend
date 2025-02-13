@@ -270,12 +270,23 @@ export class EmployeeAuthService {
     employee: Employee,
     loggedInBy: keyof typeof LoggedInBy,
   ): Promise<{ accessToken: string; refreshToken: string }> {
+    const employeeWithPermissions = await this.prisma.employee.findUnique({
+      where: {
+        employeeId: employee.employeeId,
+      },
+      include: {
+        permissions: true,
+      },
+    });
+
     const payload: JwtEmployeePayload = {
       employeeId: employee.employeeId,
       workshopId: employee.workshopId,
       entityType: EntityType.EMPLOYEE,
       loggedInBy,
-      permissions: employee.permissions || [],
+      permissionIds: employeeWithPermissions.permissions.map(
+        (p) => p.permissionId,
+      ),
     };
 
     const accessToken = this.jwtService.sign(payload, {

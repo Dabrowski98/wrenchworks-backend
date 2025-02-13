@@ -1,9 +1,11 @@
 import { Action } from '../ability.factory';
 import { UserRole } from '../../prisma/dto/user-role.enum';
 import { EntityType } from 'src/common/enums/entity-type.enum';
+import { PrismaService } from 'src/database/prisma.service';
+import { JwtUserPayload } from 'src/modules/auth/user-auth/custom-dto';
 
 export class UserAbilityHandler {
-  static handle(can, cannot, userPayload) {
+  static handle(can, cannot, userPayload: JwtUserPayload, prisma: PrismaService) {
     userPayload = {
       userId: userPayload.userId && BigInt(userPayload.userId),
       role: userPayload.role,

@@ -64,6 +64,7 @@ export class CustomerResolver {
     @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
     @Args() args?: FindManyCustomerArgs,
   ): Promise<Customer[]> {
+    console.log("xd");
     return this.customerService.findMany(currentEntity, args);
   }
 
