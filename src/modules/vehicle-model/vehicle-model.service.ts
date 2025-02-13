@@ -27,8 +27,8 @@ export class VehicleModelService {
     return vehicleModel;
   }
 
-  async findMany(args: FindManyVehicleModelArgs): Promise<VehicleModel[]> {
-    return this.prisma.vehicleModel.findMany(args);
+  async findMany(args?: FindManyVehicleModelArgs): Promise<VehicleModel[]> {
+    return this.prisma.vehicleModel.findMany(args || {});
   }
 
   async update(args: UpdateOneVehicleModelArgs): Promise<VehicleModel> {

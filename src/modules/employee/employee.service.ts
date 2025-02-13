@@ -79,8 +79,9 @@ export class EmployeeService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.employee.findMany({
       where: {
-        AND: [accessibleBy(ability).Employee, args.where],
+        AND: [accessibleBy(ability).Employee, args?.where || {}],
       },
+      ...args,
     });
   }
 

@@ -83,6 +83,7 @@ export class ServiceService {
 
     return this.prisma.service.findMany({
       where: { AND: [accessibleBy(ability).Service, args?.where || {}] },
+      ...args,
     });
   }
 

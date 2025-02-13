@@ -96,9 +96,7 @@ export class AddressService {
   }
 
   async findMany(args?: FindManyAddressArgs): Promise<Address[]> {
-    return this.prisma.address.findMany({
-      where: args.where || {},
-    });
+    return this.prisma.address.findMany(args || {});
   }
 
   async delete(

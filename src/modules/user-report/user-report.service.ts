@@ -110,7 +110,8 @@ export class UserReportService {
   ): Promise<UserReport[]> {
     const ability = await this.abilityFactory.defineAbility(currentUser);
     return this.prisma.userReport.findMany({
-      where: { AND: [accessibleBy(ability).UserReport, args.where || {}] },
+      where: { AND: [accessibleBy(ability).UserReport, args?.where || {}] },
+      ...args,
     });
   }
 

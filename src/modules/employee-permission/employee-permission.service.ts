@@ -48,11 +48,12 @@ export class EmployeePermissionService {
 
   async findMany(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
-    args: FindManyEmployeePermissionArgs,
+    args?: FindManyEmployeePermissionArgs,
   ): Promise<EmployeePermission[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.employeePermission.findMany({
-      where: { AND: [accessibleBy(ability).EmployeePermission, args.where] },
+      where: { AND: [accessibleBy(ability).EmployeePermission, args?.where] },
+      ...args,
     });
   }
 

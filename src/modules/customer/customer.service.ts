@@ -65,14 +65,14 @@ export class CustomerService {
 
   async findMany(
     currentEntity: JwtEmployeePayload | JwtUserPayload,
-    args: FindManyCustomerArgs,
+    args?: FindManyCustomerArgs,
   ): Promise<Customer[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-
     return this.prisma.customer.findMany({
       where: {
-        AND: [accessibleBy(ability).Customer, args.where || {}],
+        AND: [accessibleBy(ability).Customer, args?.where || {}],
       },
+      ...args,
     });
   }
 

@@ -274,6 +274,7 @@ export class ServiceRequestService {
       where: {
         AND: [accessibleBy(ability).ServiceRequest, args?.where || {}],
       },
+      ...args,
     });
     return serviceRequests;
   }

@@ -83,6 +83,7 @@ export class TaskService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return await this.prisma.task.findMany({
       where: { AND: [accessibleBy(ability).Task, args?.where || {}] },
+      ...args,
     });
   }
 

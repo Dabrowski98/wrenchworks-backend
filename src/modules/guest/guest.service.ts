@@ -46,6 +46,7 @@ export class GuestService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.guest.findMany({
       where: { AND: [accessibleBy(ability).Guest, args?.where || {}] },
+      ...args,
     });
   }
 

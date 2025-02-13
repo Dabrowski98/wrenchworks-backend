@@ -94,8 +94,9 @@ export class JoinWorkshopRequestService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.joinWorkshopRequest.findMany({
       where: {
-        AND: [accessibleBy(ability).JoinWorkshopRequest, args.where || {}],
+        AND: [accessibleBy(ability).JoinWorkshopRequest, args?.where || {}],
       },
+      ...args,
     });
   }
 

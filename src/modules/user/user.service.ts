@@ -47,7 +47,7 @@ export class UserService {
     return user;
   }
 
-  async findMany(args: FindManyUserArgs): Promise<User[]> {
+  async findMany(args?: FindManyUserArgs): Promise<User[]> {
     return this.prisma.user.findMany(args || {});
   }
 

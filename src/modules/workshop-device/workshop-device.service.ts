@@ -49,13 +49,14 @@ export class WorkshopDeviceService {
 
   async findMany(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
-    args: FindManyWorkshopDeviceArgs,
+    args?: FindManyWorkshopDeviceArgs,
   ): Promise<WorkshopDevice[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return await this.prisma.workshopDevice.findMany({
       where: {
-        AND: [accessibleBy(ability).WorkshopDevice, args.where],
+        AND: [accessibleBy(ability).WorkshopDevice, args?.where || {}],
       },
+      ...args,
     });
   }
 

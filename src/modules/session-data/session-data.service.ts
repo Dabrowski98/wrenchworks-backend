@@ -43,6 +43,7 @@ export class SessionDataService {
       where: {
         AND: [accessibleBy(ability).SessionData, args?.where || {}],
       },
+      ...args,
     });
     return sessionDatas;
   }

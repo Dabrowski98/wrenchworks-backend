@@ -68,6 +68,7 @@ export class VehicleDetailsService {
       where: {
         AND: [accessibleBy(ability).VehicleDetails, args?.where || {}],
       },
+      ...args,
     });
   }
 
