@@ -157,27 +157,51 @@ export class UserService {
   }
 
   async resolveCount(userId: bigint): Promise<UserCount> {
+    const counts = await this.prisma.$transaction([
+      this.prisma.vehicle.count({ where: { userId } }),
+      this.prisma.serviceRequest.count({ where: { userId } }),
+      this.prisma.customer.count({ where: { userId } }),
+      this.prisma.employee.count({ where: { userId } }),
+      this.prisma.joinWorkshopRequest.count({
+        where: { user: { userId } },
+      }),
+      this.prisma.userReport.count({ where: { userId } }),
+      this.prisma.workshop.count({
+        where: { user: { userId } },
+      }),
+      this.prisma.review.count({ where: { user: { userId } } }),
+      this.prisma.reviewResponse.count({
+        where: { user: { userId } },
+      }),
+      this.prisma.sessionData.count({
+        where: { user: { userId } },
+      }),
+    ]);
+
+    const [
+      vehicles,
+      serviceRequests,
+      customers,
+      employees,
+      joinWorkshopRequests,
+      userReports,
+      workshops,
+      reviews,
+      reviewResponses,
+      sessionData,
+    ] = counts;
+
     return {
-      vehicles: await this.prisma.vehicle.count({ where: { userId } }),
-      serviceRequests: await this.prisma.serviceRequest.count({
-        where: { userId },
-      }),
-      customers: await this.prisma.customer.count({ where: { userId } }),
-      employees: await this.prisma.employee.count({ where: { userId } }),
-      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({
-        where: { user: { userId } },
-      }),
-      userReports: await this.prisma.userReport.count({ where: { userId } }),
-      workshops: await this.prisma.workshop.count({
-        where: { user: { userId } },
-      }),
-      reviews: await this.prisma.review.count({ where: { user: { userId } } }),
-      reviewResponses: await this.prisma.reviewResponse.count({
-        where: { user: { userId } },
-      }),
-      sessionData: await this.prisma.sessionData.count({
-        where: { user: { userId } },
-      }),
+      vehicles,
+      serviceRequests,
+      customers,
+      employees,
+      joinWorkshopRequests,
+      userReports,
+      workshops,
+      reviews,
+      reviewResponses,
+      sessionData,
     };
   }
 }

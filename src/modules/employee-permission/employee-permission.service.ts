@@ -149,16 +149,19 @@ export class EmployeePermissionService {
   }
 
   async resolveCount(permissionId: bigint): Promise<EmployeePermissionCount> {
-    const count = await this.prisma.employeePermission.findUnique({
-      where: { permissionId },
-      include: {
-        _count: {
-          select: {
-            employees: true,
+    const [employeePermissions] = await this.prisma.$transaction([
+      this.prisma.employeePermission.findUnique({
+        where: { permissionId },
+        include: {
+          _count: {
+            select: {
+              employees: true,
+            },
           },
         },
-      },
-    });
-    return count._count;
+      }),
+    ]);
+
+    return employeePermissions._count;
   }
 }

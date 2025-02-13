@@ -182,28 +182,58 @@ export class WorkshopService {
   }
 
   async resolveCount(workshopId: bigint): Promise<WorkshopCount> {
-    return {
-      customers: await this.prisma.customer.count({
+    const counts = await this.prisma.$transaction([
+      this.prisma.customer.count({
         where: { workshopId },
       }),
-      employees: await this.prisma.employee.count({
+      this.prisma.employee.count({
         where: { workshopId },
       }),
-      reviews: await this.prisma.review.count({
+      this.prisma.review.count({
         where: { workshopId },
       }),
-      serviceRequests: await this.prisma.serviceRequest.count({
+      this.prisma.serviceRequest.count({
         where: { workshopId },
       }),
-      services: await this.prisma.service.count({
+      this.prisma.service.count({
         where: { workshopId },
       }),
-      workshopJobs: await this.prisma.workshopJob.count({
+      this.prisma.workshopJob.count({
         where: { workshopId },
       }),
-      jobCategories: await this.prisma.jobCategory.count({
+      this.prisma.jobCategory.count({
         where: { workshops: { some: { workshopId } } },
       }),
+      this.prisma.joinWorkshopRequest.count({
+        where: { workshopId },
+      }),
+      this.prisma.workshopDevice.count({
+        where: { workshopId },
+      }),
+    ]);
+
+    const [
+      customers,
+      employees,
+      reviews,
+      serviceRequests,
+      services,
+      workshopJobs,
+      jobCategories,
+      joinWorkshopRequests,
+      workshopDevices,
+    ] = counts;
+
+    return {
+      customers,
+      employees,
+      reviews,
+      serviceRequests,
+      services,
+      workshopJobs,
+      jobCategories,
+      joinWorkshopRequests,
+      workshopDevices,
     };
   }
 }

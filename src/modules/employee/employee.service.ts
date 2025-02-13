@@ -278,14 +278,24 @@ export class EmployeeService {
   }
 
   async resolveCount(employeeId: bigint): Promise<EmployeeCount> {
-    return {
-      services: await this.prisma.service.count({ where: { employeeId } }),
-      joinWorkshopRequests: await this.prisma.joinWorkshopRequest.count({
+    const counts = await this.prisma.$transaction([
+      this.prisma.service.count({
+        where: { employeeId },
+      }),
+      this.prisma.joinWorkshopRequest.count({
         where: { employee: { employeeId } },
       }),
-      tasks: await this.prisma.task.count({
+      this.prisma.task.count({
         where: { employees: { some: { employeeId } } },
       }),
+    ]);
+
+    const [services, joinWorkshopRequests, tasks] = counts;
+
+    return {
+      services,
+      joinWorkshopRequests,
+      tasks,
     };
   }
 }

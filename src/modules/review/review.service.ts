@@ -204,10 +204,14 @@ export class ReviewService {
   }
 
   async resolveCount(reviewId: bigint): Promise<ReviewCount> {
-    return {
-      reviewResponses: await this.prisma.reviewResponse.count({
+    const [reviewResponses] = await this.prisma.$transaction([
+      this.prisma.reviewResponse.count({
         where: { reviewId },
       }),
+    ]);
+
+    return {
+      reviewResponses,
     };
   }
 }

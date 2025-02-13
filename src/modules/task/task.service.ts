@@ -277,7 +277,6 @@ export class TaskService {
       .catch(() => false);
   }
 
-
   // RESOLVE METHODS
 
   async workshopJob(taskId: bigint): Promise<WorkshopJob | null> {
@@ -308,10 +307,14 @@ export class TaskService {
   }
 
   async resolveCount(taskId: bigint): Promise<TaskCount> {
-    return {
-      employees: await this.prisma.employee.count({
+    const [employees] = await this.prisma.$transaction([
+      this.prisma.employee.count({
         where: { tasks: { some: { taskId } } },
       }),
+    ]);
+
+    return {
+      employees,
     };
   }
 }

@@ -164,10 +164,14 @@ export class WorkshopJobService {
   }
 
   async resolveCount(workshopJobId: bigint): Promise<WorkshopJobCount> {
-    return {
-      tasks: await this.prisma.task.count({
+    const [tasks] = await this.prisma.$transaction([
+      this.prisma.task.count({
         where: { workshopJobId },
       }),
+    ]);
+
+    return {
+      tasks,
     };
   }
 }

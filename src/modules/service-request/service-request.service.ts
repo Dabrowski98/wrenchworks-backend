@@ -413,10 +413,14 @@ export class ServiceRequestService {
   }
 
   async resolveCount(serviceRequestId: bigint): Promise<ServiceRequestCount> {
-    return {
-      jobs: await this.prisma.job.count({
+    const [jobs] = await this.prisma.$transaction([
+      this.prisma.job.count({
         where: { serviceRequests: { some: { serviceRequestId } } },
       }),
+    ]);
+
+    return {
+      jobs,
     };
   }
 }

@@ -216,9 +216,16 @@ export class CustomerService {
   }
 
   async resolveCount(customerId: bigint): Promise<CustomerCount> {
+    const counts = await this.prisma.$transaction([
+      this.prisma.service.count({ where: { customerId } }),
+      this.prisma.vehicle.count({ where: { customerId } }),
+    ]);
+
+    const [services, vehicles] = counts;
+
     return {
-      services: await this.prisma.service.count({ where: { customerId } }),
-      vehicles: await this.prisma.vehicle.count({ where: { customerId } }),
+      services,
+      vehicles,
     };
   }
 }

@@ -47,7 +47,6 @@ export class JobService {
       .catch(() => false);
   }
 
-
   // RESOLVE METHODS
 
   async jobCategory(jobId: bigint): Promise<JobCategory | null> {
@@ -78,13 +77,20 @@ export class JobService {
   }
 
   async resolveCount(jobId: bigint): Promise<JobCount> {
-    return {
-      serviceRequests: await this.prisma.serviceRequest.count({
+    const counts = await this.prisma.$transaction([
+      this.prisma.serviceRequest.count({
         where: { jobs: { some: { jobId } } },
       }),
-      jobWorkshops: await this.prisma.workshopJob.count({
+      this.prisma.workshopJob.count({
         where: { jobId },
       }),
+    ]);
+
+    const [serviceRequests, jobWorkshops] = counts;
+
+    return {
+      serviceRequests,
+      jobWorkshops,
     };
   }
 }

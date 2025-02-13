@@ -83,14 +83,22 @@ export class JobCategoryService {
   }
 
   async resolveCount(categoryId: bigint): Promise<JobCategoryCount> {
-    return {
-      children: await this.prisma.jobCategory.count({ where: { categoryId } }),
-      jobs: await this.prisma.job.count({
+    const counts = await this.prisma.$transaction([
+      this.prisma.jobCategory.count({ where: { categoryId } }),
+      this.prisma.job.count({
         where: { jobCategory: { categoryId } },
       }),
-      workshops: await this.prisma.workshop.count({
+      this.prisma.workshop.count({
         where: { jobCategories: { some: { categoryId } } },
       }),
+    ]);
+
+    const [children, jobs, workshops] = counts;
+
+    return {
+      children,
+      jobs,
+      workshops,
     };
   }
 }
