@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AcceptServiceRequestInput {
+  customer: CustomerCreateWithoutVehiclesInput
+  employeeId: BigInt!
+  serviceDescription: String
+  serviceRequestId: BigInt!
+  serviceStartDate: DateTime
+  tasks: [TaskCreateInput!]
+}
+
 input AcceptWorkshopDeviceInput {
   deviceId: BigInt!
   deviceName: String!
@@ -16,7 +25,6 @@ type Address {
   postCode: String!
   region: String!
   street: String
-  user: User
   workshop: Workshop
 }
 
@@ -46,32 +54,13 @@ input AddressCreateInput {
   street: String
 }
 
-input AddressCreateNestedOneWithoutUserInput {
-  create: AddressCreateWithoutUserInput
-}
-
 input AddressCreateNestedOneWithoutWorkshopInput {
   create: AddressCreateWithoutWorkshopInput
-}
-
-input AddressCreateOrConnectWithoutUserInput {
-  create: AddressCreateWithoutUserInput!
-  where: AddressWhereUniqueInput!
 }
 
 input AddressCreateOrConnectWithoutWorkshopInput {
   create: AddressCreateWithoutWorkshopInput!
   where: AddressWhereUniqueInput!
-}
-
-input AddressCreateWithoutUserInput {
-  buildingNo: String!
-  city: String!
-  country: String!
-  flatNo: String
-  postCode: String!
-  region: String!
-  street: String
 }
 
 input AddressCreateWithoutWorkshopInput {
@@ -120,7 +109,6 @@ input AddressOrderByWithRelationInput {
   postCode: SortOrder
   region: SortOrder
   street: SortOrderInput
-  user: UserOrderByWithRelationInput
   workshop: WorkshopOrderByWithRelationInput
 }
 
@@ -149,16 +137,6 @@ input AddressUpdateInput {
   street: String
 }
 
-input AddressUpdateOneWithoutUserNestedInput {
-  connect: AddressWhereUniqueInput
-  connectOrCreate: AddressCreateOrConnectWithoutUserInput
-  create: AddressCreateWithoutUserInput
-  delete: AddressWhereInput
-  disconnect: AddressWhereInput
-  update: AddressUpdateToOneWithWhereWithoutUserInput
-  upsert: AddressUpsertWithoutUserInput
-}
-
 input AddressUpdateOneWithoutWorkshopNestedInput {
   connect: AddressWhereUniqueInput
   connectOrCreate: AddressCreateOrConnectWithoutWorkshopInput
@@ -169,24 +147,9 @@ input AddressUpdateOneWithoutWorkshopNestedInput {
   upsert: AddressUpsertWithoutWorkshopInput
 }
 
-input AddressUpdateToOneWithWhereWithoutUserInput {
-  data: AddressUpdateWithoutUserInput!
-  where: AddressWhereInput
-}
-
 input AddressUpdateToOneWithWhereWithoutWorkshopInput {
   data: AddressUpdateWithoutWorkshopInput!
   where: AddressWhereInput
-}
-
-input AddressUpdateWithoutUserInput {
-  buildingNo: String
-  city: String
-  country: String
-  flatNo: String
-  postCode: String
-  region: String
-  street: String
 }
 
 input AddressUpdateWithoutWorkshopInput {
@@ -197,12 +160,6 @@ input AddressUpdateWithoutWorkshopInput {
   postCode: String
   region: String
   street: String
-}
-
-input AddressUpsertWithoutUserInput {
-  create: AddressCreateWithoutUserInput!
-  update: AddressUpdateWithoutUserInput!
-  where: AddressWhereInput
 }
 
 input AddressUpsertWithoutWorkshopInput {
@@ -223,7 +180,6 @@ input AddressWhereInput {
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
-  user: UserNullableRelationFilter
   workshop: WorkshopNullableRelationFilter
 }
 
@@ -239,7 +195,6 @@ input AddressWhereUniqueInput {
   postCode: StringFilter
   region: StringFilter
   street: StringNullableFilter
-  user: UserNullableRelationFilter
   workshop: WorkshopNullableRelationFilter
 }
 
@@ -298,15 +253,16 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
-input CreateAdminInput {
-  address: AddressCreateNestedOneWithoutUserInput
-  avatarURL: String
-  email: String!
-  firstName: String
-  lastName: String
-  password: String!
-  telephoneNumber: String!
-  username: String!
+input CreateServiceRequestAsGuestInput {
+  guest: GuestCreateInput!
+  serviceRequest: ServiceRequestCreateInput!
+  vehicle: VehicleCreateInput!
+}
+
+input CreateVehicleForUserInput {
+  user: UserCreateNestedOneWithoutVehiclesInput!
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
 }
 
 type Customer {
@@ -314,7 +270,7 @@ type Customer {
   _count: CustomerCount!
   companyName: String
   createdAt: DateTime!
-  createdBy: String
+  createdBy: BigInt
 
   """Note: Fill this field in Service layer."""
   creationSource: CustomerCreationSource!
@@ -332,7 +288,7 @@ type Customer {
   """Note: Optional because it defaults to 0.00"""
   totalDue: Decimal!
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   user: User
   userId: BigInt
   vehicles: [Vehicle!]
@@ -377,6 +333,67 @@ type CustomerCountAggregate {
   workshopId: Int!
 }
 
+input CustomerCreateInput {
+  NIP: String
+  companyName: String
+  creationSource: CustomerCreationSource!
+  description: String
+  email: String
+  firstName: String
+  guest: GuestCreateNestedOneWithoutCustomerInput
+  services: ServiceCreateNestedManyWithoutCustomerInput
+  telephoneNumber: String
+  totalDue: Decimal
+  user: UserCreateNestedOneWithoutCustomersInput
+  vehicles: VehicleCreateNestedManyWithoutCustomerInput
+  workshop: WorkshopCreateNestedOneWithoutCustomersInput!
+}
+
+input CustomerCreateNestedOneWithoutServicesInput {
+  connect: CustomerWhereUniqueInput
+  connectOrCreate: CustomerCreateOrConnectWithoutServicesInput
+  create: CustomerCreateWithoutServicesInput
+}
+
+input CustomerCreateNestedOneWithoutVehiclesInput {
+  connect: CustomerWhereUniqueInput
+}
+
+input CustomerCreateOrConnectWithoutServicesInput {
+  create: CustomerCreateWithoutServicesInput!
+  where: CustomerWhereUniqueInput!
+}
+
+input CustomerCreateWithoutServicesInput {
+  NIP: String
+  companyName: String
+  creationSource: CustomerCreationSource!
+  description: String
+  email: String
+  firstName: String
+  guest: GuestCreateNestedOneWithoutCustomerInput
+  telephoneNumber: String
+  totalDue: Decimal
+  user: UserCreateNestedOneWithoutCustomersInput
+  vehicles: VehicleCreateNestedManyWithoutCustomerInput
+  workshop: WorkshopCreateNestedOneWithoutCustomersInput!
+}
+
+input CustomerCreateWithoutVehiclesInput {
+  NIP: String
+  companyName: String
+  creationSource: CustomerCreationSource!
+  description: String
+  email: String
+  firstName: String
+  guest: GuestCreateNestedOneWithoutCustomerInput
+  services: ServiceCreateNestedManyWithoutCustomerInput
+  telephoneNumber: String
+  totalDue: Decimal
+  user: UserCreateNestedOneWithoutCustomersInput
+  workshop: WorkshopCreateNestedOneWithoutCustomersInput!
+}
+
 enum CustomerCreationSource {
   GUEST
   USER
@@ -393,7 +410,7 @@ type CustomerMaxAggregate {
   NIP: String
   companyName: String
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   creationSource: CustomerCreationSource
   customerId: BigInt
   deletedAt: DateTime
@@ -405,7 +422,7 @@ type CustomerMaxAggregate {
   telephoneNumber: String
   totalDue: Decimal
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
 }
@@ -414,7 +431,7 @@ type CustomerMinAggregate {
   NIP: String
   companyName: String
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   creationSource: CustomerCreationSource
   customerId: BigInt
   deletedAt: DateTime
@@ -426,7 +443,7 @@ type CustomerMinAggregate {
   telephoneNumber: String
   totalDue: Decimal
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
 }
@@ -466,14 +483,52 @@ input CustomerRelationFilter {
   isNot: CustomerWhereInput
 }
 
+enum CustomerScalarFieldEnum {
+  NIP
+  companyName
+  createdAt
+  createdBy
+  creationSource
+  customerId
+  deletedAt
+  description
+  email
+  firstName
+  guestId
+  isVerified
+  telephoneNumber
+  totalDue
+  updatedAt
+  updatedBy
+  userId
+  workshopId
+}
+
 type CustomerSumAggregate {
-  createdBy: String
+  createdBy: BigInt
   customerId: BigInt
   guestId: BigInt
   totalDue: Decimal
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
+}
+
+input CustomerUpdateInput {
+  NIP: String
+  companyName: String
+  creationSource: CustomerCreationSource
+  description: String
+  email: String
+  firstName: String
+  isVerified: Boolean
+  telephoneNumber: String
+  totalDue: Decimal
+}
+
+input CustomerUserIdWorkshopIdCompoundUniqueInput {
+  userId: BigInt!
+  workshopId: BigInt!
 }
 
 input CustomerWhereInput {
@@ -495,6 +550,31 @@ input CustomerWhereInput {
   totalDue: DecimalFilter
   user: UserNullableRelationFilter
   userId: BigIntNullableFilter
+  vehicles: VehicleListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input CustomerWhereUniqueInput {
+  AND: [CustomerWhereInput!]
+  NIP: StringNullableFilter
+  NOT: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  companyName: StringNullableFilter
+  creationSource: EnumCustomerCreationSourceFilter
+  customerId: BigInt
+  description: StringNullableFilter
+  email: StringNullableFilter
+  firstName: StringNullableFilter
+  guest: GuestNullableRelationFilter
+  guestId: BigInt
+  isVerified: BoolFilter
+  services: ServiceListRelationFilter
+  telephoneNumber: StringNullableFilter
+  totalDue: DecimalFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  userId_workshopId: CustomerUserIdWorkshopIdCompoundUniqueInput
   vehicles: VehicleListRelationFilter
   workshop: WorkshopRelationFilter
   workshopId: BigIntFilter
@@ -552,10 +632,26 @@ input DecimalNullableFilter {
   notIn: [Decimal!]
 }
 
+input EditOneTaskInput {
+  customName: String
+  description: String
+  executionTime: Float
+  partsCost: Decimal
+}
+
+input EditReviewInput {
+  rating: Decimal
+  reviewText: String
+}
+
+input EditReviewResponseInput {
+  responseText: String!
+}
+
 type Employee {
   _count: EmployeeCount!
   createdAt: DateTime!
-  createdBy: String
+  createdBy: BigInt
   deletedAt: DateTime
   employeeId: BigInt!
   joinWorkshopRequests: [JoinWorkshopRequest!]
@@ -572,7 +668,7 @@ type Employee {
   status: EmployeeStatus!
   tasks: [Task!]
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
 
   """Note: Depends solely on join workshop request status."""
   user: User
@@ -613,15 +709,57 @@ type EmployeeCountAggregate {
   workshopId: Int!
 }
 
+input EmployeeCreateInput {
+  joinWorkshopRequests: JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  login: String!
+  nickname: BigInt
+  password: String!
+  permissions: EmployeePermissionCreateNestedManyWithoutEmployeesInput
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
+input EmployeeCreateNestedManyWithoutTasksInput {
+  connect: [EmployeeWhereUniqueInput!]
+}
+
+input EmployeeCreateNestedOneWithoutJoinWorkshopRequestsInput {
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateNestedOneWithoutServicesInput {
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateOrConnectWithoutTasksInput {
+  create: EmployeeCreateWithoutTasksInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeCreateWithoutTasksInput {
+  joinWorkshopRequests: JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput
+  joinedAt: DateTime
+  login: String!
+  nickname: BigInt
+  password: String!
+  permissions: EmployeePermissionCreateNestedManyWithoutEmployeesInput
+  workshop: WorkshopCreateNestedOneWithoutEmployeesInput!
+}
+
 input EmployeeListRelationFilter {
   every: EmployeeWhereInput
   none: EmployeeWhereInput
   some: EmployeeWhereInput
 }
 
+input EmployeeLoginWorkshopIdCompoundUniqueInput {
+  login: String!
+  workshopId: BigInt!
+}
+
 type EmployeeMaxAggregate {
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   deletedAt: DateTime
   employeeId: BigInt
   joinedAt: DateTime
@@ -630,14 +768,14 @@ type EmployeeMaxAggregate {
   refreshToken: String
   status: EmployeeStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
 }
 
 type EmployeeMinAggregate {
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   deletedAt: DateTime
   employeeId: BigInt
   joinedAt: DateTime
@@ -646,7 +784,7 @@ type EmployeeMinAggregate {
   refreshToken: String
   status: EmployeeStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
 }
@@ -786,6 +924,18 @@ enum EmployeePermissionScalarFieldEnum {
   updatedAt
 }
 
+input EmployeePermissionScalarWhereInput {
+  AND: [EmployeePermissionScalarWhereInput!]
+  NOT: [EmployeePermissionScalarWhereInput!]
+  OR: [EmployeePermissionScalarWhereInput!]
+  action: StringFilter
+  conditions: JsonNullableFilter
+  description: StringNullableFilter
+  name: StringFilter
+  permissionId: BigIntFilter
+  subject: StringFilter
+}
+
 type EmployeePermissionSumAggregate {
   permissionId: BigInt
 }
@@ -797,6 +947,53 @@ input EmployeePermissionUpdateInput {
   name: String
   permissionId: BigInt
   subject: String
+}
+
+input EmployeePermissionUpdateManyMutationInput {
+  action: String
+  conditions: JSON
+  description: String
+  name: String
+  permissionId: BigInt
+  subject: String
+}
+
+input EmployeePermissionUpdateManyWithWhereWithoutEmployeesInput {
+  data: EmployeePermissionUpdateManyMutationInput!
+  where: EmployeePermissionScalarWhereInput!
+}
+
+input EmployeePermissionUpdateManyWithoutEmployeesNestedInput {
+  connect: [EmployeePermissionWhereUniqueInput!]
+  connectOrCreate: [EmployeePermissionCreateOrConnectWithoutEmployeesInput!]
+  create: [EmployeePermissionCreateWithoutEmployeesInput!]
+  delete: [EmployeePermissionWhereUniqueInput!]
+  deleteMany: [EmployeePermissionScalarWhereInput!]
+  disconnect: [EmployeePermissionWhereUniqueInput!]
+  set: [EmployeePermissionWhereUniqueInput!]
+  update: [EmployeePermissionUpdateWithWhereUniqueWithoutEmployeesInput!]
+  updateMany: [EmployeePermissionUpdateManyWithWhereWithoutEmployeesInput!]
+  upsert: [EmployeePermissionUpsertWithWhereUniqueWithoutEmployeesInput!]
+}
+
+input EmployeePermissionUpdateWithWhereUniqueWithoutEmployeesInput {
+  data: EmployeePermissionUpdateWithoutEmployeesInput!
+  where: EmployeePermissionWhereUniqueInput!
+}
+
+input EmployeePermissionUpdateWithoutEmployeesInput {
+  action: String
+  conditions: JSON
+  description: String
+  name: String
+  permissionId: BigInt
+  subject: String
+}
+
+input EmployeePermissionUpsertWithWhereUniqueWithoutEmployeesInput {
+  create: EmployeePermissionCreateWithoutEmployeesInput!
+  update: EmployeePermissionUpdateWithoutEmployeesInput!
+  where: EmployeePermissionWhereUniqueInput!
 }
 
 input EmployeePermissionWhereInput {
@@ -830,6 +1027,38 @@ input EmployeeRelationFilter {
   isNot: EmployeeWhereInput
 }
 
+enum EmployeeScalarFieldEnum {
+  createdAt
+  createdBy
+  deletedAt
+  employeeId
+  joinedAt
+  login
+  nickname
+  password
+  refreshToken
+  status
+  updatedAt
+  updatedBy
+  userId
+  workshopId
+}
+
+input EmployeeScalarWhereInput {
+  AND: [EmployeeScalarWhereInput!]
+  NOT: [EmployeeScalarWhereInput!]
+  OR: [EmployeeScalarWhereInput!]
+  employeeId: BigIntFilter
+  joinedAt: DateTimeFilter
+  login: StringFilter
+  nickname: StringNullableFilter
+  password: StringFilter
+  refreshToken: StringNullableFilter
+  status: EnumEmployeeStatusFilter
+  userId: BigIntNullableFilter
+  workshopId: BigIntFilter
+}
+
 enum EmployeeStatus {
   ACTIVE
   INACTIVE
@@ -837,11 +1066,65 @@ enum EmployeeStatus {
 }
 
 type EmployeeSumAggregate {
-  createdBy: String
+  createdBy: BigInt
   employeeId: BigInt
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
   workshopId: BigInt
+}
+
+input EmployeeUpdateInput {
+  joinWorkshopRequests: JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput
+  joinedAt: DateTime
+  login: String
+  nickname: BigInt
+  password: String
+  permissions: EmployeePermissionUpdateManyWithoutEmployeesNestedInput
+}
+
+input EmployeeUpdateManyMutationInput {
+  joinedAt: DateTime
+  login: String
+  nickname: BigInt
+  password: String
+}
+
+input EmployeeUpdateManyWithWhereWithoutTasksInput {
+  data: EmployeeUpdateManyMutationInput!
+  where: EmployeeScalarWhereInput!
+}
+
+input EmployeeUpdateManyWithoutTasksNestedInput {
+  connect: [EmployeeWhereUniqueInput!]
+  connectOrCreate: [EmployeeCreateOrConnectWithoutTasksInput!]
+  create: [EmployeeCreateWithoutTasksInput!]
+  delete: [EmployeeWhereUniqueInput!]
+  deleteMany: [EmployeeScalarWhereInput!]
+  disconnect: [EmployeeWhereUniqueInput!]
+  set: [EmployeeWhereUniqueInput!]
+  update: [EmployeeUpdateWithWhereUniqueWithoutTasksInput!]
+  updateMany: [EmployeeUpdateManyWithWhereWithoutTasksInput!]
+  upsert: [EmployeeUpsertWithWhereUniqueWithoutTasksInput!]
+}
+
+input EmployeeUpdateWithWhereUniqueWithoutTasksInput {
+  data: EmployeeUpdateWithoutTasksInput!
+  where: EmployeeWhereUniqueInput!
+}
+
+input EmployeeUpdateWithoutTasksInput {
+  joinWorkshopRequests: JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput
+  joinedAt: DateTime
+  login: String
+  nickname: BigInt
+  password: String
+  permissions: EmployeePermissionUpdateManyWithoutEmployeesNestedInput
+}
+
+input EmployeeUpsertWithWhereUniqueWithoutTasksInput {
+  create: EmployeeCreateWithoutTasksInput!
+  update: EmployeeUpdateWithoutTasksInput!
+  where: EmployeeWhereUniqueInput!
 }
 
 input EmployeeWhereInput {
@@ -852,6 +1135,28 @@ input EmployeeWhereInput {
   joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
   joinedAt: DateTimeFilter
   login: StringFilter
+  nickname: StringNullableFilter
+  password: StringFilter
+  permissions: EmployeePermissionListRelationFilter
+  refreshToken: StringNullableFilter
+  services: ServiceListRelationFilter
+  status: EnumEmployeeStatusFilter
+  tasks: TaskListRelationFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input EmployeeWhereUniqueInput {
+  AND: [EmployeeWhereInput!]
+  NOT: [EmployeeWhereInput!]
+  OR: [EmployeeWhereInput!]
+  employeeId: BigInt
+  joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
+  joinedAt: DateTimeFilter
+  login: StringFilter
+  login_workshopId: EmployeeLoginWorkshopIdCompoundUniqueInput
   nickname: StringNullableFilter
   password: StringFilter
   permissions: EmployeePermissionListRelationFilter
@@ -1035,6 +1340,21 @@ type GuestCountAggregate {
   telephoneNumber: Int!
 }
 
+input GuestCreateInput {
+  NIP: String
+  companyName: String
+  email: String
+  firstName: String!
+  guestId: BigInt
+  serviceRequest: ServiceRequestCreateNestedOneWithoutGuestInput
+  telephoneNumber: String
+  vehicle: VehicleCreateNestedOneWithoutGuestInput
+}
+
+input GuestCreateNestedOneWithoutCustomerInput {
+  connect: GuestWhereUniqueInput
+}
+
 type GuestMaxAggregate {
   NIP: String
   companyName: String
@@ -1150,6 +1470,11 @@ type Job {
   serviceRequests: [ServiceRequest!]
 }
 
+type JobAvgAggregate {
+  categoryId: Float
+  jobId: Float
+}
+
 type JobCategory {
   _count: JobCategoryCount!
   categoryId: BigInt!
@@ -1185,8 +1510,40 @@ type JobCategoryCountAggregate {
   parentId: Int!
 }
 
+input JobCategoryCreateInput {
+  children: JobCategoryCreateNestedManyWithoutParentInput
+  description: String
+  isPopular: Boolean
+  name: String!
+  parent: JobCategoryCreateNestedOneWithoutChildrenInput
+}
+
+input JobCategoryCreateNestedManyWithoutParentInput {
+  connect: [JobCategoryWhereUniqueInput!]
+}
+
 input JobCategoryCreateNestedManyWithoutWorkshopsInput {
   connect: [JobCategoryWhereUniqueInput!]
+}
+
+input JobCategoryCreateNestedOneWithoutChildrenInput {
+  connect: JobCategoryWhereUniqueInput
+}
+
+input JobCategoryCreateNestedOneWithoutJobsInput {
+  connect: JobCategoryWhereUniqueInput
+}
+
+input JobCategoryCreateOrConnectWithoutChildrenInput {
+  create: JobCategoryCreateWithoutChildrenInput!
+  where: JobCategoryWhereUniqueInput!
+}
+
+input JobCategoryCreateWithoutChildrenInput {
+  description: String
+  isPopular: Boolean
+  name: String!
+  parent: JobCategoryCreateNestedOneWithoutChildrenInput
 }
 
 input JobCategoryListRelationFilter {
@@ -1220,14 +1577,69 @@ input JobCategoryOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input JobCategoryOrderByWithRelationInput {
+  categoryId: SortOrder
+  children: JobCategoryOrderByRelationAggregateInput
+  description: SortOrderInput
+  isPopular: SortOrder
+  jobs: JobOrderByRelationAggregateInput
+  name: SortOrder
+  parent: JobCategoryOrderByWithRelationInput
+  parentId: SortOrderInput
+  workshops: WorkshopOrderByRelationAggregateInput
+}
+
 input JobCategoryRelationFilter {
   is: JobCategoryWhereInput
   isNot: JobCategoryWhereInput
 }
 
+enum JobCategoryScalarFieldEnum {
+  categoryId
+  description
+  isPopular
+  name
+  parentId
+}
+
 type JobCategorySumAggregate {
   categoryId: BigInt
   parentId: BigInt
+}
+
+input JobCategoryUpdateInput {
+  description: String
+  isPopular: Boolean
+  name: String
+  parent: JobCategoryUpdateOneWithoutChildrenNestedInput
+}
+
+input JobCategoryUpdateOneWithoutChildrenNestedInput {
+  connect: JobCategoryWhereUniqueInput
+  connectOrCreate: JobCategoryCreateOrConnectWithoutChildrenInput
+  create: JobCategoryCreateWithoutChildrenInput
+  delete: JobCategoryWhereInput
+  disconnect: JobCategoryWhereInput
+  update: JobCategoryUpdateToOneWithWhereWithoutChildrenInput
+  upsert: JobCategoryUpsertWithoutChildrenInput
+}
+
+input JobCategoryUpdateToOneWithWhereWithoutChildrenInput {
+  data: JobCategoryUpdateWithoutChildrenInput!
+  where: JobCategoryWhereInput
+}
+
+input JobCategoryUpdateWithoutChildrenInput {
+  description: String
+  isPopular: Boolean
+  name: String
+  parent: JobCategoryUpdateOneWithoutChildrenNestedInput
+}
+
+input JobCategoryUpsertWithoutChildrenInput {
+  create: JobCategoryCreateWithoutChildrenInput!
+  update: JobCategoryUpdateWithoutChildrenInput!
+  where: JobCategoryWhereInput
 }
 
 input JobCategoryWhereInput {
@@ -1254,7 +1666,7 @@ input JobCategoryWhereUniqueInput {
   description: StringNullableFilter
   isPopular: BoolFilter
   jobs: JobListRelationFilter
-  name: StringFilter
+  name: String
   parent: JobCategoryNullableRelationFilter
   parentId: BigIntNullableFilter
   workshops: WorkshopListRelationFilter
@@ -1265,8 +1677,52 @@ type JobCount {
   serviceRequests: Int!
 }
 
+type JobCountAggregate {
+  _all: Int!
+  categoryId: Int!
+  description: Int!
+  isPopular: Int!
+  jobId: Int!
+  name: Int!
+}
+
+input JobCreateInput {
+  description: String
+  isPopular: Boolean
+  jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
+  name: String
+}
+
+input JobCreateNestedManyWithoutServiceRequestsInput {
+  connect: [JobWhereUniqueInput!]
+}
+
 input JobCreateNestedOneWithoutJobWorkshopsInput {
   connect: JobWhereUniqueInput
+}
+
+input JobCreateOrConnectWithoutJobWorkshopsInput {
+  create: JobCreateWithoutJobWorkshopsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobCreateOrConnectWithoutServiceRequestsInput {
+  create: JobCreateWithoutServiceRequestsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobCreateWithoutJobWorkshopsInput {
+  description: String
+  isPopular: Boolean
+  jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
+  name: String
+}
+
+input JobCreateWithoutServiceRequestsInput {
+  description: String
+  isPopular: Boolean
+  jobCategory: JobCategoryCreateNestedOneWithoutJobsInput!
+  name: String
 }
 
 input JobListRelationFilter {
@@ -1275,13 +1731,136 @@ input JobListRelationFilter {
   some: JobWhereInput
 }
 
+type JobMaxAggregate {
+  categoryId: BigInt
+  description: String
+  isPopular: Boolean
+  jobId: BigInt
+  name: String
+}
+
+type JobMinAggregate {
+  categoryId: BigInt
+  description: String
+  isPopular: Boolean
+  jobId: BigInt
+  name: String
+}
+
 input JobOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input JobOrderByWithRelationInput {
+  categoryId: SortOrder
+  description: SortOrderInput
+  isPopular: SortOrder
+  jobCategory: JobCategoryOrderByWithRelationInput
+  jobId: SortOrder
+  jobWorkshops: WorkshopJobOrderByRelationAggregateInput
+  name: SortOrderInput
+  serviceRequests: ServiceRequestOrderByRelationAggregateInput
 }
 
 input JobRelationFilter {
   is: JobWhereInput
   isNot: JobWhereInput
+}
+
+enum JobScalarFieldEnum {
+  categoryId
+  description
+  isPopular
+  jobId
+  name
+}
+
+input JobScalarWhereInput {
+  AND: [JobScalarWhereInput!]
+  NOT: [JobScalarWhereInput!]
+  OR: [JobScalarWhereInput!]
+  categoryId: BigIntFilter
+  description: StringNullableFilter
+  isPopular: BoolFilter
+  jobId: BigIntFilter
+  name: StringNullableFilter
+}
+
+type JobSumAggregate {
+  categoryId: BigInt
+  jobId: BigInt
+}
+
+input JobUpdateInput {
+  description: String
+  isPopular: Boolean
+  name: String
+}
+
+input JobUpdateManyMutationInput {
+  description: String
+  isPopular: Boolean
+  name: String
+}
+
+input JobUpdateManyWithWhereWithoutServiceRequestsInput {
+  data: JobUpdateManyMutationInput!
+  where: JobScalarWhereInput!
+}
+
+input JobUpdateManyWithoutServiceRequestsNestedInput {
+  connect: [JobWhereUniqueInput!]
+  connectOrCreate: [JobCreateOrConnectWithoutServiceRequestsInput!]
+  create: [JobCreateWithoutServiceRequestsInput!]
+  delete: [JobWhereUniqueInput!]
+  deleteMany: [JobScalarWhereInput!]
+  disconnect: [JobWhereUniqueInput!]
+  set: [JobWhereUniqueInput!]
+  update: [JobUpdateWithWhereUniqueWithoutServiceRequestsInput!]
+  updateMany: [JobUpdateManyWithWhereWithoutServiceRequestsInput!]
+  upsert: [JobUpsertWithWhereUniqueWithoutServiceRequestsInput!]
+}
+
+input JobUpdateOneRequiredWithoutJobWorkshopsNestedInput {
+  connect: JobWhereUniqueInput
+  connectOrCreate: JobCreateOrConnectWithoutJobWorkshopsInput
+  create: JobCreateWithoutJobWorkshopsInput
+  update: JobUpdateToOneWithWhereWithoutJobWorkshopsInput
+  upsert: JobUpsertWithoutJobWorkshopsInput
+}
+
+input JobUpdateToOneWithWhereWithoutJobWorkshopsInput {
+  data: JobUpdateWithoutJobWorkshopsInput!
+  where: JobWhereInput
+}
+
+input JobUpdateWithWhereUniqueWithoutServiceRequestsInput {
+  data: JobUpdateWithoutServiceRequestsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobUpdateWithoutJobWorkshopsInput {
+  description: String
+  isPopular: Boolean
+  name: String
+}
+
+input JobUpdateWithoutServiceRequestsInput {
+  description: String
+  isPopular: Boolean
+  name: String
+}
+
+input JobUpsertWithWhereUniqueWithoutServiceRequestsInput {
+  create: JobCreateWithoutServiceRequestsInput!
+  update: JobUpdateWithoutServiceRequestsInput!
+  where: JobWhereUniqueInput!
+}
+
+input JobUpsertWithoutJobWorkshopsInput {
+  create: JobCreateWithoutJobWorkshopsInput!
+  update: JobUpdateWithoutJobWorkshopsInput!
+  where: JobWhereInput
 }
 
 input JobWhereInput {
@@ -1308,14 +1887,14 @@ input JobWhereUniqueInput {
   jobCategory: JobCategoryRelationFilter
   jobId: BigInt
   jobWorkshops: WorkshopJobListRelationFilter
-  name: StringNullableFilter
+  name: String
   serviceRequests: ServiceRequestListRelationFilter
 }
 
 """Note: Do not allow receiver to update this model apart from status."""
 type JoinWorkshopRequest {
   createdAt: DateTime!
-  createdBy: String
+  createdBy: BigInt
   employee: Employee!
   employeeId: BigInt!
   joinWorkshopRequestId: BigInt!
@@ -1326,7 +1905,7 @@ type JoinWorkshopRequest {
   """Note: Optional because field defaults to PENDING"""
   status: JoinWorkshopRequestStatus!
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   user: User!
   workshop: Workshop!
   workshopId: BigInt!
@@ -1356,6 +1935,14 @@ type JoinWorkshopRequestCountAggregate {
   workshopId: Int!
 }
 
+input JoinWorkshopRequestCreateInput {
+  employee: EmployeeCreateNestedOneWithoutJoinWorkshopRequestsInput!
+  joinWorkshopRequestId: BigInt
+  message: String
+  user: UserCreateNestedOneWithoutJoinWorkshopRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput!
+}
+
 input JoinWorkshopRequestCreateManyEmployeeInput {
   joinWorkshopRequestId: BigInt
   message: String
@@ -1373,6 +1960,11 @@ input JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput {
   createMany: JoinWorkshopRequestCreateManyEmployeeInputEnvelope
 }
 
+input JoinWorkshopRequestCreateOrConnectWithoutEmployeeInput {
+  create: JoinWorkshopRequestCreateWithoutEmployeeInput!
+  where: JoinWorkshopRequestWhereUniqueInput!
+}
+
 input JoinWorkshopRequestCreateWithoutEmployeeInput {
   joinWorkshopRequestId: BigInt
   message: String
@@ -1388,7 +1980,7 @@ input JoinWorkshopRequestListRelationFilter {
 
 type JoinWorkshopRequestMaxAggregate {
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   employeeId: BigInt
   joinWorkshopRequestId: BigInt
   message: String
@@ -1396,13 +1988,13 @@ type JoinWorkshopRequestMaxAggregate {
   resolvedAt: DateTime
   status: JoinWorkshopRequestStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
 }
 
 type JoinWorkshopRequestMinAggregate {
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   employeeId: BigInt
   joinWorkshopRequestId: BigInt
   message: String
@@ -1410,12 +2002,50 @@ type JoinWorkshopRequestMinAggregate {
   resolvedAt: DateTime
   status: JoinWorkshopRequestStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
 }
 
 input JoinWorkshopRequestOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input JoinWorkshopRequestOrderByWithRelationInput {
+  employee: EmployeeOrderByWithRelationInput
+  employeeId: SortOrder
+  joinWorkshopRequestId: SortOrder
+  message: SortOrderInput
+  receiverId: SortOrder
+  status: SortOrder
+  user: UserOrderByWithRelationInput
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
+}
+
+enum JoinWorkshopRequestScalarFieldEnum {
+  createdAt
+  createdBy
+  employeeId
+  joinWorkshopRequestId
+  message
+  receiverId
+  resolvedAt
+  status
+  updatedAt
+  updatedBy
+  workshopId
+}
+
+input JoinWorkshopRequestScalarWhereInput {
+  AND: [JoinWorkshopRequestScalarWhereInput!]
+  NOT: [JoinWorkshopRequestScalarWhereInput!]
+  OR: [JoinWorkshopRequestScalarWhereInput!]
+  employeeId: BigIntFilter
+  joinWorkshopRequestId: BigIntFilter
+  message: StringNullableFilter
+  receiverId: BigIntFilter
+  status: EnumJoinWorkshopRequestStatusFilter
+  workshopId: BigIntFilter
 }
 
 enum JoinWorkshopRequestStatus {
@@ -1425,12 +2055,60 @@ enum JoinWorkshopRequestStatus {
 }
 
 type JoinWorkshopRequestSumAggregate {
-  createdBy: String
+  createdBy: BigInt
   employeeId: BigInt
   joinWorkshopRequestId: BigInt
   receiverId: BigInt
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
+}
+
+input JoinWorkshopRequestUpdateInput {
+  joinWorkshopRequestId: BigInt
+  message: String
+  status: JoinWorkshopRequestStatus
+}
+
+input JoinWorkshopRequestUpdateManyMutationInput {
+  joinWorkshopRequestId: BigInt
+  message: String
+  status: JoinWorkshopRequestStatus
+}
+
+input JoinWorkshopRequestUpdateManyWithWhereWithoutEmployeeInput {
+  data: JoinWorkshopRequestUpdateManyMutationInput!
+  where: JoinWorkshopRequestScalarWhereInput!
+}
+
+input JoinWorkshopRequestUpdateManyWithoutEmployeeNestedInput {
+  connect: [JoinWorkshopRequestWhereUniqueInput!]
+  connectOrCreate: [JoinWorkshopRequestCreateOrConnectWithoutEmployeeInput!]
+  create: [JoinWorkshopRequestCreateWithoutEmployeeInput!]
+  createMany: JoinWorkshopRequestCreateManyEmployeeInputEnvelope
+  delete: [JoinWorkshopRequestWhereUniqueInput!]
+  deleteMany: [JoinWorkshopRequestScalarWhereInput!]
+  disconnect: [JoinWorkshopRequestWhereUniqueInput!]
+  set: [JoinWorkshopRequestWhereUniqueInput!]
+  update: [JoinWorkshopRequestUpdateWithWhereUniqueWithoutEmployeeInput!]
+  updateMany: [JoinWorkshopRequestUpdateManyWithWhereWithoutEmployeeInput!]
+  upsert: [JoinWorkshopRequestUpsertWithWhereUniqueWithoutEmployeeInput!]
+}
+
+input JoinWorkshopRequestUpdateWithWhereUniqueWithoutEmployeeInput {
+  data: JoinWorkshopRequestUpdateWithoutEmployeeInput!
+  where: JoinWorkshopRequestWhereUniqueInput!
+}
+
+input JoinWorkshopRequestUpdateWithoutEmployeeInput {
+  joinWorkshopRequestId: BigInt
+  message: String
+  status: JoinWorkshopRequestStatus
+}
+
+input JoinWorkshopRequestUpsertWithWhereUniqueWithoutEmployeeInput {
+  create: JoinWorkshopRequestCreateWithoutEmployeeInput!
+  update: JoinWorkshopRequestUpdateWithoutEmployeeInput!
+  where: JoinWorkshopRequestWhereUniqueInput!
 }
 
 input JoinWorkshopRequestWhereInput {
@@ -1440,6 +2118,21 @@ input JoinWorkshopRequestWhereInput {
   employee: EmployeeRelationFilter
   employeeId: BigIntFilter
   joinWorkshopRequestId: BigIntFilter
+  message: StringNullableFilter
+  receiverId: BigIntFilter
+  status: EnumJoinWorkshopRequestStatusFilter
+  user: UserRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input JoinWorkshopRequestWhereUniqueInput {
+  AND: [JoinWorkshopRequestWhereInput!]
+  NOT: [JoinWorkshopRequestWhereInput!]
+  OR: [JoinWorkshopRequestWhereInput!]
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  joinWorkshopRequestId: BigInt
   message: StringNullableFilter
   receiverId: BigIntFilter
   status: EnumJoinWorkshopRequestStatusFilter
@@ -1488,40 +2181,101 @@ type LoginUserResponse {
 }
 
 type Mutation {
-  acceptDeviceRegistration(acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput!): WorkshopDevice!
+  acceptDeviceRegistration(data: AcceptWorkshopDeviceInput!, where: WorkshopWhereUniqueInput!): WorkshopDevice!
+  acceptJoinWorkshopRequest(joinWorkshopRequestId: BigInt!): Boolean!
+  acceptReview(reviewId: BigInt!): Review!
+  acceptReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
+  acceptServiceRequest(data: AcceptServiceRequestInput!): ServiceRequest!
   assignPermissionsToEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
+  cancelTask(taskId: BigInt!): Task!
   changeEmployeePassword(changeEmployeePasswordInput: ChangePasswordInput!): Boolean!
-  changeUserPassword(changeUserPasswordInput: ChangePasswordInput!): Boolean!
-  createAddressForUser(data: AddressCreateInput!, userId: BigInt!): Address!
+  changeUserPassword(data: ChangePasswordInput!, where: UserWhereUniqueInput!): Boolean!
+  completeTask(taskId: BigInt!): Task!
   createAddressForWorkshop(data: AddressCreateInput!, workshopId: BigInt!): Address!
-  createAdmin(createAdminInput: CreateAdminInput!): User!
+  createAdmin(data: UserCreateInput!): User!
+  createCustomer(data: CustomerCreateInput!): Customer!
+  createEmployee(data: EmployeeCreateInput!): Employee!
   createEmployeePermission(data: EmployeePermissionCreateInput!): EmployeePermission!
+  createJob(data: JobCreateInput!): Job!
+  createJobCategory(data: JobCategoryCreateInput!): JobCategory!
+  createReview(data: ReviewCreateInput!): Review!
+  createReviewResponse(data: ReviewResponseCreateInput!): ReviewResponse!
+  createService(data: ServiceCreateInput!): Service!
+  createServiceRequestAsGuest(data: CreateServiceRequestAsGuestInput!): ServiceRequest!
+  createServiceRequestAsUser(data: ServiceRequestCreateInput!): ServiceRequest!
   createSessionData(sessionDataCreateInput: SessionDataCreateInput!): SessionData!
+  createTask(data: TaskCreateInput!): Task!
+  createVehicleBrand(data: VehicleBrandCreateInput!): VehicleBrand!
+  createVehicleDetails(data: VehicleDetailsCreateInput!): VehicleDetails!
+  createVehicleForCustomer(data: VehicleCreateInput!): Vehicle!
+  createVehicleForUser(data: CreateVehicleForUserInput!): Vehicle!
+  createVehicleModel(data: VehicleModelCreateInput!): VehicleModel!
+  createWorkshopDetails(data: WorkshopDetailsCreateInput!): WorkshopDetails!
   deleteAddress(where: AddressWhereUniqueInput!): Boolean!
+  deleteCustomer(customerId: BigInt!): Boolean!
+  deleteEmployee(employeeId: BigInt!): Boolean!
   deleteEmployeePermission(employeePermissionId: BigInt!): Boolean!
   deleteGuest(where: GuestWhereUniqueInput!): Boolean!
-  deleteSessionData(sessionDataId: String!): Boolean!
+  deleteJob(where: JobWhereUniqueInput!): Boolean!
+  deleteJobCategory(where: JobCategoryWhereUniqueInput!): Boolean!
+  deleteJoinWorkshopRequest(where: JoinWorkshopRequestWhereUniqueInput!): Boolean!
+  deleteReview(where: ReviewWhereUniqueInput!): Boolean!
+  deleteReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
+  deleteService(where: ServiceWhereUniqueInput!): Boolean!
+  deleteServiceRequest(where: ServiceRequestWhereUniqueInput!): Boolean!
+  deleteTask(where: TaskWhereUniqueInput!): Boolean!
+  deleteVehicle(where: VehicleWhereUniqueInput!): Boolean!
+  deleteVehicleBrand(where: VehicleBrandWhereUniqueInput!): Boolean!
+  deleteVehicleDetails(where: VehicleDetailsWhereUniqueInput!): Boolean!
+  deleteVehicleModel(where: VehicleModelWhereUniqueInput!): Boolean!
   deleteWorkshop(where: WorkshopWhereUniqueInput!): Boolean!
-  generateDeviceOTP: String!
-  loginEmployeeByUser(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
-  loginEmployeeByWorkshop(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
+  deleteWorkshopDetails(where: WorkshopDetailsWhereUniqueInput!): Boolean!
+  disableEmployee(employeeId: BigInt!): Boolean!
+  editReview(data: EditReviewInput!, where: ReviewWhereUniqueInput!): Review!
+  editReviewResponse(data: EditReviewResponseInput!, where: ReviewResponseWhereUniqueInput!): ReviewResponse!
+  editTask(data: EditOneTaskInput!, where: TaskWhereUniqueInput!): Task!
+  enableEmployee(employeeId: BigInt!): Boolean!
+  generateDeviceOTP(workshopId: BigInt!): String!
+  hideReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
+  loginEmployeeFromDevice(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
+  loginEmployeeFromUser(loginEmployeeInput: LoginEmployeeInput!): LoginEmployeeResponse!
   loginUser(loginUserInput: LoginUserInput!): LoginUserResponse!
   logoutAllUserSessions(userId: BigInt): Boolean!
   logoutAnotherEmployee(employeeId: BigInt!): Boolean!
   logoutEmployee(refreshToken: String!): Boolean!
   logoutUser(refreshToken: String!): Boolean!
-  refreshTokens(refreshToken: String!): LoginUserResponse!
-  registerEmployee(registerEmployeeInput: RegisterEmployeeInput!): Employee!
-  registerUser(registerUserInput: RegisterUserInput!): User!
-  registerWorkshop(registerWorkshopInput: RegisterWorkshopInput!): RegisterWorkshopResponse!
+  refreshEmployeeTokens(refreshToken: String!): LoginEmployeeResponse!
+  refreshUserTokens(refreshToken: String!): LoginUserResponse!
+  registerUser(data: UserCreateInput!): User!
+  registerWorkshop(data: RegisterWorkshopInput!): RegisterWorkshopResponse!
+  rejectJoinWorkshopRequest(joinWorkshopRequestId: BigInt!): Boolean!
+  rejectReview(reviewId: BigInt!): Review!
+  rejectReviewResponse(where: ReviewResponseWhereUniqueInput!): Boolean!
+  rejectServiceRequest(serviceRequestId: BigInt!): ServiceRequest!
   removeDevice(deviceId: BigInt!): Boolean!
   removePermissionsFromEmployee(employeeId: BigInt!, permissionIds: [BigInt!]!): Boolean!
-  requestDeviceRegistration(requestDeviceRegistrationInput: RequestDeviceRegistrationInput!): Boolean!
+  requestDeviceRegistration(data: RequestDeviceRegistrationInput!): Boolean!
+  sendJoinWorkshopRequest(data: JoinWorkshopRequestCreateInput!): JoinWorkshopRequest!
   updateAddress(data: AddressUpdateInput!, where: AddressWhereUniqueInput!): Address!
+  updateCustomer(data: CustomerUpdateInput!, where: CustomerWhereUniqueInput!): Customer!
+  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee!
   updateEmployeePermission(data: EmployeePermissionUpdateInput!, where: EmployeePermissionWhereUniqueInput!): EmployeePermission!
   updateGuest(data: GuestUpdateInput!, where: GuestWhereUniqueInput!): Guest!
-  updateSessionData(sessionDataId: String!, sessionDataUpdateInput: SessionDataUpdateInput!): SessionData!
+  updateJob(data: JobUpdateInput!, where: JobWhereUniqueInput!): Job!
+  updateJobCategory(data: JobCategoryUpdateInput!, where: JobCategoryWhereUniqueInput!): JobCategory!
+  updateJoinWorkshopRequest(data: JoinWorkshopRequestUpdateInput!, where: JoinWorkshopRequestWhereUniqueInput!): JoinWorkshopRequest!
+  updateReview(data: ReviewUpdateInput!, where: ReviewWhereUniqueInput!): Review!
+  updateReviewResponse(data: ReviewResponseUpdateInput!, where: ReviewResponseWhereUniqueInput!): ReviewResponse!
+  updateService(data: ServiceUpdateInput!, where: ServiceWhereUniqueInput!): Service!
+  updateServiceRequest(data: ServiceRequestUpdateInput!, where: ServiceRequestWhereUniqueInput!): ServiceRequest!
+  updateSessionData(data: SessionDataUpdateInput!, where: SessionDataWhereUniqueInput!): SessionData!
+  updateTask(data: TaskUpdateInput!, where: TaskWhereUniqueInput!): Task!
+  updateVehicle(data: VehicleUpdateInput!, where: VehicleWhereUniqueInput!): Vehicle!
+  updateVehicleBrand(data: VehicleBrandUpdateInput!, where: VehicleBrandWhereUniqueInput!): VehicleBrand!
+  updateVehicleDetails(data: VehicleDetailsUpdateInput!, where: VehicleDetailsWhereUniqueInput!): VehicleDetails!
+  updateVehicleModel(data: VehicleModelUpdateInput!, where: VehicleModelWhereUniqueInput!): VehicleModel!
   updateWorkshop(data: WorkshopUpdateInput!, where: WorkshopWhereUniqueInput!): Workshop!
+  updateWorkshopDetails(data: WorkshopDetailsUpdateInput!, where: WorkshopDetailsWhereUniqueInput!): WorkshopDetails!
 }
 
 input NestedBigIntFilter {
@@ -1775,55 +2529,54 @@ enum NullsOrder {
 }
 
 type Query {
-  AdminTest: String!
   address(where: AddressWhereUniqueInput!): Address!
   addresses(cursor: AddressWhereUniqueInput, distinct: [AddressScalarFieldEnum!], orderBy: [AddressOrderByWithRelationInput!], skip: Int, take: Int, where: AddressWhereInput): [Address!]!
+  customer(where: CustomerWhereUniqueInput!): Customer!
+  customers(cursor: CustomerWhereUniqueInput, distinct: [CustomerScalarFieldEnum!], orderBy: [CustomerOrderByWithRelationInput!], skip: Int, take: Int, where: CustomerWhereInput): [Customer!]!
+  employee(where: EmployeeWhereUniqueInput!): Employee!
   employeePermission(where: EmployeePermissionWhereUniqueInput!): EmployeePermission!
   employeePermissions(cursor: EmployeePermissionWhereUniqueInput, distinct: [EmployeePermissionScalarFieldEnum!], orderBy: [EmployeePermissionOrderByWithRelationInput!], skip: Int, take: Int, where: EmployeePermissionWhereInput): [EmployeePermission!]!
-  findAllUsers: [User!]!
+  employees(cursor: EmployeeWhereUniqueInput, distinct: [EmployeeScalarFieldEnum!], orderBy: [EmployeeOrderByWithRelationInput!], skip: Int, take: Int, where: EmployeeWhereInput): [Employee!]!
   findUserByEmail(email: String!): User!
   findUserById(userId: BigInt!): User!
   findUsers(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
-  getAllSessionData: [SessionData!]!
-  getSessionData(id: String!): SessionData!
   guest(where: GuestWhereUniqueInput!): Guest!
   guests(cursor: GuestWhereUniqueInput, distinct: [GuestScalarFieldEnum!], orderBy: [GuestOrderByWithRelationInput!], skip: Int, take: Int, where: GuestWhereInput): [Guest!]!
-  testtest: String!
+  job(where: JobWhereUniqueInput!): Job!
+  jobCategories(cursor: JobCategoryWhereUniqueInput, distinct: [JobCategoryScalarFieldEnum!], orderBy: [JobCategoryOrderByWithRelationInput!], skip: Int, take: Int, where: JobCategoryWhereInput): [JobCategory!]!
+  jobCategory(where: JobCategoryWhereUniqueInput!): JobCategory!
+  jobs(cursor: JobWhereUniqueInput, distinct: [JobScalarFieldEnum!], orderBy: [JobOrderByWithRelationInput!], skip: Int, take: Int, where: JobWhereInput): [Job!]!
+  joinWorkshopRequest(where: JoinWorkshopRequestWhereUniqueInput!): JoinWorkshopRequest!
+  joinWorkshopRequests(cursor: JoinWorkshopRequestWhereUniqueInput, distinct: [JoinWorkshopRequestScalarFieldEnum!], orderBy: [JoinWorkshopRequestOrderByWithRelationInput!], skip: Int, take: Int, where: JoinWorkshopRequestWhereInput): [JoinWorkshopRequest!]!
+  review(where: ReviewWhereUniqueInput!): Review!
+  reviewResponse(where: ReviewResponseWhereUniqueInput!): ReviewResponse!
+  reviewResponses(cursor: ReviewResponseWhereUniqueInput, distinct: [ReviewResponseScalarFieldEnum!], orderBy: [ReviewResponseOrderByWithRelationInput!], skip: Int, take: Int, where: ReviewResponseWhereInput): [ReviewResponse!]!
+  reviews(cursor: ReviewWhereUniqueInput, distinct: [ReviewScalarFieldEnum!], orderBy: [ReviewOrderByWithRelationInput!], skip: Int, take: Int, where: ReviewWhereInput): [Review!]!
+  service(where: ServiceWhereUniqueInput!): Service!
+  serviceRequest(where: ServiceRequestWhereUniqueInput!): ServiceRequest!
+  serviceRequests(cursor: ServiceRequestWhereUniqueInput, distinct: [ServiceRequestScalarFieldEnum!], orderBy: [ServiceRequestOrderByWithRelationInput!], skip: Int, take: Int, where: ServiceRequestWhereInput): [ServiceRequest!]!
+  services(cursor: ServiceWhereUniqueInput, distinct: [ServiceScalarFieldEnum!], orderBy: [ServiceOrderByWithRelationInput!], skip: Int, take: Int, where: ServiceWhereInput): [Service!]!
+  sessionData(where: SessionDataWhereUniqueInput!): SessionData!
+  sessionDatas(cursor: SessionDataWhereUniqueInput, distinct: [SessionDataScalarFieldEnum!], orderBy: [SessionDataOrderByWithRelationInput!], skip: Int, take: Int, where: SessionDataWhereInput): [SessionData!]!
+  task(where: TaskWhereUniqueInput!): Task!
+  tasks(cursor: TaskWhereUniqueInput, distinct: [TaskScalarFieldEnum!], orderBy: [TaskOrderByWithRelationInput!], skip: Int, take: Int, where: TaskWhereInput): [Task!]!
+  vehicle(where: VehicleWhereUniqueInput!): Vehicle!
+  vehicleBrand(where: VehicleBrandWhereUniqueInput!): VehicleBrand!
+  vehicleBrands(cursor: VehicleBrandWhereUniqueInput, distinct: [VehicleBrandScalarFieldEnum!], orderBy: [VehicleBrandOrderByWithRelationInput!], skip: Int, take: Int, where: VehicleBrandWhereInput): [VehicleBrand!]!
+  vehicleDetails(where: VehicleDetailsWhereUniqueInput!): VehicleDetails!
+  vehicleDetailsList(cursor: VehicleDetailsWhereUniqueInput, distinct: [VehicleDetailsScalarFieldEnum!], orderBy: [VehicleDetailsOrderByWithRelationInput!], skip: Int, take: Int, where: VehicleDetailsWhereInput): [VehicleDetails!]!
+  vehicleModel(where: VehicleModelWhereUniqueInput!): VehicleModel!
+  vehicleModels(cursor: VehicleModelWhereUniqueInput, distinct: [VehicleModelScalarFieldEnum!], orderBy: [VehicleModelOrderByWithRelationInput!], skip: Int, take: Int, where: VehicleModelWhereInput): [VehicleModel!]!
+  vehicles(cursor: VehicleWhereUniqueInput, distinct: [VehicleScalarFieldEnum!], orderBy: [VehicleOrderByWithRelationInput!], skip: Int, take: Int, where: VehicleWhereInput): [Vehicle!]!
   workshop(where: WorkshopWhereUniqueInput!): Workshop!
+  workshopDetails(where: WorkshopDetailsWhereUniqueInput!): WorkshopDetails!
+  workshopDetailsList(cursor: WorkshopDetailsWhereUniqueInput, distinct: [WorkshopDetailsScalarFieldEnum!], orderBy: [WorkshopDetailsOrderByWithRelationInput!], skip: Int, take: Int, where: WorkshopDetailsWhereInput): [WorkshopDetails!]!
   workshops(cursor: WorkshopWhereUniqueInput, distinct: [WorkshopScalarFieldEnum!], orderBy: [WorkshopOrderByWithRelationInput!], skip: Int, take: Int, where: WorkshopWhereInput): [Workshop!]!
 }
 
-input RegisterEmployeeInput {
-  joinWorkshopRequests: JoinWorkshopRequestCreateNestedManyWithoutEmployeeInput
-  joinedAt: DateTime
-  login: String!
-  nickname: BigInt
-  password: String!
-  permissions: EmployeePermissionCreateNestedManyWithoutEmployeesInput
-}
-
-input RegisterUserInput {
-  address: AddressCreateNestedOneWithoutUserInput
-  avatarURL: String
-  email: String!
-  firstName: String
-  lastName: String
-  password: String!
-  telephoneNumber: String!
-  username: String!
-}
-
 input RegisterWorkshopInput {
-  address: AddressCreateNestedOneWithoutWorkshopInput
-  email: String!
-  isManagingWork: Boolean
-  isOfferingService: Boolean
-  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
-  ownerEmployee: RegisterEmployeeInput!
-  password: String!
-  telephoneNumber: String!
-  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
-  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+  ownerEmployee: EmployeeCreateInput!
+  workshop: WorkshopCreateInput!
 }
 
 type RegisterWorkshopResponse {
@@ -1845,6 +2598,7 @@ type Review {
 
   """Note: Optional because field defaults to 0.00"""
   rating: Decimal!
+  responses: [ReviewResponse!]
   reviewId: BigInt!
   reviewResponses: [ReviewResponse!]
   reviewText: String!
@@ -1884,6 +2638,18 @@ type ReviewCountAggregate {
   workshopId: Int!
 }
 
+input ReviewCreateInput {
+  rating: Decimal
+  reviewText: String!
+  status: ReviewStatus
+  user: UserCreateNestedOneWithoutReviewsInput!
+  workshop: WorkshopCreateNestedOneWithoutReviewsInput!
+}
+
+input ReviewCreateNestedOneWithoutReviewResponsesInput {
+  connect: ReviewWhereUniqueInput
+}
+
 input ReviewListRelationFilter {
   every: ReviewWhereInput
   none: ReviewWhereInput
@@ -1918,6 +2684,20 @@ type ReviewMinAggregate {
 
 input ReviewOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input ReviewOrderByWithRelationInput {
+  originalRating: SortOrderInput
+  originalReviewText: SortOrderInput
+  rating: SortOrder
+  reviewId: SortOrder
+  reviewResponses: ReviewResponseOrderByRelationAggregateInput
+  reviewText: SortOrder
+  status: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
 }
 
 input ReviewRelationFilter {
@@ -1968,6 +2748,17 @@ type ReviewResponseCountAggregate {
   userId: Int!
 }
 
+input ReviewResponseCreateInput {
+  parentResponse: ReviewResponseCreateNestedOneWithoutChildrenResponsesInput
+  responseText: String!
+  review: ReviewCreateNestedOneWithoutReviewResponsesInput!
+  user: UserCreateNestedOneWithoutReviewResponsesInput!
+}
+
+input ReviewResponseCreateNestedOneWithoutChildrenResponsesInput {
+  connect: ReviewResponseWhereUniqueInput
+}
+
 input ReviewResponseListRelationFilter {
   every: ReviewResponseWhereInput
   none: ReviewResponseWhereInput
@@ -2007,6 +2798,32 @@ input ReviewResponseOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input ReviewResponseOrderByWithRelationInput {
+  childrenResponses: ReviewResponseOrderByRelationAggregateInput
+  originalResponseText: SortOrderInput
+  parentResponse: ReviewResponseOrderByWithRelationInput
+  parentResponseId: SortOrderInput
+  responseText: SortOrder
+  review: ReviewOrderByWithRelationInput
+  reviewId: SortOrder
+  reviewResponseId: SortOrder
+  status: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+enum ReviewResponseScalarFieldEnum {
+  createdAt
+  originalResponseText
+  parentResponseId
+  responseText
+  reviewId
+  reviewResponseId
+  status
+  updatedAt
+  userId
+}
+
 enum ReviewResponseStatus {
   ACCEPTED
   HIDDEN
@@ -2019,6 +2836,11 @@ type ReviewResponseSumAggregate {
   reviewId: BigInt
   reviewResponseId: BigInt
   userId: BigInt
+}
+
+input ReviewResponseUpdateInput {
+  responseText: String
+  status: ReviewResponseStatus
 }
 
 input ReviewResponseWhereInput {
@@ -2038,6 +2860,36 @@ input ReviewResponseWhereInput {
   userId: BigIntFilter
 }
 
+input ReviewResponseWhereUniqueInput {
+  AND: [ReviewResponseWhereInput!]
+  NOT: [ReviewResponseWhereInput!]
+  OR: [ReviewResponseWhereInput!]
+  childrenResponses: ReviewResponseListRelationFilter
+  originalResponseText: StringNullableFilter
+  parentResponse: ReviewResponseNullableRelationFilter
+  parentResponseId: BigIntNullableFilter
+  responseText: StringFilter
+  review: ReviewRelationFilter
+  reviewId: BigIntFilter
+  reviewResponseId: BigInt
+  status: EnumReviewResponseStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+}
+
+enum ReviewScalarFieldEnum {
+  createdAt
+  originalRating
+  originalReviewText
+  rating
+  reviewId
+  reviewText
+  status
+  updatedAt
+  userId
+  workshopId
+}
+
 enum ReviewStatus {
   ACCEPTED
   HIDDEN
@@ -2051,6 +2903,12 @@ type ReviewSumAggregate {
   reviewId: BigInt
   userId: BigInt
   workshopId: BigInt
+}
+
+input ReviewUpdateInput {
+  rating: Decimal
+  reviewText: String
+  status: ReviewStatus
 }
 
 input ReviewWhereInput {
@@ -2070,10 +2928,27 @@ input ReviewWhereInput {
   workshopId: BigIntFilter
 }
 
+input ReviewWhereUniqueInput {
+  AND: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  originalRating: DecimalNullableFilter
+  originalReviewText: StringNullableFilter
+  rating: DecimalFilter
+  reviewId: BigInt
+  reviewResponses: ReviewResponseListRelationFilter
+  reviewText: StringFilter
+  status: EnumReviewStatusFilter
+  user: UserRelationFilter
+  userId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
 type Service {
   _count: ServiceCount!
   addedAt: DateTime!
-  addedBy: String
+  addedBy: BigInt
   customer: Customer!
   customerId: BigInt!
   deletedAt: DateTime
@@ -2087,7 +2962,7 @@ type Service {
   """Note: Optional because field defaults to 0.00"""
   paymentAmount: Decimal!
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceDescription: String
   serviceEndDate: DateTime
   serviceId: BigInt!
@@ -2099,7 +2974,7 @@ type Service {
   status: ServiceStatus
   tasks: [Task!]
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   vehicle: Vehicle!
   vehicleId: BigInt!
   workshop: Workshop!
@@ -2147,6 +3022,26 @@ type ServiceCountAggregate {
   workshopId: Int!
 }
 
+input ServiceCreateInput {
+  customer: CustomerCreateNestedOneWithoutServicesInput!
+  description: String
+  employee: EmployeeCreateNestedOneWithoutServicesInput!
+  serviceDescription: String
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  tasks: TaskCreateNestedManyWithoutServiceInput
+  vehicle: VehicleCreateNestedOneWithoutServicesInput!
+  workshop: WorkshopCreateNestedOneWithoutServicesInput!
+}
+
+input ServiceCreateNestedManyWithoutCustomerInput {
+  connect: [ServiceWhereUniqueInput!]
+}
+
+input ServiceCreateNestedOneWithoutTasksInput {
+  connect: ServiceWhereUniqueInput
+}
+
 input ServiceListRelationFilter {
   every: ServiceWhereInput
   none: ServiceWhereInput
@@ -2155,7 +3050,7 @@ input ServiceListRelationFilter {
 
 type ServiceMaxAggregate {
   addedAt: DateTime
-  addedBy: String
+  addedBy: BigInt
   customerId: BigInt
   deletedAt: DateTime
   description: String
@@ -2163,7 +3058,7 @@ type ServiceMaxAggregate {
   payedOff: Boolean
   paymentAmount: Decimal
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceDescription: String
   serviceEndDate: DateTime
   serviceId: BigInt
@@ -2171,14 +3066,14 @@ type ServiceMaxAggregate {
   serviceStartDate: DateTime
   status: ServiceStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   vehicleId: BigInt
   workshopId: BigInt
 }
 
 type ServiceMinAggregate {
   addedAt: DateTime
-  addedBy: String
+  addedBy: BigInt
   customerId: BigInt
   deletedAt: DateTime
   description: String
@@ -2186,7 +3081,7 @@ type ServiceMinAggregate {
   payedOff: Boolean
   paymentAmount: Decimal
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceDescription: String
   serviceEndDate: DateTime
   serviceId: BigInt
@@ -2194,7 +3089,7 @@ type ServiceMinAggregate {
   serviceStartDate: DateTime
   status: ServiceStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   vehicleId: BigInt
   workshopId: BigInt
 }
@@ -2250,7 +3145,7 @@ type ServiceRequest {
   guestId: BigInt
   jobs: [Job!]
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceRequestId: BigInt!
 
   """Note: Optional because field defaults to pending"""
@@ -2293,6 +3188,26 @@ type ServiceRequestCountAggregate {
   workshopId: Int!
 }
 
+input ServiceRequestCreateInput {
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  user: UserCreateNestedOneWithoutServiceRequestsInput
+  vehicle: VehicleCreateNestedOneWithoutServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
+input ServiceRequestCreateNestedOneWithoutGuestInput {
+  create: ServiceRequestCreateWithoutGuestInput
+}
+
+input ServiceRequestCreateWithoutGuestInput {
+  description: String
+  jobs: JobCreateNestedManyWithoutServiceRequestsInput
+  user: UserCreateNestedOneWithoutServiceRequestsInput
+  vehicle: VehicleCreateNestedOneWithoutServiceRequestsInput!
+  workshop: WorkshopCreateNestedOneWithoutServiceRequestsInput!
+}
+
 input ServiceRequestListRelationFilter {
   every: ServiceRequestWhereInput
   none: ServiceRequestWhereInput
@@ -2306,7 +3221,7 @@ type ServiceRequestMaxAggregate {
   description: String
   guestId: BigInt
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceRequestId: BigInt
   status: ServiceRequestStatus
   userId: BigInt
@@ -2321,7 +3236,7 @@ type ServiceRequestMinAggregate {
   description: String
   guestId: BigInt
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceRequestId: BigInt
   status: ServiceRequestStatus
   userId: BigInt
@@ -2355,6 +3270,21 @@ input ServiceRequestOrderByWithRelationInput {
   workshopId: SortOrder
 }
 
+enum ServiceRequestScalarFieldEnum {
+  approvedServiceId
+  createdAt
+  deletedAt
+  description
+  guestId
+  resolvedAt
+  resolvedBy
+  serviceRequestId
+  status
+  userId
+  vehicleId
+  workshopId
+}
+
 enum ServiceRequestStatus {
   ACCEPTED
   CANCELLED
@@ -2365,11 +3295,18 @@ enum ServiceRequestStatus {
 type ServiceRequestSumAggregate {
   approvedServiceId: BigInt
   guestId: BigInt
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceRequestId: BigInt
   userId: BigInt
   vehicleId: BigInt
   workshopId: BigInt
+}
+
+input ServiceRequestUpdateInput {
+  description: String
+  jobs: JobUpdateManyWithoutServiceRequestsNestedInput
+  status: ServiceRequestStatus
+  vehicle: VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput
 }
 
 input ServiceRequestWhereInput {
@@ -2392,6 +3329,49 @@ input ServiceRequestWhereInput {
   workshopId: BigIntFilter
 }
 
+input ServiceRequestWhereUniqueInput {
+  AND: [ServiceRequestWhereInput!]
+  NOT: [ServiceRequestWhereInput!]
+  OR: [ServiceRequestWhereInput!]
+  approvedService: ServiceNullableRelationFilter
+  approvedServiceId: BigInt
+  description: StringNullableFilter
+  guest: GuestNullableRelationFilter
+  guestId: BigInt
+  jobs: JobListRelationFilter
+  serviceRequestId: BigInt
+  status: EnumServiceRequestStatusNullableFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+enum ServiceScalarFieldEnum {
+  addedAt
+  addedBy
+  customerId
+  deletedAt
+  description
+  employeeId
+  payedOff
+  paymentAmount
+  resolvedAt
+  resolvedBy
+  serviceDescription
+  serviceEndDate
+  serviceId
+  serviceRequestId
+  serviceStartDate
+  status
+  updatedAt
+  updatedBy
+  vehicleId
+  workshopId
+}
+
 enum ServiceStatus {
   CANCELLED
   COMPLETED
@@ -2399,16 +3379,28 @@ enum ServiceStatus {
 }
 
 type ServiceSumAggregate {
-  addedBy: String
+  addedBy: BigInt
   customerId: BigInt
   employeeId: BigInt
   paymentAmount: Decimal
-  resolvedBy: String
+  resolvedBy: BigInt
   serviceId: BigInt
   serviceRequestId: BigInt
-  updatedBy: String
+  updatedBy: BigInt
   vehicleId: BigInt
   workshopId: BigInt
+}
+
+input ServiceUpdateInput {
+  description: String
+  payedOff: Boolean
+  paymentAmount: Decimal
+  serviceDescription: String
+  serviceEndDate: DateTime
+  serviceRequestId: BigInt
+  serviceStartDate: DateTime
+  status: ServiceStatus
+  vehicle: VehicleUpdateOneRequiredWithoutServicesNestedInput
 }
 
 input ServiceWhereInput {
@@ -2427,6 +3419,31 @@ input ServiceWhereInput {
   serviceId: BigIntFilter
   serviceRequest: ServiceRequestNullableRelationFilter
   serviceRequestId: BigIntNullableFilter
+  serviceStartDate: DateTimeFilter
+  status: EnumServiceStatusNullableFilter
+  tasks: TaskListRelationFilter
+  vehicle: VehicleRelationFilter
+  vehicleId: BigIntFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+}
+
+input ServiceWhereUniqueInput {
+  AND: [ServiceWhereInput!]
+  NOT: [ServiceWhereInput!]
+  OR: [ServiceWhereInput!]
+  customer: CustomerRelationFilter
+  customerId: BigIntFilter
+  description: StringNullableFilter
+  employee: EmployeeRelationFilter
+  employeeId: BigIntFilter
+  payedOff: BoolFilter
+  paymentAmount: DecimalFilter
+  serviceDescription: StringNullableFilter
+  serviceEndDate: DateTimeNullableFilter
+  serviceId: BigInt
+  serviceRequest: ServiceRequestNullableRelationFilter
+  serviceRequestId: BigInt
   serviceStartDate: DateTimeFilter
   status: EnumServiceStatusNullableFilter
   tasks: TaskListRelationFilter
@@ -2517,6 +3534,33 @@ input SessionDataOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input SessionDataOrderByWithRelationInput {
+  deviceId: SortOrder
+  deviceInfo: SortOrderInput
+  deviceName: SortOrderInput
+  deviceSerialNumber: SortOrderInput
+  expiresAt: SortOrder
+  ipAddress: SortOrderInput
+  issuedAt: SortOrder
+  refreshToken: SortOrder
+  sessionDataId: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+enum SessionDataScalarFieldEnum {
+  deviceId
+  deviceInfo
+  deviceName
+  deviceSerialNumber
+  expiresAt
+  ipAddress
+  issuedAt
+  refreshToken
+  sessionDataId
+  userId
+}
+
 type SessionDataSumAggregate {
   userId: BigInt
 }
@@ -2531,6 +3575,11 @@ input SessionDataUpdateInput {
   issuedAt: DateTime
   refreshToken: String
   user: UserUpdateOneRequiredWithoutSessionDataNestedInput
+}
+
+input SessionDataUserIdDeviceIdCompoundUniqueInput {
+  deviceId: String!
+  userId: BigInt!
 }
 
 input SessionDataWhereInput {
@@ -2548,6 +3597,24 @@ input SessionDataWhereInput {
   sessionDataId: StringFilter
   user: UserRelationFilter
   userId: BigIntFilter
+}
+
+input SessionDataWhereUniqueInput {
+  AND: [SessionDataWhereInput!]
+  NOT: [SessionDataWhereInput!]
+  OR: [SessionDataWhereInput!]
+  deviceId: StringFilter
+  deviceInfo: StringNullableFilter
+  deviceName: StringNullableFilter
+  deviceSerialNumber: StringNullableFilter
+  expiresAt: DateTimeFilter
+  ipAddress: StringNullableFilter
+  issuedAt: DateTimeFilter
+  refreshToken: StringFilter
+  sessionDataId: String
+  user: UserRelationFilter
+  userId: BigIntFilter
+  userId_deviceId: SessionDataUserIdDeviceIdCompoundUniqueInput
 }
 
 enum SortOrder {
@@ -2591,7 +3658,7 @@ input StringNullableFilter {
 type Task {
   _count: TaskCount!
   createdAt: DateTime!
-  createdBy: String
+  createdBy: BigInt
   customName: String
   description: String!
   employees: [Employee!]
@@ -2602,7 +3669,7 @@ type Task {
   """Note: Optional because field defaults to 0.00"""
   partsCost: Decimal!
   resolvedAt: DateTime
-  resolvedBy: String
+  resolvedBy: BigInt
   service: Service!
   serviceId: BigInt!
 
@@ -2610,13 +3677,82 @@ type Task {
   status: TaskStatus
   taskId: BigInt!
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopJob: WorkshopJob!
   workshopJobId: BigInt!
 }
 
+type TaskAvgAggregate {
+  createdBy: Float
+  executionTime: Float
+  partsCost: Decimal
+  resolvedBy: Float
+  serviceId: Float
+  taskId: Float
+  updatedBy: Float
+  workshopJobId: Float
+}
+
 type TaskCount {
   employees: Int!
+}
+
+type TaskCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  createdBy: Int!
+  customName: Int!
+  description: Int!
+  executionTime: Int!
+  partsCost: Int!
+  resolvedAt: Int!
+  resolvedBy: Int!
+  serviceId: Int!
+  status: Int!
+  taskId: Int!
+  updatedAt: Int!
+  updatedBy: Int!
+  workshopJobId: Int!
+}
+
+input TaskCreateInput {
+  customName: String
+  description: String!
+  employees: EmployeeCreateNestedManyWithoutTasksInput
+  executionTime: Float
+  partsCost: Decimal
+  service: ServiceCreateNestedOneWithoutTasksInput!
+  status: TaskStatus
+  workshopJob: WorkshopJobCreateNestedOneWithoutTasksInput!
+}
+
+input TaskCreateManyServiceInput {
+  customName: String
+  description: String!
+  executionTime: Float
+  partsCost: Decimal
+  status: TaskStatus
+  workshopJobId: BigInt!
+}
+
+input TaskCreateManyServiceInputEnvelope {
+  data: [TaskCreateManyServiceInput!]!
+  skipDuplicates: Boolean
+}
+
+input TaskCreateNestedManyWithoutServiceInput {
+  create: [TaskCreateWithoutServiceInput!]
+  createMany: TaskCreateManyServiceInputEnvelope
+}
+
+input TaskCreateWithoutServiceInput {
+  customName: String
+  description: String!
+  employees: EmployeeCreateNestedManyWithoutTasksInput
+  executionTime: Float
+  partsCost: Decimal
+  status: TaskStatus
+  workshopJob: WorkshopJobCreateNestedOneWithoutTasksInput!
 }
 
 input TaskListRelationFilter {
@@ -2625,14 +3761,100 @@ input TaskListRelationFilter {
   some: TaskWhereInput
 }
 
+type TaskMaxAggregate {
+  createdAt: DateTime
+  createdBy: BigInt
+  customName: String
+  description: String
+  executionTime: Float
+  partsCost: Decimal
+  resolvedAt: DateTime
+  resolvedBy: BigInt
+  serviceId: BigInt
+  status: TaskStatus
+  taskId: BigInt
+  updatedAt: DateTime
+  updatedBy: BigInt
+  workshopJobId: BigInt
+}
+
+type TaskMinAggregate {
+  createdAt: DateTime
+  createdBy: BigInt
+  customName: String
+  description: String
+  executionTime: Float
+  partsCost: Decimal
+  resolvedAt: DateTime
+  resolvedBy: BigInt
+  serviceId: BigInt
+  status: TaskStatus
+  taskId: BigInt
+  updatedAt: DateTime
+  updatedBy: BigInt
+  workshopJobId: BigInt
+}
+
 input TaskOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input TaskOrderByWithRelationInput {
+  customName: SortOrderInput
+  description: SortOrder
+  employees: EmployeeOrderByRelationAggregateInput
+  executionTime: SortOrder
+  partsCost: SortOrder
+  service: ServiceOrderByWithRelationInput
+  serviceId: SortOrder
+  status: SortOrderInput
+  taskId: SortOrder
+  workshopJob: WorkshopJobOrderByWithRelationInput
+  workshopJobId: SortOrder
+}
+
+enum TaskScalarFieldEnum {
+  createdAt
+  createdBy
+  customName
+  description
+  executionTime
+  partsCost
+  resolvedAt
+  resolvedBy
+  serviceId
+  status
+  taskId
+  updatedAt
+  updatedBy
+  workshopJobId
 }
 
 enum TaskStatus {
   CANCELLED
   COMPLETED
   PENDING
+}
+
+type TaskSumAggregate {
+  createdBy: BigInt
+  executionTime: Float
+  partsCost: Decimal
+  resolvedBy: BigInt
+  serviceId: BigInt
+  taskId: BigInt
+  updatedBy: BigInt
+  workshopJobId: BigInt
+}
+
+input TaskUpdateInput {
+  customName: String
+  description: String
+  employees: EmployeeUpdateManyWithoutTasksNestedInput
+  executionTime: Float
+  partsCost: Decimal
+  status: TaskStatus
+  workshopJob: WorkshopJobUpdateOneRequiredWithoutTasksNestedInput
 }
 
 input TaskWhereInput {
@@ -2652,11 +3874,26 @@ input TaskWhereInput {
   workshopJobId: BigIntFilter
 }
 
+input TaskWhereUniqueInput {
+  AND: [TaskWhereInput!]
+  NOT: [TaskWhereInput!]
+  OR: [TaskWhereInput!]
+  customName: StringNullableFilter
+  description: StringFilter
+  employees: EmployeeListRelationFilter
+  executionTime: FloatFilter
+  partsCost: DecimalFilter
+  service: ServiceRelationFilter
+  serviceId: BigIntFilter
+  status: EnumTaskStatusNullableFilter
+  taskId: BigInt
+  workshopJob: WorkshopJobRelationFilter
+  workshopJobId: BigIntFilter
+}
+
 """Note: CREATE USER ONLY IF PHONE NUMBER IS CONFIRMED."""
 type User {
   _count: UserCount!
-  address: Address
-  addressId: String
   avatarURL: String
   createdAt: DateTime!
   customers: [Customer!]
@@ -2683,7 +3920,6 @@ type User {
 }
 
 type UserAvgAggregate {
-  addressId: Float
   userId: Float
 }
 
@@ -2702,7 +3938,6 @@ type UserCount {
 
 type UserCountAggregate {
   _all: Int!
-  addressId: Int!
   avatarURL: Int!
   createdAt: Int!
   deletedAt: Int!
@@ -2718,11 +3953,45 @@ type UserCountAggregate {
   username: Int!
 }
 
+input UserCreateInput {
+  avatarURL: String
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+  telephoneNumber: String!
+  username: String!
+}
+
+input UserCreateNestedOneWithoutCustomersInput {
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateNestedOneWithoutJoinWorkshopRequestsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateNestedOneWithoutReviewResponsesInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutReviewsInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutServiceRequestsInput {
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateNestedOneWithoutSessionDataInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutVehiclesInput {
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateNestedOneWithoutWorkshopsInput {
   connect: UserWhereUniqueInput
 }
 
@@ -2732,7 +4001,6 @@ input UserCreateOrConnectWithoutSessionDataInput {
 }
 
 input UserCreateWithoutSessionDataInput {
-  address: AddressCreateNestedOneWithoutUserInput
   avatarURL: String
   email: String!
   firstName: String
@@ -2743,7 +4011,6 @@ input UserCreateWithoutSessionDataInput {
 }
 
 type UserMaxAggregate {
-  addressId: String
   avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
@@ -2760,7 +4027,6 @@ type UserMaxAggregate {
 }
 
 type UserMinAggregate {
-  addressId: String
   avatarURL: String
   createdAt: DateTime
   deletedAt: DateTime
@@ -2782,8 +4048,6 @@ input UserNullableRelationFilter {
 }
 
 input UserOrderByWithRelationInput {
-  address: AddressOrderByWithRelationInput
-  addressId: SortOrderInput
   avatarURL: SortOrderInput
   customers: CustomerOrderByRelationAggregateInput
   email: SortOrder
@@ -2823,7 +4087,7 @@ type UserReport {
   """Note: Optional because field defaults to pending"""
   status: UserReportStatus!
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   user: User!
   userId: BigInt!
 }
@@ -2864,7 +4128,7 @@ type UserReportMaxAggregate {
   reportedId: BigInt
   status: UserReportStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
 }
 
@@ -2877,7 +4141,7 @@ type UserReportMinAggregate {
   reportedId: BigInt
   status: UserReportStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
 }
 
@@ -2888,8 +4152,6 @@ input UserReportOrderByRelationAggregateInput {
 enum UserReportReportedEntityType {
   REVIEW
   REVIEW_RESPONSE
-  SERVICE
-  SERVICE_REQUEST
   USER
   WORKSHOP
 }
@@ -2903,7 +4165,7 @@ enum UserReportStatus {
 type UserReportSumAggregate {
   reportId: BigInt
   reportedId: BigInt
-  updatedBy: String
+  updatedBy: BigInt
   userId: BigInt
 }
 
@@ -2942,7 +4204,6 @@ enum UserRole {
 }
 
 enum UserScalarFieldEnum {
-  addressId
   avatarURL
   createdAt
   deletedAt
@@ -2966,7 +4227,6 @@ enum UserStatus {
 }
 
 type UserSumAggregate {
-  addressId: String
   userId: BigInt
 }
 
@@ -2984,7 +4244,6 @@ input UserUpdateToOneWithWhereWithoutSessionDataInput {
 }
 
 input UserUpdateWithoutSessionDataInput {
-  address: AddressUpdateOneWithoutUserNestedInput
   avatarURL: String
   email: String
   firstName: String
@@ -3006,8 +4265,6 @@ input UserWhereInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
-  address: AddressNullableRelationFilter
-  addressId: BigIntNullableFilter
   avatarURL: StringNullableFilter
   customers: CustomerListRelationFilter
   email: StringFilter
@@ -3035,8 +4292,6 @@ input UserWhereUniqueInput {
   AND: [UserWhereInput!]
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
-  address: AddressNullableRelationFilter
-  addressId: String
   avatarURL: StringNullableFilter
   customers: CustomerListRelationFilter
   email: String
@@ -3062,7 +4317,8 @@ input UserWhereUniqueInput {
 
 type Vehicle {
   _count: VehicleCount!
-  customers: [Customer!]
+  customer: Customer
+  customerId: BigInt
   deletedAt: DateTime
   guest: Guest
   guestId: BigInt
@@ -3077,6 +4333,7 @@ type Vehicle {
 }
 
 type VehicleAvgAggregate {
+  customerId: Float
   guestId: Float
   modelId: Float
   userId: Float
@@ -3095,6 +4352,44 @@ type VehicleBrandCount {
   vehicleModels: Int!
 }
 
+type VehicleBrandCountAggregate {
+  _all: Int!
+  brandName: Int!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+input VehicleBrandCreateInput {
+  brandName: String!
+}
+
+input VehicleBrandCreateNestedOneWithoutVehicleModelsInput {
+  connect: VehicleBrandWhereUniqueInput
+  connectOrCreate: VehicleBrandCreateOrConnectWithoutVehicleModelsInput
+  create: VehicleBrandCreateWithoutVehicleModelsInput
+}
+
+input VehicleBrandCreateOrConnectWithoutVehicleModelsInput {
+  create: VehicleBrandCreateWithoutVehicleModelsInput!
+  where: VehicleBrandWhereUniqueInput!
+}
+
+input VehicleBrandCreateWithoutVehicleModelsInput {
+  brandName: String!
+}
+
+type VehicleBrandMaxAggregate {
+  brandName: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type VehicleBrandMinAggregate {
+  brandName: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 input VehicleBrandOrderByWithRelationInput {
   brandName: SortOrder
   vehicleModels: VehicleModelOrderByRelationAggregateInput
@@ -3105,6 +4400,16 @@ input VehicleBrandRelationFilter {
   isNot: VehicleBrandWhereInput
 }
 
+enum VehicleBrandScalarFieldEnum {
+  brandName
+  createdAt
+  updatedAt
+}
+
+input VehicleBrandUpdateInput {
+  brandName: String
+}
+
 input VehicleBrandWhereInput {
   AND: [VehicleBrandWhereInput!]
   NOT: [VehicleBrandWhereInput!]
@@ -3113,19 +4418,110 @@ input VehicleBrandWhereInput {
   vehicleModels: VehicleModelListRelationFilter
 }
 
+input VehicleBrandWhereUniqueInput {
+  AND: [VehicleBrandWhereInput!]
+  NOT: [VehicleBrandWhereInput!]
+  OR: [VehicleBrandWhereInput!]
+  brandName: String
+  vehicleModels: VehicleModelListRelationFilter
+}
+
 type VehicleCount {
-  customers: Int!
   serviceRequests: Int!
   services: Int!
 }
 
 type VehicleCountAggregate {
   _all: Int!
+  customerId: Int!
   deletedAt: Int!
   guestId: Int!
   modelId: Int!
   userId: Int!
   vehicleId: Int!
+}
+
+input VehicleCreateInput {
+  customer: CustomerCreateNestedOneWithoutVehiclesInput
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+}
+
+input VehicleCreateManyCustomerInput {
+  guestId: BigInt
+  modelId: BigInt!
+  userId: BigInt
+}
+
+input VehicleCreateManyCustomerInputEnvelope {
+  data: [VehicleCreateManyCustomerInput!]!
+  skipDuplicates: Boolean
+}
+
+input VehicleCreateNestedManyWithoutCustomerInput {
+  connect: [VehicleWhereUniqueInput!]
+  connectOrCreate: [VehicleCreateOrConnectWithoutCustomerInput!]
+  create: [VehicleCreateWithoutCustomerInput!]
+  createMany: VehicleCreateManyCustomerInputEnvelope
+}
+
+input VehicleCreateNestedOneWithoutGuestInput {
+  create: VehicleCreateWithoutGuestInput
+}
+
+input VehicleCreateNestedOneWithoutServiceRequestsInput {
+  connect: VehicleWhereUniqueInput
+}
+
+input VehicleCreateNestedOneWithoutServicesInput {
+  connect: VehicleWhereUniqueInput
+}
+
+input VehicleCreateNestedOneWithoutVehicleDetailsInput {
+  connect: VehicleWhereUniqueInput
+}
+
+input VehicleCreateOrConnectWithoutCustomerInput {
+  create: VehicleCreateWithoutCustomerInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateOrConnectWithoutServiceRequestsInput {
+  create: VehicleCreateWithoutServiceRequestsInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateOrConnectWithoutServicesInput {
+  create: VehicleCreateWithoutServicesInput!
+  where: VehicleWhereUniqueInput!
+}
+
+input VehicleCreateWithoutCustomerInput {
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+}
+
+input VehicleCreateWithoutGuestInput {
+  customer: CustomerCreateNestedOneWithoutVehiclesInput
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+}
+
+input VehicleCreateWithoutServiceRequestsInput {
+  customer: CustomerCreateNestedOneWithoutVehiclesInput
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
+}
+
+input VehicleCreateWithoutServicesInput {
+  customer: CustomerCreateNestedOneWithoutVehiclesInput
+  user: UserCreateNestedOneWithoutVehiclesInput
+  vehicleDetails: VehicleDetailsCreateNestedOneWithoutVehicleInput
+  vehicleModel: VehicleModelCreateNestedOneWithoutVehiclesInput!
 }
 
 type VehicleDetails {
@@ -3140,6 +4536,89 @@ type VehicleDetails {
   vehicle: Vehicle!
   vehicleDetailsId: BigInt!
   vehicleId: BigInt!
+  yearOfProduction: Int
+}
+
+type VehicleDetailsAvgAggregate {
+  vehicleDetailsId: Float
+  vehicleId: Float
+  yearOfProduction: Float
+}
+
+type VehicleDetailsCountAggregate {
+  VIN: Int!
+  _all: Int!
+  bodyColor: Int!
+  countryOfRegistration: Int!
+  deletedAt: Int!
+  engineCapacity: Int!
+  engineNo: Int!
+  fuelType: Int!
+  licensePlate: Int!
+  vehicleDetailsId: Int!
+  vehicleId: Int!
+  yearOfProduction: Int!
+}
+
+input VehicleDetailsCreateInput {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicle: VehicleCreateNestedOneWithoutVehicleDetailsInput!
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
+input VehicleDetailsCreateNestedOneWithoutVehicleInput {
+  create: VehicleDetailsCreateWithoutVehicleInput
+}
+
+input VehicleDetailsCreateOrConnectWithoutVehicleInput {
+  create: VehicleDetailsCreateWithoutVehicleInput!
+  where: VehicleDetailsWhereUniqueInput!
+}
+
+input VehicleDetailsCreateWithoutVehicleInput {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
+type VehicleDetailsMaxAggregate {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  vehicleId: BigInt
+  yearOfProduction: Int
+}
+
+type VehicleDetailsMinAggregate {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  deletedAt: DateTime
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  vehicleId: BigInt
   yearOfProduction: Int
 }
 
@@ -3162,6 +4641,71 @@ input VehicleDetailsOrderByWithRelationInput {
   yearOfProduction: SortOrderInput
 }
 
+enum VehicleDetailsScalarFieldEnum {
+  VIN
+  bodyColor
+  countryOfRegistration
+  deletedAt
+  engineCapacity
+  engineNo
+  fuelType
+  licensePlate
+  vehicleDetailsId
+  vehicleId
+  yearOfProduction
+}
+
+type VehicleDetailsSumAggregate {
+  vehicleDetailsId: BigInt
+  vehicleId: BigInt
+  yearOfProduction: Int
+}
+
+input VehicleDetailsUpdateInput {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
+input VehicleDetailsUpdateOneWithoutVehicleNestedInput {
+  connect: VehicleDetailsWhereUniqueInput
+  connectOrCreate: VehicleDetailsCreateOrConnectWithoutVehicleInput
+  create: VehicleDetailsCreateWithoutVehicleInput
+  delete: VehicleDetailsWhereInput
+  disconnect: VehicleDetailsWhereInput
+  update: VehicleDetailsUpdateToOneWithWhereWithoutVehicleInput
+  upsert: VehicleDetailsUpsertWithoutVehicleInput
+}
+
+input VehicleDetailsUpdateToOneWithWhereWithoutVehicleInput {
+  data: VehicleDetailsUpdateWithoutVehicleInput!
+  where: VehicleDetailsWhereInput
+}
+
+input VehicleDetailsUpdateWithoutVehicleInput {
+  VIN: String
+  bodyColor: BodyColor
+  countryOfRegistration: String
+  engineCapacity: String
+  engineNo: String
+  fuelType: FuelType
+  licensePlate: String
+  vehicleDetailsId: BigInt
+  yearOfProduction: Int
+}
+
+input VehicleDetailsUpsertWithoutVehicleInput {
+  create: VehicleDetailsCreateWithoutVehicleInput!
+  update: VehicleDetailsUpdateWithoutVehicleInput!
+  where: VehicleDetailsWhereInput
+}
+
 input VehicleDetailsWhereInput {
   AND: [VehicleDetailsWhereInput!]
   NOT: [VehicleDetailsWhereInput!]
@@ -3179,6 +4723,23 @@ input VehicleDetailsWhereInput {
   yearOfProduction: IntNullableFilter
 }
 
+input VehicleDetailsWhereUniqueInput {
+  AND: [VehicleDetailsWhereInput!]
+  NOT: [VehicleDetailsWhereInput!]
+  OR: [VehicleDetailsWhereInput!]
+  VIN: StringNullableFilter
+  bodyColor: EnumBodyColorNullableFilter
+  countryOfRegistration: StringNullableFilter
+  engineCapacity: StringNullableFilter
+  engineNo: StringNullableFilter
+  fuelType: EnumFuelTypeNullableFilter
+  licensePlate: StringNullableFilter
+  vehicle: VehicleRelationFilter
+  vehicleDetailsId: BigInt
+  vehicleId: BigInt
+  yearOfProduction: IntNullableFilter
+}
+
 input VehicleListRelationFilter {
   every: VehicleWhereInput
   none: VehicleWhereInput
@@ -3186,6 +4747,7 @@ input VehicleListRelationFilter {
 }
 
 type VehicleMaxAggregate {
+  customerId: BigInt
   deletedAt: DateTime
   guestId: BigInt
   modelId: BigInt
@@ -3194,6 +4756,7 @@ type VehicleMaxAggregate {
 }
 
 type VehicleMinAggregate {
+  customerId: BigInt
   deletedAt: DateTime
   guestId: BigInt
   modelId: BigInt
@@ -3212,14 +4775,57 @@ type VehicleModel {
   vehicles: [Vehicle!]
 }
 
+type VehicleModelAvgAggregate {
+  modelId: Float
+}
+
 type VehicleModelCount {
   vehicles: Int!
+}
+
+type VehicleModelCountAggregate {
+  _all: Int!
+  brand: Int!
+  createdAt: Int!
+  modelId: Int!
+  modelName: Int!
+  updatedAt: Int!
+}
+
+input VehicleModelCreateInput {
+  modelName: String!
+  vehicleBrand: VehicleBrandCreateNestedOneWithoutVehicleModelsInput!
+}
+
+input VehicleModelCreateNestedOneWithoutVehiclesInput {
+  connect: VehicleModelWhereUniqueInput
 }
 
 input VehicleModelListRelationFilter {
   every: VehicleModelWhereInput
   none: VehicleModelWhereInput
   some: VehicleModelWhereInput
+}
+
+type VehicleModelMaxAggregate {
+  brand: String
+  createdAt: DateTime
+  modelId: BigInt
+  modelName: String
+  updatedAt: DateTime
+}
+
+type VehicleModelMinAggregate {
+  brand: String
+  createdAt: DateTime
+  modelId: BigInt
+  modelName: String
+  updatedAt: DateTime
+}
+
+input VehicleModelModelNameBrandCompoundUniqueInput {
+  brand: String!
+  modelName: String!
 }
 
 input VehicleModelOrderByRelationAggregateInput {
@@ -3239,6 +4845,22 @@ input VehicleModelRelationFilter {
   isNot: VehicleModelWhereInput
 }
 
+enum VehicleModelScalarFieldEnum {
+  brand
+  createdAt
+  modelId
+  modelName
+  updatedAt
+}
+
+type VehicleModelSumAggregate {
+  modelId: BigInt
+}
+
+input VehicleModelUpdateInput {
+  modelName: String
+}
+
 input VehicleModelWhereInput {
   AND: [VehicleModelWhereInput!]
   NOT: [VehicleModelWhereInput!]
@@ -3246,6 +4868,18 @@ input VehicleModelWhereInput {
   brand: StringFilter
   modelId: BigIntFilter
   modelName: StringFilter
+  vehicleBrand: VehicleBrandRelationFilter
+  vehicles: VehicleListRelationFilter
+}
+
+input VehicleModelWhereUniqueInput {
+  AND: [VehicleModelWhereInput!]
+  NOT: [VehicleModelWhereInput!]
+  OR: [VehicleModelWhereInput!]
+  brand: StringFilter
+  modelId: BigInt
+  modelName: StringFilter
+  modelName_brand: VehicleModelModelNameBrandCompoundUniqueInput
   vehicleBrand: VehicleBrandRelationFilter
   vehicles: VehicleListRelationFilter
 }
@@ -3260,7 +4894,8 @@ input VehicleOrderByRelationAggregateInput {
 }
 
 input VehicleOrderByWithRelationInput {
-  customers: CustomerOrderByRelationAggregateInput
+  customer: CustomerOrderByWithRelationInput
+  customerId: SortOrderInput
   guest: GuestOrderByWithRelationInput
   guestId: SortOrderInput
   modelId: SortOrder
@@ -3278,18 +4913,79 @@ input VehicleRelationFilter {
   isNot: VehicleWhereInput
 }
 
+enum VehicleScalarFieldEnum {
+  customerId
+  deletedAt
+  guestId
+  modelId
+  userId
+  vehicleId
+}
+
 type VehicleSumAggregate {
+  customerId: BigInt
   guestId: BigInt
   modelId: BigInt
   userId: BigInt
   vehicleId: BigInt
 }
 
+input VehicleUpdateInput {
+  vehicleDetails: VehicleDetailsUpdateOneWithoutVehicleNestedInput
+}
+
+input VehicleUpdateOneRequiredWithoutServiceRequestsNestedInput {
+  connect: VehicleWhereUniqueInput
+  connectOrCreate: VehicleCreateOrConnectWithoutServiceRequestsInput
+  create: VehicleCreateWithoutServiceRequestsInput
+  update: VehicleUpdateToOneWithWhereWithoutServiceRequestsInput
+  upsert: VehicleUpsertWithoutServiceRequestsInput
+}
+
+input VehicleUpdateOneRequiredWithoutServicesNestedInput {
+  connect: VehicleWhereUniqueInput
+  connectOrCreate: VehicleCreateOrConnectWithoutServicesInput
+  create: VehicleCreateWithoutServicesInput
+  update: VehicleUpdateToOneWithWhereWithoutServicesInput
+  upsert: VehicleUpsertWithoutServicesInput
+}
+
+input VehicleUpdateToOneWithWhereWithoutServiceRequestsInput {
+  data: VehicleUpdateWithoutServiceRequestsInput!
+  where: VehicleWhereInput
+}
+
+input VehicleUpdateToOneWithWhereWithoutServicesInput {
+  data: VehicleUpdateWithoutServicesInput!
+  where: VehicleWhereInput
+}
+
+input VehicleUpdateWithoutServiceRequestsInput {
+  vehicleDetails: VehicleDetailsUpdateOneWithoutVehicleNestedInput
+}
+
+input VehicleUpdateWithoutServicesInput {
+  vehicleDetails: VehicleDetailsUpdateOneWithoutVehicleNestedInput
+}
+
+input VehicleUpsertWithoutServiceRequestsInput {
+  create: VehicleCreateWithoutServiceRequestsInput!
+  update: VehicleUpdateWithoutServiceRequestsInput!
+  where: VehicleWhereInput
+}
+
+input VehicleUpsertWithoutServicesInput {
+  create: VehicleCreateWithoutServicesInput!
+  update: VehicleUpdateWithoutServicesInput!
+  where: VehicleWhereInput
+}
+
 input VehicleWhereInput {
   AND: [VehicleWhereInput!]
   NOT: [VehicleWhereInput!]
   OR: [VehicleWhereInput!]
-  customers: CustomerListRelationFilter
+  customer: CustomerNullableRelationFilter
+  customerId: BigIntNullableFilter
   guest: GuestNullableRelationFilter
   guestId: BigIntNullableFilter
   modelId: BigIntFilter
@@ -3299,6 +4995,24 @@ input VehicleWhereInput {
   userId: BigIntNullableFilter
   vehicleDetails: VehicleDetailsNullableRelationFilter
   vehicleId: BigIntFilter
+  vehicleModel: VehicleModelRelationFilter
+}
+
+input VehicleWhereUniqueInput {
+  AND: [VehicleWhereInput!]
+  NOT: [VehicleWhereInput!]
+  OR: [VehicleWhereInput!]
+  customer: CustomerNullableRelationFilter
+  customerId: BigIntNullableFilter
+  guest: GuestNullableRelationFilter
+  guestId: BigInt
+  modelId: BigIntFilter
+  serviceRequests: ServiceRequestListRelationFilter
+  services: ServiceListRelationFilter
+  user: UserNullableRelationFilter
+  userId: BigIntNullableFilter
+  vehicleDetails: VehicleDetailsNullableRelationFilter
+  vehicleId: BigInt
   vehicleModel: VehicleModelRelationFilter
 }
 
@@ -3323,7 +5037,7 @@ type Workshop {
   services: [Service!]
   telephoneNumber: String!
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   user: User!
   workshopDetails: WorkshopDetails
   workshopDevices: [WorkshopDevice!]
@@ -3366,7 +5080,47 @@ type WorkshopCountAggregate {
   workshopId: Int!
 }
 
+input WorkshopCreateInput {
+  address: AddressCreateNestedOneWithoutWorkshopInput
+  email: String!
+  isManagingWork: Boolean
+  isOfferingService: Boolean
+  jobCategories: JobCategoryCreateNestedManyWithoutWorkshopsInput
+  telephoneNumber: String!
+  user: UserCreateNestedOneWithoutWorkshopsInput!
+  workshopDetails: WorkshopDetailsCreateNestedOneWithoutWorkshopInput
+  workshopJobs: WorkshopJobCreateNestedManyWithoutWorkshopInput
+}
+
+input WorkshopCreateNestedOneWithoutCustomersInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutEmployeesInput {
+  connect: WorkshopWhereUniqueInput
+}
+
 input WorkshopCreateNestedOneWithoutJoinWorkshopRequestsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutReviewsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutServiceRequestsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutServicesInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutWorkshopDetailsInput {
+  connect: WorkshopWhereUniqueInput
+}
+
+input WorkshopCreateNestedOneWithoutWorkshopJobsInput {
   connect: WorkshopWhereUniqueInput
 }
 
@@ -3380,7 +5134,7 @@ type WorkshopDetails {
   rating: Decimal
   status: WorkshopDetailsStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshop: Workshop!
   workshopId: BigInt!
   workshopName: String!
@@ -3404,6 +5158,15 @@ type WorkshopDetailsCountAggregate {
   updatedBy: Int!
   workshopId: Int!
   workshopName: Int!
+}
+
+input WorkshopDetailsCreateInput {
+  NIP: String
+  description: String
+  logoURL: String
+  rating: Decimal
+  workshop: WorkshopCreateNestedOneWithoutWorkshopDetailsInput!
+  workshopName: String!
 }
 
 input WorkshopDetailsCreateNestedOneWithoutWorkshopInput {
@@ -3431,7 +5194,7 @@ type WorkshopDetailsMaxAggregate {
   rating: Decimal
   status: WorkshopDetailsStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
   workshopName: String
 }
@@ -3444,7 +5207,7 @@ type WorkshopDetailsMinAggregate {
   rating: Decimal
   status: WorkshopDetailsStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
   workshopName: String
 }
@@ -3465,6 +5228,19 @@ input WorkshopDetailsOrderByWithRelationInput {
   workshopName: SortOrder
 }
 
+enum WorkshopDetailsScalarFieldEnum {
+  NIP
+  deletedAt
+  description
+  logoURL
+  rating
+  status
+  updatedAt
+  updatedBy
+  workshopId
+  workshopName
+}
+
 enum WorkshopDetailsStatus {
   ACTIVE
   INACTIVE
@@ -3473,8 +5249,17 @@ enum WorkshopDetailsStatus {
 
 type WorkshopDetailsSumAggregate {
   rating: Decimal
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
+}
+
+input WorkshopDetailsUpdateInput {
+  NIP: String
+  description: String
+  logoURL: String
+  rating: Decimal
+  status: WorkshopDetailsStatus
+  workshopName: String
 }
 
 input WorkshopDetailsUpdateOneWithoutWorkshopNestedInput {
@@ -3537,14 +5322,14 @@ input WorkshopDetailsWhereUniqueInput {
 
 type WorkshopDevice {
   acceptedAt: DateTime
-  acceptedBy: String
+  acceptedBy: BigInt
   deviceName: String!
   lastLoginAt: DateTime
-  lastLoginBy: String
+  lastLoginBy: BigInt
   serialNumber: String!
   status: WorkshopDeviceStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshop: Workshop!
   workshopDeviceId: BigInt!
   workshopId: BigInt!
@@ -3581,28 +5366,28 @@ input WorkshopDeviceListRelationFilter {
 
 type WorkshopDeviceMaxAggregate {
   acceptedAt: DateTime
-  acceptedBy: String
+  acceptedBy: BigInt
   deviceName: String
   lastLoginAt: DateTime
-  lastLoginBy: String
+  lastLoginBy: BigInt
   serialNumber: String
   status: WorkshopDeviceStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopDeviceId: BigInt
   workshopId: BigInt
 }
 
 type WorkshopDeviceMinAggregate {
   acceptedAt: DateTime
-  acceptedBy: String
+  acceptedBy: BigInt
   deviceName: String
   lastLoginAt: DateTime
-  lastLoginBy: String
+  lastLoginBy: BigInt
   serialNumber: String
   status: WorkshopDeviceStatus
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopDeviceId: BigInt
   workshopId: BigInt
 }
@@ -3615,7 +5400,7 @@ type WorkshopDeviceOtp {
   WorkshopDeviceOtpId: BigInt!
   code: String!
   createdAt: DateTime!
-  employeeId: BigInt!
+  employeeId: BigInt
   expiresAt: DateTime!
   workshop: Workshop!
   workshopId: BigInt!
@@ -3663,7 +5448,7 @@ input WorkshopDeviceOtpNullableRelationFilter {
 input WorkshopDeviceOtpOrderByWithRelationInput {
   WorkshopDeviceOtpId: SortOrder
   code: SortOrder
-  employeeId: SortOrder
+  employeeId: SortOrderInput
   expiresAt: SortOrder
   workshop: WorkshopOrderByWithRelationInput
   workshopId: SortOrder
@@ -3681,22 +5466,22 @@ input WorkshopDeviceOtpWhereInput {
   OR: [WorkshopDeviceOtpWhereInput!]
   WorkshopDeviceOtpId: BigIntFilter
   code: StringFilter
-  employeeId: BigIntFilter
+  employeeId: BigIntNullableFilter
   expiresAt: DateTimeFilter
   workshop: WorkshopRelationFilter
   workshopId: BigIntFilter
 }
 
 enum WorkshopDeviceStatus {
-  ACTIVE
   DISABLED
+  ENABLED
   INACTIVE
 }
 
 type WorkshopDeviceSumAggregate {
-  acceptedBy: String
-  lastLoginBy: String
-  updatedBy: String
+  acceptedBy: BigInt
+  lastLoginBy: BigInt
+  updatedBy: BigInt
   workshopDeviceId: BigInt
   workshopId: BigInt
 }
@@ -3723,14 +5508,14 @@ type WorkshopJob {
   """Note: Optional because field defaults to true"""
   availability: Boolean!
   createdAt: DateTime!
-  createdBy: String
+  createdBy: BigInt
   job: Job!
   jobId: BigInt!
   maxPrice: Decimal
   minPrice: Decimal
   tasks: [Task!]
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshop: Workshop!
   workshopId: BigInt!
   workshopJobDescription: String
@@ -3784,6 +5569,24 @@ input WorkshopJobCreateNestedManyWithoutWorkshopInput {
   createMany: WorkshopJobCreateManyWorkshopInputEnvelope
 }
 
+input WorkshopJobCreateNestedOneWithoutTasksInput {
+  connect: WorkshopJobWhereUniqueInput
+}
+
+input WorkshopJobCreateOrConnectWithoutTasksInput {
+  create: WorkshopJobCreateWithoutTasksInput!
+  where: WorkshopJobWhereUniqueInput!
+}
+
+input WorkshopJobCreateWithoutTasksInput {
+  availability: Boolean
+  job: JobCreateNestedOneWithoutJobWorkshopsInput!
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshop: WorkshopCreateNestedOneWithoutWorkshopJobsInput!
+  workshopJobDescription: String
+}
+
 input WorkshopJobCreateWithoutWorkshopInput {
   availability: Boolean
   job: JobCreateNestedOneWithoutJobWorkshopsInput!
@@ -3801,12 +5604,12 @@ input WorkshopJobListRelationFilter {
 type WorkshopJobMaxAggregate {
   availability: Boolean
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   jobId: BigInt
   maxPrice: Decimal
   minPrice: Decimal
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
   workshopJobDescription: String
   workshopJobId: BigInt
@@ -3815,12 +5618,12 @@ type WorkshopJobMaxAggregate {
 type WorkshopJobMinAggregate {
   availability: Boolean
   createdAt: DateTime
-  createdBy: String
+  createdBy: BigInt
   jobId: BigInt
   maxPrice: Decimal
   minPrice: Decimal
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
   workshopJobDescription: String
   workshopJobId: BigInt
@@ -3830,19 +5633,59 @@ input WorkshopJobOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input WorkshopJobOrderByWithRelationInput {
+  availability: SortOrder
+  job: JobOrderByWithRelationInput
+  jobId: SortOrder
+  maxPrice: SortOrderInput
+  minPrice: SortOrderInput
+  tasks: TaskOrderByRelationAggregateInput
+  workshop: WorkshopOrderByWithRelationInput
+  workshopId: SortOrder
+  workshopJobDescription: SortOrderInput
+  workshopJobId: SortOrder
+}
+
 input WorkshopJobRelationFilter {
   is: WorkshopJobWhereInput
   isNot: WorkshopJobWhereInput
 }
 
 type WorkshopJobSumAggregate {
-  createdBy: String
+  createdBy: BigInt
   jobId: BigInt
   maxPrice: Decimal
   minPrice: Decimal
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
   workshopJobId: BigInt
+}
+
+input WorkshopJobUpdateOneRequiredWithoutTasksNestedInput {
+  connect: WorkshopJobWhereUniqueInput
+  connectOrCreate: WorkshopJobCreateOrConnectWithoutTasksInput
+  create: WorkshopJobCreateWithoutTasksInput
+  update: WorkshopJobUpdateToOneWithWhereWithoutTasksInput
+  upsert: WorkshopJobUpsertWithoutTasksInput
+}
+
+input WorkshopJobUpdateToOneWithWhereWithoutTasksInput {
+  data: WorkshopJobUpdateWithoutTasksInput!
+  where: WorkshopJobWhereInput
+}
+
+input WorkshopJobUpdateWithoutTasksInput {
+  availability: Boolean
+  job: JobUpdateOneRequiredWithoutJobWorkshopsNestedInput
+  maxPrice: Decimal
+  minPrice: Decimal
+  workshopJobDescription: String
+}
+
+input WorkshopJobUpsertWithoutTasksInput {
+  create: WorkshopJobCreateWithoutTasksInput!
+  update: WorkshopJobUpdateWithoutTasksInput!
+  where: WorkshopJobWhereInput
 }
 
 input WorkshopJobWhereInput {
@@ -3859,6 +5702,28 @@ input WorkshopJobWhereInput {
   workshopId: BigIntFilter
   workshopJobDescription: StringNullableFilter
   workshopJobId: BigIntFilter
+}
+
+input WorkshopJobWhereUniqueInput {
+  AND: [WorkshopJobWhereInput!]
+  NOT: [WorkshopJobWhereInput!]
+  OR: [WorkshopJobWhereInput!]
+  availability: BoolFilter
+  job: JobRelationFilter
+  jobId: BigIntFilter
+  maxPrice: DecimalNullableFilter
+  minPrice: DecimalNullableFilter
+  tasks: TaskListRelationFilter
+  workshop: WorkshopRelationFilter
+  workshopId: BigIntFilter
+  workshopId_jobId: WorkshopJobWorkshopIdJobIdCompoundUniqueInput
+  workshopJobDescription: StringNullableFilter
+  workshopJobId: BigInt
+}
+
+input WorkshopJobWorkshopIdJobIdCompoundUniqueInput {
+  jobId: BigInt!
+  workshopId: BigInt!
 }
 
 input WorkshopListRelationFilter {
@@ -3878,7 +5743,7 @@ type WorkshopMaxAggregate {
   ownerId: BigInt
   telephoneNumber: String
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
 }
 
@@ -3893,7 +5758,7 @@ type WorkshopMinAggregate {
   ownerId: BigInt
   telephoneNumber: String
   updatedAt: DateTime
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
 }
 
@@ -3919,7 +5784,6 @@ input WorkshopOrderByWithRelationInput {
   jobCategories: JobCategoryOrderByRelationAggregateInput
   joinWorkshopRequests: JoinWorkshopRequestOrderByRelationAggregateInput
   ownerId: SortOrder
-  password: SortOrder
   reviews: ReviewOrderByRelationAggregateInput
   serviceRequests: ServiceRequestOrderByRelationAggregateInput
   services: ServiceOrderByRelationAggregateInput
@@ -3945,7 +5809,6 @@ enum WorkshopScalarFieldEnum {
   isOfferingService
   isVerified
   ownerId
-  password
   telephoneNumber
   updatedAt
   updatedBy
@@ -3955,7 +5818,7 @@ enum WorkshopScalarFieldEnum {
 type WorkshopSumAggregate {
   addressId: BigInt
   ownerId: BigInt
-  updatedBy: String
+  updatedBy: BigInt
   workshopId: BigInt
 }
 
@@ -3965,7 +5828,6 @@ input WorkshopUpdateInput {
   isManagingWork: Boolean
   isOfferingService: Boolean
   isVerified: Boolean
-  password: String
   telephoneNumber: String
   workshopDetails: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput
 }
@@ -3986,7 +5848,6 @@ input WorkshopWhereInput {
   jobCategories: JobCategoryListRelationFilter
   joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
   ownerId: BigIntFilter
-  password: StringFilter
   reviews: ReviewListRelationFilter
   serviceRequests: ServiceRequestListRelationFilter
   services: ServiceListRelationFilter
@@ -4014,7 +5875,6 @@ input WorkshopWhereUniqueInput {
   jobCategories: JobCategoryListRelationFilter
   joinWorkshopRequests: JoinWorkshopRequestListRelationFilter
   ownerId: BigIntFilter
-  password: StringFilter
   reviews: ReviewListRelationFilter
   serviceRequests: ServiceRequestListRelationFilter
   services: ServiceListRelationFilter

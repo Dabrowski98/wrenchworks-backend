@@ -10,11 +10,12 @@ import * as Validator from 'class-validator';
 import { ReviewStatus } from '../../prisma/dto/review-status.enum';
 import { WorkshopUpdateOneRequiredWithoutReviewsNestedInput } from '../../workshop/dto/workshop-update-one-required-without-reviews-nested.input';
 import { ReviewResponseUpdateManyWithoutReviewNestedInput } from '../../review-response/dto/review-response-update-many-without-review-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class ReviewUpdateWithoutUserInput {
+
+    @HideField()
+    reviewId?: bigint | number;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -25,6 +26,9 @@ export class ReviewUpdateWithoutUserInput {
     @Validator.IsOptional()
     rating?: Decimal;
 
+    @HideField()
+    originalRating?: Decimal;
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Review text must be a string' })
     @Validator.Length(0, 10000, { message: 'Review text cannot exceed 10000 characters' })
@@ -32,9 +36,23 @@ export class ReviewUpdateWithoutUserInput {
     @Validator.IsOptional({ groups: [UPDATE]})
     reviewText?: string;
 
+    @HideField()
+    originalReviewText?: string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
     @Field(() => ReviewStatus, {nullable:true})
     @Validator.IsEnum(ReviewStatus, { message: 'Invalid review status' })
     @Validator.IsOptional()
     status?: keyof typeof ReviewStatus;
 
-    }
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutReviewsNestedInput;
+
+    @HideField()
+    reviewResponses?: ReviewResponseUpdateManyWithoutReviewNestedInput;
+}

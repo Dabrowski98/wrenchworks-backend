@@ -11,12 +11,12 @@ export class WorkshopDeviceSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     workshopId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy?: bigint | number;
 }

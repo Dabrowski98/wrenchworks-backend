@@ -3,12 +3,17 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
+import * as Scalars from 'graphql-scalars';
 import { WorkshopUpdateOneRequiredWithoutWorkshopDevicesNestedInput } from '../../workshop/dto/workshop-update-one-required-without-workshop-devices-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopDeviceUpdateInput {
+
+    @HideField()
+    workshopDeviceId?: bigint | number;
+
+    @HideField()
+    serialNumber?: string;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Device name must be a string' })
@@ -25,13 +30,21 @@ export class WorkshopDeviceUpdateInput {
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy?: bigint | number;
 
-    }
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutWorkshopDevicesNestedInput;
+}

@@ -66,4 +66,24 @@ export class ServiceScalarWhereWithAggregatesInput {
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     serviceEndDate?: DateTimeNullableWithAggregatesFilter;
 
-    }
+    @HideField()
+    addedAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    addedBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    resolvedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    resolvedBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableWithAggregatesFilter;
+}

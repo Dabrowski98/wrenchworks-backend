@@ -29,19 +29,19 @@ export class WorkshopDeviceGroupBy {
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy?: bigint | number;
 
     @Field(() => WorkshopDeviceCountAggregate, {nullable:true})

@@ -40,6 +40,12 @@ export class WorkshopDeviceScalarWhereWithAggregatesInput {
     @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
     lastLoginBy?: BigIntNullableWithAggregatesFilter;
 
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     acceptedAt?: DateTimeNullableWithAggregatesFilter;
 

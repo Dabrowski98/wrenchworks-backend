@@ -4,11 +4,12 @@ import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { UserStatus } from '../../prisma/dto/user-status.enum';
 import { UserRole } from '../../prisma/dto/user-role.enum';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserUpdateManyMutationInput {
+
+    @HideField()
+    userId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -66,4 +67,15 @@ export class UserUpdateManyMutationInput {
     @Validator.IsOptional()
     lastName?: string;
 
-    }
+    @HideField()
+    role?: keyof typeof UserRole;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

@@ -15,4 +15,9 @@ export class EmployeeAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     userId?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    createdBy?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+}

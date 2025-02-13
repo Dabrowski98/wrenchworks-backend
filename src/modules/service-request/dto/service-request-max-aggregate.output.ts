@@ -36,7 +36,7 @@ export class ServiceRequestMaxAggregate {
     @Field(() => Date, {nullable:true})
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     resolvedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})

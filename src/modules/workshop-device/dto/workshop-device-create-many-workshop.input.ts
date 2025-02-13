@@ -3,11 +3,13 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
+import * as Scalars from 'graphql-scalars';
 
 @InputType()
 export class WorkshopDeviceCreateManyWorkshopInput {
+
+    @HideField()
+    workshopDeviceId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Serial number must be a string' })
@@ -30,12 +32,18 @@ export class WorkshopDeviceCreateManyWorkshopInput {
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy?: bigint | number;
 }

@@ -23,6 +23,9 @@ export class Vehicle {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     guestId!: bigint | null;
 
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    customerId!: bigint | null;
+
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     modelId!: bigint;
 
@@ -44,9 +47,9 @@ export class Vehicle {
     @Field(() => User, {nullable:true})
     user?: User | null;
 
-    @Field(() => [Customer], {nullable:true})
+    @Field(() => Customer, {nullable:true})
     @Type(() => Customer)
-    customers?: Array<Customer>;
+    customer?: Customer | null;
 
     @Field(() => Guest, {nullable:true})
     guest?: Guest | null;

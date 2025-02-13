@@ -9,7 +9,7 @@ import { transformToDecimal } from 'prisma-graphql-type-decimal';
 import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 import { HideField } from '@nestjs/graphql';
-import { VehicleUncheckedCreateNestedManyWithoutCustomersInput } from '../../vehicle/dto/vehicle-unchecked-create-nested-many-without-customers.input';
+import { VehicleUncheckedCreateNestedManyWithoutCustomerInput } from '../../vehicle/dto/vehicle-unchecked-create-nested-many-without-customer.input';
 import { ValidateNested } from 'class-validator';
 
 @InputType()
@@ -81,9 +81,24 @@ export class CustomerUncheckedCreateWithoutServicesInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    @Field(() => VehicleUncheckedCreateNestedManyWithoutCustomersInput, {nullable:true})
-    @Type(() => VehicleUncheckedCreateNestedManyWithoutCustomersInput)
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @Field(() => VehicleUncheckedCreateNestedManyWithoutCustomerInput, {nullable:true})
+    @Type(() => VehicleUncheckedCreateNestedManyWithoutCustomerInput)
     @ValidateNested()
-    @Type(() => VehicleUncheckedCreateNestedManyWithoutCustomersInput)
-    vehicles?: VehicleUncheckedCreateNestedManyWithoutCustomersInput;
+    @Type(() => VehicleUncheckedCreateNestedManyWithoutCustomerInput)
+    vehicles?: VehicleUncheckedCreateNestedManyWithoutCustomerInput;
 }

@@ -6,8 +6,6 @@ import { VehicleCreateNestedOneWithoutGuestInput } from '../../vehicle/dto/vehic
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ServiceRequestCreateNestedOneWithoutGuestInput } from '../../service-request/dto/service-request-create-nested-one-without-guest.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class GuestCreateWithoutCustomerInput {

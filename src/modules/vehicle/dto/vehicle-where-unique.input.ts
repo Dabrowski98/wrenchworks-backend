@@ -12,7 +12,7 @@ import { ValidateNested } from 'class-validator';
 import { ServiceListRelationFilter } from '../../service/dto/service-list-relation-filter.input';
 import { VehicleModelRelationFilter } from '../../vehicle-model/dto/vehicle-model-relation-filter.input';
 import { UserNullableRelationFilter } from '../../user/dto/user-nullable-relation-filter.input';
-import { CustomerListRelationFilter } from '../../customer/dto/customer-list-relation-filter.input';
+import { CustomerNullableRelationFilter } from '../../customer/dto/customer-nullable-relation-filter.input';
 import { GuestNullableRelationFilter } from '../../guest/dto/guest-nullable-relation-filter.input';
 import { VehicleDetailsNullableRelationFilter } from '../../vehicle-details/dto/vehicle-details-nullable-relation-filter.input';
 
@@ -37,8 +37,14 @@ export class VehicleWhereUniqueInput {
     @Field(() => BigIntNullableFilter, {nullable:true})
     userId?: BigIntNullableFilter;
 
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    customerId?: BigIntNullableFilter;
+
     @Field(() => BigIntFilter, {nullable:true})
     modelId?: BigIntFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
 
     @Field(() => ServiceRequestListRelationFilter, {nullable:true})
     @Type(() => ServiceRequestListRelationFilter)
@@ -62,11 +68,11 @@ export class VehicleWhereUniqueInput {
     @ValidateNested()
     user?: UserNullableRelationFilter;
 
-    @Field(() => CustomerListRelationFilter, {nullable:true})
-    @Type(() => CustomerListRelationFilter)
+    @Field(() => CustomerNullableRelationFilter, {nullable:true})
+    @Type(() => CustomerNullableRelationFilter)
     @ValidateNested()
-    @Type(() => CustomerListRelationFilter)
-    customers?: CustomerListRelationFilter;
+    @Type(() => CustomerNullableRelationFilter)
+    customer?: CustomerNullableRelationFilter;
 
     @Field(() => GuestNullableRelationFilter, {nullable:true})
     @Type(() => GuestNullableRelationFilter)

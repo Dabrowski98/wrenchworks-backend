@@ -5,6 +5,7 @@ import { WorkshopDevice } from './dto/workshop-device.model';
 import { FindUniqueWorkshopDeviceArgs } from './dto/find-unique-workshop-device.args';
 import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import {
+  CreateOneWorkshopDeviceArgs,
   DeleteOneWorkshopDeviceArgs,
   FindManyWorkshopDeviceArgs,
   UpdateOneWorkshopDeviceArgs,
@@ -12,40 +13,73 @@ import {
 import { Workshop } from '../workshop/dto/workshop.model';
 import { WorkshopDeviceStatus } from '@prisma/client';
 import { ServiceRequestCount } from '../service-request/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { AbilityFactory, Action } from '../ability/ability.factory';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { subject } from '@casl/ability';
+import { ForbiddenError } from '@casl/ability';
+import { accessibleBy } from '@casl/prisma';
+import { WorkshopDeviceChangeNameArgs } from './custom-dto/workshop-device-change-name.args';
 
 @Injectable()
 export class WorkshopDeviceService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
-  async create(
-    data: WorkshopDeviceCreateInput,
-    workshopId: bigint,
-  ): Promise<WorkshopDevice> {
-    return this.prisma.workshopDevice.create({
-      data: { ...data, workshop: { connect: { workshopId } } },
-    });
+  async create(args: CreateOneWorkshopDeviceArgs): Promise<WorkshopDevice> {
+    return this.prisma.workshopDevice.create(args);
   }
 
-  async findOne(args: FindUniqueWorkshopDeviceArgs): Promise<WorkshopDevice> {
-    const result = await this.prisma.workshopDevice.findUnique(args);
-
-    if (!result) {
+  async findOne(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: FindUniqueWorkshopDeviceArgs,
+  ): Promise<WorkshopDevice> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const workshopDevice = await this.prisma.workshopDevice.findFirst({
+      where: { AND: [accessibleBy(ability).WorkshopDevice, args.where] },
+    });
+    if (!workshopDevice) {
       throw new RecordNotFoundError(WorkshopDevice);
     }
-
-    return result;
+    return workshopDevice;
   }
 
-  async findMany(args: FindManyWorkshopDeviceArgs): Promise<WorkshopDevice[]> {
-    return this.prisma.workshopDevice.findMany(args);
-  }
-
-  async findAll(): Promise<WorkshopDevice[]> {
-    return this.prisma.workshopDevice.findMany();
+  async findMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: FindManyWorkshopDeviceArgs,
+  ): Promise<WorkshopDevice[]> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.workshopDevice.findMany({
+      where: {
+        AND: [accessibleBy(ability).WorkshopDevice, args.where],
+      },
+    });
   }
 
   async update(args: UpdateOneWorkshopDeviceArgs): Promise<WorkshopDevice> {
     return this.prisma.workshopDevice.update(args);
+  }
+
+  async changeName(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: WorkshopDeviceChangeNameArgs,
+  ): Promise<WorkshopDevice> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const workshopDevice = await this.prisma.workshopDevice.findUnique({
+      where: args.where,
+      include: { workshop: true },
+    });
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('WorkshopDevice', workshopDevice),
+    );
+
+    return this.prisma.workshopDevice.update({
+      where: args.where,
+      data: { deviceName: args.data.deviceName },
+    });
   }
 
   async delete(args: DeleteOneWorkshopDeviceArgs): Promise<Boolean> {
@@ -57,17 +91,45 @@ export class WorkshopDeviceService {
       .catch(() => false);
   }
 
-  async disable(deviceId: bigint): Promise<Boolean> {
+  async disable(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    deviceId: bigint,
+  ): Promise<Boolean> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const workshopDevice = await this.prisma.workshopDevice.findUnique({
+      where: { workshopDeviceId: deviceId },
+      include: { workshop: true },
+    });
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('WorkshopDevice', workshopDevice),
+    );
+
     return !!this.prisma.workshopDevice.update({
       where: { workshopDeviceId: deviceId },
       data: { status: WorkshopDeviceStatus.DISABLED },
     });
   }
 
-  async enable(deviceId: bigint): Promise<Boolean> {
+  async enable(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    deviceId: bigint,
+  ): Promise<Boolean> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const workshopDevice = await this.prisma.workshopDevice.findUnique({
+      where: { workshopDeviceId: deviceId },
+      include: { workshop: true },
+    });
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('WorkshopDevice', workshopDevice),
+    );
+
     return !!this.prisma.workshopDevice.update({
       where: { workshopDeviceId: deviceId },
-      data: { status: WorkshopDeviceStatus.ACTIVE },
+      data: { status: WorkshopDeviceStatus.ENABLED },
     });
   }
 

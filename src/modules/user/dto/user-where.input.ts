@@ -67,6 +67,15 @@ export class UserWhereInput {
     @Field(() => EnumUserRoleFilter, {nullable:true})
     role?: EnumUserRoleFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
+
     @Field(() => VehicleListRelationFilter, {nullable:true})
     @Type(() => VehicleListRelationFilter)
     @ValidateNested()

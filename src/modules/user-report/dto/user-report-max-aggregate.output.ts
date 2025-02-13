@@ -35,6 +35,6 @@ export class UserReportMaxAggregate {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

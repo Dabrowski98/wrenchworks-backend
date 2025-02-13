@@ -14,6 +14,6 @@ export class WorkshopSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     addressId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

@@ -16,8 +16,8 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { AbilitiesGuard, Action, CheckAbilities } from '../ability';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
@@ -34,7 +34,7 @@ export class EmployeePermissionResolver {
   ) {}
 
   // ADMIN
-  @CheckAbilities({ action: Action.Manage, subject: 'EmployeePermission' })
+  @CheckAbilities({ action: Action.Create, subject: 'EmployeePermission' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => EmployeePermission)
   createEmployeePermission(
@@ -64,7 +64,7 @@ export class EmployeePermissionResolver {
   }
 
   // ADMIN
-  @CheckAbilities({ action: Action.Manage, subject: 'EmployeePermission' })
+  @CheckAbilities({ action: Action.Moderate, subject: 'EmployeePermission' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => EmployeePermission)
   updateEmployeePermission(
@@ -74,7 +74,7 @@ export class EmployeePermissionResolver {
   }
 
   // ADMIN
-  @CheckAbilities({ action: Action.Manage, subject: 'EmployeePermission' })
+  @CheckAbilities({ action: Action.Delete, subject: 'EmployeePermission' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   deleteEmployeePermission(

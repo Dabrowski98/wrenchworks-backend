@@ -50,19 +50,19 @@ export class ServiceMinAggregate {
     @Field(() => Date, {nullable:true})
     addedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     addedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     resolvedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     resolvedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})

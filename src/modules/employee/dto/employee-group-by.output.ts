@@ -27,6 +27,9 @@ export class EmployeeGroupBy {
     @Field(() => String, {nullable:false})
     login!: string;
 
+    @HideField()
+    password!: string;
+
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 
@@ -42,13 +45,13 @@ export class EmployeeGroupBy {
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
     @Field(() => EmployeeCountAggregate, {nullable:true})

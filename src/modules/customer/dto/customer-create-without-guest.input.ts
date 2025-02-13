@@ -11,11 +11,14 @@ import { Type } from 'class-transformer';
 import { ServiceCreateNestedManyWithoutCustomerInput } from '../../service/dto/service-create-nested-many-without-customer.input';
 import { ValidateNested } from 'class-validator';
 import { UserCreateNestedOneWithoutCustomersInput } from '../../user/dto/user-create-nested-one-without-customers.input';
-import { VehicleCreateNestedManyWithoutCustomersInput } from '../../vehicle/dto/vehicle-create-nested-many-without-customers.input';
+import { VehicleCreateNestedManyWithoutCustomerInput } from '../../vehicle/dto/vehicle-create-nested-many-without-customer.input';
 import { WorkshopCreateNestedOneWithoutCustomersInput } from '../../workshop/dto/workshop-create-nested-one-without-customers.input';
 
 @InputType()
 export class CustomerCreateWithoutGuestInput {
+
+    @HideField()
+    customerId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
@@ -37,6 +40,9 @@ export class CustomerCreateWithoutGuestInput {
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;
+
+    @HideField()
+    isVerified?: boolean;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -66,6 +72,21 @@ export class CustomerCreateWithoutGuestInput {
     @Validator.IsOptional()
     companyName?: string;
 
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
     @Field(() => ServiceCreateNestedManyWithoutCustomerInput, {nullable:true})
     @Type(() => ServiceCreateNestedManyWithoutCustomerInput)
     @ValidateNested()
@@ -77,11 +98,11 @@ export class CustomerCreateWithoutGuestInput {
     @ValidateNested()
     user?: UserCreateNestedOneWithoutCustomersInput;
 
-    @Field(() => VehicleCreateNestedManyWithoutCustomersInput, {nullable:true})
-    @Type(() => VehicleCreateNestedManyWithoutCustomersInput)
+    @Field(() => VehicleCreateNestedManyWithoutCustomerInput, {nullable:true})
+    @Type(() => VehicleCreateNestedManyWithoutCustomerInput)
     @ValidateNested()
-    @Type(() => VehicleCreateNestedManyWithoutCustomersInput)
-    vehicles?: VehicleCreateNestedManyWithoutCustomersInput;
+    @Type(() => VehicleCreateNestedManyWithoutCustomerInput)
+    vehicles?: VehicleCreateNestedManyWithoutCustomerInput;
 
     @Field(() => WorkshopCreateNestedOneWithoutCustomersInput, {nullable:false})
     @Type(() => WorkshopCreateNestedOneWithoutCustomersInput)

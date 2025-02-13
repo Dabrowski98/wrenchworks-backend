@@ -53,6 +53,12 @@ export class ReviewWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     originalReviewText?: StringNullableFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
     @Field(() => EnumReviewStatusFilter, {nullable:true})
     status?: EnumReviewStatusFilter;
 

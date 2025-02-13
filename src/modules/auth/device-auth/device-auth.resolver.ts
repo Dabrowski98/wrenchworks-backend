@@ -7,25 +7,25 @@ import { WorkshopDevice } from 'src/modules/workshop-device/dto/workshop-device.
 import * as Scalars from 'graphql-scalars';
 import { DeviceAuthService } from './device-auth.service';
 import { EmployeeJwtAuthGuard } from '../employee-auth/guards/employee-jwt-auth.guard';
-import { RequestDeviceRegistrationInput } from './dto/request-device-registration.input';
-import { AcceptWorkshopDeviceInput } from './dto/accept-workshop-device.input';
 import { CheckAbilities } from 'src/modules/ability/abilities.decorator';
 import { Action } from 'src/modules/ability/ability.factory';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { UserJwtAuthGuard } from '../user-auth/guards/user-jwt-auth.guard';
-import { JwtEmployeePayload } from '../employee-auth/dto';
+
 import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtUserPayload } from '../user-auth/dto';
+import { JwtEmployeePayload } from '../employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../user-auth/custom-dto/jwt-user-payload';
+import { AcceptWorkshopDeviceArgs } from './custom-dto/accept-workshop-device.args';
+import { RequestDeviceRegistrationArgs } from './custom-dto/request-device-registration.args';
 
 @Resolver()
 export class DeviceAuthResolver {
   constructor(private readonly deviceAuthService: DeviceAuthService) {}
 
-  // EMPLOYEE with right permissions can generate device OTP
-  // USER (owner) can generate device OTP
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'WorkshopDevice' })
-  @UseGuards(EmployeeJwtAuthGuard)
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => String)
   generateDeviceOTP(
     @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
@@ -35,38 +35,34 @@ export class DeviceAuthResolver {
     return this.deviceAuthService.generateDeviceOTP(currentEntity, workshopId);
   }
 
-  // ANYONE can request device registration (by inputting device OTP)
+  // PUBLIC
   @Public()
-  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard) // keep guards as they provide logged entity data.
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   async requestDeviceRegistration(
-    @Args('requestDeviceRegistrationInput')
-    requestDeviceRegistrationInput: RequestDeviceRegistrationInput,
+    @Args() requestDeviceRegistrationArgs: RequestDeviceRegistrationArgs,
   ): Promise<boolean> {
     const device = await this.deviceAuthService.requestDeviceRegistration(
-      requestDeviceRegistrationInput,
+      requestDeviceRegistrationArgs,
     );
     return !!device;
   }
 
-  // USER(Owner) can accept device registration
-  // EMPLOYEE with right permissions can accept device registration
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'WorkshopDevice' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => WorkshopDevice)
   acceptDeviceRegistration(
     @CurrentEntity() currentEntity: JwtEmployeePayload | JwtUserPayload,
-    @Args('acceptWorkshopDeviceInput')
-    acceptWorkshopDeviceInput: AcceptWorkshopDeviceInput,
+    @Args() acceptWorkshopDeviceArgs: AcceptWorkshopDeviceArgs,
   ): Promise<WorkshopDevice> {
     return this.deviceAuthService.acceptDeviceRegistration(
       currentEntity,
-      acceptWorkshopDeviceInput,
+      acceptWorkshopDeviceArgs,
     );
   }
 
-  // USER(Owner) can remove device
-  // EMPLOYEE with right permissions can remove device
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Delete, subject: 'WorkshopDevice' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)

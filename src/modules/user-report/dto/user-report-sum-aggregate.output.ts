@@ -14,6 +14,6 @@ export class UserReportSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     reportedId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

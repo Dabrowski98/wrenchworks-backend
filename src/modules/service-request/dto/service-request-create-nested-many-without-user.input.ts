@@ -17,9 +17,14 @@ export class ServiceRequestCreateNestedManyWithoutUserInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutUserInput>;
 
+    @HideField()
+    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutUserInput>;
+
     @Field(() => ServiceRequestCreateManyUserInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyUserInputEnvelope)
     @ValidateNested()
     createMany?: ServiceRequestCreateManyUserInputEnvelope;
 
-    }
+    @HideField()
+    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
+}

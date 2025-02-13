@@ -44,6 +44,21 @@ export class CustomerCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     companyName?: true;
 
+    @HideField()
+    deletedAt?: true;
+
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

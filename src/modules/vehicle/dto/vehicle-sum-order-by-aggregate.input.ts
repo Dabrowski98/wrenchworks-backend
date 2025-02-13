@@ -15,5 +15,8 @@ export class VehicleSumOrderByAggregateInput {
     guestId?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    customerId?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
 }

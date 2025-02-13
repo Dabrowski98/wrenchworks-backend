@@ -29,6 +29,24 @@ export class TaskCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     partsCost?: true;
 
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    resolvedAt?: true;
+
+    @HideField()
+    resolvedBy?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

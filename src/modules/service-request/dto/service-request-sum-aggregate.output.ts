@@ -23,6 +23,6 @@ export class ServiceRequestSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     approvedServiceId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     resolvedBy?: bigint | number;
 }

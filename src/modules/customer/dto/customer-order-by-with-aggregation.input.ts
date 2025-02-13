@@ -52,6 +52,21 @@ export class CustomerOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     companyName?: SortOrderInput;
 
+    @HideField()
+    deletedAt?: SortOrderInput;
+
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @HideField()
+    updatedBy?: SortOrderInput;
+
     @Field(() => CustomerCountOrderByAggregateInput, {nullable:true})
     @Type(() => CustomerCountOrderByAggregateInput)
     _count?: CustomerCountOrderByAggregateInput;

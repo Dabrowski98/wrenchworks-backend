@@ -13,6 +13,9 @@ import { Type } from 'class-transformer';
 @InputType()
 export class CustomerCreateManyUserInput {
 
+    @HideField()
+    customerId?: bigint | number;
+
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;
 
@@ -39,6 +42,9 @@ export class CustomerCreateManyUserInput {
     @Validator.IsEmail({}, { message: 'Invalid email format' })
     @Validator.IsOptional()
     email?: string;
+
+    @HideField()
+    isVerified?: boolean;
 
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -68,4 +74,18 @@ export class CustomerCreateManyUserInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+}

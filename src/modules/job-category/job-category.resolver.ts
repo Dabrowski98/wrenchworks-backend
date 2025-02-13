@@ -29,7 +29,7 @@ import { Public } from 'src/common/decorators/guard-decorators/public.decorator'
 export class JobCategoryResolver {
   constructor(private readonly jobCategoryService: JobCategoryService) {}
 
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Create, subject: 'JobCategory' })
   @Mutation(() => JobCategory)
   createJobCategory(
@@ -52,7 +52,7 @@ export class JobCategoryResolver {
     return this.jobCategoryService.findMany(args);
   }
 
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Update, subject: 'JobCategory' })
   @Mutation(() => JobCategory)
   updateJobCategory(
@@ -61,7 +61,7 @@ export class JobCategoryResolver {
     return this.jobCategoryService.update(args);
   }
 
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Delete, subject: 'JobCategory' })
   @Mutation(() => Boolean)
   deleteJobCategory(@Args() args: DeleteOneJobCategoryArgs): Promise<boolean> {

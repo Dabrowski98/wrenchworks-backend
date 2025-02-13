@@ -7,6 +7,9 @@ import * as Validator from 'class-validator';
 @InputType()
 export class WorkshopDeviceOtpCreateManyInput {
 
+    @HideField()
+    WorkshopDeviceOtpId?: bigint | number;
+
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     @Validator.IsOptional()
     employeeId?: bigint | number;
@@ -26,4 +29,6 @@ export class WorkshopDeviceOtpCreateManyInput {
     @Validator.IsNotEmpty()
     expiresAt!: Date | string;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+}

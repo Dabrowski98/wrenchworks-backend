@@ -8,6 +8,9 @@ import { WorkshopJobUpdateManyWithoutJobNestedInput } from '../../workshop-job/d
 @InputType()
 export class JobUpdateWithoutServiceRequestsInput {
 
+    @HideField()
+    jobId?: bigint | number;
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Name must be a string' })
     @Validator.Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
@@ -25,4 +28,9 @@ export class JobUpdateWithoutServiceRequestsInput {
     @Validator.IsOptional()
     isPopular?: boolean;
 
-    }
+    @HideField()
+    jobCategory?: JobCategoryUpdateOneRequiredWithoutJobsNestedInput;
+
+    @HideField()
+    jobWorkshops?: WorkshopJobUpdateManyWithoutJobNestedInput;
+}

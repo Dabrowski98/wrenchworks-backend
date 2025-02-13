@@ -16,7 +16,7 @@ import {
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
 import { ReviewResponseStatus } from '@prisma/client';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { ForbiddenError, subject } from '@casl/ability';
 import { Action, AbilityFactory } from '../ability/ability.factory';
 import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
@@ -80,6 +80,7 @@ export class ReviewResponseService {
       Action.Update,
       subject('ReviewResponse', reviewResponse),
     );
+
 
     const reviewResponseId = args.where.reviewResponseId;
 

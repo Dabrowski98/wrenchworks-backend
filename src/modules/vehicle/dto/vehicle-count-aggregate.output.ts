@@ -15,6 +15,9 @@ export class VehicleCountAggregate {
     guestId!: number;
 
     @Field(() => Int, {nullable:false})
+    customerId!: number;
+
+    @Field(() => Int, {nullable:false})
     modelId!: number;
 
     @Field(() => Int, {nullable:false})

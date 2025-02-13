@@ -40,7 +40,7 @@ export class UserReportGroupBy {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
     @Field(() => UserReportCountAggregate, {nullable:true})

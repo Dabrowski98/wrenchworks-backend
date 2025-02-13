@@ -7,8 +7,8 @@ import {
   FindUniqueEmployeePermissionArgs,
   UpdateOneEmployeePermissionArgs,
 } from './dto';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { Employee } from '../employee/dto';
 import { ForbiddenException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
@@ -66,6 +66,7 @@ export class EmployeePermissionService {
 
     const employee = await this.prisma.employee.findUnique({
       where: { employeeId },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     if (!employee) {
@@ -98,6 +99,7 @@ export class EmployeePermissionService {
 
     const employee = await this.prisma.employee.findUnique({
       where: { employeeId },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     if (!employee) {

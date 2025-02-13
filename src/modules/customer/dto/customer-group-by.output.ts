@@ -58,13 +58,13 @@ export class CustomerGroupBy {
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 
     @Field(() => CustomerCountAggregate, {nullable:true})

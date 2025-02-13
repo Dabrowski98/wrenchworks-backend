@@ -48,11 +48,7 @@ export class UserService {
   }
 
   async findMany(args: FindManyUserArgs): Promise<User[]> {
-    return this.prisma.user.findMany(args);
-  }
-
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany(args || {});
   }
 
   async update(args: UpdateOneUserArgs): Promise<User> {
@@ -69,15 +65,6 @@ export class UserService {
   }
 
   // RESOLVE METHODS
-
-  async address(userId: bigint): Promise<Address> {
-    return (
-      await this.prisma.user.findUnique({
-        where: { userId },
-        include: { address: true },
-      })
-    ).address;
-  }
 
   async vehicles(userId: bigint): Promise<Vehicle[]> {
     return (
@@ -163,7 +150,7 @@ export class UserService {
   async sessionData(userId: bigint): Promise<SessionData[]> {
     return (
       await this.prisma.user.findUnique({
-        where: {userId},
+        where: { userId },
         include: { sessionData: true },
       })
     ).sessionData;

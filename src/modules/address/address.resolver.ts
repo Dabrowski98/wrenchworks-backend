@@ -14,30 +14,22 @@ import {
   FindUniqueAddressArgs,
   UpdateOneAddressArgs,
 } from './dto';
-import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
-import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
-import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
 import { Action, CheckAbilities } from '../ability';
-import { CreateAddressForUserArgs } from './custom-dto/create-create-for-user.args';
 import { CreateAddressForWorkshopArgs } from './custom-dto/create-address-for-workshop.args';
-import { AbilitiesGuard } from '../ability/abilities.guard';
-import { UseGuards } from '@nestjs/common';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
-import { JwtUserPayload } from '../auth/user-auth/dto';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
-import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 
 @Resolver(() => Address)
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
-  // USER(Owner) can create address for workshop
-  // EMPLOYEE with right permissions can create address for workshop
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'Address' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Address)
@@ -45,11 +37,10 @@ export class AddressResolver {
     @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
     @Args() args: CreateAddressForWorkshopArgs,
   ): Promise<Address> {
-    return this.addressService.createAddressForWorkshop(currentEntity, args);
+    return this.addressService.create(currentEntity, args);
   }
 
-  // USER(Owner) can update address
-  // EMPLOYEE with right permissions can update address
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Address' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Address)
@@ -60,22 +51,23 @@ export class AddressResolver {
     return this.addressService.update(currentEntity, args);
   }
 
-  // ANYONE can read address
+  // PUBLIC
   @Public()
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => Address)
   async address(@Args() args: FindUniqueAddressArgs): Promise<Address> {
     return this.addressService.findOne(args);
   }
 
-  // ANYONE can read addresses
+  // PUBLIC
   @Public()
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [Address])
   addresses(@Args() args?: FindManyAddressArgs): Promise<Address[]> {
-    return this.addressService.findMany(args ?? {});
+    return this.addressService.findMany(args);
   }
 
-  // USER(Owner) can delete address
-  // EMPLOYEE with right permissions can delete address
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Delete, subject: 'Address' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)

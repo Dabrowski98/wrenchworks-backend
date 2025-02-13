@@ -11,7 +11,10 @@ import {
 import { PrismaService } from 'src/database/prisma.service';
 import { Employee } from '../employee/dto';
 import { Service } from '../service/dto';
-import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import {
+  BadRequestError,
+  RecordNotFoundError,
+} from 'src/common/custom-errors/errors.config';
 import { CreateServiceRequestAsGuestInput } from './custom-dto/create-service-request-as-guest.input';
 import { GuestService } from '../guest/guest.service';
 import { ServiceService } from '../service/service.service';
@@ -24,58 +27,94 @@ import { Vehicle } from '../vehicle/dto';
 import { Workshop } from '../workshop/dto';
 import { Guest } from '../guest/dto';
 import { User } from '../user/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { ForbiddenError, subject } from '@casl/ability';
+import { AbilityFactory, Action } from '../ability/ability.factory';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { isEmployeePayload } from 'src/common/utils/type-guards';
+import { accessibleBy } from '@casl/prisma';
+import { CreateServiceRequestAsGuestArgs } from './custom-dto/create-service-request-as-guest.args';
+import { AcceptServiceRequestArgs } from './custom-dto/accept-service-request.args';
 
 @Injectable()
 export class ServiceRequestService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly serviceService: ServiceService,
+    private readonly abilityFactory: AbilityFactory,
   ) {}
 
   async createAsUser(
+    currentUser: JwtUserPayload,
     args: CreateOneServiceRequestArgs,
-    userId: bigint,
   ): Promise<ServiceRequest> {
+    const ability = await this.abilityFactory.defineAbility(currentUser);
+    const user = await this.prisma.user.findUnique({
+      where: { userId: args.data.user.connect.userId },
+      select: { userId: true },
+    });
+
+    if (!user) throw new RecordNotFoundError(User);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('ServiceRequest', user as any),
+    );
+
     return this.prisma.serviceRequest.create({
       data: {
         ...args.data,
         createdAt: new Date(),
-        user: { connect: { userId } },
+        user: { connect: { userId: user.userId } },
       },
     });
   }
 
   async createAsGuest(
-    args: CreateServiceRequestAsGuestInput,
+    args: CreateServiceRequestAsGuestArgs,
   ): Promise<ServiceRequest> {
+    const { serviceRequest, guest, vehicle } = args.data;
     return this.prisma.serviceRequest.create({
       data: {
-        ...args.serviceRequest,
+        ...serviceRequest,
         createdAt: new Date(),
-        guest: { create: { ...args.guest } },
-        vehicle: { create: { ...args.vehicle } },
+        guest: { create: { ...guest } },
+        vehicle: { create: { ...vehicle } },
       },
     });
   }
 
   async accept(
-    args: AcceptServiceRequestInput,
-    employeeId: bigint,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: AcceptServiceRequestArgs,
   ): Promise<ServiceRequest> {
-    const {
-      serviceRequestId,
-      customer,
-      tasks,
-      serviceDescription,
-      serviceStartDate,
-      employeeId: responsibleEmployeeId,
-    } = args;
-
     return this.prisma.$transaction(async (tx) => {
-      const serviceRequest = await this.findOne({
+      const {
+        serviceRequestId,
+        customer,
+        tasks,
+        serviceDescription,
+        serviceStartDate,
+        employeeId: responsibleEmployeeId,
+      } = args.data;
+
+      const ability = await this.abilityFactory.defineAbility(currentEntity);
+      const serviceRequest = await this.prisma.serviceRequest.findUnique({
         where: { serviceRequestId },
+        include: {
+          workshop: { select: { workshopId: true, ownerId: true } },
+        },
       });
+
       if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Resolve,
+        subject('ServiceRequest', serviceRequest),
+      );
+
+      if (serviceRequest.resolvedAt)
+        throw new BadRequestError('Service request already resolved');
 
       const requestFromUser = !!serviceRequest.userId;
 
@@ -116,23 +155,20 @@ export class ServiceRequestService {
               },
             };
 
-      const approvedService = await this.serviceService.create(
-        {
-          data: {
-            serviceRequestId: serviceRequest.serviceRequestId,
-            customer: customerData,
-            employee: { connect: { employeeId: responsibleEmployeeId } },
-            description: serviceDescription,
-            serviceStartDate: serviceStartDate
-              ? new Date(serviceStartDate)
-              : undefined,
-            vehicle: { connect: { vehicleId: serviceRequest.vehicleId } },
-            workshop: { connect: { workshopId: serviceRequest.workshopId } },
-            tasks: { create: tasks },
-          },
+      const approvedService = await this.serviceService.create(currentEntity, {
+        data: {
+          serviceRequestId: serviceRequest.serviceRequestId,
+          customer: customerData,
+          employee: { connect: { employeeId: responsibleEmployeeId } },
+          description: serviceDescription,
+          serviceStartDate: serviceStartDate
+            ? new Date(serviceStartDate)
+            : undefined,
+          vehicle: { connect: { vehicleId: serviceRequest.vehicleId } },
+          workshop: { connect: { workshopId: serviceRequest.workshopId } },
+          tasks: { create: tasks },
         },
-        employeeId,
-      );
+      });
 
       return await tx.serviceRequest.update({
         where: { serviceRequestId },
@@ -142,45 +178,117 @@ export class ServiceRequestService {
           },
           status: 'ACCEPTED',
           resolvedAt: new Date(),
-          resolvedBy: employeeId,
+          resolvedBy: isEmployeePayload(currentEntity)
+            ? currentEntity.employeeId
+            : undefined,
         },
       });
     });
   }
 
   async reject(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
     serviceRequestId: bigint,
-    employeeId: bigint,
   ): Promise<ServiceRequest> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequest = await this.prisma.serviceRequest.findUnique({
+      where: { serviceRequestId },
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
+    });
+
+    if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Resolve,
+      subject('ServiceRequest', serviceRequest),
+    );
+
+    if (serviceRequest.resolvedAt)
+      throw new BadRequestError('Service request already resolved');
+
     return this.prisma.serviceRequest.update({
       where: { serviceRequestId },
       data: {
         status: 'REJECTED',
         resolvedAt: new Date(),
-        resolvedBy: employeeId,
+        resolvedBy: isEmployeePayload(currentEntity)
+          ? currentEntity.employeeId
+          : undefined,
       },
     });
   }
 
-  async findOne(args: FindUniqueServiceRequestArgs): Promise<ServiceRequest> {
-    const serviceRequest = await this.prisma.serviceRequest.findUnique(args);
+  async findOne(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: FindUniqueServiceRequestArgs,
+  ): Promise<ServiceRequest> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequest = await this.prisma.serviceRequest.findFirst({
+      where: { AND: [accessibleBy(ability).ServiceRequest, args.where] },
+    });
     if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
     return serviceRequest;
   }
 
-  async findMany(args: FindManyServiceRequestArgs): Promise<ServiceRequest[]> {
-    return this.prisma.serviceRequest.findMany(args);
+  async findMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args?: FindManyServiceRequestArgs,
+  ): Promise<ServiceRequest[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequests = await this.prisma.serviceRequest.findMany({
+      where: {
+        AND: [accessibleBy(ability).ServiceRequest, args?.where || {}],
+      },
+    });
+    return serviceRequests;
   }
 
-  async update(args: UpdateOneServiceRequestArgs): Promise<ServiceRequest> {
+  async update(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: UpdateOneServiceRequestArgs,
+  ): Promise<ServiceRequest> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequest = await this.prisma.serviceRequest.findFirst({
+      where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
+    });
+
+    if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('ServiceRequest', serviceRequest),
+    );
+
     return this.prisma.serviceRequest.update(args);
   }
 
-  async delete(args: DeleteOneServiceRequestArgs): Promise<boolean> {
+  async delete(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: DeleteOneServiceRequestArgs,
+  ): Promise<boolean> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const serviceRequest = await this.prisma.serviceRequest.findFirst({
+      where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
+    });
+
+    if (!serviceRequest) throw new RecordNotFoundError(ServiceRequest);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('ServiceRequest', serviceRequest),
+    );
+
     return this.prisma.serviceRequest
-      .delete({
-        where: args.where,
-      })
+      .delete({ where: args.where })
       .then(() => true)
       .catch(() => false);
   }

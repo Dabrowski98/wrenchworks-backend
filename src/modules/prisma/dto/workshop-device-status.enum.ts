@@ -1,7 +1,7 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum WorkshopDeviceStatus {
-    ACTIVE = "ACTIVE",
+    ENABLED = "ENABLED",
     INACTIVE = "INACTIVE",
     DISABLED = "DISABLED"
 }

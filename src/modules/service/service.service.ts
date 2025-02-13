@@ -18,8 +18,8 @@ import { Customer } from '../customer/dto/customer.model';
 import { Employee } from '../employee/dto/employee.model';
 import { Vehicle } from '../vehicle/dto/vehicle.model';
 import { Prisma } from '@prisma/client';
-import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { ForbiddenError, subject } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { isEmployeePayload } from 'src/common/utils/type-guards';
@@ -37,18 +37,16 @@ export class ServiceService {
     args: CreateOneServiceArgs,
   ): Promise<Service> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Create,
-      subject('Service', {
-        workshopId: args.data.workshop.connect.workshopId,
-      } as any),
-    );
-
     const workshop = await this.prisma.workshop.findUnique({
       where: { workshopId: args.data.workshop.connect.workshopId },
+      select: { workshopId: true, ownerId: true },
     });
-
     if (!workshop) throw new RecordNotFoundError(Workshop);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('Service', { workshop } as any as Service),
+    );
 
     return this.prisma.service.create({
       data: {
@@ -66,14 +64,12 @@ export class ServiceService {
     args: FindUniqueServiceArgs,
   ): Promise<Service> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-    const service = await this.prisma.service.findUnique(args);
+    const service = await this.prisma.service.findFirst({
+      where: { AND: [accessibleBy(ability).Service, args.where] },
+    });
 
     if (!service) throw new RecordNotFoundError(Service);
 
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Service', service),
-    );
     return service;
   }
 
@@ -95,6 +91,9 @@ export class ServiceService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     const service = await this.prisma.service.findUnique({
       where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
 
     if (!service) throw new RecordNotFoundError(Service);
@@ -107,29 +106,6 @@ export class ServiceService {
     return this.prisma.service.update(args);
   }
 
-  async changeEmployee(
-    currentEntity: JwtUserPayload | JwtEmployeePayload,
-    serviceId: bigint,
-    employeeId: bigint,
-  ): Promise<Service> {
-    const ability = await this.abilityFactory.defineAbility(currentEntity);
-    const service = await this.prisma.service.findUnique({
-      where: { serviceId },
-    });
-
-    if (!service) throw new RecordNotFoundError(Service);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Update,
-      subject('Service', service),
-    );
-
-    return this.prisma.service.update({
-      where: { serviceId },
-      data: { employeeId },
-    });
-  }
-
   async delete(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: DeleteOneServiceArgs,
@@ -137,6 +113,9 @@ export class ServiceService {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     const service = await this.prisma.service.findUnique({
       where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
 
     if (!service) throw new RecordNotFoundError(Service);

@@ -22,49 +22,61 @@ import { Employee } from '../employee/dto';
 import { Service } from '../service/dto';
 import { JobCategory } from '../job-category/dto';
 import { User } from '../user/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { AbilityFactory, Action } from '../ability';
+import { ForbiddenError, subject } from '@casl/ability';
 
 @Injectable()
 export class WorkshopService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
   async create(args: CreateOneWorkshopArgs): Promise<Workshop> {
     return this.prisma.workshop.create(args);
   }
 
-  async update(args: UpdateOneWorkshopArgs): Promise<Workshop> {
+  async update(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: UpdateOneWorkshopArgs,
+  ): Promise<Workshop> {
+    const ability = this.abilityFactory.defineAbility(currentEntity);
+    const workshop = await this.findOne({
+      where: { workshopId: args.where.workshopId },
+    });
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('Workshop', workshop),
+    );
     return this.prisma.workshop.update(args);
   }
 
-  // async updateWorkshop(args: UpdateOneWorkshopArgs): Promise<Workshop> {
-  //   const { data, workshopId } = args;
-  //   const { personId, address, workshopDetails, ...restData } = data;
-
-  //   return this.prisma.workshop.update({
-  //     where: { workshopId },
-  //     data: {
-  //       ...restData,
-  //       ...(address && { address: { update: address } }),
-  //       ...(personId && { person: { connect: { personId } } }),
-  //       ...(workshopDetails && {
-  //         workshopDetails: { update: workshopDetails },
-  //       }),
-  //     },
-  //   });
-  // }
-
-  async findMany(args: FindManyWorkshopArgs): Promise<Workshop[]> {
-    return this.prisma.workshop.findMany(args);
+  async findMany(args?: FindManyWorkshopArgs): Promise<Workshop[]> {
+    return this.prisma.workshop.findMany(args || {});
   }
 
-  async findOne(args: FindUniqueWorkshopArgs) {
+  async findOne(args: FindUniqueWorkshopArgs): Promise<Workshop> {
     const workshop = await this.prisma.workshop.findUnique(args);
-
     if (!workshop) throw new RecordNotFoundError(Workshop);
-
     return workshop;
   }
 
-  async delete(args: DeleteOneWorkshopArgs): Promise<Boolean> {
+  async delete(
+    currentUser: JwtUserPayload,
+    args: DeleteOneWorkshopArgs,
+  ): Promise<Boolean> {
+    const ability = this.abilityFactory.defineAbility(currentUser);
+    const workshop = await this.findOne({
+      where: { workshopId: args.where.workshopId },
+    });
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Delete,
+      subject('Workshop', workshop),
+    );
     return await this.prisma.workshop
       .delete({
         where: args.where,

@@ -4,11 +4,12 @@ import { HideField } from '@nestjs/graphql';
 import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { EmployeeStatus } from '../../prisma/dto/employee-status.enum';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeeCreateManyInput {
+
+    @HideField()
+    employeeId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:false})
     workshopId!: bigint | number;
@@ -39,9 +40,29 @@ export class EmployeeCreateManyInput {
     @Validator.IsOptional({groups: [UPDATE]})
     password!: string;
 
+    @HideField()
+    refreshToken?: string;
+
+    @HideField()
+    status?: keyof typeof EmployeeStatus;
+
     @Field(() => Date, {nullable:true})
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+}

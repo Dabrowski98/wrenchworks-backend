@@ -40,6 +40,12 @@ export class EmployeePermissionWhereInput {
     @Field(() => JsonNullableFilter, {nullable:true})
     conditions?: JsonNullableFilter;
 
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeFilter;
+
     @Field(() => EmployeeListRelationFilter, {nullable:true})
     @Type(() => EmployeeListRelationFilter)
     @ValidateNested()

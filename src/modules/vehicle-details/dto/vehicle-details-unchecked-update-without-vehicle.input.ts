@@ -63,4 +63,6 @@ export class VehicleDetailsUncheckedUpdateWithoutVehicleInput {
     @Validator.IsOptional()
     bodyColor?: keyof typeof BodyColor;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+}

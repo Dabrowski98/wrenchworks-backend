@@ -19,8 +19,8 @@ import { Workshop } from '../workshop/dto/workshop.model';
 import { Action } from '../ability';
 import { AbilityFactory } from '../ability';
 import { subject } from '@casl/ability';
-import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
@@ -35,12 +35,14 @@ export class CustomerService {
     args: CreateOneCustomerArgs,
   ): Promise<Customer> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const workshop = await this.prisma.workshop.findUnique({
+      where: { workshopId: args.data.workshop.connect.workshopId },
+    });
+    if (!workshop) throw new RecordNotFoundError(Workshop);
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Customer', {
-        workshopId: args.data.workshop.connect.workshopId,
-      } as any as Customer),
+      subject('Customer', { workshop } as any as Customer),
     );
 
     return this.prisma.customer.create({ data: args.data });
@@ -52,13 +54,10 @@ export class CustomerService {
   ): Promise<Customer> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
 
-    const customer = await this.prisma.customer.findUnique(args);
+    const customer = await this.prisma.customer.findFirst({
+      where: { AND: [accessibleBy(ability).Customer, args.where] },
+    });
     if (!customer) throw new RecordNotFoundError(Customer);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Customer', customer),
-    );
 
     return customer;
   }
@@ -68,10 +67,9 @@ export class CustomerService {
     args: FindManyCustomerArgs,
   ): Promise<Customer[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-
     return this.prisma.customer.findMany({
       where: {
-        AND: [accessibleBy(ability).Customer, args.where],
+        AND: [accessibleBy(ability).Customer, args.where || {}],
       },
     });
   }
@@ -82,7 +80,10 @@ export class CustomerService {
   ): Promise<Customer> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
 
-    const customer = await this.prisma.customer.findUnique(args);
+    const customer = await this.prisma.customer.findUnique({
+      where: args.where,
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
     if (!customer) throw new RecordNotFoundError(Customer);
 
     ForbiddenError.from(ability).throwUnlessCan(
@@ -101,6 +102,7 @@ export class CustomerService {
 
     const customer = await this.prisma.customer.findUnique({
       where: { customerId },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
     if (!customer) throw new RecordNotFoundError(Customer);
 
@@ -119,57 +121,76 @@ export class CustomerService {
 
   // RESOLVER METHODS
 
-  async vehicles(customerId: bigint): Promise<Vehicle[]> {
-    return (
-      await this.prisma.customer.findUnique({
-        where: { customerId },
-        include: { vehicles: true },
-      })
-    ).vehicles;
+  async services(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    customerId: bigint,
+  ): Promise<Service[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.service.findMany({
+      where: {
+        AND: [accessibleBy(ability).Service, { customerId }],
+      },
+    });
   }
 
-  async services(customerId: bigint): Promise<Service[]> {
-    return (
-      await this.prisma.customer.findUnique({
-        where: { customerId },
-        include: { services: true },
-      })
-    ).services;
+  async guest(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    customerId: bigint,
+  ): Promise<Guest | null> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.guest.findFirst({
+      where: {
+        AND: [accessibleBy(ability).Guest, { customer: { customerId } }],
+      },
+    });
   }
 
-  async guest(customerId: bigint): Promise<Guest | null> {
-    return (
-      await this.prisma.customer.findUnique({
-        where: { customerId },
-        include: { guest: true },
-      })
-    ).guest;
+  async user(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    customerId: bigint,
+  ): Promise<User | null> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.user.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).User,
+          { customers: { some: { customerId } } },
+        ],
+      },
+    });
   }
 
-  async user(customerId: bigint): Promise<User | null> {
-    return (
-      await this.prisma.customer.findUnique({
-        where: { customerId },
-        include: { user: true },
-      })
-    ).user;
+  async vehicles(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    customerId: bigint,
+  ): Promise<Vehicle[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.vehicle.findMany({
+      where: {
+        AND: [accessibleBy(ability).Vehicle, { customerId }],
+      },
+    });
   }
 
-  async workshop(customerId: bigint): Promise<Workshop | null> {
-    return (
-      await this.prisma.customer.findUnique({
-        where: { customerId },
-        include: { workshop: true },
-      })
-    ).workshop;
+  async workshop(
+    currentEntity: JwtEmployeePayload | JwtUserPayload,
+    customerId: bigint,
+  ): Promise<Workshop | null> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    return await this.prisma.workshop.findFirst({
+      where: {
+        AND: [
+          accessibleBy(ability).Workshop,
+          { customers: { some: { customerId } } },
+        ],
+      },
+    });
   }
 
   async resolveCount(customerId: bigint): Promise<CustomerCount> {
     return {
       services: await this.prisma.service.count({ where: { customerId } }),
-      vehicles: await this.prisma.vehicle.count({
-        where: { customers: { some: { customerId } } },
-      }),
+      vehicles: await this.prisma.vehicle.count({ where: { customerId } }),
     };
   }
 }

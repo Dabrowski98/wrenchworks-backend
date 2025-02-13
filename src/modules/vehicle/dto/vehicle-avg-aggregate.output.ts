@@ -15,5 +15,8 @@ export class VehicleAvgAggregate {
     guestId?: number;
 
     @Field(() => Float, {nullable:true})
+    customerId?: number;
+
+    @Field(() => Float, {nullable:true})
     modelId?: number;
 }

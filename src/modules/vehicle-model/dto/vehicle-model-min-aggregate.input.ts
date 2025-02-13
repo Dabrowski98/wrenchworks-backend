@@ -14,4 +14,9 @@ export class VehicleModelMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     brand?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+}

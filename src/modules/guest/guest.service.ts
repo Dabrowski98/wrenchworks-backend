@@ -13,9 +13,9 @@ import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
 import { Customer } from '../customer/dto';
 import { ServiceRequest } from '../service-request/dto';
 import { AbilityFactory, Action } from '../ability';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { ForbiddenError, subject } from '@casl/ability';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
@@ -30,18 +30,11 @@ export class GuestService {
     args: FindUniqueGuestArgs,
   ): Promise<Guest> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-
-    const guest = await this.prisma.guest.findUnique({
-      where: args.where,
+    const guest = await this.prisma.guest.findFirst({
+      where: { AND: [accessibleBy(ability).Guest, args.where] },
     });
 
     if (!guest) throw new RecordNotFoundError(Guest);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Guest', guest),
-    );
-
     return guest;
   }
 
@@ -51,7 +44,7 @@ export class GuestService {
   ): Promise<Guest[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     return this.prisma.guest.findMany({
-      where: { AND: [accessibleBy(ability).Guest, args?.where] },
+      where: { AND: [accessibleBy(ability).Guest, args?.where || {}] },
     });
   }
 
@@ -64,6 +57,9 @@ export class GuestService {
 
     const guest = await this.prisma.guest.findUnique({
       where,
+      include: {
+        serviceRequest: { select: { workshopId: true } },
+      },
     });
 
     if (!guest) throw new RecordNotFoundError(Guest);
@@ -86,6 +82,9 @@ export class GuestService {
 
     const guest = await this.prisma.guest.findUnique({
       where: args.where,
+      include: {
+        serviceRequest: { select: { workshopId: true } },
+      },
     });
 
     if (!guest) throw new RecordNotFoundError(Guest);

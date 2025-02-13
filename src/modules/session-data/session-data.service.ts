@@ -3,14 +3,27 @@ import { PrismaService } from 'src/database/prisma.service';
 import { SessionData } from './dto/session-data.model';
 import {
   DeleteManySessionDataArgs,
+  DeleteOneSessionDataArgs,
+  FindManySessionDataArgs,
+  FindUniqueSessionDataArgs,
   SessionDataCreateInput,
   SessionDataUpdateInput,
+  UpdateOneSessionDataArgs,
 } from './dto';
 import { User } from '../user/dto';
-
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { RecordNotFoundError } from 'src/common/custom-errors/errors.config';
+import { accessibleBy } from '@casl/prisma';
+import { AbilityFactory, Action } from '../ability/ability.factory';
+import { ForbiddenError } from '@casl/ability';
+import { subject } from '@casl/ability';
 @Injectable()
 export class SessionDataService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly abilityFactory: AbilityFactory,
+  ) {}
 
   async create(
     sessionDataCreateInput: SessionDataCreateInput,
@@ -20,49 +33,67 @@ export class SessionDataService {
     });
   }
 
-  async findAll(): Promise<SessionData[]> {
-    return this.prisma.sessionData.findMany();
+  async findMany(
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args?: FindManySessionDataArgs,
+  ): Promise<SessionData[]> {
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const sessionDatas = await this.prisma.sessionData.findMany({
+      where: {
+        AND: [accessibleBy(ability).SessionData, args?.where || {}],
+      },
+    });
+    return sessionDatas;
   }
 
   async findOne(
-    id: string,
-    options?: {
-      includeUser?: boolean;
-    },
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: FindUniqueSessionDataArgs,
   ): Promise<SessionData> {
-    const session = await this.prisma.sessionData.findUnique({
-      where: { sessionDataId: id },
-      include: {
-        user: options?.includeUser,
-      },
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const session = await this.prisma.sessionData.findFirst({
+      where: { AND: [accessibleBy(ability).SessionData, args.where] },
     });
-    if (!session) {
-      throw new NotFoundException(`SessionData with ID ${id} not found`);
-    }
+    if (!session) throw new RecordNotFoundError(SessionData);
+
     return session;
   }
 
   async update(
-    id: string,
-    sessionDataUpdateInput: SessionDataUpdateInput,
+    currentEntity: JwtUserPayload | JwtEmployeePayload,
+    args: UpdateOneSessionDataArgs,
   ): Promise<SessionData> {
-    return this.prisma.sessionData.update({
-      where: { sessionDataId: id },
-      data: sessionDataUpdateInput,
+    const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const session = await this.prisma.sessionData.findUnique({
+      where: args.where,
     });
+
+    if (!session) throw new RecordNotFoundError(SessionData);
+
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('SessionData', session),
+    );
+
+    return this.prisma.sessionData.update(args);
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(args: DeleteOneSessionDataArgs): Promise<boolean> {
+    const session = await this.prisma.sessionData.findUnique(args);
+    if (!session) throw new RecordNotFoundError(SessionData);
+
     return this.prisma.sessionData
       .delete({
-        where: { sessionDataId: id },
+        where: args.where,
       })
       .then(() => true)
       .catch(() => false);
   }
 
-  async deleteMany(where: DeleteManySessionDataArgs): Promise<boolean> {
-    const result = await this.prisma.sessionData.deleteMany(where);
+  async deleteMany(userId: bigint): Promise<boolean> {
+    const result = await this.prisma.sessionData.deleteMany({
+      where: { userId },
+    });
     return !!result;
   }
 

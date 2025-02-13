@@ -4,6 +4,7 @@ export enum VehicleScalarFieldEnum {
     vehicleId = "vehicleId",
     userId = "userId",
     guestId = "guestId",
+    customerId = "customerId",
     modelId = "modelId",
     deletedAt = "deletedAt"
 }

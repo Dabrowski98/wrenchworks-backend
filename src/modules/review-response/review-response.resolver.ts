@@ -24,11 +24,10 @@ import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user
 import { Action, CheckAbilities } from '../ability';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { EditReviewResponseArgs } from './custom-dto/edit-review-response.args';
-import { VoteReviewResponseArgs } from './custom-dto/vote-review-response.args';
 
 @Resolver(() => ReviewResponse)
 export class ReviewResponseResolver {
@@ -115,7 +114,7 @@ export class ReviewResponseResolver {
     return this.reviewResponseService.reject(args);
   }
 
-  //ADMIN
+  // ADMIN
   @CheckAbilities({ action: Action.Moderate, subject: 'ReviewResponse' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)

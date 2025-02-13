@@ -28,12 +28,12 @@ export class ServiceSumAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     paymentAmount?: Decimal;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     addedBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     resolvedBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

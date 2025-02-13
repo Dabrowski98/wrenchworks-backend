@@ -20,11 +20,7 @@ export class VehicleBrandService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(args: CreateOneVehicleBrandArgs): Promise<VehicleBrand> {
-    return this.prisma.vehicleBrand.create({
-      data: {
-        ...args.data,
-      },
-    });
+    return this.prisma.vehicleBrand.create(args);
   }
 
   async findOne(args: FindUniqueVehicleBrandArgs): Promise<VehicleBrand> {
@@ -33,8 +29,8 @@ export class VehicleBrandService {
     return vehicleBrand;
   }
 
-  async findMany(args: FindManyVehicleBrandArgs): Promise<VehicleBrand[]> {
-    return this.prisma.vehicleBrand.findMany(args);
+  async findMany(args?: FindManyVehicleBrandArgs): Promise<VehicleBrand[]> {
+    return this.prisma.vehicleBrand.findMany(args || {});
   }
 
   async update(args: UpdateOneVehicleBrandArgs): Promise<VehicleBrand> {

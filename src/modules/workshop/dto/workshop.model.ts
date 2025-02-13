@@ -50,7 +50,7 @@ export class Workshop {
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})

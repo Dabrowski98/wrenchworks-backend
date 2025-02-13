@@ -52,4 +52,21 @@ export class TaskScalarWhereWithAggregatesInput {
     @Type(() => DecimalWithAggregatesFilter)
     partsCost?: DecimalWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    resolvedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    resolvedBy?: BigIntNullableWithAggregatesFilter;
+}

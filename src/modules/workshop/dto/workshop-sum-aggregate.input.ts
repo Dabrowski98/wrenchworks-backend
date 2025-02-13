@@ -14,4 +14,6 @@ export class WorkshopSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     addressId?: true;
 
-    }
+    @HideField()
+    updatedBy?: true;
+}

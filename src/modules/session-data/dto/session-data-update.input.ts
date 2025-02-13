@@ -8,6 +8,9 @@ import { ValidateNested } from 'class-validator';
 @InputType()
 export class SessionDataUpdateInput {
 
+    @HideField()
+    sessionDataId?: string;
+
     @Field(() => String, {nullable:true})
     refreshToken?: string;
 

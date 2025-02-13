@@ -28,6 +28,12 @@ export class EmployeePermissionOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     conditions?: SortOrderInput;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
     @Field(() => EmployeeOrderByRelationAggregateInput, {nullable:true})
     @Type(() => EmployeeOrderByRelationAggregateInput)
     @ValidateNested()

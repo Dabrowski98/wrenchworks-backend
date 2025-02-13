@@ -11,11 +11,14 @@ import { Type } from 'class-transformer';
 import { ServiceUpdateManyWithoutCustomerNestedInput } from '../../service/dto/service-update-many-without-customer-nested.input';
 import { GuestUpdateOneWithoutCustomerNestedInput } from '../../guest/dto/guest-update-one-without-customer-nested.input';
 import { UserUpdateOneWithoutCustomersNestedInput } from '../../user/dto/user-update-one-without-customers-nested.input';
-import { VehicleUpdateManyWithoutCustomersNestedInput } from '../../vehicle/dto/vehicle-update-many-without-customers-nested.input';
+import { VehicleUpdateManyWithoutCustomerNestedInput } from '../../vehicle/dto/vehicle-update-many-without-customer-nested.input';
 import { WorkshopUpdateOneRequiredWithoutCustomersNestedInput } from '../../workshop/dto/workshop-update-one-required-without-customers-nested.input';
 
 @InputType()
 export class CustomerUpdateInput {
+
+    @HideField()
+    customerId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
@@ -71,4 +74,33 @@ export class CustomerUpdateInput {
     @Validator.IsOptional()
     companyName?: string;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    services?: ServiceUpdateManyWithoutCustomerNestedInput;
+
+    @HideField()
+    guest?: GuestUpdateOneWithoutCustomerNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneWithoutCustomersNestedInput;
+
+    @HideField()
+    vehicles?: VehicleUpdateManyWithoutCustomerNestedInput;
+
+    @HideField()
+    workshop?: WorkshopUpdateOneRequiredWithoutCustomersNestedInput;
+}

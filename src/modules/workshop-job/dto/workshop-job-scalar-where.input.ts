@@ -48,4 +48,15 @@ export class WorkshopJobScalarWhereInput {
     @Field(() => BoolFilter, {nullable:true})
     availability?: BoolFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+}

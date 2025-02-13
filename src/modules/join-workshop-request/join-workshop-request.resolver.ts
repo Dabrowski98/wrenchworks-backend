@@ -27,8 +27,8 @@ import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 
 @Resolver(() => JoinWorkshopRequest)
@@ -99,7 +99,6 @@ export class JoinWorkshopRequestResolver {
       joinWorkshopRequestId,
     );
   }
-
 
   // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'JoinWorkshopRequest' })

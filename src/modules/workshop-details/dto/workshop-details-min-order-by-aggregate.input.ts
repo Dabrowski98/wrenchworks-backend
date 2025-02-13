@@ -27,4 +27,12 @@ export class WorkshopDetailsMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     NIP?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+
+    @HideField()
+    deletedAt?: keyof typeof SortOrder;
+}

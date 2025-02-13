@@ -35,6 +35,9 @@ export class VehicleDetailsCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     bodyColor?: true;
 
+    @HideField()
+    deletedAt?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

@@ -21,8 +21,14 @@ export class VehicleOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     guestId?: SortOrderInput;
 
+    @Field(() => SortOrderInput, {nullable:true})
+    customerId?: SortOrderInput;
+
     @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
+
+    @HideField()
+    deletedAt?: SortOrderInput;
 
     @Field(() => VehicleCountOrderByAggregateInput, {nullable:true})
     _count?: VehicleCountOrderByAggregateInput;

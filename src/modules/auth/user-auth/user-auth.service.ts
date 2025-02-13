@@ -1,23 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from '../../user/dto';
-import { UserService } from '../../user/user.service';
-import { LoginUserResponse } from './dto/login-user.response';
-import { RegisterUserInput } from './dto/register-user.input';
-import { v4 as uuidv4 } from 'uuid';
-import { SessionData } from '@prisma/client';
-import { UserRole } from '../../prisma';
-import { CreateAdminInput } from './dto/create-admin.input';
+import { CreateOneUserArgs, User } from '../../user/dto';
+import { UserService } from 'src/modules/user/user.service';
 import { EntityType } from 'src/common/enums/entity-type.enum';
 import { SessionDataService } from 'src/modules/session-data/session-data.service';
 import {
   BadRequestError,
+  CustomForbiddenError,
   UnauthorizedError,
 } from 'src/common/custom-errors/errors.config';
-import { JwtUserPayload } from './dto/jwt-user-payload';
+import { JwtUserPayload } from './custom-dto/jwt-user-payload';
 import { DeviceData } from 'src/common/decorators/headers-decorators/device-data.decorator';
 import { ChangePasswordInput } from '../common-dto';
+import { PrismaService } from 'src/database/prisma.service';
+import { UserRole } from 'src/modules/prisma/dto';
+import { SessionData } from 'src/modules/session-data/dto';
+import { v4 as uuidv4 } from 'uuid';
+import { AbilityFactory } from 'src/modules/ability/ability.factory';
+import { ForbiddenError, subject } from '@casl/ability';
+import { Action } from 'src/modules/ability/ability.factory';
+import { ChangeUserPasswordArgs } from './custom-dto/change-user-password.args';
+import { LoginUserResponse } from './custom-dto/login-user.response';
 
 @Injectable()
 export class UserAuthService {
@@ -25,21 +29,26 @@ export class UserAuthService {
     private readonly userService: UserService,
     private readonly sessionDataService: SessionDataService,
     private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly userAbilityFactory: AbilityFactory,
   ) {}
 
-  async registerUser(input: RegisterUserInput): Promise<User> {
+  async registerUser(input: CreateOneUserArgs): Promise<User> {
+    const { email, password, username, telephoneNumber } = input.data;
     const hashedPassword = await bcrypt.hash(
-      input.password,
+      password,
       Number(process.env.SALT_ROUNDS),
     );
 
     const userData = {
-      ...input,
+      email,
       password: hashedPassword,
+      username,
+      telephoneNumber,
       role: UserRole.USER,
     };
 
-    //TODO: VERIFY TELEPHONE NUMBER.
+    // TELEPHONE NUMBER VERIFICATION
 
     return this.userService.create(userData);
   }
@@ -123,23 +132,36 @@ export class UserAuthService {
     });
   }
 
-  async revokeRefreshToken(refreshToken: string) {
+  async revokeRefreshToken(refreshToken: string): Promise<boolean> {
     const decodedRefreshToken = await this.jwtService.decode(refreshToken);
 
     if (!decodedRefreshToken) return false;
 
-    const result = await this.sessionDataService.delete(
-      decodedRefreshToken.jti,
-    );
+    console.log('Decoded refresh token:', decodedRefreshToken);
 
-    return result ? true : false;
-  }
-
-  async revokeAllRefreshTokens(userId: bigint) {
-    const result = await this.sessionDataService.deleteMany({
-      where: { userId: { equals: userId } },
+    const result = await this.sessionDataService.delete({
+      where: { sessionDataId: decodedRefreshToken.jti },
     });
 
+    return !!result;
+  }
+
+  async revokeAllRefreshTokens(
+    userId: bigint,
+    currentUser?: JwtUserPayload,
+  ): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: { userId: currentUser.userId },
+    });
+    if (!user) throw new UnauthorizedError('User not found');
+    if (currentUser) {
+      const ability = this.userAbilityFactory.defineAbility(currentUser);
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Update,
+        subject('User', user),
+      );
+    }
+    const result = await this.sessionDataService.deleteMany(userId);
     return !!result;
   }
 
@@ -166,9 +188,9 @@ export class UserAuthService {
         throw new UnauthorizedError('Invalid refresh token');
       }
 
-      const session = await this.sessionDataService.findOne(
-        decodedRefreshToken.jti,
-      );
+      const session = await this.prisma.sessionData.findUnique({
+        where: { sessionDataId: decodedRefreshToken.jti },
+      });
 
       if (session.expiresAt < new Date()) {
         await this.revokeAllRefreshTokens(session.userId);
@@ -190,43 +212,57 @@ export class UserAuthService {
   }
 
   async changeUserPassword(
-    userId: bigint,
-    changePasswordInput: ChangePasswordInput,
+    currentUser: JwtUserPayload,
+    changeUserPasswordArgs: ChangeUserPasswordArgs,
   ) {
+    const { where, data } = changeUserPasswordArgs;
+    const ability = this.userAbilityFactory.defineAbility(currentUser);
     const user = await this.userService.findOneWithPassword({
-      where: { userId },
+      where,
     });
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Update,
+      subject('User', user),
+    );
 
     if (!user) throw new UnauthorizedError('User not found');
 
     const isPasswordValid = await bcrypt.compare(
-      changePasswordInput.oldPassword,
+      data.oldPassword,
       user.password,
     );
 
     if (!isPasswordValid) throw new UnauthorizedError('Invalid old password');
 
-    if (changePasswordInput.oldPassword === changePasswordInput.newPassword)
+    if (data.oldPassword === data.newPassword)
       throw new BadRequestError(
         'New password cannot be the same as the old password',
       );
 
-    const hashedPassword = await bcrypt.hash(
-      changePasswordInput.newPassword,
-      10,
-    );
+    const hashedPassword = await bcrypt.hash(data.newPassword, 10);
 
     return !!this.userService.update({
-      where: { userId },
+      where,
       data: { password: hashedPassword },
     });
   }
 
-  async createAdmin(input: CreateAdminInput): Promise<User> {
-    const hashedPassword = await bcrypt.hash(input.password, 10);
+  async createAdmin(
+    currentUser: JwtUserPayload,
+    args: CreateOneUserArgs,
+  ): Promise<User> {
+    if (currentUser.role !== UserRole.SUPERADMIN)
+      throw new CustomForbiddenError(
+        'You are not authorized to perform this action',
+      );
+
+    const { email, password, username, telephoneNumber } = args.data;
+    const hashedPassword = await bcrypt.hash(password, 10);
     const userData = {
-      ...input,
+      email,
       password: hashedPassword,
+      username,
+      telephoneNumber,
       role: UserRole.ADMIN,
     };
     return this.userService.create(userData);

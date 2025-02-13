@@ -1,17 +1,13 @@
 import { Resolver, Mutation, Query, Args, Context } from '@nestjs/graphql';
 import { UserAuthService } from './user-auth.service';
-import { LoginUserResponse } from './dto/login-user.response';
-import { LoginUserInput } from './dto/login-user.input';
-import { RegisterUserInput } from './dto/register-user.input';
-import { User } from '../../user/dto';
+import { CreateOneUserArgs, User } from '../../user/dto';
 import { UseGuards } from '@nestjs/common';
 import { GraphQLBigInt } from 'graphql-scalars';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
-import { CreateAdminInput } from './dto/create-admin.input';
 import { UserJwtAuthGuard } from './guards/user-jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
-import { JwtUserPayload } from './dto/jwt-user-payload';
+import { JwtUserPayload } from './custom-dto/jwt-user-payload';
 import { DeviceData } from 'src/common/decorators/headers-decorators/device-data.decorator';
 import { LoginAuthGuard } from './guards/user-local-auth.guard';
 import { ChangePasswordInput } from '../common-dto';
@@ -19,26 +15,23 @@ import { AbilityFactory, Action } from '../../ability/ability.factory';
 import { UserService } from 'src/modules/user/user.service';
 import { CheckAbilities } from 'src/modules/ability/abilities.decorator';
 import { AbilitiesGuard } from 'src/modules/ability/abilities.guard';
+import { LoginUserInput } from './custom-dto/login-user.input';
+import { LoginUserResponse } from './custom-dto/login-user.response';
+import { ChangeUserPasswordArgs } from './custom-dto/change-user-password.args';
 
 @UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver()
 export class UserAuthResolver {
-  constructor(
-    private readonly userAuthService: UserAuthService,
-    private readonly userAbilityFactory: AbilityFactory,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userAuthService: UserAuthService) {}
 
-  // ANYONE can register user
+  // PUBLIC
   @Public()
   @Mutation(() => User)
-  registerUser(
-    @Args('registerUserInput') registerUserInput: RegisterUserInput,
-  ): Promise<User> {
-    return this.userAuthService.registerUser(registerUserInput);
+  registerUser(@Args() args: CreateOneUserArgs): Promise<User> {
+    return this.userAuthService.registerUser(args);
   }
 
-  // ANYONE can login
+  // PUBLIC
   @Public()
   @UseGuards(LoginAuthGuard)
   @Mutation(() => LoginUserResponse)
@@ -50,25 +43,21 @@ export class UserAuthResolver {
     return this.userAuthService.loginUser(context.user, deviceData);
   }
 
-  // ANYONE can refresh tokens
+  // PUBLIC
   @Public()
   @Mutation(() => LoginUserResponse)
-  refreshTokens(
+  refreshUserTokens(
     @Args('refreshToken') refreshToken: string,
     @DeviceData() deviceData: DeviceData,
   ): Promise<LoginUserResponse> {
     return this.userAuthService.refreshTokens(refreshToken, deviceData);
   }
 
-  // USER can logout himself
-  @CheckAbilities({ action: Action.Update, subject: 'User' })
+  // USER
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Boolean)
   logoutUser(@Args('refreshToken') refreshToken: string): Promise<boolean> {
-    return this.userAuthService
-      .revokeRefreshToken(refreshToken)
-      .then(() => true)
-      .catch(() => false);
+    return this.userAuthService.revokeRefreshToken(refreshToken);
   }
 
   // USER can logout all his sessions
@@ -80,10 +69,7 @@ export class UserAuthResolver {
     @Args('userId', { type: () => GraphQLBigInt, nullable: true })
     userId: bigint,
   ): Promise<boolean> {
-    return this.userAuthService
-      .revokeAllRefreshTokens(userId)
-      .then(() => true)
-      .catch(() => false);
+    return this.userAuthService.revokeAllRefreshTokens(userId, currentUser);
   }
 
   // ADMIN can create admin
@@ -91,9 +77,10 @@ export class UserAuthResolver {
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => User)
   createAdmin(
-    @Args('createAdminInput') createAdminInput: CreateAdminInput,
+    @CurrentUser() currentUser: JwtUserPayload,
+    @Args() args: CreateOneUserArgs,
   ): Promise<User> {
-    return this.userAuthService.createAdmin(createAdminInput);
+    return this.userAuthService.createAdmin(currentUser, args);
   }
 
   // USER can change his password
@@ -102,11 +89,8 @@ export class UserAuthResolver {
   @Mutation(() => Boolean)
   changeUserPassword(
     @CurrentUser() currentUser: JwtUserPayload,
-    @Args('changeUserPasswordInput') changePasswordInput: ChangePasswordInput,
+    @Args() args: ChangeUserPasswordArgs,
   ): Promise<boolean> {
-    return this.userAuthService
-      .changeUserPassword(currentUser.userId, changePasswordInput)
-      .then(() => true)
-      .catch(() => false);
+    return this.userAuthService.changeUserPassword(currentUser, args);
   }
 }

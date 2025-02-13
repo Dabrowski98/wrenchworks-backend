@@ -16,4 +16,9 @@ export class WorkshopDetailsCreateNestedOneWithoutWorkshopInput {
     @ValidateNested()
     create?: WorkshopDetailsCreateWithoutWorkshopInput;
 
-    }
+    @HideField()
+    connectOrCreate?: WorkshopDetailsCreateOrConnectWithoutWorkshopInput;
+
+    @HideField()
+    connect?: Prisma.AtLeast<WorkshopDetailsWhereUniqueInput, 'workshopId'>;
+}

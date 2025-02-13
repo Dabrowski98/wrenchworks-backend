@@ -29,4 +29,21 @@ export class TaskMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     partsCost?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    resolvedAt?: true;
+
+    @HideField()
+    resolvedBy?: true;
+}

@@ -27,4 +27,15 @@ export class WorkshopJobMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     availability?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    createdBy?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+}

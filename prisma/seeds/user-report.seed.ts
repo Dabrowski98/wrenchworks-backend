@@ -33,8 +33,8 @@ const userReports = [
     userId: 7n, // usercustomer1
     reportText: 'Service was performed without authorization',
     reportType: UserReportType.FRAUDULENT_ACTIVITY,
-    reportedEntityType: UserReportReportedEntityType.SERVICE,
-    reportedId: 2n, // Service in Workshop 2
+    reportedEntityType: UserReportReportedEntityType.WORKSHOP,
+    reportedId: 2n, // Workshop 2
     status: UserReportStatus.CLOSED,
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
     updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), // 8 days ago
@@ -63,8 +63,8 @@ const userReports = [
     userId: 10n, // usercustomer4
     reportText: 'Service request contains spam advertisement',
     reportType: UserReportType.SPAM,
-    reportedEntityType: UserReportReportedEntityType.SERVICE_REQUEST,
-    reportedId: 4n, // Service request 4
+    reportedEntityType: UserReportReportedEntityType.WORKSHOP,
+    reportedId: 2n, // Workshop 2
     status: UserReportStatus.CLOSED,
     createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
     updatedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
@@ -83,8 +83,8 @@ const userReports = [
     userId: 9n, // usercustomer3
     reportText: 'Privacy violation in service details',
     reportType: UserReportType.PRIVACY_VIOLATION,
-    reportedEntityType: UserReportReportedEntityType.SERVICE,
-    reportedId: 3n, // Service 3
+    reportedEntityType: UserReportReportedEntityType.WORKSHOP,
+    reportedId: 2n, // Workshop 2
     status: UserReportStatus.PENDING,
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
   },
@@ -151,11 +151,14 @@ async function verifyReportedEntity(
       return !!(await prisma.review.findUnique({
         where: { reviewId: entityId },
       }));
-    case UserReportReportedEntityType.SERVICE:
-      return !!(await prisma.service.findUnique({
-        where: { serviceId: entityId },
+    case UserReportReportedEntityType.REVIEW_RESPONSE:
+      return !!(await prisma.reviewResponse.findUnique({
+        where: { reviewResponseId: entityId },
       }));
-    // Add other cases as needed
+    case UserReportReportedEntityType.USER:
+      return !!(await prisma.user.findUnique({
+        where: { userId: entityId },
+      }));
     default:
       return false;
   }

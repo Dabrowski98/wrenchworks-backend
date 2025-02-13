@@ -24,6 +24,12 @@ export class ReviewResponseMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     originalResponseText?: keyof typeof SortOrder;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    updatedAt?: keyof typeof SortOrder;
+
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 }

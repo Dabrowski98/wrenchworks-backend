@@ -1,19 +1,39 @@
-import { Resolver, Query, Mutation, Args, Parent, ResolveField } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Parent,
+  ResolveField,
+} from '@nestjs/graphql';
 import { SessionDataService } from './session-data.service';
 import { SessionData } from './dto/session-data.model';
-import { SessionDataCreateInput, SessionDataUpdateInput } from './dto';
+import {
+  DeleteManySessionDataArgs,
+  DeleteOneSessionDataArgs,
+  FindManySessionDataArgs,
+  FindUniqueSessionDataArgs,
+  SessionDataCreateInput,
+  SessionDataUpdateInput,
+  UpdateOneSessionDataArgs,
+} from './dto';
 import { Action, CheckAbilities } from '../ability';
 import { User } from '../user/dto';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { UseGuards } from '@nestjs/common';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { GraphQLBigInt } from 'graphql-scalars';
 
-@UseGuards(UserJwtAuthGuard, AbilitiesGuard)
 @Resolver(() => SessionData)
 export class SessionDataResolver {
   constructor(private readonly sessionDataService: SessionDataService) {}
 
-
+  // ADMIN
+  @CheckAbilities({ action: Action.Create, subject: 'SessionData' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => SessionData)
   async createSessionData(
     @Args('sessionDataCreateInput')
@@ -22,37 +42,42 @@ export class SessionDataResolver {
     return this.sessionDataService.create(sessionDataCreateInput);
   }
 
-  @Query(() => [SessionData], { name: 'getAllSessionData' })
-  async findAll(): Promise<SessionData[]> {
-    return this.sessionDataService.findAll();
+  // ADMIN, USER
+  @CheckAbilities({ action: Action.Read, subject: 'SessionData' })
+  @UseGuards(UserJwtAuthGuard)
+  @Query(() => [SessionData])
+  async sessionDatas(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: FindManySessionDataArgs,
+  ): Promise<SessionData[]> {
+    return this.sessionDataService.findMany(currentEntity, args);
   }
 
-  @Query(() => SessionData, { name: 'getSessionData' })
-  async findOne(@Args('id') id: string): Promise<SessionData> {
-    return this.sessionDataService.findOne(id);
+  // ADMIN, USER
+  @CheckAbilities({ action: Action.Read, subject: 'SessionData' })
+  @UseGuards(UserJwtAuthGuard)
+  @Query(() => SessionData)
+  async sessionData(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: FindUniqueSessionDataArgs,
+  ): Promise<SessionData> {
+    return this.sessionDataService.findOne(currentEntity, args);
   }
 
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'SessionData' })
+  @UseGuards(UserJwtAuthGuard)
   @Mutation(() => SessionData)
   async updateSessionData(
-    @Args('sessionDataId') sessionDataId: string,
-    @Args('sessionDataUpdateInput')
-    sessionDataUpdateInput: SessionDataUpdateInput,
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: UpdateOneSessionDataArgs,
   ): Promise<SessionData> {
-    return this.sessionDataService.update(
-      sessionDataId,
-      sessionDataUpdateInput,
-    );
-  }
-
-  @Mutation(() => Boolean)
-  async deleteSessionData(
-    @Args('sessionDataId') sessionDataId: string,
-  ): Promise<boolean> {
-    return this.sessionDataService.delete(sessionDataId);
+    return this.sessionDataService.update(currentEntity, args);
   }
 
   // RESOLVE METHODS
 
+  @CheckAbilities({ action: Action.Read, subject: 'User' })
   @ResolveField(() => User)
   async user(@Parent() sessionData: SessionData): Promise<User> {
     return this.sessionDataService.user(sessionData.sessionDataId);

@@ -18,10 +18,8 @@ import {
 } from './dto';
 import { User } from '../user/dto';
 import { Workshop } from '../workshop/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
 import { accessibleBy } from '@casl/prisma';
 import { Action, AbilityFactory } from '../ability/ability.factory';
-import { CreateAddressForUserArgs } from './custom-dto/create-create-for-user.args';
 import { CreateAddressForWorkshopArgs } from './custom-dto/create-address-for-workshop.args';
 import { Prisma } from '@prisma/client';
 import { Mutation, Args, Query, Parent, ResolveField } from '@nestjs/graphql';
@@ -29,8 +27,9 @@ import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.d
 import { ForbiddenError, subject } from '@casl/ability';
 import { CheckAbilities } from '../ability';
 import { CurrentUserID } from 'src/common/decorators/jwt-decorators/current-user-id.decorator';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
 import { EntityType } from 'src/common/enums/entity-type.enum';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 
 @Injectable()
 export class AddressService {
@@ -40,22 +39,10 @@ export class AddressService {
   ) {}
 
   async create(
-    input: AddressCreateInput,
-    workshopId?: bigint,
-  ): Promise<Address> {
-    return this.prisma.address.create({
-      data: {
-        ...input,
-        workshop: workshopId ? { connect: { workshopId } } : undefined,
-      },
-    });
-  }
-
-  async createAddressForWorkshop(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     args: CreateAddressForWorkshopArgs,
   ): Promise<Address> {
-    const workshopWithAddress = await this.prisma.workshop.findUniqueOrThrow({
+    const workshop = await this.prisma.workshop.findUniqueOrThrow({
       where: { workshopId: args.workshopId },
       include: { address: true },
     });
@@ -64,8 +51,12 @@ export class AddressService {
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Address', { workshop: workshopWithAddress } as any as Address),
+      subject('Address', { workshop } as any as Address),
     );
+
+    if (workshop.address) {
+      throw new BadRequestError('Workshop already has an address');
+    }
 
     return this.prisma.address.create({
       data: {
@@ -80,18 +71,17 @@ export class AddressService {
     args: UpdateOneAddressArgs,
   ): Promise<Address> {
     const ability = await this.userAbilityFactory.defineAbility(currentEntity);
-    const addressWithUserAndWorkshop =
-      await this.prisma.address.findUniqueOrThrow({
-        where: args.where,
-        include: {
-          workshop: true,
-        },
-      });
+    const address = await this.prisma.address.findUnique({
+      where: args.where,
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
 
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Update,
-      subject('Address', addressWithUserAndWorkshop),
-    );
+    if (address.workshop) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Update,
+        subject('Address', address),
+      );
+    }
 
     return this.prisma.address.update(args);
   }
@@ -104,7 +94,7 @@ export class AddressService {
     return record;
   }
 
-  async findMany(args: FindManyAddressArgs): Promise<Address[]> {
+  async findMany(args?: FindManyAddressArgs): Promise<Address[]> {
     return this.prisma.address.findMany({
       where: args.where || {},
     });
@@ -116,13 +106,17 @@ export class AddressService {
   ): Promise<Boolean> {
     const address = await this.prisma.address.findUniqueOrThrow({
       where: args.where,
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     const ability = await this.userAbilityFactory.defineAbility(currentEntity);
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Delete,
-      subject('Address', address),
-    );
+
+    if (address.workshop) {
+      ForbiddenError.from(ability).throwUnlessCan(
+        Action.Delete,
+        subject('Address', address),
+      );
+    }
 
     return this.prisma.address
       .delete({

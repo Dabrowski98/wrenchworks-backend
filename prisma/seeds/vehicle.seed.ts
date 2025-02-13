@@ -95,7 +95,7 @@ const vehicles = [
   },
   // Customer vehicles
   {
-    userId: 7n,
+    customerId: 1n,
     modelId: 112n,
     details: {
       yearOfProduction: 2019,
@@ -161,7 +161,7 @@ export async function seedVehicles() {
           where: {
             OR: [
               { userId: vehicle.userId },
-              { customers: { some: { customerId: vehicle.customerId } } },
+              { customer: { customerId: vehicle.customerId } },
             ],
           },
         })

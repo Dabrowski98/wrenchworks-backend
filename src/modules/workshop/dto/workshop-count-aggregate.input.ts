@@ -29,6 +29,18 @@ export class WorkshopCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     isOfferingService?: true;
 
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    deletedAt?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

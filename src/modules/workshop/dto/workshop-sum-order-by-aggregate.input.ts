@@ -15,4 +15,6 @@ export class WorkshopSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     addressId?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    updatedBy?: keyof typeof SortOrder;
+}

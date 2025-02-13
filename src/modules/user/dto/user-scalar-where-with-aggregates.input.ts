@@ -55,4 +55,12 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => EnumUserRoleWithAggregatesFilter, {nullable:true})
     role?: EnumUserRoleWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableWithAggregatesFilter;
+}

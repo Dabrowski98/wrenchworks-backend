@@ -26,8 +26,8 @@ import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 
 @Resolver(() => Guest)
 export class GuestResolver {

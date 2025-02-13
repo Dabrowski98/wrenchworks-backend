@@ -63,4 +63,6 @@ export class VehicleDetailsUpdateManyMutationInput {
     @Validator.IsOptional()
     bodyColor?: keyof typeof BodyColor;
 
-    }
+    @HideField()
+    deletedAt?: Date | string;
+}

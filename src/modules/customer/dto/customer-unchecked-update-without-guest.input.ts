@@ -11,7 +11,7 @@ import { Type } from 'class-transformer';
 import { HideField } from '@nestjs/graphql';
 import { ServiceUncheckedUpdateManyWithoutCustomerNestedInput } from '../../service/dto/service-unchecked-update-many-without-customer-nested.input';
 import { ValidateNested } from 'class-validator';
-import { VehicleUncheckedUpdateManyWithoutCustomersNestedInput } from '../../vehicle/dto/vehicle-unchecked-update-many-without-customers-nested.input';
+import { VehicleUncheckedUpdateManyWithoutCustomerNestedInput } from '../../vehicle/dto/vehicle-unchecked-update-many-without-customer-nested.input';
 
 @InputType()
 export class CustomerUncheckedUpdateWithoutGuestInput {
@@ -79,15 +79,30 @@ export class CustomerUncheckedUpdateWithoutGuestInput {
     @Validator.IsOptional()
     companyName?: string;
 
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
     @Field(() => ServiceUncheckedUpdateManyWithoutCustomerNestedInput, {nullable:true})
     @Type(() => ServiceUncheckedUpdateManyWithoutCustomerNestedInput)
     @ValidateNested()
     @Type(() => ServiceUncheckedUpdateManyWithoutCustomerNestedInput)
     services?: ServiceUncheckedUpdateManyWithoutCustomerNestedInput;
 
-    @Field(() => VehicleUncheckedUpdateManyWithoutCustomersNestedInput, {nullable:true})
-    @Type(() => VehicleUncheckedUpdateManyWithoutCustomersNestedInput)
+    @Field(() => VehicleUncheckedUpdateManyWithoutCustomerNestedInput, {nullable:true})
+    @Type(() => VehicleUncheckedUpdateManyWithoutCustomerNestedInput)
     @ValidateNested()
-    @Type(() => VehicleUncheckedUpdateManyWithoutCustomersNestedInput)
-    vehicles?: VehicleUncheckedUpdateManyWithoutCustomersNestedInput;
+    @Type(() => VehicleUncheckedUpdateManyWithoutCustomerNestedInput)
+    vehicles?: VehicleUncheckedUpdateManyWithoutCustomerNestedInput;
 }

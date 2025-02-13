@@ -36,4 +36,6 @@ export class VehicleDetailsMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     bodyColor?: keyof typeof SortOrder;
 
-    }
+    @HideField()
+    deletedAt?: keyof typeof SortOrder;
+}

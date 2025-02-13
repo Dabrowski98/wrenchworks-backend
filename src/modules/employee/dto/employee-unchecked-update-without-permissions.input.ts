@@ -9,8 +9,6 @@ import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { JoinWorkshopRequestUncheckedUpdateManyWithoutEmployeeNestedInput } from '../../join-workshop-request/dto/join-workshop-request-unchecked-update-many-without-employee-nested.input';
 import { TaskUncheckedUpdateManyWithoutEmployeesNestedInput } from '../../task/dto/task-unchecked-update-many-without-employees-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeeUncheckedUpdateWithoutPermissionsInput {
@@ -59,6 +57,21 @@ export class EmployeeUncheckedUpdateWithoutPermissionsInput {
     @Validator.IsDate({ message: 'Joined at must be a valid date' })
     @Validator.IsOptional()
     joinedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
 
     @Field(() => ServiceUncheckedUpdateManyWithoutEmployeeNestedInput, {nullable:true})
     @Type(() => ServiceUncheckedUpdateManyWithoutEmployeeNestedInput)

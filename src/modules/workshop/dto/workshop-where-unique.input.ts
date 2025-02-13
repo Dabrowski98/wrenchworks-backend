@@ -25,8 +25,6 @@ import { JobCategoryListRelationFilter } from '../../job-category/dto/job-catego
 import { JoinWorkshopRequestListRelationFilter } from '../../join-workshop-request/dto/join-workshop-request-list-relation-filter.input';
 import { WorkshopDeviceOtpNullableRelationFilter } from '../../workshop-device-otp/dto/workshop-device-otp-nullable-relation-filter.input';
 import { WorkshopDeviceListRelationFilter } from '../../workshop-device/dto/workshop-device-list-relation-filter.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopWhereUniqueInput {
@@ -67,6 +65,18 @@ export class WorkshopWhereUniqueInput {
 
     @Field(() => BoolNullableFilter, {nullable:true})
     isOfferingService?: BoolNullableFilter;
+
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableFilter;
+
+    @HideField()
+    deletedAt?: DateTimeNullableFilter;
 
     @Field(() => AddressNullableRelationFilter, {nullable:true})
     @ValidateNested()

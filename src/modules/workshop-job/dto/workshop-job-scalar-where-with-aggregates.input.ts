@@ -48,4 +48,15 @@ export class WorkshopJobScalarWhereWithAggregatesInput {
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     availability?: BoolWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    createdBy?: BigIntNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeNullableWithAggregatesFilter;
+
+    @HideField()
+    updatedBy?: BigIntNullableWithAggregatesFilter;
+}

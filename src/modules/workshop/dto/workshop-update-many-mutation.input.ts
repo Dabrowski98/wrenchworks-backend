@@ -2,11 +2,12 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopUpdateManyMutationInput {
+
+    @HideField()
+    workshopId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -37,4 +38,15 @@ export class WorkshopUpdateManyMutationInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

@@ -4,8 +4,6 @@ import * as Scalars from 'graphql-scalars';
 import * as Validator from 'class-validator';
 import { WorkshopDeviceStatus } from '../../prisma/dto/workshop-device-status.enum';
 import { HideField } from '@nestjs/graphql';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopDeviceUncheckedCreateWithoutWorkshopInput {
@@ -34,12 +32,18 @@ export class WorkshopDeviceUncheckedCreateWithoutWorkshopInput {
     @Field(() => Date, {nullable:true})
     lastLoginAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
 
     @Field(() => Date, {nullable:true})
     acceptedAt?: Date | string;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy?: bigint | number;
 }

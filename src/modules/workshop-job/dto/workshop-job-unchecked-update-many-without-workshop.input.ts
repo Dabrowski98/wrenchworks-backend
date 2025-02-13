@@ -47,4 +47,15 @@ export class WorkshopJobUncheckedUpdateManyWithoutWorkshopInput {
     @Validator.IsOptional()
     availability?: boolean;
 
-    }
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+}

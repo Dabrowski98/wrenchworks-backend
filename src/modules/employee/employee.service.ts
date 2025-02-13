@@ -24,8 +24,8 @@ import { JoinWorkshopRequest } from '../join-workshop-request/dto/join-workshop-
 import { Task } from '../task/dto/task.model';
 import { Service } from '../service/dto';
 import { EmployeeStatus } from '../prisma';
-import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { AbilityFactory, accessibleBy } from '../ability';
 import { ForbiddenError } from '@casl/ability';
 import { Action } from '../ability';
@@ -43,12 +43,14 @@ export class EmployeeService {
     args: CreateOneEmployeeArgs,
   ): Promise<Employee> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const workshop = await this.prisma.workshop.findUnique({
+      where: { workshopId: args.data.workshop.connect.workshopId },
+    });
+    if (!workshop) throw new RecordNotFoundError(Workshop);
 
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Employee', {
-        workshopId: args.data.workshop.connect.workshopId,
-      } as any),
+      subject('Employee', { workshop } as any),
     );
 
     return this.prisma.employee.create({
@@ -62,14 +64,10 @@ export class EmployeeService {
   ): Promise<Employee> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
 
-    const employee = await this.prisma.employee.findUnique(args);
+    const employee = await this.prisma.employee.findFirst({
+      where: { AND: [accessibleBy(ability).Employee, args.where] },
+    });
     if (!employee) throw new RecordNotFoundError(Employee);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('Employee', employee),
-    );
-
     return employee;
   }
 
@@ -78,7 +76,6 @@ export class EmployeeService {
     args?: FindManyEmployeeArgs,
   ): Promise<Employee[]> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-
     return this.prisma.employee.findMany({
       where: {
         AND: [accessibleBy(ability).Employee, args.where],
@@ -92,7 +89,10 @@ export class EmployeeService {
   ): Promise<Employee> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
 
-    const employee = await this.prisma.employee.findUnique(args);
+    const employee = await this.prisma.employee.findUnique({
+      where: args.where,
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
+    });
     if (!employee) throw new RecordNotFoundError(Employee);
 
     ForbiddenError.from(ability).throwUnlessCan(
@@ -121,6 +121,7 @@ export class EmployeeService {
 
     const employeeToEnable = await this.prisma.employee.findUnique({
       where: { employeeId },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     if (!employeeToEnable) throw new RecordNotFoundError(Employee);
@@ -150,6 +151,7 @@ export class EmployeeService {
 
     const employeeToDisable = await this.prisma.employee.findUnique({
       where: { employeeId },
+      include: { workshop: { select: { workshopId: true, ownerId: true } } },
     });
 
     if (!employeeToDisable) throw new RecordNotFoundError(Employee);
@@ -179,6 +181,9 @@ export class EmployeeService {
 
     const employeeToDelete = await this.prisma.employee.findUnique({
       where: { employeeId },
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
     if (!employeeToDelete) throw new RecordNotFoundError(Employee);
 

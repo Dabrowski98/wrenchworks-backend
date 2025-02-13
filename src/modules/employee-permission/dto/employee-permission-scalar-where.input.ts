@@ -37,4 +37,9 @@ export class EmployeePermissionScalarWhereInput {
     @Field(() => JsonNullableFilter, {nullable:true})
     conditions?: JsonNullableFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeFilter;
+}

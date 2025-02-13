@@ -44,4 +44,24 @@ export class ServiceMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     serviceEndDate?: true;
 
-    }
+    @HideField()
+    addedAt?: true;
+
+    @HideField()
+    addedBy?: true;
+
+    @HideField()
+    resolvedAt?: true;
+
+    @HideField()
+    resolvedBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    deletedAt?: true;
+}

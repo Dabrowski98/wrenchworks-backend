@@ -5,4 +5,18 @@ import { HideField } from '@nestjs/graphql';
 @InputType()
 export class WorkshopDeviceOtpUpdateWithoutWorkshopInput {
 
-    }
+    @HideField()
+    WorkshopDeviceOtpId?: bigint | number;
+
+    @HideField()
+    employeeId?: bigint | number;
+
+    @HideField()
+    code?: string;
+
+    @HideField()
+    expiresAt?: Date | string;
+
+    @HideField()
+    createdAt?: Date | string;
+}

@@ -1,4 +1,4 @@
-import { JwtEmployeePayload } from 'src/modules/auth/employee-auth/dto';
+import { JwtEmployeePayload } from 'src/modules/auth/employee-auth/custom-dto/jwt-employee-payload';
 import { Action } from '../ability.factory';
 import { EntityType } from 'src/common/enums/entity-type.enum';
 
@@ -14,14 +14,33 @@ export class EmployeeAbilityHandler {
       entityType: EntityType.EMPLOYEE,
     };
 
-    cannot(Action.Manage, 'all', {
-      workshop: { isNot: { workshopId: employeePayload.workshopId } },
+    // cannot(Action.Manage, 'all', {
+    //   workshop: { isNot: { workshopId: employeePayload.workshopId } },
+    // });
+    // can(Action.Read, 'Workshop', {
+    //   workshopId: employeePayload.workshopId,
+    // });
+    // can(Action.Read, 'WorkshopDetails', {
+    //   workshopId: employeePayload.workshopId,
+    // });
+    can(Action.Read, 'Customer', {
+      workshop: { is: { workshopId: employeePayload.workshopId } },
     });
-    can(Action.Read, 'Workshop', {
-      workshopId: employeePayload.workshopId,
+
+    can(Action.Read, 'Service', {
+      workshop: { is: { workshopId: employeePayload.workshopId } },
     });
-    can(Action.Read, 'WorkshopDetails', {
-      workshopId: employeePayload.workshopId,
+
+    can(Action.Read, 'Address', {
+      workshop: { is: { workshopId: employeePayload.workshopId } },
+    });
+
+    can(Action.Update, 'Address', {
+      workshop: { is: { workshopId: employeePayload.workshopId } },
+    });
+
+    can(Action.Read, 'Guest', {
+      serviceRequest: { workshopId: employeePayload.workshopId },
     });
 
     const defaultCondition = {

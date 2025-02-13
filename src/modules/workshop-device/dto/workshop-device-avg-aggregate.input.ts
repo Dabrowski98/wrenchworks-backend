@@ -14,6 +14,9 @@ export class WorkshopDeviceAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     lastLoginBy?: true;
 
+    @HideField()
+    updatedBy?: true;
+
     @Field(() => Boolean, {nullable:true})
     acceptedBy?: true;
 }

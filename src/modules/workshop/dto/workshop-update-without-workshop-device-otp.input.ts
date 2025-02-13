@@ -16,11 +16,12 @@ import { WorkshopJobUpdateManyWithoutWorkshopNestedInput } from '../../workshop-
 import { JobCategoryUpdateManyWithoutWorkshopsNestedInput } from '../../job-category/dto/job-category-update-many-without-workshops-nested.input';
 import { JoinWorkshopRequestUpdateManyWithoutWorkshopNestedInput } from '../../join-workshop-request/dto/join-workshop-request-update-many-without-workshop-nested.input';
 import { WorkshopDeviceUpdateManyWithoutWorkshopNestedInput } from '../../workshop-device/dto/workshop-device-update-many-without-workshop-nested.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class WorkshopUpdateWithoutWorkshopDeviceOtpInput {
+
+    @HideField()
+    workshopId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsEmail({}, { message: 'Invalid email format' })
@@ -51,10 +52,40 @@ export class WorkshopUpdateWithoutWorkshopDeviceOtpInput {
     @Validator.IsOptional()
     isOfferingService?: boolean;
 
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+
     @Field(() => AddressUpdateOneWithoutWorkshopNestedInput, {nullable:true})
     @ValidateNested()
     @Type(() => AddressUpdateOneWithoutWorkshopNestedInput)
     address?: AddressUpdateOneWithoutWorkshopNestedInput;
+
+    @HideField()
+    customers?: CustomerUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    employees?: EmployeeUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    reviews?: ReviewUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    serviceRequests?: ServiceRequestUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    services?: ServiceUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    user?: UserUpdateOneRequiredWithoutWorkshopsNestedInput;
 
     @Field(() => WorkshopDetailsUpdateOneWithoutWorkshopNestedInput, {nullable:true})
     @Type(() => WorkshopDetailsUpdateOneWithoutWorkshopNestedInput)
@@ -62,4 +93,15 @@ export class WorkshopUpdateWithoutWorkshopDeviceOtpInput {
     @Type(() => WorkshopDetailsUpdateOneWithoutWorkshopNestedInput)
     workshopDetails?: WorkshopDetailsUpdateOneWithoutWorkshopNestedInput;
 
-    }
+    @HideField()
+    workshopJobs?: WorkshopJobUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    jobCategories?: JobCategoryUpdateManyWithoutWorkshopsNestedInput;
+
+    @HideField()
+    joinWorkshopRequests?: JoinWorkshopRequestUpdateManyWithoutWorkshopNestedInput;
+
+    @HideField()
+    workshopDevices?: WorkshopDeviceUpdateManyWithoutWorkshopNestedInput;
+}

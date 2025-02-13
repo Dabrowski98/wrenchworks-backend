@@ -11,8 +11,6 @@ import { HideField } from '@nestjs/graphql';
 import { EmployeeListRelationFilter } from '../../employee/dto/employee-list-relation-filter.input';
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class EmployeePermissionWhereUniqueInput {
@@ -47,6 +45,12 @@ export class EmployeePermissionWhereUniqueInput {
 
     @Field(() => JsonNullableFilter, {nullable:true})
     conditions?: JsonNullableFilter;
+
+    @HideField()
+    createdAt?: DateTimeFilter;
+
+    @HideField()
+    updatedAt?: DateTimeFilter;
 
     @Field(() => EmployeeListRelationFilter, {nullable:true})
     @Type(() => EmployeeListRelationFilter)

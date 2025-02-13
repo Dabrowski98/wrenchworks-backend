@@ -12,8 +12,6 @@ import { Type } from 'class-transformer';
 import { JobCategoryListRelationFilter } from './job-category-list-relation-filter.input';
 import { JobListRelationFilter } from '../../job/dto/job-list-relation-filter.input';
 import { WorkshopListRelationFilter } from '../../workshop/dto/workshop-list-relation-filter.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class JobCategoryWhereUniqueInput {

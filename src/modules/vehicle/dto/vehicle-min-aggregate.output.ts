@@ -15,6 +15,9 @@ export class VehicleMinAggregate {
     guestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    customerId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
 
     @Field(() => Date, {nullable:true})

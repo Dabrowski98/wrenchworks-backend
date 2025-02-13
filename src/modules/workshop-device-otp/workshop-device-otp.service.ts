@@ -15,19 +15,15 @@ import { Workshop } from '../workshop/dto/workshop.model';
 export class WorkshopDeviceOTPService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(
-    input: WorkshopDeviceOtpCreateInput,
-  ): Promise<WorkshopDeviceOtp> {
-    return this.prisma.workshopDeviceOtp.create({ data: input });
+  async create(args: CreateOneWorkshopDeviceOtpArgs): Promise<WorkshopDeviceOtp> {
+    return this.prisma.workshopDeviceOtp.create(args);
   }
 
   async findOne(
     where: FindUniqueWorkshopDeviceOtpArgs,
   ): Promise<WorkshopDeviceOtp> {
     const otp = await this.prisma.workshopDeviceOtp.findUnique(where);
-
     if (!otp) throw new RecordNotFoundError(WorkshopDeviceOtp);
-
     return otp;
   }
 
@@ -44,16 +40,5 @@ export class WorkshopDeviceOTPService {
       })
       .then(() => true)
       .catch(() => false);
-  }
-
-  // RESOLVER METHODS
-
-  async workshop(workshopDeviceOtpId: bigint): Promise<Workshop> {
-    return (
-      await this.prisma.workshopDeviceOtp.findUnique({
-        where: { WorkshopDeviceOtpId: workshopDeviceOtpId },
-        include: { workshop: true },
-      })
-    ).workshop;
   }
 }

@@ -13,6 +13,6 @@ export class WorkshopDetailsSumAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     rating?: Decimal;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

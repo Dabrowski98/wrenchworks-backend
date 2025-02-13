@@ -70,4 +70,24 @@ export class ServiceUncheckedUpdateManyWithoutWorkshopInput {
     @Validator.IsOptional()
     serviceEndDate?: Date | string;
 
-    }
+    @HideField()
+    addedAt?: Date | string;
+
+    @HideField()
+    addedBy?: bigint | number;
+
+    @HideField()
+    resolvedAt?: Date | string;
+
+    @HideField()
+    resolvedBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+}

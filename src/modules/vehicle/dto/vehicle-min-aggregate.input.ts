@@ -15,6 +15,11 @@ export class VehicleMinAggregateInput {
     guestId?: true;
 
     @Field(() => Boolean, {nullable:true})
+    customerId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     modelId?: true;
 
-    }
+    @HideField()
+    deletedAt?: true;
+}

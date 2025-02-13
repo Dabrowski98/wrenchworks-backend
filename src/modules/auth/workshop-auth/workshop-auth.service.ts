@@ -3,41 +3,57 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/database/prisma.service';
 import { EmployeeService } from 'src/modules/employee/employee.service';
 import { WorkshopService } from 'src/modules/workshop/workshop.service';
-import { RegisterWorkshopResponse } from './dto/register-workshop.response';
-import { RegisterWorkshopInput } from './dto/register-workshop.input';
 import { UserService } from 'src/modules/user/user.service';
 import { BadRequestError } from 'src/common/custom-errors/errors.config';
-import { JwtUserPayload } from '../user-auth/dto/jwt-user-payload';
+import { JwtUserPayload } from '../user-auth/custom-dto/jwt-user-payload';
+import { CreateOneWorkshopArgs, Workshop } from 'src/modules/workshop/dto';
+import { AbilityFactory } from 'src/modules/ability/ability.factory';
+import { ForbiddenError, subject } from '@casl/ability';
+import { Action } from 'src/modules/ability/ability.factory';
+import { RegisterWorkshopResponse } from './custom-dto';
+import { RegisterWorkshopArgs } from './custom-dto/register-workshop.args';
 @Injectable()
 export class WorkshopAuthService {
   constructor(
     private readonly userService: UserService,
     private readonly workshopService: WorkshopService,
     private readonly prisma: PrismaService,
+    private readonly userAbilityFactory: AbilityFactory,
   ) {}
 
   async registerWorkshop(
     currentUser: JwtUserPayload,
-    input: RegisterWorkshopInput,
+    args: RegisterWorkshopArgs,
   ): Promise<RegisterWorkshopResponse> {
     if (!currentUser) throw new BadRequestError('User not found');
-    const userWorkshops = await this.userService.workshops(currentUser.userId);
+    const { data } = args;
+    const user = await this.prisma.user.findUnique({
+      where: { userId: data.workshop.user.connect.userId },
+      include: {
+        workshops: true,
+      },
+    });
+    const ability = this.userAbilityFactory.defineAbility(currentUser);
+    ForbiddenError.from(ability).throwUnlessCan(
+      Action.Create,
+      subject('Workshop', { user } as any as Workshop),
+    );
+
+    const userWorkshops = user.workshops;
 
     if (userWorkshops.length >= Number(process.env.USER_MAX_WORKSHOPS))
       throw new BadRequestException(
         'User has reached the maximum number of workshops he can have',
       );
 
-    const { ownerEmployee: ownerEmployeeInput, ...workshopInput } = input;
-
     const employeeHashedPassword = await bcrypt.hash(
-      ownerEmployeeInput.password,
+      data.ownerEmployee.password,
       Number(process.env.SALT_ROUNDS),
     );
 
     const workshop = await this.workshopService.create({
       data: {
-        ...workshopInput,
+        ...data.workshop,
         user: { connect: { userId: currentUser.userId } },
       },
     });
@@ -46,7 +62,7 @@ export class WorkshopAuthService {
 
     const ownerEmployee = await this.prisma.employee.create({
       data: {
-        ...ownerEmployeeInput,
+        ...data.ownerEmployee,
         password: employeeHashedPassword,
         workshop: { connect: { workshopId: workshop.workshopId } },
         permissions: {

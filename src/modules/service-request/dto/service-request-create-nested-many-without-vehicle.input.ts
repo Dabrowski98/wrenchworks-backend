@@ -17,9 +17,14 @@ export class ServiceRequestCreateNestedManyWithoutVehicleInput {
     @ValidateNested()
     create?: Array<ServiceRequestCreateWithoutVehicleInput>;
 
+    @HideField()
+    connectOrCreate?: Array<ServiceRequestCreateOrConnectWithoutVehicleInput>;
+
     @Field(() => ServiceRequestCreateManyVehicleInputEnvelope, {nullable:true})
     @Type(() => ServiceRequestCreateManyVehicleInputEnvelope)
     @ValidateNested()
     createMany?: ServiceRequestCreateManyVehicleInputEnvelope;
 
-    }
+    @HideField()
+    connect?: Array<Prisma.AtLeast<ServiceRequestWhereUniqueInput, 'serviceRequestId' | 'guestId' | 'approvedServiceId'>>;
+}

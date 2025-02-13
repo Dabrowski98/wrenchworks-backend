@@ -26,7 +26,7 @@ import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { CurrentUser } from 'src/common/decorators/jwt-decorators/current-user.decorator';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { EditReviewArgs } from './custom-dto/edit-review.args';
 @Resolver(() => Review)
 export class ReviewResolver {

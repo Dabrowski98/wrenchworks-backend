@@ -14,11 +14,12 @@ import { ReviewResponseCreateNestedManyWithoutUserInput } from '../../review-res
 import { UserReportCreateNestedManyWithoutUserInput } from '../../user-report/dto/user-report-create-nested-many-without-user.input';
 import { JoinWorkshopRequestCreateNestedManyWithoutUserInput } from '../../join-workshop-request/dto/join-workshop-request-create-nested-many-without-user.input';
 import { SessionDataCreateNestedManyWithoutUserInput } from '../../session-data/dto/session-data-create-nested-many-without-user.input';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class UserCreateInput {
+
+    @HideField()
+    userId?: bigint | number;
 
     @Field(() => String, {nullable:false})
     @Validator.IsString({ message: 'Username must be a string' })
@@ -54,6 +55,12 @@ export class UserCreateInput {
     @Validator.IsOptional()
     avatarURL?: string;
 
+    @HideField()
+    isVerified?: boolean;
+
+    @HideField()
+    status?: keyof typeof UserStatus;
+
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'First name must be a string' })
     @Validator.Length(2, 30, { message: 'First name must be between 2 and 30 characters' })
@@ -66,4 +73,45 @@ export class UserCreateInput {
     @Validator.IsOptional()
     lastName?: string;
 
-    }
+    @HideField()
+    role?: keyof typeof UserRole;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    vehicles?: VehicleCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    customers?: CustomerCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    employees?: EmployeeCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    workshops?: WorkshopCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    reviews?: ReviewCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    reviewResponses?: ReviewResponseCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    userReports?: UserReportCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    joinWorkshopRequests?: JoinWorkshopRequestCreateNestedManyWithoutUserInput;
+
+    @HideField()
+    sessionData?: SessionDataCreateNestedManyWithoutUserInput;
+}

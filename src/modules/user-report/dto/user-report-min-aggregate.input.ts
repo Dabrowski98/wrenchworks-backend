@@ -26,4 +26,12 @@ export class UserReportMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     status?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

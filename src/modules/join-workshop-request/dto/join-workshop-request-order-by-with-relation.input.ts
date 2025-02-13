@@ -30,6 +30,21 @@ export class JoinWorkshopRequestOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     status?: keyof typeof SortOrder;
 
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @HideField()
+    updatedBy?: SortOrderInput;
+
+    @HideField()
+    resolvedAt?: SortOrderInput;
+
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
     @ValidateNested()

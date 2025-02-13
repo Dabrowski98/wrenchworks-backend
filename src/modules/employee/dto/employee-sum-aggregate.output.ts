@@ -14,9 +14,9 @@ export class EmployeeSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     userId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

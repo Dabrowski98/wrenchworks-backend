@@ -23,4 +23,18 @@ export class JoinWorkshopRequestMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     status?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedAt?: true;
+
+    @HideField()
+    updatedBy?: true;
+
+    @HideField()
+    resolvedAt?: true;
+}

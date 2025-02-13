@@ -19,6 +19,7 @@ export { CustomerCreateNestedManyWithoutVehiclesInput } from './customer-create-
 export { CustomerCreateNestedManyWithoutWorkshopInput } from './customer-create-nested-many-without-workshop.input';
 export { CustomerCreateNestedOneWithoutGuestInput } from './customer-create-nested-one-without-guest.input';
 export { CustomerCreateNestedOneWithoutServicesInput } from './customer-create-nested-one-without-services.input';
+export { CustomerCreateNestedOneWithoutVehiclesInput } from './customer-create-nested-one-without-vehicles.input';
 export { CustomerCreateOrConnectWithoutGuestInput } from './customer-create-or-connect-without-guest.input';
 export { CustomerCreateOrConnectWithoutServicesInput } from './customer-create-or-connect-without-services.input';
 export { CustomerCreateOrConnectWithoutUserInput } from './customer-create-or-connect-without-user.input';
@@ -83,8 +84,10 @@ export { CustomerUpdateManyWithoutVehiclesNestedInput } from './customer-update-
 export { CustomerUpdateManyWithoutWorkshopNestedInput } from './customer-update-many-without-workshop-nested.input';
 export { CustomerUpdateOneRequiredWithoutServicesNestedInput } from './customer-update-one-required-without-services-nested.input';
 export { CustomerUpdateOneWithoutGuestNestedInput } from './customer-update-one-without-guest-nested.input';
+export { CustomerUpdateOneWithoutVehiclesNestedInput } from './customer-update-one-without-vehicles-nested.input';
 export { CustomerUpdateToOneWithWhereWithoutGuestInput } from './customer-update-to-one-with-where-without-guest.input';
 export { CustomerUpdateToOneWithWhereWithoutServicesInput } from './customer-update-to-one-with-where-without-services.input';
+export { CustomerUpdateToOneWithWhereWithoutVehiclesInput } from './customer-update-to-one-with-where-without-vehicles.input';
 export { CustomerUpdateWithWhereUniqueWithoutUserInput } from './customer-update-with-where-unique-without-user.input';
 export { CustomerUpdateWithWhereUniqueWithoutVehiclesInput } from './customer-update-with-where-unique-without-vehicles.input';
 export { CustomerUpdateWithWhereUniqueWithoutWorkshopInput } from './customer-update-with-where-unique-without-workshop.input';
@@ -99,6 +102,7 @@ export { CustomerUpsertWithWhereUniqueWithoutVehiclesInput } from './customer-up
 export { CustomerUpsertWithWhereUniqueWithoutWorkshopInput } from './customer-upsert-with-where-unique-without-workshop.input';
 export { CustomerUpsertWithoutGuestInput } from './customer-upsert-without-guest.input';
 export { CustomerUpsertWithoutServicesInput } from './customer-upsert-without-services.input';
+export { CustomerUpsertWithoutVehiclesInput } from './customer-upsert-without-vehicles.input';
 export { CustomerUserIdWorkshopIdCompoundUniqueInput } from './customer-user-id-workshop-id-compound-unique.input';
 export { CustomerWhereUniqueInput } from './customer-where-unique.input';
 export { CustomerWhereInput } from './customer-where.input';

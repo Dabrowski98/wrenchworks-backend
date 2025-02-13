@@ -16,4 +16,9 @@ export class AddressCreateNestedOneWithoutWorkshopInput {
     @ValidateNested()
     create?: AddressCreateWithoutWorkshopInput;
 
-    }
+    @HideField()
+    connectOrCreate?: AddressCreateOrConnectWithoutWorkshopInput;
+
+    @HideField()
+    connect?: Prisma.AtLeast<AddressWhereUniqueInput, 'addressId'>;
+}

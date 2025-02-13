@@ -11,26 +11,24 @@ import { CurrentEmployeeID } from 'src/common/decorators/jwt-decorators/current-
 import { DeviceSerialNumber } from 'src/common/decorators/headers-decorators/device-serial-number.decorator';
 import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
 import { EmployeeAuthService } from './employee-auth.service';
-import { RegisterEmployeeInput } from './dto/register-employee.input';
 import { EmployeeJwtAuthGuard } from './guards/employee-jwt-auth.guard';
 import { EmployeeLocalAuthGuard } from './guards/employee-local-auth.guard';
-import { LoginEmployeeResponse } from './dto/login-employee.response';
-import { UserJwtAuthGuard } from '../user-auth/guards/user-jwt-auth.guard';
-import { LoginEmployeeInput } from './dto/login-employee.input';
 import { ChangePasswordInput } from '../common-dto';
 import { EntityType } from 'src/common/enums/entity-type.enum';
 import { Action, CheckAbilities } from 'src/modules/ability';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
-import { JwtUserPayload } from '../user-auth/dto';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtEmployeePayload } from './dto';
 import { CurrentEmployee } from 'src/common/decorators/jwt-decorators/current-employee.decorator';
+import { UserJwtAuthGuard } from '../user-auth/guards/user-jwt-auth.guard';
+import { JwtUserPayload } from '../user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from './custom-dto/jwt-employee-payload';
+import { LoginEmployeeInput } from './custom-dto/login-employee.input';
+import { LoginEmployeeResponse } from '../employee-auth/custom-dto/login-employee.response';
 @Resolver()
 export class EmployeeAuthResolver {
   constructor(private readonly employeeAuthService: EmployeeAuthService) {}
 
-  // USER(Owner) can create employee
-  // EMPLOYEE with right permissions can create employee
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Create, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Employee)
@@ -41,7 +39,7 @@ export class EmployeeAuthResolver {
     return this.employeeAuthService.createEmployee(currentEntity, args);
   }
 
-  // USER(connected to employee) can login
+  // USER
   @UseGuards(UserJwtAuthGuard, EmployeeLocalAuthGuard)
   @Mutation(() => LoginEmployeeResponse)
   loginEmployeeFromUser(
@@ -55,7 +53,7 @@ export class EmployeeAuthResolver {
     );
   }
 
-  // ANYONE can login from registered device
+  // PUBLIC
   @Public()
   @UseGuards(EmployeeLocalAuthGuard)
   @Mutation(() => LoginEmployeeResponse)
@@ -74,18 +72,24 @@ export class EmployeeAuthResolver {
     );
   }
 
+  @Public()
+  @Mutation(() => LoginEmployeeResponse)
+  async refreshEmployeeTokens(
+    @Args('refreshToken') refreshToken: string,
+  ): Promise<LoginEmployeeResponse> {
+    return this.employeeAuthService.refreshTokens(refreshToken);
+  }
+
   // EMPLOYEE can logout
   @UseGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  logoutEmployee(@Args('refreshToken') refreshToken: string): Promise<boolean> {
-    return this.employeeAuthService
-      .revokeRefreshToken(refreshToken)
-      .then(() => true)
-      .catch(() => false);
+  async logoutEmployee(
+    @Args('refreshToken') refreshToken: string,
+  ): Promise<boolean> {
+    return this.employeeAuthService.revokeRefreshToken(refreshToken);
   }
 
-  // USER(Owner) can logout another employee
-  // EMPLOYEE(Owner) can logout another employee
+  // ADMIN, USER(Owner), EMPLOYEE
   @CheckAbilities({ action: Action.Update, subject: 'Employee' })
   @OrGuards(EmployeeJwtAuthGuard, UserJwtAuthGuard)
   @Mutation(() => Boolean)
@@ -94,23 +98,22 @@ export class EmployeeAuthResolver {
     @Args('employeeId', { type: () => Scalars.GraphQLBigInt })
     employeeIdToLogout: bigint,
   ): Promise<boolean> {
-    return this.employeeAuthService
-      .logoutAnotherEmployee(currentEntity, employeeIdToLogout)
-      .then(() => true)
-      .catch(() => false);
+    return this.employeeAuthService.logoutAnotherEmployee(
+      currentEntity,
+      employeeIdToLogout,
+    );
   }
 
-  // EMPLOYEE can change password
-  @UseGuards(EmployeeJwtAuthGuard)
+  @OrGuards(EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
   changeEmployeePassword(
     @CurrentEmployee() employee: JwtEmployeePayload,
     @Args('changeEmployeePasswordInput')
     changePasswordInput: ChangePasswordInput,
   ): Promise<boolean> {
-    return this.employeeAuthService
-      .changeEmployeePassword(employee.employeeId, changePasswordInput)
-      .then(() => true)
-      .catch(() => false);
+    return this.employeeAuthService.changeEmployeePassword(
+      employee.employeeId,
+      changePasswordInput,
+    );
   }
 }

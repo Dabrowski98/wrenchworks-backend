@@ -37,13 +37,13 @@ export class JoinWorkshopRequest {
     @Field(() => Date, {nullable:false})
     createdAt!: Date;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})

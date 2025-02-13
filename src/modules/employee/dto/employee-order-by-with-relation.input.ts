@@ -42,6 +42,21 @@ export class EmployeeOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     joinedAt?: keyof typeof SortOrder;
 
+    @HideField()
+    deletedAt?: SortOrderInput;
+
+    @HideField()
+    createdAt?: keyof typeof SortOrder;
+
+    @HideField()
+    createdBy?: SortOrderInput;
+
+    @HideField()
+    updatedAt?: SortOrderInput;
+
+    @HideField()
+    updatedBy?: SortOrderInput;
+
     @Field(() => EmployeePermissionOrderByRelationAggregateInput, {nullable:true})
     permissions?: EmployeePermissionOrderByRelationAggregateInput;
 

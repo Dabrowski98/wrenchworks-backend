@@ -28,14 +28,13 @@ import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
-
 
   @CheckAbilities({ action: Action.Create, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
@@ -66,7 +65,6 @@ export class EmployeeResolver {
   ): Promise<Employee[]> {
     return this.employeeService.findMany(currentEntity, args);
   }
-
 
   @CheckAbilities({ action: Action.Update, subject: 'Employee' })
   @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)

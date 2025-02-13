@@ -15,15 +15,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { EmployeeService } from 'src/modules/employee/employee.service';
-import { RegisterEmployeeInput } from './dto/register-employee.input';
-import { LoginEmployeeResponse } from './dto/login-employee.response';
-import * as bcrypt from 'bcrypt';
-import { LoggedInBy } from './enums/loggedInBy.enum';
-import { ChangePasswordInput } from '../common-dto';
-import { JwtEmployeePayload } from './dto/jwt-employee-payload';
-import { EntityType } from 'src/common/enums/entity-type.enum';
-import { WorkshopDeviceService } from 'src/modules/workshop-device';
-import { JwtUserPayload } from '../user-auth/dto';
 import { UserService } from 'src/modules/user/user.service';
 import { User } from 'src/modules/user/dto';
 import { isEmployeePayload, isUserPayload } from 'src/common/utils/type-guards';
@@ -31,12 +22,19 @@ import { ForbiddenError, subject } from '@casl/ability';
 import { Action } from 'src/modules/ability';
 import { AbilityFactory } from 'src/modules/ability/ability.factory';
 import { PrismaService } from 'src/database/prisma.service';
+import { JwtUserPayload } from '../user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from './custom-dto/jwt-employee-payload';
+import * as bcrypt from 'bcrypt';
+import { LoggedInBy } from './enums/loggedInBy.enum';
+import { LoginEmployeeResponse } from './custom-dto/login-employee.response';
+import { ChangePasswordInput } from '../common-dto';
+import { EntityType } from 'src/common/enums/entity-type.enum';
+
 @Injectable()
 export class EmployeeAuthService {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly userService: UserService,
-    private readonly workshopDeviceService: WorkshopDeviceService,
     private readonly jwtService: JwtService,
     private readonly userAbilityFactory: AbilityFactory,
     private readonly prisma: PrismaService,
@@ -54,11 +52,15 @@ export class EmployeeAuthService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     data = { ...data, password: hashedPassword };
 
-    const workshopId = data.workshop.connect.workshopId;
+    const workshop = await this.prisma.workshop.findUnique({
+      where: { workshopId: data.workshop.connect.workshopId },
+    });
+    if (!workshop) throw new BadRequestException('Workshop not found');
+
     const ability = await this.userAbilityFactory.defineAbility(currentEntity);
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('Employee', { workshopId } as any),
+      subject('Employee', { workshop } as any),
     );
 
     return this.employeeService.create(currentEntity, args);
@@ -91,7 +93,7 @@ export class EmployeeAuthService {
     deviceSerialNumber: string,
     workshopId: bigint,
   ): Promise<LoginEmployeeResponse> {
-    const device = await this.workshopDeviceService.findOne({
+    const device = await this.prisma.workshopDevice.findUnique({
       where: {
         workshopId_serialNumber: {
           workshopId,
@@ -120,9 +122,7 @@ export class EmployeeAuthService {
     return { accessToken, refreshToken, employee };
   }
 
-  async revokeRefreshToken(
-    refreshToken: string,
-  ) {
+  async revokeRefreshToken(refreshToken: string): Promise<boolean> {
     const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
       secret: process.env.EMPLOYEE_REFRESH_SECRET,
     });
@@ -135,39 +135,48 @@ export class EmployeeAuthService {
 
     if (!employee.refreshToken) return false;
 
-    const result = await this.employeeService.updateRefreshToken(
+    return !!(await this.employeeService.updateRefreshToken(
       employee.employeeId,
       null,
-    );
-
-    return result ? true : false;
+    ));
   }
 
   async refreshTokens(currentRT: string): Promise<LoginEmployeeResponse> {
-    const decodedRefreshToken = await this.jwtService.verify(currentRT, {
-      secret: process.env.EMPLOYEE_REFRESH_SECRET,
-    });
+    try {
+      const decodedRefreshToken = await this.jwtService.verify(currentRT, {
+        secret: process.env.EMPLOYEE_REFRESH_SECRET,
+      });
 
-    if (!decodedRefreshToken)
+      const employee = await this.prisma.employee.findUnique({
+        where: { employeeId: decodedRefreshToken.employeeId },
+      });
+
+      if (!employee || !employee.refreshToken) {
+        throw new UnauthorizedException('Access Denied');
+      }
+
+      if (employee.refreshToken !== currentRT) {
+        throw new UnauthorizedException('Access Denied');
+      }
+
+      const { accessToken, refreshToken } = await this.generateTokens(
+        employee,
+        decodedRefreshToken.loggedInBy,
+      );
+
+      await this.employeeService.updateRefreshToken(
+        employee.employeeId,
+        refreshToken,
+      );
+
+      return {
+        accessToken,
+        refreshToken,
+        employee,
+      };
+    } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
-
-    const employee = await this.prisma.employee.findUnique({
-      where: { employeeId: decodedRefreshToken.employeeId },
-    });
-
-    if (!employee) throw new UnauthorizedException('Employee not found');
-
-    const { accessToken, refreshToken } = await this.generateTokens(
-      employee,
-      LoggedInBy.USER,
-    );
-    await this.revokeRefreshToken(currentRT);
-    await this.employeeService.updateRefreshToken(
-      employee.employeeId,
-      refreshToken,
-    );
-
-    return { accessToken, refreshToken, employee };
+    }
   }
 
   async changeEmployeePassword(
@@ -209,36 +218,39 @@ export class EmployeeAuthService {
   async logoutAnotherEmployee(
     currentEntity: JwtUserPayload | JwtEmployeePayload,
     employeeIdToLogout: bigint,
-  ) {
-    let employee: Employee;
+  ): Promise<boolean> {
+    let loggedEmployee: Employee;
     let user: User;
 
     if (isEmployeePayload(currentEntity)) {
-      employee = await this.prisma.employee.findUnique({
+      loggedEmployee = await this.prisma.employee.findUnique({
         where: { employeeId: currentEntity.employeeId },
       });
     } else if (isUserPayload(currentEntity)) {
-      user = await this.userService.findOne({
+      user = await this.prisma.user.findUnique({
         where: { userId: currentEntity.userId },
       });
     }
 
-    if (!employee && !user) throw new UnauthorizedException('Entity not found');
+    if (!loggedEmployee && !user)
+      throw new UnauthorizedException('Entity not found');
 
-    const employeeToLogout: Employee = await this.prisma.employee.findUnique({
+    const employee: Employee = await this.prisma.employee.findUnique({
       where: { employeeId: employeeIdToLogout },
+      include: {
+        workshop: true,
+      },
     });
 
     const ability = await this.userAbilityFactory.defineAbility(currentEntity);
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Update,
-      subject('Employee', { ...employeeToLogout, password: undefined }),
+      subject('Employee', employee as any),
     );
 
-    if (!employeeToLogout)
-      throw new UnauthorizedException('Employee not found');
+    if (!employee) throw new UnauthorizedException('Employee not found');
 
-    await this.revokeRefreshToken(employeeToLogout.refreshToken);
+    return await this.revokeRefreshToken(employee.refreshToken);
   }
 
   async validateEmployee(

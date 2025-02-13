@@ -10,7 +10,4 @@ export class VehicleCount {
 
     @Field(() => Int, {nullable:false})
     services?: number;
-
-    @Field(() => Int, {nullable:false})
-    customers?: number;
 }

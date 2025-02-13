@@ -52,6 +52,18 @@ export class WorkshopJobUncheckedCreateInput {
     @Validator.IsOptional()
     availability?: boolean;
 
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
     @Field(() => TaskUncheckedCreateNestedManyWithoutWorkshopJobInput, {nullable:true})
     @Type(() => TaskUncheckedCreateNestedManyWithoutWorkshopJobInput)
     @ValidateNested()

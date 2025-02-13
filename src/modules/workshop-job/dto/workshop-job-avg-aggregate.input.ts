@@ -20,4 +20,9 @@ export class WorkshopJobAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     maxPrice?: true;
 
-    }
+    @HideField()
+    createdBy?: true;
+
+    @HideField()
+    updatedBy?: true;
+}

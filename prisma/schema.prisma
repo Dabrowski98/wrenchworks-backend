@@ -9,6 +9,8 @@ generator client {
 //TODO: ABAC EMPLOYEE AUTHORIZATION
 //TODO: REMOVE DANGEROUSLY DEMANDING OBJECTS FROM COUNT RESOLVERS
 //TODO: ADD SKIP, PAGINATION, SORTING TO ALL RESOLVERS
+//TODO: CUSTOM DTOS ADD PRISMA.ATLEAST
+//TODO: AUTHORIZATION ON RESOLVE FIELDS
 
 generator nestgraphql {
     provider = "node node_modules/prisma-nestjs-graphql"
@@ -183,8 +185,10 @@ model Customer {
   companyName  String?      @db.VarChar(30)
   deletedAt    DateTime?    @db.Timestamp(0)
   createdAt    DateTime     @default(now()) @db.Timestamp(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   createdBy    BigInt?      @db.UnsignedBigInt
   updatedAt    DateTime?     @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy    BigInt?      @db.UnsignedBigInt
   /// @HideField({ match: '@(Customer)@(Update)*Input' })
   services     Service[]
@@ -245,8 +249,10 @@ model Employee {
   joinedAt              DateTime          @default(now()) @db.DateTime(0)
   deletedAt             DateTime?         @db.Timestamp(0)
   createdAt             DateTime          @default(now()) @db.Timestamp(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   createdBy             BigInt?           @db.UnsignedBigInt
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy             BigInt?           @db.UnsignedBigInt
   /// Note: Connect or Create only allowed
   // role                  EmployeeRole?     @relation(fields: [roleId], references: [roleId], onDelete: NoAction, map: "fk_employeeCanHaveRoleAssigned")
@@ -430,8 +436,10 @@ model JoinWorkshopRequest {
   /// Note: Optional because field defaults to PENDING
   status              JoinWorkshopRequestStatus  @default(PENDING)
   createdAt           DateTime                   @default(now()) @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   createdBy           BigInt?                    @db.UnsignedBigInt
   updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?                    @db.UnsignedBigInt
   resolvedAt          DateTime?                  @db.DateTime(0)
   /// @HideField({ match: '@(JoinWorkshopRequest)@(Update)*Input' })
@@ -649,10 +657,13 @@ model Service {
   /// @HideField({ match: '@(Service)@(Create)*Input' })
   serviceEndDate      DateTime?         @db.DateTime(0)
   addedAt             DateTime          @default(now()) @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   addedBy             BigInt?           @db.UnsignedBigInt
   resolvedAt          DateTime?         @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy          BigInt?           @db.UnsignedBigInt
   updatedAt          DateTime?          @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?           @db.UnsignedBigInt
   deletedAt           DateTime?         @db.Timestamp(0)
   /// @HideField({ match: '@(Service)@(Create|Update)*Input' })
@@ -701,6 +712,7 @@ model ServiceRequest {
   description           String?                   @db.Text
   createdAt             DateTime                  @default(now()) @db.DateTime(0)
   resolvedAt            DateTime?                 @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy            BigInt?                   @db.UnsignedBigInt
   deletedAt             DateTime?                 @db.Timestamp(0)
   jobs                                                    Job[]
@@ -773,10 +785,13 @@ model Task {
   /// Note: Optional because field defaults to 0.00
   partsCost            Decimal               @default(0.00) @db.Decimal(10, 2)
   createdAt            DateTime              @default(now()) @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   createdBy            BigInt?               @db.UnsignedBigInt
-  updatedAt          DateTime?              @db.Timestamp(0) @updatedAt
+  updatedAt            DateTime?             @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy            BigInt?               @db.UnsignedBigInt
   resolvedAt           DateTime?             @db.DateTime(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   resolvedBy           BigInt?               @db.UnsignedBigInt
   workshopJob          WorkshopJob           @relation(fields: [workshopJobId], references: [workshopJobId], onDelete: NoAction)
   /// @HideField({ match: '@(Task)@(Update)*Input' })
@@ -886,8 +901,9 @@ model UserReport {
   status             UserReportStatus          @default(PENDING)
   createdAt          DateTime                   @default(now()) @db.DateTime(0)
   updatedAt          DateTime?                   @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy          BigInt?                     @db.UnsignedBigInt
-  /// @HideField({ match: '@(UserReport)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(UserReport)@(Update)*Input' })
   user               User                       @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_reportMadeByUser")
 
   @@index([userId])
@@ -903,6 +919,8 @@ model Vehicle {
   /// @FieldType('Scalars.GraphQLBigInt')
   guestId                           BigInt?            @db.UnsignedBigInt @unique
   /// @FieldType('Scalars.GraphQLBigInt')
+  customerId                        BigInt?            @db.UnsignedBigInt
+  /// @FieldType('Scalars.GraphQLBigInt')
   modelId                           BigInt             @db.UnsignedBigInt
   deletedAt                         DateTime?          @db.Timestamp(0)
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
@@ -914,13 +932,14 @@ model Vehicle {
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
   user                              User?              @relation(fields: [userId], references: [userId], onDelete: NoAction, map: "fk_vehicleCanBeOwnedByUser")
   /// @HideField({ match: '@(Vehicle)@(Update)*Input' })
-  customers                         Customer[]
+  customer                          Customer?          @relation(fields: [customerId], references: [customerId], onDelete: NoAction, map: "fk_vehicleIsOwnedByCustomer")
   /// @HideField({ match: '@(Vehicle)@(Create|Update)*Input' })
   guest                             Guest?             @relation(fields: [guestId], references: [guestId], onDelete: SetNull, map: "fk_GuestProvidesVehicle")
   vehicleDetails                    VehicleDetails?
 
   @@index([modelId])
   @@index([userId])
+  @@index([customerId])
 }
 
 model VehicleBrand {
@@ -1037,6 +1056,7 @@ model Workshop {
   isOfferingService         Boolean?                    @default(false)
   createdAt                 DateTime                    @default(now()) @db.Timestamp(0)
   updatedAt                 DateTime?                   @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy                 BigInt?                     @db.UnsignedBigInt
   deletedAt                 DateTime?                   @db.Timestamp(0)
   address                   Address?                    @relation(fields: [addressId], references: [addressId], onDelete: SetNull, map: "fk_workshopHasAddress")
@@ -1088,12 +1108,15 @@ model WorkshopDevice {
   /// @Validator.IsOptional()
   status              WorkshopDeviceStatus?     @default(INACTIVE)
   lastLoginAt         DateTime?                 @db.Timestamp(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   lastLoginBy         BigInt?                   @db.UnsignedBigInt
   updatedAt           DateTime?                 @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy           BigInt?                   @db.UnsignedBigInt
   acceptedAt          DateTime?                 @db.Timestamp(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   acceptedBy          BigInt?                   @db.UnsignedBigInt
-  /// @HideField({ match: '@(WorkshopDevice)@(Create|Update)*Input' })
+  /// @HideField({ match: '@(WorkshopDevice)@(Update)*Input' })
   workshop            Workshop                  @relation(fields: [workshopId], references: [workshopId], onDelete: NoAction, map: "fk_workshopHasDevice")
 
   @@unique([workshopId, serialNumber])
@@ -1163,6 +1186,7 @@ model WorkshopDetails {
   /// @Validator.IsOptional()
   NIP              String?                   @db.Char(10)
   updatedAt        DateTime?                  @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy        BigInt?                   @db.UnsignedBigInt
   deletedAt        DateTime?                 @db.Timestamp(0)
   /// @HideField({ match: '@(WorkshopDetails)@(Update)*Input' })
@@ -1196,8 +1220,10 @@ model WorkshopJob {
   /// Note: Optional because field defaults to true
   availability            Boolean   @default(true)
   createdAt               DateTime                  @default(now()) @db.Timestamp(0)
+  /// @FieldType('Scalars.GraphQLBigInt')
   createdBy               BigInt?                   @db.UnsignedBigInt
   updatedAt          DateTime?                  @db.Timestamp(0) @updatedAt
+  /// @FieldType('Scalars.GraphQLBigInt')
   updatedBy               BigInt?                   @db.UnsignedBigInt
   /// @HideField({ match: '@(WorkshopJob)@(Create|Update)*Input' })
   tasks                   Task[]    
@@ -1214,8 +1240,6 @@ enum UserReportReportedEntityType {
   WORKSHOP
   REVIEW
   REVIEW_RESPONSE
-  SERVICE
-  SERVICE_REQUEST
 }
 
 enum UserReportType {
@@ -1321,7 +1345,7 @@ enum JoinWorkshopRequestStatus {
 }
 
 enum WorkshopDeviceStatus {
-  ACTIVE
+  ENABLED
   INACTIVE
   DISABLED
 }

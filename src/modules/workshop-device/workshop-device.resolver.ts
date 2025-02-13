@@ -16,56 +16,87 @@ import {
   DeleteOneWorkshopDeviceArgs,
   FindManyWorkshopDeviceArgs,
 } from './dto';
+import { Action } from '../ability';
+import { CheckAbilities } from '../ability';
+import { OrGuards } from 'src/common/decorators/guard-decorators/or-guards.decorator';
+import { UserJwtAuthGuard } from '../auth/user-auth/guards';
+import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards/employee-jwt-auth.guard';
+import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { Public } from 'src/common/decorators/guard-decorators/public.decorator';
+import { WorkshopDeviceChangeNameArgs } from './custom-dto/workshop-device-change-name.args';
 
 @Resolver(() => WorkshopDevice)
 export class WorkshopDeviceResolver {
   constructor(private readonly workshopDeviceService: WorkshopDeviceService) {}
 
-  @Query(() => WorkshopDevice, { name: 'workshopDevice' })
-  findOneWorkshopDevice(@Args() args: FindUniqueWorkshopDeviceArgs) {
-    return this.workshopDeviceService.findOne(args);
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Query(() => WorkshopDevice)
+  workshopDevice(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: FindUniqueWorkshopDeviceArgs,
+  ) {
+    return this.workshopDeviceService.findOne(currentEntity, args);
   }
 
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Read, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Query(() => [WorkshopDevice])
-  findManyWorkshopDevices(@Args() args: FindManyWorkshopDeviceArgs) {
-    return this.workshopDeviceService.findMany(args);
+  workshopDevices(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args?: FindManyWorkshopDeviceArgs,
+  ) {
+    return this.workshopDeviceService.findMany(currentEntity, args);
   }
 
-  @Query(() => [WorkshopDevice], { name: 'workshopDevices' })
-  findAllWorkshopDevices() {
-    return this.workshopDeviceService.findAll();
-  }
-
-//   @Mutation(() => WorkshopDevice)
-//   createWorkshopDevice(
-//     @Args('data') data: WorkshopDeviceCreateInput,
-//     @Args('workshopId') workshopId: bigint,
-//   ) {
-//     return this.workshopDeviceService.create(data, workshopId);
-//   }
-
+  // ADMIN
+  @CheckAbilities({ action: Action.Moderate, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard)
   @Mutation(() => WorkshopDevice)
   updateWorkshopDevice(@Args() args: UpdateOneWorkshopDeviceArgs) {
     return this.workshopDeviceService.update(args);
   }
 
-  @Mutation(() => Boolean)
-  deleteWorkshopDevice(@Args() args: DeleteOneWorkshopDeviceArgs) {
-    return this.workshopDeviceService.delete(args);
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Update, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
+  @Mutation(() => WorkshopDevice)
+  changeWorkshopDeviceName(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args() args: WorkshopDeviceChangeNameArgs,
+  ) {
+    return this.workshopDeviceService.changeName(currentEntity, args);
   }
 
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Update, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  disableWorkshopDevice(@Args('deviceId') deviceId: bigint) {
-    return this.workshopDeviceService.disable(deviceId);
+  disableWorkshopDevice(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args('deviceId') deviceId: bigint,
+  ) {
+    return this.workshopDeviceService.disable(currentEntity, deviceId);
   }
 
+  // ADMIN, USER(Owner), EMPLOYEE
+  @CheckAbilities({ action: Action.Update, subject: 'WorkshopDevice' })
+  @OrGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
-  enableWorkshopDevice(@Args('deviceId') deviceId: bigint) {
-    return this.workshopDeviceService.enable(deviceId);
+  enableWorkshopDevice(
+    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
+    @Args('deviceId') deviceId: bigint,
+  ) {
+    return this.workshopDeviceService.enable(currentEntity, deviceId);
   }
 
   // RESOLVE FIELDS
 
+  @Public()
   @ResolveField(() => Workshop)
   workshop(@Parent() workshopDevice: WorkshopDevice) {
     return this.workshopDeviceService.workshop(workshopDevice.workshopDeviceId);

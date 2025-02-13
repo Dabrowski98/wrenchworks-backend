@@ -14,6 +14,12 @@ export class VehicleModelCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     brand?: true;
 
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

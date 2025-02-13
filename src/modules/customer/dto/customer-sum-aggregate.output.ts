@@ -22,9 +22,9 @@ export class CustomerSumAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     totalDue?: Decimal;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

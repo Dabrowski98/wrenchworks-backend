@@ -14,5 +14,8 @@ export class VehicleSumAggregateInput {
     guestId?: true;
 
     @Field(() => Boolean, {nullable:true})
+    customerId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     modelId?: true;
 }

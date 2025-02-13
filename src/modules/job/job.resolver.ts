@@ -31,7 +31,7 @@ import { Public } from 'src/common/decorators/guard-decorators/public.decorator'
 export class JobResolver {
   constructor(private readonly jobService: JobService) {}
   
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Create, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard)
   @Mutation(() => Job)
@@ -53,7 +53,7 @@ export class JobResolver {
     return this.jobService.findMany(args);
   }
   
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Update, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard, AbilitiesGuard)
   @Mutation(() => Job)
@@ -61,7 +61,7 @@ export class JobResolver {
     return this.jobService.update(args);
   }
   
-  // ADMIN ONLY
+  // ADMIN
   @CheckAbilities({ action: Action.Delete, subject: 'Job' })
   @UseGuards(UserJwtAuthGuard, AbilitiesGuard)
   @Mutation(() => Boolean)

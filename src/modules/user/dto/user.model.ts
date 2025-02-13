@@ -32,6 +32,9 @@ export class User {
     /**
      * Note: Password will be hashed before storage
      */
+    @HideField()
+    password!: string;
+
     @Field(() => String, {nullable:false})
     email!: string;
 

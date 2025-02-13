@@ -37,4 +37,9 @@ export class EmployeePermissionScalarWhereWithAggregatesInput {
     @Field(() => JsonNullableWithAggregatesFilter, {nullable:true})
     conditions?: JsonNullableWithAggregatesFilter;
 
-    }
+    @HideField()
+    createdAt?: DateTimeWithAggregatesFilter;
+
+    @HideField()
+    updatedAt?: DateTimeWithAggregatesFilter;
+}

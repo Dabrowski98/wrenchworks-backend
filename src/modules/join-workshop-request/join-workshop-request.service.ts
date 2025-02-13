@@ -17,8 +17,8 @@ import {
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
 import { JoinWorkshopRequestStatus } from '@prisma/client';
-import { JwtUserPayload } from '../auth/user-auth/dto';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 import { AbilityFactory, accessibleBy, Action } from '../ability';
 import { ForbiddenError, subject } from '@casl/ability';
 
@@ -34,17 +34,20 @@ export class JoinWorkshopRequestService {
     args: CreateOneJoinWorkshopRequestArgs,
   ): Promise<JoinWorkshopRequest> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
+    const workshop = await this.prisma.workshop.findUnique({
+      where: { workshopId: args.data.workshop.connect.workshopId },
+      select: { workshopId: true, ownerId: true },
+    });
+
     ForbiddenError.from(ability).throwUnlessCan(
       Action.Create,
-      subject('JoinWorkshopRequest', {
-        workshopId: args.data.workshop.connect.workshopId,
-      } as any),
+      subject('JoinWorkshopRequest', { workshop } as any),
     );
 
     const employee = await this.prisma.employee.findFirst({
       where: {
         AND: {
-          workshopId: args.data.workshop.connect.workshopId,
+          workshopId: workshop.workshopId,
           userId: args.data.user.connect.userId,
         },
       },
@@ -76,14 +79,10 @@ export class JoinWorkshopRequestService {
     args: FindUniqueJoinWorkshopRequestArgs,
   ): Promise<JoinWorkshopRequest> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
-    const request = await this.prisma.joinWorkshopRequest.findUnique(args);
-
+    const request = await this.prisma.joinWorkshopRequest.findFirst({
+      where: { AND: [accessibleBy(ability).JoinWorkshopRequest, args.where] },
+    });
     if (!request) throw new RecordNotFoundError(JoinWorkshopRequest);
-
-    ForbiddenError.from(ability).throwUnlessCan(
-      Action.Read,
-      subject('JoinWorkshopRequest', request),
-    );
     return request;
   }
 
@@ -105,6 +104,9 @@ export class JoinWorkshopRequestService {
   ): Promise<boolean> {
     const request = await this.prisma.joinWorkshopRequest.findUnique({
       where: { joinWorkshopRequestId },
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
     if (!request) throw new RecordNotFoundError(JoinWorkshopRequest);
     const ability = await this.abilityFactory.defineAbility(currentUser);
@@ -145,6 +147,9 @@ export class JoinWorkshopRequestService {
   ): Promise<boolean> {
     const request = await this.prisma.joinWorkshopRequest.findUnique({
       where: { joinWorkshopRequestId },
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
     if (!request) throw new RecordNotFoundError(JoinWorkshopRequest);
     const ability = await this.abilityFactory.defineAbility(currentUser);
@@ -165,7 +170,10 @@ export class JoinWorkshopRequestService {
   ): Promise<JoinWorkshopRequest> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     const request = await this.prisma.joinWorkshopRequest.findUnique({
-      where: { joinWorkshopRequestId: args.where.joinWorkshopRequestId },
+      where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
     if (!request) throw new RecordNotFoundError(JoinWorkshopRequest);
 
@@ -183,7 +191,10 @@ export class JoinWorkshopRequestService {
   ): Promise<boolean> {
     const ability = await this.abilityFactory.defineAbility(currentEntity);
     const request = await this.prisma.joinWorkshopRequest.findUnique({
-      where: { joinWorkshopRequestId: args.where.joinWorkshopRequestId },
+      where: args.where,
+      include: {
+        workshop: { select: { workshopId: true, ownerId: true } },
+      },
     });
     if (!request) throw new RecordNotFoundError(JoinWorkshopRequest);
 
@@ -193,7 +204,7 @@ export class JoinWorkshopRequestService {
     );
 
     return !!this.prisma.joinWorkshopRequest.delete({
-      where: { joinWorkshopRequestId: args.where.joinWorkshopRequestId },
+      where: args.where,
     });
   }
 

@@ -23,4 +23,21 @@ export class JoinWorkshopRequestCreateManyWorkshopInput {
     @Validator.IsOptional()
     message?: string;
 
-    }
+    @HideField()
+    status?: keyof typeof JoinWorkshopRequestStatus;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    createdBy?: bigint | number;
+
+    @HideField()
+    updatedAt?: Date | string;
+
+    @HideField()
+    updatedBy?: bigint | number;
+
+    @HideField()
+    resolvedAt?: Date | string;
+}

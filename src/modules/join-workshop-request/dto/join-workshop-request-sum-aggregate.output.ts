@@ -17,9 +17,9 @@ export class JoinWorkshopRequestSumAggregate {
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     employeeId?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     createdBy?: bigint | number;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy?: bigint | number;
 }

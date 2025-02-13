@@ -9,7 +9,7 @@ import { ValidateNested } from 'class-validator';
 import { ServiceOrderByRelationAggregateInput } from '../../service/dto/service-order-by-relation-aggregate.input';
 import { VehicleModelOrderByWithRelationInput } from '../../vehicle-model/dto/vehicle-model-order-by-with-relation.input';
 import { UserOrderByWithRelationInput } from '../../user/dto/user-order-by-with-relation.input';
-import { CustomerOrderByRelationAggregateInput } from '../../customer/dto/customer-order-by-relation-aggregate.input';
+import { CustomerOrderByWithRelationInput } from '../../customer/dto/customer-order-by-with-relation.input';
 import { GuestOrderByWithRelationInput } from '../../guest/dto/guest-order-by-with-relation.input';
 import { VehicleDetailsOrderByWithRelationInput } from '../../vehicle-details/dto/vehicle-details-order-by-with-relation.input';
 
@@ -25,8 +25,14 @@ export class VehicleOrderByWithRelationInput {
     @Field(() => SortOrderInput, {nullable:true})
     guestId?: SortOrderInput;
 
+    @Field(() => SortOrderInput, {nullable:true})
+    customerId?: SortOrderInput;
+
     @Field(() => SortOrder, {nullable:true})
     modelId?: keyof typeof SortOrder;
+
+    @HideField()
+    deletedAt?: SortOrderInput;
 
     @Field(() => ServiceRequestOrderByRelationAggregateInput, {nullable:true})
     @Type(() => ServiceRequestOrderByRelationAggregateInput)
@@ -50,11 +56,11 @@ export class VehicleOrderByWithRelationInput {
     @ValidateNested()
     user?: UserOrderByWithRelationInput;
 
-    @Field(() => CustomerOrderByRelationAggregateInput, {nullable:true})
-    @Type(() => CustomerOrderByRelationAggregateInput)
+    @Field(() => CustomerOrderByWithRelationInput, {nullable:true})
+    @Type(() => CustomerOrderByWithRelationInput)
     @ValidateNested()
-    @Type(() => CustomerOrderByRelationAggregateInput)
-    customers?: CustomerOrderByRelationAggregateInput;
+    @Type(() => CustomerOrderByWithRelationInput)
+    customer?: CustomerOrderByWithRelationInput;
 
     @Field(() => GuestOrderByWithRelationInput, {nullable:true})
     @Type(() => GuestOrderByWithRelationInput)

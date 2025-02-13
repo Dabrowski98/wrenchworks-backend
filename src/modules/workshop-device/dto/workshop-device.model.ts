@@ -26,19 +26,19 @@ export class WorkshopDevice {
     @Field(() => Date, {nullable:true})
     lastLoginAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     lastLoginBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})
     updatedAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     updatedBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})
     acceptedAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     acceptedBy!: bigint | null;
 
     @Field(() => Workshop, {nullable:false})

@@ -17,8 +17,8 @@ import {
   RecordNotFoundError,
 } from 'src/common/custom-errors/errors.config';
 import { ReviewStatus } from '../prisma';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import { ForbiddenError } from '@casl/ability';
 import { AbilityFactory, Action } from '../ability/ability.factory';
 import { subject } from '@casl/ability';

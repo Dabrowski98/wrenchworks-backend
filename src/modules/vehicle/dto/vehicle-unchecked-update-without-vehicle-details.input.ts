@@ -6,7 +6,6 @@ import { ServiceRequestUncheckedUpdateManyWithoutVehicleNestedInput } from '../.
 import { Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ServiceUncheckedUpdateManyWithoutVehicleNestedInput } from '../../service/dto/service-unchecked-update-many-without-vehicle-nested.input';
-import { CustomerUncheckedUpdateManyWithoutVehiclesNestedInput } from '../../customer/dto/customer-unchecked-update-many-without-vehicles-nested.input';
 
 @InputType()
 export class VehicleUncheckedUpdateWithoutVehicleDetailsInput {
@@ -21,7 +20,13 @@ export class VehicleUncheckedUpdateWithoutVehicleDetailsInput {
     guestId?: bigint | number;
 
     @Field(() => Scalars.GraphQLBigInt, {nullable:true})
+    customerId?: bigint | number;
+
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     modelId?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
 
     @Field(() => ServiceRequestUncheckedUpdateManyWithoutVehicleNestedInput, {nullable:true})
     @Type(() => ServiceRequestUncheckedUpdateManyWithoutVehicleNestedInput)
@@ -34,10 +39,4 @@ export class VehicleUncheckedUpdateWithoutVehicleDetailsInput {
     @ValidateNested()
     @Type(() => ServiceUncheckedUpdateManyWithoutVehicleNestedInput)
     services?: ServiceUncheckedUpdateManyWithoutVehicleNestedInput;
-
-    @Field(() => CustomerUncheckedUpdateManyWithoutVehiclesNestedInput, {nullable:true})
-    @Type(() => CustomerUncheckedUpdateManyWithoutVehiclesNestedInput)
-    @ValidateNested()
-    @Type(() => CustomerUncheckedUpdateManyWithoutVehiclesNestedInput)
-    customers?: CustomerUncheckedUpdateManyWithoutVehiclesNestedInput;
 }

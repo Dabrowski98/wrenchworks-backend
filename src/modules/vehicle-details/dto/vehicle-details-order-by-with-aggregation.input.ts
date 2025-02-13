@@ -42,6 +42,9 @@ export class VehicleDetailsOrderByWithAggregationInput {
     @Field(() => SortOrderInput, {nullable:true})
     bodyColor?: SortOrderInput;
 
+    @HideField()
+    deletedAt?: SortOrderInput;
+
     @Field(() => VehicleDetailsCountOrderByAggregateInput, {nullable:true})
     _count?: VehicleDetailsCountOrderByAggregateInput;
 

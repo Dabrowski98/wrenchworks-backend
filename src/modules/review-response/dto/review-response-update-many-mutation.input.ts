@@ -3,11 +3,12 @@ import { InputType } from '@nestjs/graphql';
 import { HideField } from '@nestjs/graphql';
 import * as Validator from 'class-validator';
 import { ReviewResponseStatus } from '../../prisma/dto/review-response-status.enum';
-import { CREATE, UPDATE } from 'src/common/constants/validation-groups';
-
 
 @InputType()
 export class ReviewResponseUpdateManyMutationInput {
+
+    @HideField()
+    reviewResponseId?: bigint | number;
 
     @Field(() => String, {nullable:true})
     @Validator.IsString({ message: 'Response text must be a string' })
@@ -15,6 +16,15 @@ export class ReviewResponseUpdateManyMutationInput {
     @Validator.IsNotEmpty({ groups: [CREATE], message: 'Response text is required' })
     @Validator.IsOptional({ groups: [UPDATE]})
     responseText?: string;
+
+    @HideField()
+    originalResponseText?: string;
+
+    @HideField()
+    createdAt?: Date | string;
+
+    @HideField()
+    updatedAt?: Date | string;
 
     @Field(() => ReviewResponseStatus, {nullable:true})
     @Validator.IsEnum(ReviewResponseStatus, { message: 'Invalid response status' })

@@ -47,7 +47,7 @@ export class ServiceRequest {
     @Field(() => Date, {nullable:true})
     resolvedAt!: Date | null;
 
-    @Field(() => String, {nullable:true})
+    @Field(() => Scalars.GraphQLBigInt, {nullable:true})
     resolvedBy!: bigint | null;
 
     @Field(() => Date, {nullable:true})

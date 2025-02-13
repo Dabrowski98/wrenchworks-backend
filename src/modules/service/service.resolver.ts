@@ -31,8 +31,8 @@ import { AbilitiesGuard } from '../ability/abilities.guard';
 import { UserJwtAuthGuard } from '../auth/user-auth/guards';
 import { EmployeeJwtAuthGuard } from '../auth/employee-auth/guards';
 import { CurrentEntity } from 'src/common/decorators/jwt-decorators/current-entity.decorator';
-import { JwtUserPayload } from '../auth/user-auth/dto/jwt-user-payload';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto/jwt-employee-payload';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 
 @Resolver(() => Service)
 export class ServiceResolver {
@@ -83,18 +83,6 @@ export class ServiceResolver {
   }
 
   // ADMIN, EMPLOYEE
-  @CheckAbilities({ action: Action.Update, subject: 'Service' })
-  @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
-  @Mutation(() => Service)
-  async changeEmployee(
-    @CurrentEntity() currentEntity: JwtUserPayload | JwtEmployeePayload,
-    @Args('serviceId', { type: () => GraphQLBigInt }) serviceId: bigint,
-    @Args('employeeId', { type: () => GraphQLBigInt }) employeeId: bigint,
-  ): Promise<Service> {
-    return this.serviceService.changeEmployee(currentEntity, serviceId, employeeId);
-  }
-
-  // ADMIN, EMPLOYEE
   @CheckAbilities({ action: Action.Delete, subject: 'Service' })
   @UseGuards(UserJwtAuthGuard, EmployeeJwtAuthGuard)
   @Mutation(() => Boolean)
@@ -104,6 +92,9 @@ export class ServiceResolver {
   ): Promise<boolean> {
     return this.serviceService.delete(currentEntity, args);
   }
+
+  //start service etc.
+  //end service etc.
 
   // RESOLVE FIELDS
 

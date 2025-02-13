@@ -3,7 +3,7 @@ import { createPrismaAbility, PrismaQuery, Subjects } from '@casl/prisma';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserRole } from '../prisma/dto/user-role.enum';
 import { WorkshopDeviceOtp } from '../workshop-device-otp/dto/workshop-device-otp.model';
-import { JwtUserPayload } from '../auth/user-auth/dto';
+import { JwtUserPayload } from '../auth/user-auth/custom-dto/jwt-user-payload';
 import {
   AbilityBuilder,
   createAliasResolver,
@@ -40,7 +40,7 @@ import {
 import { EntityType } from 'src/common/enums/entity-type.enum';
 import { UserAbilityHandler } from './handlers/user-ability.handler';
 import { EmployeeAbilityHandler } from './handlers/employee-ability.handler';
-import { JwtEmployeePayload } from '../auth/employee-auth/dto';
+import { JwtEmployeePayload } from '../auth/employee-auth/custom-dto/jwt-employee-payload';
 
 export enum Action {
   Manage = 'manage',
@@ -86,7 +86,27 @@ export type AppSubjects =
 
 //REVIEW CREATE conditional compare userId's
 //REVIEW RESPONSE SAME
+//SESSION DATA conditional compare userId's
+//USER REPORT CREATE conditional compare userId's
+//VEHICLE CREATE on USER compare userIds
+//VEHICLE CREATE on EMPLOYEE compare workshopIds
+//VEHICLE READ on USER compare userIds
+//VEHICLE READ on EMPLOYEE compare workshopIds on nested customers
 
+//VEHICLE BY USER COMPARE BY USERID
+//VEHICLE BY EMPLOYEE COMPARE BY CUSTOMER.WORKSHOPID
+
+//VEHICLE DETAILS BY USER COMPARE BY VEHICLE.USERID
+//VEHICLE DETAILS BY EMPLOYEE COMPARE BY VEHICLE.CUSTOMER.WORKSHOPID
+
+//WORKSHOP USER by ownerID on workshop
+//WORKSHOP EMPLOYEE by workshopId on workshop
+
+//WORKSHOP DETAILS USER by workshopId on workshop
+//WORKSHOP DETAILS EMPLOYEE by workshopId on workshop
+
+//WORKSHOP DEVICE USER by workshopId on WORKSHOP.OWNERID
+//WORKSHOP DEVICE EMPLOYEE by workshopId on WORKSHOP.WORKSHOPID
 
 export type UserAbility = PureAbility<[Action, AppSubjects], PrismaQuery>;
 

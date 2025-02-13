@@ -6,23 +6,38 @@ import { ServiceCreateNestedManyWithoutVehicleInput } from '../../service/dto/se
 import { VehicleModelCreateNestedOneWithoutVehiclesInput } from '../../vehicle-model/dto/vehicle-model-create-nested-one-without-vehicles.input';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CustomerCreateNestedManyWithoutVehiclesInput } from '../../customer/dto/customer-create-nested-many-without-vehicles.input';
+import { CustomerCreateNestedOneWithoutVehiclesInput } from '../../customer/dto/customer-create-nested-one-without-vehicles.input';
 import { GuestCreateNestedOneWithoutVehicleInput } from '../../guest/dto/guest-create-nested-one-without-vehicle.input';
 import { VehicleDetailsCreateNestedOneWithoutVehicleInput } from '../../vehicle-details/dto/vehicle-details-create-nested-one-without-vehicle.input';
 
 @InputType()
 export class VehicleCreateWithoutUserInput {
 
+    @HideField()
+    vehicleId?: bigint | number;
+
+    @HideField()
+    deletedAt?: Date | string;
+
+    @HideField()
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutVehicleInput;
+
+    @HideField()
+    services?: ServiceCreateNestedManyWithoutVehicleInput;
+
     @Field(() => VehicleModelCreateNestedOneWithoutVehiclesInput, {nullable:false})
     @ValidateNested()
     @Type(() => VehicleModelCreateNestedOneWithoutVehiclesInput)
     vehicleModel!: VehicleModelCreateNestedOneWithoutVehiclesInput;
 
-    @Field(() => CustomerCreateNestedManyWithoutVehiclesInput, {nullable:true})
-    @Type(() => CustomerCreateNestedManyWithoutVehiclesInput)
+    @Field(() => CustomerCreateNestedOneWithoutVehiclesInput, {nullable:true})
+    @Type(() => CustomerCreateNestedOneWithoutVehiclesInput)
     @ValidateNested()
-    @Type(() => CustomerCreateNestedManyWithoutVehiclesInput)
-    customers?: CustomerCreateNestedManyWithoutVehiclesInput;
+    @Type(() => CustomerCreateNestedOneWithoutVehiclesInput)
+    customer?: CustomerCreateNestedOneWithoutVehiclesInput;
+
+    @HideField()
+    guest?: GuestCreateNestedOneWithoutVehicleInput;
 
     @Field(() => VehicleDetailsCreateNestedOneWithoutVehicleInput, {nullable:true})
     @ValidateNested()

@@ -20,4 +20,9 @@ export class EmployeePermissionMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     subject?: true;
 
-    }
+    @HideField()
+    createdAt?: true;
+
+    @HideField()
+    updatedAt?: true;
+}
